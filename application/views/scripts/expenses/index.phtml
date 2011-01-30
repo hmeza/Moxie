@@ -1,0 +1,52 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Categories</title>
+<script type="javascript">
+	function total() {
+		
+	}
+
+</script>
+</head>
+<body>
+    <h2>Categories controller</h2>
+<table width=100%>
+<!-- Form + expenses list --> 
+<tr>
+<td width=50%>
+<?php
+echo $this->form;
+?>
+<pre>
+<?php
+$f_totalAmount = 0;
+echo '<table border=1>';
+foreach ($this->list as $key=>$value) {
+	echo '<tr>';
+	echo '<td><input type="checkbox" id="" checked></td><td><a href="/expenses/delete/id/'.$value['id'].'">X</a></td>'
+	.'<td>'.$value['amount'].' &euro;</td>';
+	echo '<td>'.$value['expense_date'].'</td>';
+	echo '<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>';
+	echo '<td>'.$value['note'].'</td>';
+	echo '</tr>';
+	$f_totalAmount = $f_totalAmount + $value['amount'];
+}
+echo '<tr><td colspan=2></td><td>'.$f_totalAmount.'</td><td colspan=3></td></tr>';
+echo '</table>';
+?>
+</pre>
+</td>
+<td align="center">
+<!-- Graphic -->
+<?php
+include_once '../resources/ofc-library/open-flash-chart.php';
+?>
+</td>
+</tr>
+</table>
+</body>
+</html>

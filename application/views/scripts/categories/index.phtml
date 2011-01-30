@@ -1,0 +1,33 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Categories</title>
+</head>
+<body>
+    <h1>Categories controller</h1>
+    
+<?php
+include('Zend/Form.php');
+$form  = new Zend_Form();
+
+$form->setAction('/categories/add')
+     ->setMethod('post');
+     
+$form->setAttrib('id', 'login');
+
+$form->addElement('text', 'user_owner', array('label' => 'user owner', 'value' => '1'));
+$form->addElement('text', 'parent', array('label' => 'Category parent', 'value' => '1', 'readonly' => 'true'));
+$form->addElement('text', 'name', array('label' => 'Category name'));
+$form->addElement('text', 'description', array('label' => 'Category description'));
+$form->addElement('submit','submit', array('label' => 'Enviar'));
+echo $form;
+?>
+
+<pre>
+<?php print_r($this->list); ?>
+</pre>
+</body>
+</html>
