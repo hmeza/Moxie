@@ -50,9 +50,15 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-01-03
 	 */
 	public function indexAction() {
-		// list current month
+		// list current month by default
 		// allow navigate through months and years
-		$this->view->assign('list', $this->expenses->getExpenses(1,1,2011));
+		$i_month = $this->getRequest()->getParam('month');
+		$i_year = $this->getRequest()->getParam('year');
+		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
+		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
+		$this->view->assign('list', $this->expenses->getExpenses(1,$i_month,$i_year));
+		$this->view->assign('year', $i_year);
+		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
 	}
 	
@@ -70,6 +76,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->_helper->redirector('index','expenses');
 	}
 	
+	// TODO
 	public function editAction() {
 
 	}
@@ -87,4 +94,10 @@ class ExpensesController extends Zend_Controller_Action
 		$this->_helper->redirector('index','expenses');
 	}
 	
+	//TODO
+	public function marklineAction() {
+		$i_expensePK = $this->getRequest()->getParam('id');
+		$this->expenses->updateExpense($i_expensePK);
+		$this->_helper->redirector('index','expenses');
+	}
 }

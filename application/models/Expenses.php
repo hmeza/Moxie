@@ -35,7 +35,8 @@ class Expenses {
 					'user_owner'	=>	'e.user_owner',
 					'amount'		=>	'e.amount',
 					'note'			=>	'e.note',
-					'expense_date'	=>	'e.expense_date'
+					'expense_date'	=>	'e.expense_date',
+					'in_sum'		=>	'e.in_sum'
 				))
 			->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
 					'name'	=>	'c.name',
@@ -76,9 +77,40 @@ class Expenses {
 		}
 	}
 	
+	/**
+	 * @desc	Deletes an expense
+	 * @author	hmeza
+	 * @since	2011-01-30
+	 * @param	int $expensePK
+	 */
 	public function deleteExpense($expensePK) {
 		try {
 			$query = $this->database->delete('expenses','id = '.$expensePK);
+		} catch (Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
+	}
+	
+	// TODO
+	public function updateExpense($i_expensePK) {
+		try {
+			$query = $this->database->select()
+					->from("expenses","in_sum")
+					->where("id = ".$i_expensePK);
+			$stmt = $this->database->query($query);
+			$result = $stmt->fetchAll();
+			$result = $result[0];
+			if ($result['in_sum'] == '1') {
+				$up = 0;
+			}
+			else {
+				$up = 1;
+			}
+
+			$query = $this->database->update("expenses", array("in_sum"=>$up),array("id"=>$i_expensePK));
+			error_log($query." ".$i_expensePK);
+			
+			
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
