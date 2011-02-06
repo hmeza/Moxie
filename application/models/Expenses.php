@@ -107,7 +107,8 @@ class Expenses {
 				$up = 1;
 			}
 
-			$query = $this->database->update("expenses", array("in_sum"=>$up),array("id"=>$i_expensePK));
+			$where[] = "id = ".$i_expensePK;
+			$query = $this->database->update("expenses", array("in_sum"=>$up), $where);
 			error_log($query." ".$i_expensePK);
 			
 			
