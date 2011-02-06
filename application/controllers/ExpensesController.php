@@ -20,10 +20,13 @@ class ExpensesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
-		// get categories
+		// get categories and prepare them for view
 		$s_categories = $categories->getCategoriesByUser(1);
 		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name1'].' - '.$value['name2'];
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
 		}
 		
 		$form->setAction('/expenses/add')
@@ -82,7 +85,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Deletes a given action
+	 * @desc	Deletes a given expense
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
