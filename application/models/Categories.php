@@ -49,19 +49,20 @@ class Categories {
 	public function getCategoriesByUser($user_id) {
 		//select distinct(c2.id),c1.parent,c1.name, c2.name
 		//from categories c1 left join categories c2 on c2.parent = c1.id
+		//where c2.id is not null
 		//order by c1.parent,c2.parent;
 		$query = $this->database->select()
 			->from(array('c1'=>'categories'), array(
-				'id2'	=>	'distinct(c2.id)',
-				'id1'	=>	'c1.id',
+				'id1'	=>	'distinct(c2.id)',
+				'parent1'	=>	'c1.id',
 				'name1'	=>	'c1.name',
 				'name2'	=>	'c2.name',
-				'parent'	=>	'c1.parent'
 			))
 			->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
 			->where('c1.user_owner = ?', $user_id)
-			->where('c1.name != "root"')
-			->order('c1.parent');
+			->where('c2.id is not null')
+			->order('c1.parent')
+			->order('c2.parent');
 		$stmt = $this->database->query($query);
 		return $stmt->fetchAll();
 	}
