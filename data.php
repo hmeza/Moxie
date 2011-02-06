@@ -21,7 +21,9 @@ mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
 $sql = "select sum(e.amount),c.name from expenses e left join categories c on c.id = e.category where e.user_owner = 1 group by e.category";
 $sql = "select c0.id as parent_id, c.name as name,sum(e.amount) from expenses e, categories c left join categories c2 on c.id = c2.parent left join categories c0 on c0.id = c.parent "
-	." where (c.id = e.category or c2.id = e.category) AND YEAR(e.expense_date) = ".$year." AND MONTH(e.expense_date) = ".$month." group by (c.id) order by c.id, c2.id";
+	." where (c.id = e.category or c2.id = e.category) AND YEAR(e.expense_date) = ".$year." AND MONTH(e.expense_date) = ".$month
+	." and e.in_sum = 1"
+	." group by (c.id) order by c.id, c2.id";
 $rows = mysql_query($sql);
 
 $data = array();
