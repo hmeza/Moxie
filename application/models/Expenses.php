@@ -91,7 +91,35 @@ class Expenses {
 		}
 	}
 	
-	// TODO
+	/**
+	 * @desc	Updates expenses by setting in_sum to option value, filtering by year and month
+	 * @author	hmeza
+	 * @since	2011-02-06
+	 * @param $i_option 1 or 0
+	 * @param $i_year
+	 * @param $i_month
+	 * @todo	Implement to update different attributes
+	 * @todo	Implement to check user owner
+	 */
+	public function updateAllExpenses($i_option, $i_year, $i_month) {
+		$where[] = "MONTH(expense_date) = ".$i_month;
+		$where[] = "YEAR(expense_date) = ".$i_year;
+		$where[] = "user_owner = 1";
+		try {
+			error_log(print_r($where,true));
+			$query = $this->database->update("expenses", array("in_sum"=>$i_option), $where);
+		} catch (Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
+	}
+	
+	/**
+	 * @desc	Updates an expense by setting in_sum to 0 or 1
+	 * @author	hmeza
+	 * @since	2011-02-03
+	 * @param unknown_type $i_expensePK
+	 * @todo	Implement to update different expense attributes, as a complete edit function
+	 */
 	public function updateExpense($i_expensePK) {
 		try {
 			$query = $this->database->select()
@@ -109,9 +137,6 @@ class Expenses {
 
 			$where[] = "id = ".$i_expensePK;
 			$query = $this->database->update("expenses", array("in_sum"=>$up), $where);
-			error_log($query." ".$i_expensePK);
-			
-			
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}

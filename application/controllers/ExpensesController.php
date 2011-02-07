@@ -97,7 +97,25 @@ class ExpensesController extends Zend_Controller_Action
 		$this->_helper->redirector('index','expenses');
 	}
 	
-	//TODO
+	/**
+	 * @desc
+	 * @author	hmeza
+	 * @since	2011-02-06
+	 * @todo	Select year and month by sent parameters
+	 */
+	public function markallAction() {
+		$i_option = $this->getRequest()->getParam('option');
+		$i_year = $this->getRequest()->getParam('year');
+		$i_month = $this->getRequest()->getParam('month');
+		$this->expenses->updateAllExpenses($i_option, $i_year, $i_month);
+		$this->_helper->redirector('index','expenses');
+	}
+	
+	/**
+	 * @desc	Marks an expense to appear or not in sums
+	 * @author	hmeza
+	 * @since	2011-02-03
+	 */
 	public function marklineAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$this->expenses->updateExpense($i_expensePK);
