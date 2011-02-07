@@ -1,10 +1,6 @@
 <?php
-
-// generate some random data:
-$month = $_GET['month'];
-$year = $_GET['year'];
-if (empty($month)) $month = date('n');
-if (empty($year)) $year = date('Y');
+$month = (empty($_GET['month'])) ? date('n') : $_GET['month'];
+$year = (empty($_GET['year'])) ? date('Y') : $_GET['year'];
 
 // use the chart class to build the chart:
 include_once( 'open-flash-chart.php' );
@@ -52,4 +48,5 @@ $g->title( $s_month." ".date('Y'), '{font-size:18px; color: #000000}' );
 
 // display the data
 echo $g->render();
+error_log("finished");
 ?>
