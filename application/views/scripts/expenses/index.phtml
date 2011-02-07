@@ -4,8 +4,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Categories</title>
+  <title>Expenses</title>
 <script type="text/javascript" language="text/javascript">
+	var year = <?php echo $this->year; ?>;
+	var month = <?php echo $this->month; ?>;
+	function markAll(option) {
+		window.location="/expenses/markall/option/"+option+"/year/"+year+"/month/"+month;
+	}
+
 	function markLine(id) {
 		window.location="/expenses/markline/id/"+id;
 	}
@@ -29,8 +35,14 @@ echo $this->form;
 <?php
 $f_totalAmount = 0;
 echo '
-<form method="POST" action="/expenses/updateall" enctype="application/x-www-form-urlencoded">
-<table border=1 width=600>';
+<table border=1 width=600>
+<td colspan=6>
+Marcar:&nbsp;
+<span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
+<span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>
+</td>
+
+';
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	echo '<tr>';
@@ -43,10 +55,10 @@ foreach ($this->list as $key=>$value) {
 	echo '</tr>';
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
-echo '<tr><td colspan=2></td><td>'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
+echo '<tr>
+<td colspan=2></td>
+<td>'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
 </table>
-<input type="submit" id="submit" name="submit" value="Update">
-</form>
 ';
 ?>
 </pre>
@@ -55,10 +67,10 @@ echo '<tr><td colspan=2></td><td>'.number_format($f_totalAmount,2).' &euro;</td>
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php $this->year; ?>" />
+<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php echo $this->year; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php $this->year; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php echo $this->year; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 <?php
 //require_once 'open-flash-chart-1.9.7/php-ofc-library/open_flash_chart_object.php';
