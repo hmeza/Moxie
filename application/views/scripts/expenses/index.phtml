@@ -41,13 +41,14 @@ Marcar:&nbsp;
 <span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
 <span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>
 </td>
-
 ';
+
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
+	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	echo '<tr>';
-	echo '<td><input type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'>'
-	.'</td><td><a href="/expenses/delete/id/'.$value['id'].'">X</a></td>'
+	echo '<td><input type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>';
+	echo '<td><a href="/expenses/delete/id/'.$value['id'].$s_dateGet.'">X</a>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
 	.'<td>'.$value['amount'].' &euro;</td>';
 	echo '<td>'.$value['expense_date'].'</td>';
 	echo '<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>';
