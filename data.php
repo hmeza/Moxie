@@ -48,5 +48,4 @@ $g->title( $s_month." ".date('Y'), '{font-size:18px; color: #000000}' );
 
 // display the data
 echo $g->render();
-error_log("finished");
 ?>
