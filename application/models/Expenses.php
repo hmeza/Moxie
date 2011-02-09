@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  * @desc
  * 			id
  * 			user_owner
@@ -30,27 +30,54 @@ class Expenses {
 	 */
 	public function getExpenses($user_id, $month, $year) {
 		$query = $this->database->select()
-			->from(array('e'=>'expenses'),array(
+		->from(array('e'=>'expenses'),array(
 					'id'	=>	'e.id',
 					'user_owner'	=>	'e.user_owner',
 					'amount'		=>	'e.amount',
 					'note'			=>	'e.note',
 					'expense_date'	=>	'e.expense_date',
 					'in_sum'		=>	'e.in_sum'
-				))
-			->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
+					))
+					->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
 					'name'	=>	'c.name',
 					'description'	=>	'c.description'
-				))
-			->where('YEAR(e.expense_date) = '.$year)
-			->where('MONTH(e.expense_date) = '.$month)
-			->where('e.user_owner = '.$user_id)
-			->order('e.expense_date asc');
-		$stmt = $this->database->query($query);
-		$result = $stmt->fetchAll();
+					))
+					->where('YEAR(e.expense_date) = '.$year)
+					->where('MONTH(e.expense_date) = '.$month)
+					->where('e.user_owner = '.$user_id)
+					->order('e.expense_date asc');
+					$stmt = $this->database->query($query);
+					$result = $stmt->fetchAll();
+					return $result;
+	}
+
+	/**
+	 * @desc	Retrieve an expense by its PK
+	 * @author	hmeza
+	 * @since	2011-02-08
+	 * @param	int $i_expensePK
+	 */
+	public function getExpenseByPK($i_expensePK) {
+		try {
+			$query = $this->database->select()
+				->from(array('e'=>'expenses'),array(
+						'id'			=>	'e.id',
+						'user_owner'	=>	'e.user_owner',
+						'amount'		=>	'e.amount',
+						'note'			=>	'e.note',
+						'expense_date'	=>	'e.expense_date',
+						'in_sum'		=>	'e.in_sum',
+						'category'		=>	'e.category'
+						))
+				->where('id = '.$i_expensePK);
+			$stmt = $this->database->query($query);
+			$result = $stmt->fetch();
+		} catch (Expenses $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
 		return $result;
 	}
-	
+
 	/**
 	 * @desc	Inserts a new expense on DB
 	 * @author	hmeza
@@ -117,26 +144,40 @@ class Expenses {
 	 * @desc	Updates an expense by setting in_sum to 0 or 1
 	 * @author	hmeza
 	 * @since	2011-02-03
-	 * @param unknown_type $i_expensePK
-	 * @todo	Implement to update different expense attributes, as a complete edit function
+	 * @param	int $i_expensePK
+	 * @param	array $st_params
+	 * @todo	correct this bullshit. updateExpense should do only one type of update
 	 */
-	public function updateExpense($i_expensePK) {
+	public function updateExpense($i_expensePK, $st_params = null) {
 		try {
-			$query = $this->database->select()
-					->from("expenses","in_sum")
-					->where("id = ".$i_expensePK);
-			$stmt = $this->database->query($query);
-			$result = $stmt->fetchAll();
-			$result = $result[0];
-			if ($result['in_sum'] == '1') {
-				$up = 0;
+			if ($st_params == null) {
+				$query = $this->database->select()
+				->from("expenses","in_sum")
+				->where("id = ".$i_expensePK);
+				$stmt = $this->database->query($query);
+				$result = $stmt->fetchAll();
+				$result = $result[0];
+				if ($result['in_sum'] == '1') {
+					$up = 0;
+				}
+				else {
+					$up = 1;
+				}
+	
+				$where[] = "id = ".$i_expensePK;
+				$query = $this->database->update("expenses", array("in_sum"=>$up), $where);
 			}
 			else {
-				$up = 1;
+				$st_data = array(
+					'amount'	=>	$st_params['amount'],
+					'category'	=>	$st_params['category'],
+					'note'		=>	$st_params['note'],
+					'expense_date'	=>	$st_params['date']
+					
+				);
+				$s_where = 'id = '.$st_params['id'];
+				$this->database->update('expenses',$st_data,$s_where);
 			}
-
-			$where[] = "id = ".$i_expensePK;
-			$query = $this->database->update("expenses", array("in_sum"=>$up), $where);
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}

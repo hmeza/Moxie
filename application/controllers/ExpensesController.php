@@ -38,11 +38,57 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => 'Category name',
-			'multioptions' => $formCategories		
+			'multioptions' => $formCategories
 			)
 		);
 		$form->addElement('text', 'note', array('label' => 'Note'));
 		$form->addElement('text', 'date', array('label' => 'Date', 'value' => date('Y-m-d')));
+		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		return $form;
+	}
+	
+	/**
+	 * @desc	This function generates the form to add expenses.
+	 * @author	hmeza
+	 * @since	2011-01-30
+	 * @param	int $i_expensePK
+	 */
+	private function getEditForm($i_expensePK) {
+		include('Zend/Form.php');
+		include('Zend/Form/Element/Select.php');
+		include('application/models/Categories.php');
+		$form  = new Zend_Form();
+		$categories = new Categories();
+		
+		// get categories and prepare them for view
+		$s_categories = $categories->getCategoriesByUser(1);
+		foreach($s_categories as $key => $value) {
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
+		}
+		// retrieve data to fill the form
+		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
+		// little fix to pass only date and discarding hour
+		$s_date = explode(" ", $st_expense['expense_date']);
+		$st_expense['expense_date'] = $s_date[0];
+		
+		$form->setAction('/expenses/update')
+		     ->setMethod('post');
+		     
+		$form->setAttrib('id', 'login');
+		
+		$form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
+		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
+		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_expense['amount']));
+		// Add select
+		$multiOptions = new Zend_Form_Element_Select('category', $formCategories);
+		$multiOptions->addMultiOptions($formCategories);
+		$multiOptions->setValue(array($st_expense['category']));
+		$form->addElement($multiOptions);
+		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_expense['note']));
+		$form->addElement('text', 'date', array('label' => 'Date', 'value' => $st_expense['expense_date']));
 		$form->addElement('submit','submit', array('label' => 'Enviar'));
 		return $form;
 	}
@@ -79,9 +125,29 @@ class ExpensesController extends Zend_Controller_Action
 		$this->_helper->redirector('index','expenses');
 	}
 	
-	// TODO
+	/**
+	 * @desc	Edits a given expense
+	 * @author	hmeza
+	 * @since	2011-02-08
+	 */
 	public function editAction() {
-
+		$i_expensePK = $this->getRequest()->getParam('id');
+		$i_month = $this->getRequest()->getParam('month');
+		$i_year = $this->getRequest()->getParam('year');
+		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
+		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
+		$this->view->assign('list', $this->expenses->getExpenses(1,$i_month,$i_year));
+		$this->view->assign('year', $i_year);
+		$this->view->assign('month', $i_month);
+		$this->view->assign('form', $this->getEditForm($i_expensePK));
+		$this->render('index');
+	}
+	
+	public function updateAction() {
+		$st_params = $this->getRequest()->getPost();
+		$i_expensePK = $st_params['id'];
+		$this->expenses->updateExpense($i_expensePK, $st_params);
+		$this->_helper->redirector('index','expenses');
 	}
 	
 	/**
