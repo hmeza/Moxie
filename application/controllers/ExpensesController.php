@@ -33,8 +33,8 @@ class ExpensesController extends Zend_Controller_Action
 		     ->setMethod('post');
 		     
 		$form->setAttrib('id', 'login');
-		
-		$form->addElement('hidden', 'user_owner', array('value' => '1'));
+
+		$form->addElement('hidden', 'user_owner', array('value' => $_SESSION['user_id']));
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => 'Category name',
@@ -61,7 +61,7 @@ class ExpensesController extends Zend_Controller_Action
 		$categories = new Categories();
 		
 		// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser(1);
+		$s_categories = $categories->getCategoriesByUser($_SESSION['user_id']);
 		foreach($s_categories as $key => $value) {
 			$formCategories[$value['id1']] = $value['name2'];
 			if (!empty($value['name1'])) {
@@ -105,7 +105,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
-		$this->view->assign('list', $this->expenses->getExpenses(1,$i_month,$i_year));
+		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
@@ -121,7 +121,7 @@ class ExpensesController extends Zend_Controller_Action
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
 		if (!isset($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
-		$this->expenses->addExpense(1,$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
+		$this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
 		$this->_helper->redirector('index','expenses');
 	}
 	
@@ -136,7 +136,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
-		$this->view->assign('list', $this->expenses->getExpenses(1,$i_month,$i_year));
+		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
@@ -173,7 +173,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_option = $this->getRequest()->getParam('option');
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = $this->getRequest()->getParam('month');
-		$this->expenses->updateAllExpenses($i_option, $i_year, $i_month);
+		$this->expenses->updateAllExpenses($_SESSION['user_id'], $i_option, $i_year, $i_month);
 		$this->_helper->redirector('index','expenses');
 	}
 	

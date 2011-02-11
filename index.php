@@ -1,7 +1,10 @@
 <html>
 <body>
 <?php
+session_start();
+$_SESSION['user_id'] = 1;
 include_once 'html/web.php';
+
 
 echo web_header();
 echo web_menu();
