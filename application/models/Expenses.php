@@ -82,15 +82,15 @@ class Expenses {
 	 * @desc	Inserts a new expense on DB
 	 * @author	hmeza
 	 * @since	2011-01-30
-	 * @param	int $user
+	 * @param	int $user_id
 	 * @param	date $date
 	 * @param	float $amount
 	 * @param	int $category
 	 * @param	text $note
 	 */
-	public function addExpense($user,$date,$amount,$category,$note) {
+	public function addExpense($user_id,$date,$amount,$category,$note) {
 		$st_data = array(
-			'user_owner'	=>	$user,
+			'user_owner'	=>	$user_id,
 			'amount'		=>	$amount,
 			'category'		=>	$category,
 			'note'			=>	$note,
@@ -122,18 +122,18 @@ class Expenses {
 	 * @desc	Updates expenses by setting in_sum to option value, filtering by year and month
 	 * @author	hmeza
 	 * @since	2011-02-06
+	 * @param $user_id
 	 * @param $i_option 1 or 0
 	 * @param $i_year
 	 * @param $i_month
 	 * @todo	Implement to update different attributes
 	 * @todo	Implement to check user owner
 	 */
-	public function updateAllExpenses($i_option, $i_year, $i_month) {
+	public function updateAllExpenses($user_id, $i_option, $i_year, $i_month) {
 		$where[] = "MONTH(expense_date) = ".$i_month;
 		$where[] = "YEAR(expense_date) = ".$i_year;
-		$where[] = "user_owner = 1";
+		$where[] = "user_owner = ".$user_id;
 		try {
-			error_log(print_r($where,true));
 			$query = $this->database->update("expenses", array("in_sum"=>$i_option), $where);
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
