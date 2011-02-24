@@ -5,10 +5,6 @@ session_start();
 $_SESSION['user_id'] = 1;
 include_once 'html/web.php';
 
-
-echo web_header();
-echo web_menu();
-
 include 'Zend/Controller/Front.php';
 include_once 'Zend/Db.php';
 include_once 'Zend/Db/Adapter/Pdo/Mysql.php';
@@ -53,6 +49,10 @@ $front->setControllerDirectory(array(
 	'categories'	=>	'application/controllers',
 	'expenses'		=>	'application/controllers'
 ));
+
+echo web_header(Zend_Registry::get('config')->moxie->app->name,
+				Zend_Registry::get('config')->moxie->settings->url);
+echo web_menu();
 
 $front->run('application/controllers/');
 ?>
