@@ -58,17 +58,11 @@ class IncomesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
-		$st_data = array(
-			'sum'		=>	'sum(amount)',
-			'category'	=>	'incomes.category'
-		);
 		$list = array();
 		// get categories
 		for ($i=1;$i<=12;$i++) {
 			$s_select = $this->incomes->select()
-				->from('incomes', $st_data)
-				->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i)
-				->group('category');
+				->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i);
 			$st_rows = $this->incomes->fetchAll($s_select);
 			if (count($st_rows) > 0) {
 				foreach($st_rows as $key => $value) {

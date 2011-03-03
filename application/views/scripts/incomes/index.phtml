@@ -8,7 +8,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 <body>
 
-    <h2>Categories controller</h2>
+<h2>Incomes</h2>
 <table width=100%>
 <!-- Form + expenses list --> 
 <tr>
@@ -29,19 +29,19 @@ echo '
 
 foreach ($this->list as $key=>$value) {
 	foreach ($value as $subkey => $subvalue) {
+		$checked = ($subvalue->in_sum == 1) ? "checked":"";
 		echo '<tr>';
-		echo '<td><input type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>';
-		echo '<td>'.$value['amount'].' &euro;</td>';
-		echo '<td>'.$value['expense_date'].'</td>';
-		echo '<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>';
-		echo '<td width=200>'.$value['note'].'</td>';
+		echo '<td><input type="checkbox" id="'.$subvalue->id.'" name="'.$subvalue->id.'" onClick="markLine('.$subvalue->id.');" '.$checked.'></td>';
+		echo '<td>'.$subvalue->amount.' &euro;</td>';
+		echo '<td>'.$subvalue->date.'</td>';
+		echo '<td><div alt="'.$subvalue->note.'" title="'.$subvalue->note.'">'.$subvalue->note.'</div></td>';
 		echo '</tr>';
-		$f_totalAmount = $f_totalAmount + $value['amount'];
+		$f_totalAmount = $f_totalAmount + $subvalue->amount;
 	}
 	$f_finalAmount = $f_finalAmount + $f_totalAmount;
 }
 echo '<tr>
-<td colspan=2></td>
+<td></td>
 <td>'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
 </table>
 ';
