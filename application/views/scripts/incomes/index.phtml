@@ -13,9 +13,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <!-- Form + expenses list --> 
 <tr>
 <td>
-<a href="/incomes/index/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>">Last</a>
+<a href="/incomes/index/year/<?php echo $this->year-1; ?>">Last</a>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/incomes/index/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>">Next</a>
+<a href="/incomes/index/year/<?php echo $this->year+1; ?>">Next</a>
 <?php
 echo $this->form;
 ?>
