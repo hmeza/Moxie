@@ -1,6 +1,7 @@
 <?php
-$month = (empty($_GET['month'])) ? date('n') : $_GET['month'];
-$year = (empty($_GET['year'])) ? date('Y') : $_GET['year'];
+$data = explode(":",$_GET['mydata']);
+$month = (empty($data[1])) ? date('n') : $data[1];
+$year = (empty($data[3])) ? date('Y') : $data[3];
 
 // use the chart class to build the chart:
 include_once( 'open-flash-chart.php' );
@@ -44,7 +45,7 @@ $g->set_tool_tip( '#val# €' );
 
 $timestamp = mktime(0, 0, 0, $month, 1, $year);
 $s_month = date("F", $timestamp);
-$g->title( $s_month." ".date('Y'), '{font-size:18px; color: #000000}' );
+$g->title( $s_month." ".$year, '{font-size:18px; color: #000000}' );
 
 // display the data
 echo $g->render();
