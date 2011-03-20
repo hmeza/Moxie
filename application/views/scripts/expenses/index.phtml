@@ -20,7 +20,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 <body>
 
-    <h2>Categories controller</h2>
+    <h2>Expenses</h2>
 <table width=100%>
 <!-- Form + expenses list --> 
 <tr>
@@ -68,14 +68,12 @@ echo '<tr>
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php echo $this->year; ?>" />
+<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?month=<?php echo $this->month; ?>&year=<?php echo $this->year; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 <?php
-//require_once 'open-flash-chart-1.9.7/php-ofc-library/open_flash_chart_object.php';
-//open_flash_chart_object( 500, 250, 'http://'. $_SERVER['SERVER_NAME'] .'/data.php', false );
 
 mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
