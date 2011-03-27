@@ -7,7 +7,7 @@ $year = (empty($data[3])) ? date('Y') : $data[3];
 include_once( 'open-flash-chart.php' );
 $g = new graph();
 
-$g->bg_colour = '#ffffff';
+$g->bg_colour = '0xFFFFFF';
 // Spoon sales, March 2007
 $g->pie(60,'#000000','{font-size: 12px; color: #000000;');
 //
@@ -39,7 +39,7 @@ $g->pie_values( $data, $labels);
 // will be re-used (3 colurs for 5 slices means the last two
 // slices will have colours colour[0] and colour[1]):
 //
-$g->pie_slice_colours( array('#d01f3c','#356aa0','#aaccaa','#adffaa','#224466') );
+$g->pie_slice_colours( array('#d01f3c','#356aa0','#aaccaa','#adffaa','#aa5500','#060606','#CCFF66') );
 
 $g->set_tool_tip( '#val# €' );
 
