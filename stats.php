@@ -10,8 +10,9 @@ mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
 $sql = 'select YEAR(expense_date), MONTH(expense_date),sum(amount)'
 .' from expenses'
-.' where in_sum = 1 AND category = 10'
-.' group by MONTH(expense_date),YEAR(expense_date)'
+.' where in_sum = 1';
+if ($category != 0) $sql .= ' AND category = '.$category;
+$sql .= ' group by MONTH(expense_date),YEAR(expense_date)'
 .' order by YEAR(expense_date),MONTH(expense_date)';
 $rows = mysql_query($sql);
 
