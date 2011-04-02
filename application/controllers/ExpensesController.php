@@ -121,6 +121,7 @@ class ExpensesController extends Zend_Controller_Action
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
 		if (!isset($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
+		$st_form['date'] = str_replace('/', '-', $st_form['date']);
 		$this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
 		$this->_helper->redirector('index','expenses');
 	}

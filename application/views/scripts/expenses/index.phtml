@@ -17,6 +17,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	}
 </script>
 
+<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
+<link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
+<script type="text/javascript" src="../../../helpers.js"></script>
+<script type="text/javascript" src="../../../calendar.js"></script>
+<script type="text/javascript" src="../../../form.js"></script> 
+
 </head>
 <body>
 
@@ -29,7 +35,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>">Next</a>
 <?php
-echo $this->form;
+echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post">';
+echo $this->form->getElement('amount');
+echo $this->form->getElement('category');
+echo "\n";
+echo $this->form->getElement('note');
+echo '<div class="date"></div>';
+echo $this->form->getElement('submit');
+echo '</form>';
 ?>
 <pre>
 <?php
@@ -46,14 +59,15 @@ Marcar:&nbsp;
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	echo '<tr>';
-	echo '<td><input type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>';
-	echo '<td><a href="/expenses/delete/id/'.$value['id'].$s_dateGet.'">X</a>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
-	.'<td>'.$value['amount'].' &euro;</td>';
-	echo '<td>'.$value['expense_date'].'</td>';
-	echo '<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>';
-	echo '<td width=200>'.$value['note'].'</td>';
-	echo '</tr>';
+	echo '
+<tr>
+<td><input class="lista" type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
+<td><a href="/expenses/delete/id/'.$value['id'].$s_dateGet.'">X</a>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
+.'<td>'.$value['amount'].' &euro;</td>
+<td>'.$value['expense_date'].'</td>
+<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<td width=200>'.$value['note'].'</td>
+</tr>';
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
 echo '<tr>
