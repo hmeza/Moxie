@@ -35,7 +35,6 @@ class IncomesController extends Zend_Controller_Action
 		     
 		$form->setAttrib('id', 'login');
 		
-		$form->addElement('hidden', 'user_owner', array('value' => '1'));
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => 'Category name',
@@ -62,7 +61,8 @@ class IncomesController extends Zend_Controller_Action
 		// get categories
 		for ($i=1;$i<=12;$i++) {
 			$s_select = $this->incomes->select()
-				->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i);
+				->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i)
+				->where('user_owner = '.$_SESSION['user_id']);
 			$st_rows = $this->incomes->fetchAll($s_select);
 			if (count($st_rows) > 0) {
 				foreach($st_rows as $key => $value) {

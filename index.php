@@ -1,8 +1,28 @@
 <html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
+<link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
+<script type="text/javascript" src="../../../helpers.js"></script>
+<script type="text/javascript" src="../../../calendar.js"></script>
+<script type="text/javascript" src="../../../form.js"></script>
+<!-- Google Analytics script -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10754954-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
 <body>
 <?php
 session_start();
-$_SESSION['user_id'] = 1;
 include_once 'html/web.php';
 
 include 'Zend/Controller/Front.php';

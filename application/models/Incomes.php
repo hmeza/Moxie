@@ -22,8 +22,8 @@ class Incomes extends Zend_Db_Table_Abstract {
 				->from(array('i'=>'incomes'), $st_data)
 				->joinLeft(array('c'=>'categories','c.id = i.category',array()))
 				->where('YEAR(i.date) = '.$i_year)
-				->where('MONTH(i.date) = '.$i_month);
-			
+				->where('MONTH(i.date) = '.$i_month)
+				->where('user_owner = '.$_SESSION['user_id']);
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
