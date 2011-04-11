@@ -34,7 +34,6 @@ class ExpensesController extends Zend_Controller_Action
 		     
 		$form->setAttrib('id', 'login');
 
-		$form->addElement('hidden', 'user_owner', array('value' => $_SESSION['user_id']));
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => 'Category name',
