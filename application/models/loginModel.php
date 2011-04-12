@@ -13,11 +13,11 @@ class loginModel extends Zend_Db_Table_Abstract {
 	public function checkLogin($s_user, $s_password) {
 		try {
 			$s_select = $this->_db->select()
-						->from('users',array('id'))
+						->from('users',array('id','login'))
 						->where('login = "'.$s_user.'"')
 						->where('password = md5("'.$s_password.'")');
 			$o_rows = $this->_db->fetchAll($s_select);
-			return $o_rows[0]['id'];
+			return $o_rows[0];
 		}
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
