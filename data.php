@@ -2,6 +2,7 @@
 $data = explode(":",$_GET['mydata']);
 $month = (empty($data[1])) ? date('n') : $data[1];
 $year = (empty($data[3])) ? date('Y') : $data[3];
+$user = (empty($data[5])) ? 0 : $data[5]; 
 
 // use the chart class to build the chart:
 include_once( 'open-flash-chart.php' );
@@ -16,10 +17,10 @@ $g->pie(60,'#000000','{font-size: 12px; color: #000000;');
 // get categories from DB
 mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
-$sql = "select sum(e.amount),c.name from expenses e left join categories c on c.id = e.category where e.user_owner = 1 group by e.category";
+$sql = "select sum(e.amount),c.name from expenses e left join categories c on c.id = e.category where e.user_owner = ".$_SESSION['user_id']." group by e.category";
 $sql = "select c0.id as parent_id, c.name as name,sum(e.amount) from expenses e, categories c left join categories c2 on c.id = c2.parent left join categories c0 on c0.id = c.parent "
 	." where (c.id = e.category or c2.id = e.category) AND YEAR(e.expense_date) = ".$year." AND MONTH(e.expense_date) = ".$month
-	." and e.in_sum = 1"
+	." and e.in_sum = 1 and e.user_owner = ".$user
 	." group by (c.id) order by c.id, c2.id";
 $rows = mysql_query($sql);
 

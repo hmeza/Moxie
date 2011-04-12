@@ -1,12 +1,14 @@
 <?php
 // use the chart class to build the chart:
 include_once( 'open-flash-chart.php' );
+$data = explode(":",$_GET['mydata']);
+$user = (empty($data[1])) ? 0 : $data[1];
 
 mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
 $sql = 'select YEAR(date), MONTH(date),sum(amount)'
 .' from incomes'
-.' where in_sum = 1 AND user_owner = 1'
+.' where in_sum = 1 AND user_owner = '.$user
 .' group by YEAR(date)'
 .' order by YEAR(date)';
 $rows = mysql_query($sql);

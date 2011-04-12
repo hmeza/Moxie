@@ -3,14 +3,15 @@
 include_once( 'open-flash-chart.php' );
 
 $data = explode(":",$_GET['mydata']);
-$category = (empty($data[1])) ? 0 : $data[1];
+//$category = (empty($data[1])) ? 0 : $data[1];
 $scale = (empty($category)) ? 2500 : 500;
+$user = (empty($data[1])) ? 0 : $data[1];
 
 mysql_connect("127.0.0.1","root","0nr3fn1");
 mysql_select_db("moxie");
 $sql = 'select YEAR(expense_date), MONTH(expense_date),sum(amount)'
 .' from expenses'
-.' where in_sum = 1';
+.' where in_sum = 1 AND user_owner = '.$user;
 if ($category != 0) $sql .= ' AND category = '.$category;
 $sql .= ' group by MONTH(expense_date),YEAR(expense_date)'
 .' order by YEAR(expense_date),MONTH(expense_date)';
