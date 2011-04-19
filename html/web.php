@@ -46,14 +46,28 @@ function web_header($s_name, $b_loggedIn = false) {
 }
 
 function web_menu() {
-	return '
+	$s_webMenu = '
 	<table cellspacing=10>
 		<td><a href="/">Index</a></td>
+	';
+	if (isset($_SESSION['user_id'])) {
+		$s_webMenu .= '
 		<td><a href="/categories/index">Categories</a></td>
+		<td><a href="/budgets/index">Budget</a></td>
 		<td><a href="/incomes/index">Incomes</a></td>
 		<td><a href="/expenses/index">Expenses</a></td>
+		';
+	}
+	else {
+		$s_webMenu .= '
+		<td><a href="/texts/about">About</a></td>
+		<td><a href="/texts/benefits">Benefits</a></td>
+		';
+	}
+	$s_webMenu .= '
 	</table>
 	';
+	return $s_webMenu;
 }
 
 function web_footer() {
