@@ -12,8 +12,10 @@
  *
  */
 
-class Categories {
+class Categories extends Zend_Db_Table_Abstract {
 	private $database;
+	protected $_name = 'categories';
+	protected $_primary = 'id';
 	
 	public function __construct() {
 		global $db;
