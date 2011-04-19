@@ -1,0 +1,53 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Budgets</title>
+<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
+<link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
+<script type="text/javascript" src="../../../helpers.js"></script>
+<script type="text/javascript" src="../../../calendar.js"></script>
+<script type="text/javascript" src="../../../form.js"></script>
+<script type="text/javascript">
+function getSum() {
+	var node_list = document.getElementsByTagName('input');
+	var sum = 0;
+	for (var i = 0; i < node_list.length; i++) {
+	    var node = node_list[i];
+	 
+	    if (node.getAttribute('type') == 'text') {
+	        sum = sum + Math.round(node.value);
+	    }
+	}
+	document.getElementById('sum').innerHTML = sum + ' &euro;';
+}
+</script>
+</head>
+
+<body>
+<h2>Budget</h2>
+<table width=100%> 
+<?php
+foreach ($this->categories as $key => $value) {
+	echo '
+	<tr>
+	<td>
+	'.$value['parent1'].' '.$value['name1'].' '.$value['name2'].'
+	</td>
+	<td>
+	<form id="login" enctype="application/x-www-form-urlencoded" action="/budgets/add" method="post">
+	<input type="hidden" name="id" id="id" value="'.$value['id1'].'">
+	<input type="text" name="amount" value="" onChange="getSum()">
+	<input type="submit" value="Send">
+	</form>
+	</td>
+	</tr>
+	';	
+}
+?>
+<td colspan=2><span id="sum">0.00 &euro;</span></td>
+</table>
+</body>
+</html>
