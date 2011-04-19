@@ -11,6 +11,8 @@ class LoginController extends Zend_Controller_Action {
 	
 	/**
 	 * @desc	Perform login
+	 * @author	hmeza
+	 * @since	2011-04-11
 	 * @param	$login		string	login
 	 * @param	$password	string	password
 	 */
