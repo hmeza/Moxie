@@ -20,7 +20,6 @@ class BudgetsController extends Zend_Controller_Action
 							->where('category = '.$value['id1'])
 						);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
-			error_log(print_r($st_categories,true));
 		}
 		$this->view->assign('categories',$st_categories);
 		//$this->_helper->redirector('index','budgets');
