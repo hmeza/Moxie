@@ -5,7 +5,7 @@ $year = (empty($data[3])) ? date('Y') : $data[3];
 $user = (empty($data[5])) ? 0 : $data[5]; 
 
 // use the chart class to build the chart:
-include_once( 'open-flash-chart.php' );
+include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
 $g = new graph();
 
 $g->bg_colour = '0xFFFFFF';
