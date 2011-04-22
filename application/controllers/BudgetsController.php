@@ -13,6 +13,15 @@ class BudgetsController extends Zend_Controller_Action
 	public function indexAction() {
 		$o_categories = new Categories();
 		$st_categories = $o_categories->getCategoriesByUser($_SESSION['user_id']);
+		foreach($st_categories as $key => $value) {
+			// get budget for this category
+			$o_budget = $this->budgets->fetchRow(
+							$this->budgets->select()
+							->where('category = '.$value['id1'])
+						);
+			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
+			error_log(print_r($st_categories,true));
+		}
 		$this->view->assign('categories',$st_categories);
 		//$this->_helper->redirector('index','budgets');
 	}
@@ -23,7 +32,6 @@ class BudgetsController extends Zend_Controller_Action
 	public function addAction() {
 		$o_income = $this->getRequest()->getPost();
 		$st_data = array(
-			'id'			=>	$o_income['id'],
 			'user_owner'	=>	$_SESSION['user_id'],
 			'category'		=>	$o_income['category'],
 			'amount'		=>	$o_income['amount'],
