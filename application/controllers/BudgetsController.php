@@ -42,8 +42,7 @@ class BudgetsController extends Zend_Controller_Action
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 			try {
-				$cond = 'id = '.$st_data['id'];
-				unset($st_data[id]);
+				$cond = 'category = '.$st_data['category'];
 				$result = $this->budgets->update($st_data,$cond);
 			}
 			catch(Exception $e) {
