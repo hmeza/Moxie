@@ -38,8 +38,8 @@ foreach ($this->categories as $key => $value) {
 	</td>
 	<td>
 	<form id="login" enctype="application/x-www-form-urlencoded" action="/budgets/add" method="post">
-	<input type="hidden" name="id" id="id" value="'.$value['id1'].'">
-	<input type="text" name="amount" value="" onChange="getSum()">
+	<input type="hidden" name="category" id="category" value="'.$value['id1'].'">
+	<input type="text" name="amount" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
 	<input type="submit" value="Send">
 	</form>
 	</td>
