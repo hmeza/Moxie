@@ -1,6 +1,6 @@
 <?php
 // use the chart class to build the chart:
-include_once( 'open-flash-chart.php' );
+include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
 
 $data = explode(":",$_GET['mydata']);
 //$category = (empty($data[1])) ? 0 : $data[1];
