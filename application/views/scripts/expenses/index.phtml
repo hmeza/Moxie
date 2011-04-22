@@ -82,10 +82,10 @@ echo '<tr>
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" />
+<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 <?php
 
@@ -148,10 +148,10 @@ print_r($this->form_sent);
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" />
+<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="http://moxie.dev/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 </td>
 </tr>
