@@ -112,7 +112,7 @@ class Expenses {
 	 */
 	public function deleteExpense($expensePK) {
 		try {
-			$query = $this->database->delete('expenses','id = '.$expensePK);
+			$query = $this->database->delete('expenses','id = '.$expensePK.' AND user_owner = '.$_SESSION['user_id']);
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
