@@ -50,14 +50,6 @@ class ExpensesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
-		// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser($_SESSION['user_id']);
-		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name2'];
-			if (!empty($value['name1'])) {
-				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-			}
-		}
 		// retrieve data to fill the form
 		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
 		// little fix to pass only date and discarding hour
@@ -73,8 +65,8 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_expense['amount']));
 		// Add select
-		$multiOptions = new Zend_Form_Element_Select('category', $formCategories);
-		$multiOptions->addMultiOptions($formCategories);
+		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView());
+		$multiOptions->addMultiOptions($categories->getCategoriesForView());
 		$multiOptions->setValue(array($st_expense['category']));
 		$form->addElement($multiOptions);
 		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_expense['note']));
