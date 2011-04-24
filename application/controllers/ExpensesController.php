@@ -20,15 +20,6 @@ class ExpensesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
-		// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser(1);
-		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name2'];
-			if (!empty($value['name1'])) {
-				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-			}
-		}
-		
 		$form->setAction('/expenses/add')
 		     ->setMethod('post');
 		     
@@ -37,7 +28,7 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => 'Category name',
-			'multioptions' => $formCategories
+			'multioptions' => $categories->getCategoriesForView()
 			)
 		);
 		$form->addElement('text', 'note', array('label' => 'Note'));
