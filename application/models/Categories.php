@@ -12,6 +12,7 @@
  *
  */
 
+include_once '../Zend/Zend/Registry.php';
 class Categories extends Zend_Db_Table_Abstract {
 	private $database;
 	protected $_name = 'categories';
@@ -20,13 +21,14 @@ class Categories extends Zend_Db_Table_Abstract {
 	public function __construct() {
 		global $db;
 		$this->database = $db;
+		$this->_db = Zend_Registry::get('db');
 	}
 	
 	public function addCategory($data) {
 		try {
 			$this->database->insert('categories',
 				array(
-					'user_owner' => $data['user_owner'],
+					'user_owner' => $_SESSION['user_id'],
 					'parent' => $data['parent'],
 					'name' => $data['name'],
 					'description' => $data['description']
@@ -77,6 +79,49 @@ class Categories extends Zend_Db_Table_Abstract {
 		$stmt = $db->query($query);
 		$result = $stmt->fetchAll();
 		return $result;
+	}
+	
+	/**
+	 * @desc	Get 3 level categories tree, only with leaves
+	 * @author	hmeza
+	 * @since	2011-04-23
+	 * @return	array
+	 */
+	public function getCategoriesTree() {
+		try {
+			$query = $this->database->select()
+				->from(array('c1'=>'categories'), array(
+					'id1'	=>	'c1.id',
+					'name1'	=>	'c1.name',
+					'id2'	=>	'c2.id',
+					'name2'	=>	'c2.name',
+					'id3'	=>	'c3.id',
+					'name3'	=>	'c3.name'
+				))
+				->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
+				->joinLeft(array('c3'=>'categories'),'c3.parent = c2.id',array())
+				->where('c1.user_owner = ?', $_SESSION['user_id'])
+				->where('c1.name IS NOT NULL')
+				->order('c2.parent');
+			$stmt = $this->database->query($query);
+			return $stmt->fetchAll();
+		}
+		catch (Exception $e) {
+			echo 'Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage();
+		}
+		return array();
+	}
+	
+	public function getCategoriesForView() {
+		// get categories and prepare them for view
+		$s_categories = $this->getCategoriesByUser($_SESSION['user_id']);
+		foreach($s_categories as $key => $value) {
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
+		}
+		return $formCategories;
 	}
 }
 

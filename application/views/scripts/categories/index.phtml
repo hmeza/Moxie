@@ -7,27 +7,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
   <title>Categories</title>
 </head>
 <body>
-    <h1>Categories controller</h1>
+    <h1>Categories</h1>
     
 <?php
-include('Zend/Form.php');
-$form  = new Zend_Form();
+$this->form->setAction('/categories/add')->setMethod('post');
+$this->form->setAttrib('id', 'login');
 
-$form->setAction('/categories/add')
-     ->setMethod('post');
-     
-$form->setAttrib('id', 'login');
-
-$form->addElement('text', 'user_owner', array('label' => 'user owner', 'value' => '1'));
-$form->addElement('text', 'parent', array('label' => 'Category parent', 'value' => '1', 'readonly' => 'true'));
-$form->addElement('text', 'name', array('label' => 'Category name'));
-$form->addElement('text', 'description', array('label' => 'Category description'));
-$form->addElement('submit','submit', array('label' => 'Enviar'));
-echo $form;
+echo $this->form;
 ?>
 
-<pre>
-<?php print_r($this->list); ?>
-</pre>
+<?php
+foreach ($this->list as $key => $value) {
+	echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
+	echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="Editar" title="Editar">E</a>&nbsp;&nbsp;&nbsp;';
+	echo $value['name1']." ".$value['name2']."<br>";
+}
+?>
 </body>
 </html>
