@@ -5,13 +5,12 @@ function web_login() {
 	return '
 	<form name="login" id="login" action="/login/login" method="POST">
 	<fieldset class="login contact">
-	<legend>Login</legend> 
+	<legend>Login</legend>
 	<table width=200>
-	<td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td><tr>
-	<td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td><tr>
-	<td colspan=2 align="left" id="submit-go">
-		<input type="submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="">Already don\'t have an account?</a>
-	</td>
+	<tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
+	<tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
+	<tr><td colspan=2 align="left" id="submit-go"><input type="submit"></td></tr>
+	<tr><td colspan=2 align="right"><a href="/login/newuser">Already don\'t have an account?</a></td></tr>
 	</table>
 	</fieldset>
 	</form>
@@ -48,7 +47,6 @@ function web_header($s_name, $b_loggedIn = false) {
 function web_menu() {
 	$s_webMenu = '
 	<table cellspacing=10>
-		<td><a href="/">Index</a></td>
 	';
 	if (isset($_SESSION['user_id'])) {
 		$s_webMenu .= '
@@ -60,6 +58,7 @@ function web_menu() {
 	}
 	else {
 		$s_webMenu .= '
+		<td><a href="/">Index</a></td>
 		<td><a href="/texts/about">About</a></td>
 		<td><a href="/texts/benefits">Benefits</a></td>
 		';
