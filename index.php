@@ -2,9 +2,6 @@
 <head>
 <link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
 <link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
-<script type="text/javascript" src="../../../helpers.js"></script>
-<script type="text/javascript" src="../../../calendar.js"></script>
-<script type="text/javascript" src="../../../form.js"></script>
 <!-- Google Analytics script -->
 <script type="text/javascript">
 
