@@ -28,26 +28,30 @@ function getSum() {
 
 <body>
 <h2>Budget</h2>
-<table width=100%>
+<table width=50%>
 <?php
+$f_initialBudget = 0;
 foreach ($this->categories as $key => $value) {
 	echo '
 	<tr>
+	<form id="login" enctype="application/x-www-form-urlencoded" action="/budgets/add" method="post" class="budget">
 	<td>
 	'.$value['name1'].' '.$value['name2'].'
 	</td>
-	<td>
-	<form id="login" enctype="application/x-www-form-urlencoded" action="/budgets/add" method="post">
+	<td align="right">
 	<input type="hidden" name="category" id="category" value="'.$value['id1'].'">
 	<input type="text" name="amount" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
-	<input type="submit" value="Send">
-	</form>
 	</td>
+	<td>
+	<input type="submit" value="Send">
+	</td>
+	</form>
 	</tr>
-	';	
+	';
+	$f_initialBudget += $value['budget'];
 }
 ?>
-<tr><td colspan=2><span id="sum">0.00 &euro;</span></td></tr>
+<tr><td></td><td align="right"><span id="sum"><?= $f_initialBudget?> &euro;</span></td><td></td></td></tr>
 </table>
 </body>
 </html>
