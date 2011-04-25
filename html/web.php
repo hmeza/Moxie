@@ -9,7 +9,7 @@ function web_login() {
 	<table width=200>
 	<tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
 	<tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
-	<tr><td colspan=2 align="left" id="submit-go"><input type="submit"></td></tr>
+	<tr><td colspan=2 align="right"><input type="submit" value="Login"></td></tr>
 	<tr><td colspan=2 align="right"><a href="/login/newuser">Already don\'t have an account?</a></td></tr>
 	</table>
 	</fieldset>
