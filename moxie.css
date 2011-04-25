@@ -110,6 +110,13 @@ input.default {
 	color:#bbb;
 }
 
+form.budget {
+	background:#fff;
+	padding: 0em;
+	border: none;
+	margin: 0em;
+}
+
 #submit-go {
 	margin-top:1em;
 	width:69px;
