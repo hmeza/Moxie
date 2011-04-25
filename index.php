@@ -31,8 +31,11 @@ include_once 'Zend/Config/Ini.php';
 
 // Set config vars
 switch($_SERVER['SERVER_NAME']) {
-	case 'moxie.dev':
 	case 'hugoboss666.no-ip.com':
+	case 'moxie.com':
+		$section = "staging";
+		break;
+	case 'moxie.dev':
 	default:
 		$section = "development";
 		break;
