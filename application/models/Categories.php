@@ -50,7 +50,7 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 	}
 	
-	public function getCategoriesByUser($user_id) {
+	public function getCategoriesByUser() {
 		//select distinct(c2.id),c1.parent,c1.name, c2.name
 		//from categories c1 left join categories c2 on c2.parent = c1.id
 		//where c2.id is not null
@@ -63,7 +63,7 @@ class Categories extends Zend_Db_Table_Abstract {
 				'name2'	=>	'c2.name',
 			))
 			->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
-			->where('c1.user_owner = ?', $user_id)
+			->where('c1.user_owner = ?', $_SESSION['user_id'])
 			->where('c2.id is not null')
 			->order('c1.parent')
 			->order('c2.parent');
@@ -114,7 +114,8 @@ class Categories extends Zend_Db_Table_Abstract {
 	
 	public function getCategoriesForView() {
 		// get categories and prepare them for view
-		$s_categories = $this->getCategoriesByUser($_SESSION['user_id']);
+		$s_categories = $this->getCategoriesByUser();
+		$formCategories = array();
 		foreach($s_categories as $key => $value) {
 			$formCategories[$value['id1']] = $value['name2'];
 			if (!empty($value['name1'])) {
