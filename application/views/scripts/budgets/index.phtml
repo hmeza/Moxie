@@ -21,7 +21,7 @@ function getSum() {
 	        sum = sum + Math.round(node.value);
 	    }
 	}
-	document.getElementById('sum').innerHTML = sum + ' &euro;';
+	document.getElementById('sum').innerHTML = '<B>' + sum + ' &euro;</B>';
 }
 </script>
 </head>
@@ -51,7 +51,7 @@ foreach ($this->categories as $key => $value) {
 	$f_initialBudget += $value['budget'];
 }
 ?>
-<tr><td></td><td align="right"><span id="sum"><?= $f_initialBudget?> &euro;</span></td><td></td></td></tr>
+<tr><td></td><td align="right"><span id="sum"><B><?= $f_initialBudget?> &euro;</B></span></td><td></td></td></tr>
 </table>
 </body>
 </html>
