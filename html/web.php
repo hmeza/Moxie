@@ -54,6 +54,7 @@ function web_menu() {
 		<td><a href="/budgets/index">Budget</a></td>
 		<td><a href="/incomes/index">Incomes</a></td>
 		<td><a href="/expenses/index">Expenses</a></td>
+		<td><a href="/stats/index">Stats</a></td>
 		';
 	}
 	else {
