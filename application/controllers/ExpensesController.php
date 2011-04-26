@@ -139,10 +139,12 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-01-30
 	 */
 	public function deleteAction() {
-		// TODO: Check authenticaded user
-		// TODO: Check that expense belongs to user
 		$i_expensePK = $this->getRequest()->getParam('id');
-		$this->expenses->deleteExpense($i_expensePK);
+		try {
+			$this->expenses->delete('id = '.$i_expensePK.' AND user_owner = '.$_SESSION['user_id']);
+		} catch (Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
 		$this->_helper->redirector('index','expenses');
 	}
 	

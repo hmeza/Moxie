@@ -12,12 +12,17 @@
  *
  */
 
-class Expenses {
+include_once '../Zend/Zend/Db/Table.php';
+include_once '../Zend/Zend/Registry.php';
+class Expenses extends Zend_Db_Table_Abstract {
 	private $database;
+	protected $_name = 'expenses';
+	protected $_primary = 'id';
 	
 	public function __construct() {
 		global $db;
 		$this->database = $db;
+		$this->_db = Zend_Registry::get('db');
 	}
 	
 	/**
@@ -100,20 +105,6 @@ class Expenses {
 			$query = $this->database->insert("expenses",$st_data);
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-		}
-	}
-	
-	/**
-	 * @desc	Deletes an expense
-	 * @author	hmeza
-	 * @since	2011-01-30
-	 * @param	int $expensePK
-	 */
-	public function deleteExpense($expensePK) {
-		try {
-			$query = $this->database->delete('expenses','id = '.$expensePK.' AND user_owner = '.$_SESSION['user_id']);
-		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 	}
