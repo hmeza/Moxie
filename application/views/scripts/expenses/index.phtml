@@ -35,12 +35,25 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>">Next</a>
 <?php
-echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post">';
+$i_expensePK = $this->form->getElement('id');
+if (isset($i_expensePK)) {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post">';
+	echo $this->form->getElement('user_owner');
+	echo $this->form->getElement('id');
+}
+else {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post">';
+}
 echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
 echo "\n";
 echo $this->form->getElement('note');
-echo '<div class="date"></div>';
+if (isset($i_expensePK)) {
+	echo $this->form->getElement('date');	
+}
+else {
+	echo '<div class="date"></div>';
+}
 echo $this->form->getElement('submit');
 echo '</form>';
 ?>
