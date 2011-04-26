@@ -19,8 +19,6 @@ function calendarInput(input) {
 	var cal = null;
 	var monthsel, yearsel;
 	
-	input.defaultValue=''; //setdate.format('Y-m-d');
-	input.value=''; //setdate.format('Y-m-d');
 	input.className+=' default';	
 	input.maxLength=10;
 	input.onfocus = function() {
