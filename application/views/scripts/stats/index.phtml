@@ -1,0 +1,34 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Stats</title>
+<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
+</head>
+
+<body>
+<table width=100%>
+<h2>Stats</h2>
+<tr>
+<th align="left">Category</th>
+<th align="right">Total this year</th>
+<th align="right">Average this year</th>
+<th align="right">Total</th>
+<th align="right">Average</th>
+</tr>
+<?php
+foreach ($this->data as $key => $value) {
+	echo '<tr>
+	<td>'.$value['name'].'</td>
+	<td align="right">'.number_format($value['sumyear'],2).' &euro;</td>
+	<td align="right">'.number_format($value['avgyear'],2).' &euro;</td>
+	<td align="right">'.number_format($value['sumtotal'],2).' &euro;</td>
+	<td align="right">'.number_format($value['avgtotal'],2).' &euro;</td>
+	</tr>';
+}
+?>
+</table>
+</body>
+</html>
