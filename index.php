@@ -29,6 +29,14 @@ include 'Zend/Registry.php';
 include_once 'Zend/Db/Table.php';
 include_once 'Zend/Config/Ini.php';
 
+// Set translation
+if (isset($_SESSION['user_lang'])) {
+	include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
+}
+else {
+	include 'application/configs/langs/es.php';
+}
+
 // Set config vars
 switch($_SERVER['SERVER_NAME']) {
 	case 'hugoboss666.no-ip.com':
