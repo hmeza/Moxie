@@ -10,14 +10,41 @@ class BudgetsController extends Zend_Controller_Action
 		$this->budgets = new Budgets();		
 	}
 	
+	private function prepareCategoriesTree($st_categories) {
+		error_log(print_r($st_categories,true));
+		$st_preparedTree = array();
+		foreach($st_categories as $key => $value) {
+			if (empty($value['id3'])) {
+				$i_key = null;
+				$st_value = null;
+			}
+			if (!empty($value['id3']) && $i_key == null) {
+				$i_key = $value['id2'];
+				$st_parentLine = array(
+					'id1'	=>	$value['id1'],
+					'name1'	=>	$value['name1'],
+					'id2'	=>	$value['id2'],
+					'name2'	=>	$value['name2'],
+					'id3'	=>	null,
+					'name3'	=>	null			
+				);
+				$st_preparedTree[] = $st_parentLine;
+			}
+			$st_preparedTree[] = $value;
+		}
+		error_log(print_r($st_preparedTree,true));
+		return $st_preparedTree;
+	}
+	
 	public function indexAction() {
 		$o_categories = new Categories();
-		$st_categories = $o_categories->getCategoriesByUser($_SESSION['user_id']);
+		$st_categories = $this->prepareCategoriesTree($o_categories->getCategoriesTree());
 		foreach($st_categories as $key => $value) {
 			// get budget for this category
+			$i_categoryPK = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
 			$o_budget = $this->budgets->fetchRow(
 							$this->budgets->select()
-							->where('category = '.$value['id1'])
+							->where('category = '.$i_categoryPK)
 						);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}

@@ -101,8 +101,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
 				->joinLeft(array('c3'=>'categories'),'c3.parent = c2.id',array())
 				->where('c1.user_owner = ?', $_SESSION['user_id'])
-				->where('c1.name IS NOT NULL')
-				->order('c2.parent');
+				->where('c1.name IS NULL')
+				->order('c2.id');
 			$stmt = $this->database->query($query);
 			return $stmt->fetchAll();
 		}
