@@ -50,7 +50,7 @@ $f_initialBudget = 0;
 foreach ($this->categories as $key => $value) {
 	echo '
 	<tr>
-	<td>'.$value['name1'].' '.$value['name2'].'</td>
+	<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
 	<td align="right">
 	<input type="hidden" name="category'.$value['id1'].'" id="category'.$value['id1'].'" value="'.$value['id1'].'">
 	<input type="text" id="amount'.$value['id1'].'" name="amount'.$value['id1'].'" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
