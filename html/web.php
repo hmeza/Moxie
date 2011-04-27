@@ -2,6 +2,8 @@
 // TODO: Find a proper name for this
 
 function web_login() {
+	global $st_lang;
+	
 	return '
 	<form name="login" id="login" action="/login/login" method="POST">
 	<fieldset class="login contact">
@@ -10,7 +12,7 @@ function web_login() {
 	<tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
 	<tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
 	<tr><td colspan=2 align="right"><input type="submit" value="Login"></td></tr>
-	<tr><td colspan=2 align="right"><a href="/login/newuser">Already don\'t have an account?</a></td></tr>
+	<tr><td colspan=2 align="right"><a href="/login/newuser">'.$st_lang['new_user'].'</a></td></tr>
 	</table>
 	</fieldset>
 	</form>
@@ -22,10 +24,12 @@ function web_userData($i_userId, $s_userName) {
 }
 
 function web_header($s_name, $b_loggedIn = false) {
+	global $st_lang;
+	
 	$header = '
 	<table width=100%>
 	<tr>
-	<td valign="top"><h1>Welcome to <a href="http://moxie.dev/">'.$s_name.'</a></h1></td>
+	<td valign="top"><h1>'.$st_lang['welcome'].'<a href="http://moxie.dev/">'.$s_name.'</a></h1></td>
 	<td align="right">';
 	
 	if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
@@ -45,23 +49,25 @@ function web_header($s_name, $b_loggedIn = false) {
 }
 
 function web_menu() {
+	global $st_lang;
+	
 	$s_webMenu = '
 	<table cellspacing=10>
 	';
 	if (isset($_SESSION['user_id'])) {
 		$s_webMenu .= '
-		<td><a href="/categories/index">Categories</a></td>
-		<td><a href="/budgets/index">Budget</a></td>
-		<td><a href="/incomes/index">Incomes</a></td>
-		<td><a href="/expenses/index">Expenses</a></td>
-		<td><a href="/stats/index">Stats</a></td>
+		<td><a href="/categories/index">'.$st_lang['categories'].'</a></td>
+		<td><a href="/budgets/index">'.$st_lang['budget'].'</a></td>
+		<td><a href="/incomes/index">'.$st_lang['incomes'].'</a></td>
+		<td><a href="/expenses/index">'.$st_lang['expenses'].'</a></td>
+		<td><a href="/stats/index">'.$st_lang['stats'].'</a></td>
 		';
 	}
 	else {
 		$s_webMenu .= '
-		<td><a href="/">Index</a></td>
-		<td><a href="/texts/about">About</a></td>
-		<td><a href="/texts/benefits">Benefits</a></td>
+		<td><a href="/">'.$st_lang['index'].'</a></td>
+		<td><a href="/texts/about">'.$st_lang['about'].'</a></td>
+		<td><a href="/texts/benefits">'.$st_lang['benefits'].'</a></td>
 		';
 	}
 	$s_webMenu .= '
