@@ -11,7 +11,6 @@ class BudgetsController extends Zend_Controller_Action
 	}
 	
 	private function prepareCategoriesTree($st_categories) {
-		error_log(print_r($st_categories,true));
 		$st_preparedTree = array();
 		foreach($st_categories as $key => $value) {
 			if (empty($value['id3'])) {
@@ -32,7 +31,6 @@ class BudgetsController extends Zend_Controller_Action
 			}
 			$st_preparedTree[] = $value;
 		}
-		error_log(print_r($st_preparedTree,true));
 		return $st_preparedTree;
 	}
 	
