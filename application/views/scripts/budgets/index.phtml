@@ -27,7 +27,7 @@ foreach ($this->categories as $key => $value) {
 	$("#amount'.$value['id1'].'").change(function(){
 		category = $("#category'.$value['id1'].'").val();
 		amount = $("#amount'.$value['id1'].'").val();
-		$("#amount'.$value['id1'].'").load("http://moxie.dev/budgets/addajax/category/"+category+"/amount/"+amount);
+		$("#amount'.$value['id1'].'").load("http://moxie.dev/budgets/add/category/"+category+"/amount/"+amount);
 	})
 	.ajaxStart(function() {
 		$("#spinner").show();
