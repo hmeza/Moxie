@@ -25,35 +25,7 @@ class BudgetsController extends Zend_Controller_Action
 		//$this->_helper->redirector('index','budgets');
 	}
 	
-	/**
-	 * @desc	Add a line on budget
-	 */
 	public function addAction() {
-		$o_income = $this->getRequest()->getPost();
-		$st_data = array(
-			'user_owner'	=>	$_SESSION['user_id'],
-			'category'		=>	$o_income['category'],
-			'amount'		=>	$o_income['amount'],
-			'date_created'	=>	date('Y-m-d H:i:s'),
-		);
-		try {
-			$result = $this->budgets->insert($st_data);
-		}
-		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-			try {
-				$cond = 'category = '.$st_data['category'];
-				$result = $this->budgets->update($st_data,$cond);
-			}
-			catch(Exception $e) {
-				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-			}
-			error_log($result.' row(s) updated');
-		}
-		$this->_helper->redirector('index','budgets');
-	}
-	
-	public function addajaxAction() {
 		header("Cache-Control: no-cache");
 		$st_data = array(
 			'user_owner'	=>	$_SESSION['user_id'],
