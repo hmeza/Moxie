@@ -7,9 +7,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <title>Budgets</title>
 <link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
 <link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
-<script type="text/javascript" src="../../../helpers.js"></script>
-<script type="text/javascript" src="../../../calendar.js"></script>
-<script type="text/javascript" src="../../../form.js"></script>
 <script type="text/javascript">
 function getSum() {
 	var node_list = document.getElementsByTagName('input');
@@ -27,7 +24,7 @@ function getSum() {
 </head>
 
 <body>
-<h2>Budget</h2>
+<h2><?php global $st_lang; echo $st_lang['budget']; ?></h2>
 <table width=50%>
 <?php
 $f_initialBudget = 0;
