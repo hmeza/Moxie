@@ -42,6 +42,7 @@ class LoginController extends Zend_Controller_Action {
 			else {
 				$_SESSION['user_id'] = $st_result['id'];
 				$_SESSION['user_name'] = $st_result['login'];
+				$_SESSION['user_lang'] = $st_result['language'];
 				$this->view->assign('loginMessage', 'login OK');
 				$this->_helper->redirector('index','expenses');
 			}

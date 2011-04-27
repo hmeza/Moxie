@@ -13,7 +13,7 @@ class loginModel extends Zend_Db_Table_Abstract {
 	public function checkLogin($s_user, $s_password) {
 		try {
 			$s_select = $this->_db->select()
-						->from('users',array('id','login'))
+						->from('users',array('id','login','language'))
 						->where('login = "'.$s_user.'"')
 						->where('password = md5("'.$s_password.'")');
 			$o_rows = $this->_db->fetchAll($s_select);
