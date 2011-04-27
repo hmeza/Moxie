@@ -3,7 +3,7 @@
 $st_lang = array(
 	// Index and menu
 	'welcome' => 'Welcome to ',
-	'categories' => 'Categorias',
+	'categories' => 'Categorías',
 	'budget'	=>	'Presupuesto',
 	'incomes'	=>	'Ingresos',
 	'expenses'	=>	'Gastos',
