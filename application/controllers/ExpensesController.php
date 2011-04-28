@@ -81,12 +81,52 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-01-03
 	 */
 	public function indexAction() {
+		include 'application/models/Budgets.php';
+		$o_budget = new Budgets();
+		$st_data = $o_budget->fetchAll(
+						$o_budget->select()->where('user_owner = '.$_SESSION['user_id'])
+					);
+		$st_budget = array();
+		foreach($st_data as $key => $value) {
+			$st_budget[$value['category']] = $value['amount'];
+		}
+		
 		// list current month by default
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
+		
+		$db = Zend_Registry::get('db');
+		$s_select = $db->select()
+			->from(array('e'=>'expenses'),
+					array(
+						'sum(e.amount)'	=>	'sum(e.amount)'
+					))
+			->join(array('c'=>'categories'),'',array(
+						'id'		=>	'c.id',
+						'name'		=>	'c.name'
+					))
+			->joinLeft(array('c2'=>'categories'),'c.id = c2.parent',
+					array(
+						'son_id'	=>	'c2.id'
+					))
+			->joinLeft(array('c0'=>'categories'),'c0.id = c.parent',
+					array(
+						'parent_id'	=>	'c0.id'
+					))
+			->where('e.user_owner = '.$_SESSION['user_id'])
+			->where('c.id = e.category OR c2.id = e.category')
+			->where('YEAR(e.expense_date) = '.$i_year)
+			->where('MONTH(e.expense_date) = '.$i_month)
+			->where('e.in_sum = 1')
+			->group('c.id')
+			->order(array('c.id','c2.id'));
+		$st_data = $db->fetchAll($s_select);
+		
+		$this->view->assign('expenses', $st_data);
+		$this->view->assign('budget', $st_budget);
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
@@ -114,11 +154,51 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-02-08
 	 */
 	public function editAction() {
+		include 'application/models/Budgets.php';
+		$o_budget = new Budgets();
+		$st_data = $o_budget->fetchAll(
+						$o_budget->select()->where('user_owner = '.$_SESSION['user_id'])
+					);
+		$st_budget = array();
+		foreach($st_data as $key => $value) {
+			$st_budget[$value['category']] = $value['amount'];
+		}
+		
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
+		
+		$db = Zend_Registry::get('db');
+		$s_select = $db->select()
+			->from(array('e'=>'expenses'),
+					array(
+						'sum(e.amount)'	=>	'sum(e.amount)'
+					))
+			->join(array('c'=>'categories'),'',array(
+						'id'		=>	'c.id',
+						'name'		=>	'c.name'
+					))
+			->joinLeft(array('c2'=>'categories'),'c.id = c2.parent',
+					array(
+						'son_id'	=>	'c2.id'
+					))
+			->joinLeft(array('c0'=>'categories'),'c0.id = c.parent',
+					array(
+						'parent_id'	=>	'c0.id'
+					))
+			->where('e.user_owner = '.$_SESSION['user_id'])
+			->where('c.id = e.category OR c2.id = e.category')
+			->where('YEAR(e.expense_date) = '.$i_year)
+			->where('MONTH(e.expense_date) = '.$i_month)
+			->where('e.in_sum = 1')
+			->group('c.id')
+			->order(array('c.id','c2.id'));
+		$st_data = $db->fetchAll($s_select);
+		
+		$this->view->assign('expenses', $st_data);
+		$this->view->assign('budget', $st_budget);
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
