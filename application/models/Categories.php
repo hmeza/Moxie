@@ -124,6 +124,25 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 		return $formCategories;
 	}
+	
+	public function getCategoriesForSelect() {
+		// get categories and prepare them for view
+		$s_categories = $this->getCategoriesByUser();
+		// get root category
+		$st_parent = $this->fetchRow($this->select()
+			->where('user_owner = '.$_SESSION['user_id'])
+			->where('parent IS NULL'));
+
+		$formCategories = array();
+		$formCategories[$st_parent->id] = 'New category';
+		foreach($s_categories as $key => $value) {
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
+		}
+		return $formCategories;
+	}
 }
 
 ?>

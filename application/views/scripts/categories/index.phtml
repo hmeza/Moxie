@@ -18,9 +18,11 @@ echo $this->form;
 
 <?php
 foreach ($this->list as $key => $value) {
-	echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
-	echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="Editar" title="Editar">E</a>&nbsp;&nbsp;&nbsp;';
-	echo $value['name1']." ".$value['name2']."<br>";
+	if (!empty($value['parent1'])) {
+		echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
+		echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="Editar" title="Editar">E</a>&nbsp;&nbsp;&nbsp;';
+		echo $value['name1']." ".$value['name2']."<br>";
+	}
 }
 ?>
 </body>
