@@ -1,26 +1,14 @@
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" />
+<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/data.php?mydata=month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
+<br><br><br><br>
 <?php
-
-mysql_connect("127.0.0.1","root","0nr3fn1");
-mysql_select_db("moxie");
-
-$sql = "select category, amount from budgets where user_owner = ".$_SESSION['user_id'];
-$budget = mysql_query($sql);
-$st_budget = array();
-while ($data = mysql_fetch_array($budget)) {
-	$st_budget[$data[0]] = $data[1];
-}
-
-$sql = "select c0.id as parent_id, c.id as id, c.name as name,c2.id as son_id,sum(e.amount) from expenses e, categories c left join categories c2 on c.id = c2.parent left join categories c0 on c0.id = c.parent "
-	." where e.user_owner = ".$_SESSION['user_id']." AND (c.id = e.category or c2.id = e.category) and YEAR(e.expense_date) = ".$this->year." AND MONTH(e.expense_date) = ".$this->month." and e.in_sum = 1 group by (c.id) order by c.id, c2.id";
-$rows = mysql_query($sql);
+$st_budget = $this->budget;
 
 echo '<center><table width = 300>
 <tr><td></td><td></td><td align="right">Expended</td>';
@@ -29,21 +17,21 @@ if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">Budget</
 $current = 0;
 $total = 0;
 $budget_total = 0;
-while ($data = mysql_fetch_array($rows)) {
-	$parent = $data[1];
-	if ($data[1] != 1) {
-		$amount = $data[4];
-		if ($data[0] == $current) {
+foreach ($this->expenses as $key => $data) {
+	$parent = $data['id'];
+	if ($data['id'] != 1) {
+		$amount = $data['sum(e.amount)'];
+		if ($data['parent_id'] == $current) {
 			$category_parent = "";
-			$category_current = $data[2];
+			$category_current = $data['name'];
 		}
 		else {
-			$current = $data[1];
-			$category_parent = $data[2];
+			$current = $data['id'];
+			$category_parent = $data['name'];
 			$category_current = "";
 		}
-		if ($data[0] == 1) $total = $total + $amount;
-		$budget_amount = (isset($st_budget[$data[1]])) ? $st_budget[$data[1]] : 0;
+		if ($data['parent_id'] == 1) $total = $total + $amount;
+		$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
 		$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
 		echo '<tr><td>'.$category_parent.'</td><td>'.$category_current.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
 		if(!empty($st_budget)) {
@@ -59,7 +47,6 @@ if (!empty($st_budget)) {
 	echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';
 }
 echo '</tr></table></center>';
-mysql_free_result($rows);
 
 print_r($this->form_sent);
 ?>
@@ -67,8 +54,8 @@ print_r($this->form_sent);
 <!-- Graphic -->
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
 <param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" />
+<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" />
 <param name="quality" value="high" />
 <param name="bgcolor" value="#FFFFFF" />
-<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=http://moxie.dev/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats.php?mydata=user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>

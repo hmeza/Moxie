@@ -23,7 +23,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <script type="text/javascript" src="../../../form.js"></script> 
 
 </head>
-</head>
 <body>
 
 <h2>Expenses</h2>
@@ -38,7 +37,9 @@ echo $this->partial('expenses/data.phtml',
 </td>
 <td valign="top">
 <?php
-echo $this->partial('expenses/stats.phtml', array('year'=>$this->year,'month'=>$this->month));
+error_log(print_r($this->expenses,true));
+echo $this->partial('expenses/stats.phtml',
+					array('budget'=>$this->budget,'expenses'=>$this->expenses,'year'=>$this->year,'month'=>$this->month));
 ?>
 </td></tr></table>
 </body>
