@@ -14,7 +14,7 @@ class CategoriesController extends Zend_Controller_Action
     	$form  = new Zend_Form();
     	$form->addElement('select', 'parent', array(
 			'label' => 'Category parent',
-			'multioptions' => $this->categories->getCategoriesForView()
+			'multioptions' => $this->categories->getCategoriesForSelect()
 			)
 		);
 		$form->addElement('text', 'name', array('label' => 'Category name'));
@@ -25,8 +25,22 @@ class CategoriesController extends Zend_Controller_Action
 	}
 	
 	private function mountCategoryTree($st_categories) {
-		$st_orderedCategories = array();
-		return $st_categories;
+		$st_parent = $this->categories->fetchRow($this->categories->select()
+			->where('user_owner = '.$_SESSION['user_id'])
+			->where('parent IS NULL'));
+		$st_root = array(
+			'id1'		=>	$st_parent->id,
+			'parent1'	=>	null,
+			'name1'		=>	null,
+			'name2'		=>	'New category'
+		);
+		$st_parentCategories = array();
+		$st_parentCategories[] = $st_root;
+		foreach ($st_categories as $key => $value) {
+			$st_parentCategories[] = $value;
+		}
+		error_log(print_r($st_parentCategories,true));
+		return $st_parentCategories;
 	}
 		
     public function indexAction() {
