@@ -47,7 +47,6 @@ class BudgetsController extends Zend_Controller_Action
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
 		$this->view->assign('categories',$st_categories);
-		//$this->_helper->redirector('index','budgets');
 	}
 	
 	public function addAction() {

@@ -22,12 +22,14 @@ function getSum() {
 }
 $(document).ready(function() {
 <?php
+$s_url = Zend_Registry::get('config')->moxie->settings->url;
 foreach ($this->categories as $key => $value) {
+	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
 	echo '
-	$("#amount'.$value['id1'].'").change(function(){
-		category = $("#category'.$value['id1'].'").val();
-		amount = $("#amount'.$value['id1'].'").val();
-		$("#amount'.$value['id1'].'").load("http://moxie.dev/budgets/add/category/"+category+"/amount/"+amount);
+	$("#amount'.$id.'").change(function(){
+		category = $("#category'.$id.'").val();
+		amount = $("#amount'.$id.'").val();
+		$("#amount'.$id.'").load("'.$s_url.'/budgets/add/category/"+category+"/amount/"+amount);
 	})
 	.ajaxStart(function() {
 		$("#spinner").show();
@@ -48,12 +50,13 @@ foreach ($this->categories as $key => $value) {
 <?php
 $f_initialBudget = 0;
 foreach ($this->categories as $key => $value) {
+	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
 	echo '
 	<tr>
 	<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
 	<td align="right">
-	<input type="hidden" name="category'.$value['id1'].'" id="category'.$value['id1'].'" value="'.$value['id1'].'">
-	<input type="text" id="amount'.$value['id1'].'" name="amount'.$value['id1'].'" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
+	<input type="hidden" name="category'.$id.'" id="category'.$id.'" value="'.$id.'">
+	<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
 	</td>
 	<td width=15></td>
 	</tr>
