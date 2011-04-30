@@ -10,13 +10,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <h1>Categories</h1>
     
 <?php
-$this->form->setAction('/categories/add')->setMethod('post');
-$this->form->setAttrib('id', 'login');
-
 echo $this->form;
-?>
 
-<?php
 foreach ($this->list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
