@@ -22,7 +22,7 @@ class IncomesController extends Zend_Controller_Action
 		$categories = new Categories();
 		
 			// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser(1);
+		$s_categories = $categories->getCategoriesByUser($_SESSION['user_id']);
 		foreach($s_categories as $key => $value) {
 			$formCategories[$value['id1']] = $value['name2'];
 			if (!empty($value['name1'])) {
