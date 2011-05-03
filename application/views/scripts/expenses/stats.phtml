@@ -17,9 +17,10 @@ if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">Budget</
 $current = 0;
 $total = 0;
 $budget_total = 0;
+$i_rootPK = 0;
 foreach ($this->expenses as $key => $data) {
 	$parent = $data['id'];
-	if ($data['id'] != 1) {
+	if (!isset($data['parent_id'])) {
 		$amount = $data['sum(e.amount)'];
 		if ($data['parent_id'] == $current) {
 			$category_parent = "";
@@ -30,7 +31,7 @@ foreach ($this->expenses as $key => $data) {
 			$category_parent = $data['name'];
 			$category_current = "";
 		}
-		if ($data['parent_id'] == 1) $total = $total + $amount;
+		if ($data['parent_id'] == $i_rootPK) $total = $total + $amount;
 		$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
 		$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
 		echo '<tr><td>'.$category_parent.'</td><td>'.$category_current.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
@@ -39,6 +40,9 @@ foreach ($this->expenses as $key => $data) {
 			$budget_total = $budget_total + $budget_amount;
 		}
 		echo '</tr>';
+	}
+	else {
+		$i_rootPK = $data['id'];
 	}
 }
 echo '<tr><td colspan=2><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
