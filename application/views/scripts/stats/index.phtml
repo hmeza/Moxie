@@ -10,13 +10,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 <body>
 <table width=100%>
-<h2>Stats</h2>
+<h2><?php global $st_lang; echo $st_lang['stats']; ?></h2>
 <tr>
-<th align="left">Category</th>
-<th align="right">Total this year</th>
-<th align="right">Average this year</th>
-<th align="right">Total</th>
-<th align="right">Average</th>
+<th align="left"><?= $st_lang['category']; ?></th>
+<th align="right"><?= $st_lang['total_this_year']; ?></th>
+<th align="right"><?= $st_lang['average_this_year']; ?></th>
+<th align="right"><?= $st_lang['total']; ?></th>
+<th align="right"><?= $st_lang['average']; ?></th>
 </tr>
 <?php
 foreach ($this->data as $key => $value) {

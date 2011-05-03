@@ -17,6 +17,11 @@ $st_lang = array(
 	// Budgets
 	// Categories
 	// Stats
+	'category'	=>	'Categoría',
+	'total_this_year'	=>	'Total este año',
+	'average_this_year'	=>	'Media este año',
+	'total'		=>	'Total',
+	'average'	=>	'Media'
 	// Other stuff
 );
 ?>
