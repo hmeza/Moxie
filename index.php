@@ -1,7 +1,7 @@
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
-<link rel="stylesheet" type="text/css" href="../../../dropdown.css"/>
+<link rel="stylesheet" type="text/css" href="/moxie.css"/>
+<link rel="stylesheet" type="text/css" href="/dropdown.css"/>
 <!-- Google Analytics script -->
 <script type="text/javascript">
 
