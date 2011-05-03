@@ -20,7 +20,7 @@ $budget_total = 0;
 $i_rootPK = 0;
 foreach ($this->expenses as $key => $data) {
 	$parent = $data['id'];
-	if (!isset($data['parent_id'])) {
+	if (!empty($data['parent_id'])) {
 		$amount = $data['sum(e.amount)'];
 		if ($data['parent_id'] == $current) {
 			$category_parent = "";
