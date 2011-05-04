@@ -4,12 +4,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Budgets</title>
+<title><?php global $st_lang; echo $st_lang['stats']; ?></title>
 <link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
 </head>
 
 <body>
-<h2>Register</h2>
+<h2><?= $st_lang['register']; ?></h2>
 <?php
 $this->form->setAction('/login/registeruser')->setMethod('post');
 echo $this->form;

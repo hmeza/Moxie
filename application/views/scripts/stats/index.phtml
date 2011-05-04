@@ -4,13 +4,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Stats</title>
+<title><?php global $st_lang; echo $st_lang['stats']; ?></title>
 <link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
 </head>
 
 <body>
 <table width=100%>
-<h2><?php global $st_lang; echo $st_lang['stats']; ?></h2>
+<h2><?php echo $st_lang['stats']; ?></h2>
 <tr>
 <th align="left"><?= $st_lang['category']; ?></th>
 <th align="right"><?= $st_lang['total_this_year']; ?></th>
