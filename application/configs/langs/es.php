@@ -21,7 +21,12 @@ $st_lang = array(
 	'total_this_year'	=>	'Total este año',
 	'average_this_year'	=>	'Media este año',
 	'total'		=>	'Total',
-	'average'	=>	'Media'
+	'average'	=>	'Media',
+	// User, login, etc.
+	'new_user'	=>	'Nuevo usuario',
+	'register'	=>	'Formulario de registro',
+	'registration_ok'	=>	'<h2>Registrado con éxito!</h2>
+Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	// Other stuff
 );
 ?>
