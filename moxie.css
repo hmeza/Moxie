@@ -117,6 +117,16 @@ form.budget {
 	margin: 0em;
 }
 
+.moxietitle {
+	cursor: hand;
+	cursor: pointer;
+	background:url("/img/moxie-title.png") no-repeat;
+}
+
+.moxietitle:hover {
+	background:url("/img/moxie-title-hover.png") no-repeat;
+}
+
 #submit-go {
 	margin-top:1em;
 	width:69px;
