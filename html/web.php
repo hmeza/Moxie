@@ -20,7 +20,7 @@ function web_login() {
 }
 
 function web_userData($i_userId, $s_userName) {
-	echo $s_userName.' <a href="/login/logout">Logout</a>';
+	return $s_userName.' <a href="/login/logout">Logout</a>';
 }
 
 function web_header($s_name, $b_loggedIn = false) {
@@ -29,7 +29,7 @@ function web_header($s_name, $b_loggedIn = false) {
 	$header = '
 	<table width=100%>
 	<tr>
-	<td valign="top"><h1>'.$st_lang['welcome'].'<a href="http://moxie.dev/">'.$s_name.'</a></h1></td>
+	<td valign="top" class="moxietitle" width="233" height="65" onclick="window.location=\''.Zend_Registry::get('config')->moxie->settings->url.'\'"></td>
 	<td align="right">';
 	
 	if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
