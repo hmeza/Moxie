@@ -41,6 +41,7 @@ else {
 switch($_SERVER['SERVER_NAME']) {
 	case 'hugoboss666.no-ip.com':
 	case 'moxie.com':
+	case 'moxie.redirectme.net':
 		$section = "staging";
 		break;
 	case 'moxie.dev':
