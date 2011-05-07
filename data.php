@@ -23,7 +23,7 @@ $data = mysql_query($sql);
 $s_id = mysql_fetch_array($data);
 $i_id = $s_id['id'];
 	
-$sql = "select c.id, sum(e.amount), c.name from expenses e, categories c where c.id = e.category and e.user_owner = 15 and YEAR(e.expense_date) = 2011 AND month(e.expense_date) = 5 group by c.id order by c.id;";
+$sql = "select c.id, sum(e.amount), c.name from expenses e, categories c where c.id = e.category and e.user_owner = ".$user." and YEAR(e.expense_date) = ".$year." AND month(e.expense_date) = ".$month." group by c.id order by c.id;";
 
 $rows = mysql_query($sql);
 
