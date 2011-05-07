@@ -11,7 +11,7 @@
 $st_budget = $this->budget;
 
 echo '<center><table width = 300>
-<tr><td></td><td></td><td align="right">Expended</td>';
+<tr><td></td><td align="right">Expended</td>';
 if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">Budget</td></tr>';
 
 $current = 0;
@@ -19,33 +19,20 @@ $total = 0;
 $budget_total = 0;
 $i_rootPK = 0;
 foreach ($this->expenses as $key => $data) {
-	$parent = $data['id'];
-	if (!empty($data['parent_id'])) {
-		$amount = $data['sum(e.amount)'];
-		if ($data['parent_id'] == $current) {
-			$category_parent = "";
-			$category_current = $data['name'];
-		}
-		else {
-			$current = $data['id'];
-			$category_parent = $data['name'];
-			$category_current = "";
-		}
-		if ($data['parent_id'] == $i_rootPK) $total = $total + $amount;
-		$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
-		$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
-		echo '<tr><td>'.$category_parent.'</td><td>'.$category_current.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
-		if(!empty($st_budget)) {
-			echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
-			$budget_total = $budget_total + $budget_amount;
-		}
-		echo '</tr>';
+	$amount = $data['sum(e.amount)'];
+	$current = $data['id'];
+	$category_name = $data['name'];
+	$total = $total + $amount;
+	$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
+	$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
+	echo '<tr><td>'.$category_name.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
+	if(!empty($st_budget)) {
+		echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
+		$budget_total = $budget_total + $budget_amount;
 	}
-	else {
-		$i_rootPK = $data['id'];
-	}
+	echo '</tr>';
 }
-echo '<tr><td colspan=2><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
+echo '<tr><td><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
 if (!empty($st_budget)) {
 	$budget_color = ($budget_total <= $total) ? '#FF0000' : '#00FF00';
 	echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';

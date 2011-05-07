@@ -22,20 +22,16 @@ $sql = "select id from categories where parent IS NULL and user_owner = ".$user;
 $data = mysql_query($sql);
 $s_id = mysql_fetch_array($data);
 $i_id = $s_id['id'];
+	
+$sql = "select c.id, sum(e.amount), c.name from expenses e, categories c where c.id = e.category and e.user_owner = 15 and YEAR(e.expense_date) = 2011 AND month(e.expense_date) = 5 group by c.id order by c.id;";
 
-$sql = "select c0.id as parent_id, c.name as name,sum(e.amount) from expenses e, categories c left join categories c2 on c.id = c2.parent left join categories c0 on c0.id = c.parent "
-	." where (c.id = e.category or c2.id = e.category) AND YEAR(e.expense_date) = ".$year." AND MONTH(e.expense_date) = ".$month
-	." and e.in_sum = 1 and e.user_owner = ".$user
-	." group by (c.id) order by c.id, c2.id";
 $rows = mysql_query($sql);
 
 $data = array();
 $labels = array();
 while ($value = mysql_fetch_array($rows)) {
-	if ($value['parent_id'] == $i_id) {
-		$data[] = $value[2];
-		$labels[] = $value[1];
-	}
+	$data[] = $value[1];
+	$labels[] = $value[2];
 }
 mysql_free_result($rows);
 
