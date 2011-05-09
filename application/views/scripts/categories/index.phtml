@@ -14,9 +14,10 @@ echo $this->form;
 
 foreach ($this->list as $key => $value) {
 	if (!empty($value['parent1'])) {
+		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
 		echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
 		echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="Editar" title="Editar">E</a>&nbsp;&nbsp;&nbsp;';
-		echo $value['name1']." ".$value['name2']."<br>";
+		echo $first_name.$value['name2']."<br>";
 	}
 }
 ?>
