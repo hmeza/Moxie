@@ -16,6 +16,7 @@ $st_lang = array(
 	// Incomes
 	// Budgets
 	// Categories
+	'categories_and_budget'	=>	'Categorias y presupuesto',
 	// Stats
 	'category'	=>	'Categoría',
 	'total_this_year'	=>	'Total este año',
