@@ -57,7 +57,6 @@ function web_menu() {
 	if (isset($_SESSION['user_id'])) {
 		$s_webMenu .= '
 		<td><a href="/categories/index">'.$st_lang['categories'].'</a></td>
-		<td><a href="/budgets/index">'.$st_lang['budget'].'</a></td>
 		<td><a href="/incomes/index">'.$st_lang['incomes'].'</a></td>
 		<td><a href="/expenses/index">'.$st_lang['expenses'].'</a></td>
 		<td><a href="/stats/index">'.$st_lang['stats'].'</a></td>
