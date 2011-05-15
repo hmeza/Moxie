@@ -1,0 +1,73 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Budgets</title>
+<link rel="stylesheet" type="text/css" href="/moxie.css"/>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript">
+function getSum() {
+	var node_list = document.getElementsByTagName('input');
+	var sum = 0;
+	for (var i = 0; i < node_list.length; i++) {
+	    var node = node_list[i];
+	 
+	    if (node.getAttribute('type') == 'text') {
+	        sum = sum + Math.round(node.value);
+	    }
+	}
+	document.getElementById('sum').innerHTML = '<b>' + sum + ' &euro;</b>';
+}
+$(document).ready(function() {
+<?php
+$s_url = Zend_Registry::get('config')->moxie->settings->url;
+foreach ($this->categories as $key => $value) {
+	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
+	echo '
+	$("#amount'.$id.'").change(function(){
+		category = $("#category'.$id.'").val();
+		amount = $("#amount'.$id.'").val();
+		$("#amount'.$id.'").load("'.$s_url.'/budgets/add/category/"+category+"/amount/"+amount);
+	})
+	.ajaxStart(function() {
+		$("#spinner").show();
+	})
+	.ajaxStop(function() {
+		$("#spinner").hide();
+	});
+	';
+}
+?>
+});
+</script>
+</head>
+
+<body>
+<h2><?php global $st_lang; echo $st_lang['budget']; ?></h2>
+<table width=100%>
+<?php
+$f_initialBudget = 0;
+foreach ($this->categories as $key => $value) {
+	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
+	echo '
+	<tr>
+	<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
+	<td align="right">
+	<input type="hidden" name="category'.$id.'" id="category'.$id.'" value="'.$id.'">
+	<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
+	</td>
+	<td width=15></td>
+	</tr>
+	';
+	$f_initialBudget += $value['budget'];
+}
+?>
+<tr>
+<td></td><td align="right"><span id="sum"><b><?= $f_initialBudget?> &euro;</b></span></td>
+<td><span id="spinner" style="display:none"><img src="/img/spinner.gif"></span></td>
+</tr>
+</table>
+</body>
+</html>
