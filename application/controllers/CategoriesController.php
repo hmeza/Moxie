@@ -1,6 +1,8 @@
 <?php
 /** Zend_Controller_Action */
-include 'application/models/Categories.php';
+include_once 'application/models/Categories.php';
+include 'application/controllers/BudgetsController.php';
+
 class CategoriesController extends Zend_Controller_Action
 {
 	private $categories;
@@ -68,8 +70,9 @@ class CategoriesController extends Zend_Controller_Action
 	}
 		
     public function indexAction() {
-		$this->view->assign('form', $this->getForm());
+    	$this->view->assign('form', $this->getForm());
 		$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser($_SESSION['user_id'])));
+		$this->_forward('index', 'budgets');
     }
     
    
