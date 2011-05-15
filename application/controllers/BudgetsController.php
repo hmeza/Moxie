@@ -1,7 +1,7 @@
 <?php
 /** Zend_Controller_Action */
 include 'application/models/Budgets.php';
-include 'application/models/Categories.php';
+include_once 'application/models/Categories.php';
 class BudgetsController extends Zend_Controller_Action
 {
 	private $budgets;
@@ -47,6 +47,7 @@ class BudgetsController extends Zend_Controller_Action
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
 		$this->view->assign('categories',$st_categories);
+		$this->renderScript('categories/index.phtml'); 
 	}
 	
 	public function addAction() {
