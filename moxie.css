@@ -23,6 +23,17 @@ a {
 a:hover {
 	color: #0202a7;
 }
+
+span.linked {
+	color: #0b77b7;
+	text-decoration:none;
+}
+span:hover.linked {
+	color: #0202a7;
+	cursor: hand;
+	cursor: pointer;
+}
+
 label {
 	float:left;
 	width:10em;
