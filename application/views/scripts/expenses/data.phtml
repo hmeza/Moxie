@@ -45,7 +45,7 @@ foreach ($this->list as $key=>$value) {
 	echo '
 <tr>
 <td><input class="lista" type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
-<td><a href="/expenses/delete/id/'.$value['id'].$s_dateGet.'">X</a>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
+<td><span class="linked" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'>X</span>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
 .'<td>'.$value['amount'].' &euro;</td>
 <td width=100 align="center">'.$expense_date.'</td>
 <td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
