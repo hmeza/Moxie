@@ -58,6 +58,7 @@ fieldset {
 	padding:0 0.5em 0.5em;
 }
 .date input {
+	background-image:url(/img/calendar-small.gif);
 	background-repeat:no-repeat;
 	background-position:100% 50%;
 }
