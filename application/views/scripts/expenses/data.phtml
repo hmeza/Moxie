@@ -28,7 +28,7 @@ echo '</form>';
 <?php
 $f_totalAmount = 0;
 echo '
-<table border=1 width=600>
+<table border=1 width=600 class="list">
 <td colspan=6>
 Marcar:&nbsp;
 <span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
@@ -44,12 +44,12 @@ foreach ($this->list as $key=>$value) {
 	
 	echo '
 <tr>
-<td><input class="lista" type="checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
-<td><span class="linked" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'>X</span>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
-.'<td>'.$value['amount'].' &euro;</td>
-<td width=100 align="center">'.$expense_date.'</td>
-<td><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td width=200>'.$value['note'].'</td>
+<td class="list" width="10"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
+<td class="list" width="30"><span class="linked" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'>X</span>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
+.'<td align="right" class="list">'.number_format($value['amount'],2).' &euro;</td>
+<td width="100" align="center" class="list">'.$expense_date.'</td>
+<td class="list" width="80"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<td class="list">'.$value['note'].'</td>
 </tr>';
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
