@@ -24,16 +24,6 @@ a:hover {
 	color: #0202a7;
 }
 
-span.linked {
-	color: #0b77b7;
-	text-decoration:none;
-}
-span:hover.linked {
-	color: #0202a7;
-	cursor: hand;
-	cursor: pointer;
-}
-
 label {
 	float:left;
 	width:10em;
@@ -150,6 +140,48 @@ form.budget {
 .moxietitle:hover {
 	background:url("/img/moxie-title-hover.png") no-repeat;
 }
+
+div.moxieicon {
+	width: 16px;
+	height: 16px;
+}
+div:hover.moxieicon {
+	cursor: hand;
+	cursor: pointer;
+}
+div.moxienext {
+	width: 21px;
+	height: 15px;
+	background:url("/img/next.png") no-repeat;
+}
+div:hover.moxienext{
+	width: 21px;
+	height: 15px;
+	background:url("/img/next_hover.png") no-repeat;
+}
+div.moxieprevious {
+	width: 21px;
+	height: 15px;
+	background:url("/img/previous.png") no-repeat;
+}
+div:hover.moxieprevious {
+	width: 21px;
+	height: 15px;
+	background:url("/img/previous_hover.png") no-repeat;
+}
+div.moxieedit {
+	background:url("/img/edit.png") no-repeat;
+}
+div:hover.moxieedit {
+	background:url("/img/edit_hover.png") no-repeat;
+}
+div.moxiedelete {
+	background:url("/img/delete.png") no-repeat;
+}
+div:hover.moxiedelete {
+	background:url("/img/delete_hover.png") no-repeat;
+}
+
 
 #submit-go {
 	margin-top:1em;

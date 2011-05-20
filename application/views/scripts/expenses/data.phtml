@@ -1,6 +1,7 @@
-<a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>">Last</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>">Next</a>
+<table>
+<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div></a></td>
+<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div></a></td>
+</table>
 <?php
 $i_expensePK = $this->form->getElement('id');
 if (isset($i_expensePK)) {
@@ -29,10 +30,10 @@ echo '</form>';
 $f_totalAmount = 0;
 echo '
 <table border=1 width=600 class="list">
-<td colspan=6>
+<td colspan=7>
 Marcar:&nbsp;
 <span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
-<span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>
+<span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>&nbsp;&nbsp;&nbsp;
 </td>
 ';
 
@@ -45,7 +46,8 @@ foreach ($this->list as $key=>$value) {
 	echo '
 <tr>
 <td class="list" width="10"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
-<td class="list" width="30"><span class="linked" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'>X</span>&nbsp;<a href="/expenses/edit/id/'.$value['id'].$s_dateGet.'">E</a></td>'
+<td class="list" width="16"><div class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'></div></td>
+<td class="list" width="16"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>'
 .'<td align="right" class="list">'.number_format($value['amount'],2).' &euro;</td>
 <td width="100" align="center" class="list">'.$expense_date.'</td>
 <td class="list" width="80"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
@@ -54,7 +56,7 @@ foreach ($this->list as $key=>$value) {
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
 echo '<tr>
-<td colspan=2></td>
+<td colspan=3></td>
 <td>'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
 </table>
 ';
