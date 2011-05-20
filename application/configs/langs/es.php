@@ -12,6 +12,7 @@ $st_lang = array(
 	'about'		=>	'Acerca de',
 	'benefits'	=>	'Ventajas',
 	'new_user'	=>	'Aún no te has registrado?',
+	'forgot_password'	=>	'Has olvidado tu contraseña?',
 	// Expenses
 	// Incomes
 	// Budgets
@@ -21,7 +22,8 @@ $st_lang = array(
 	'category'	=>	'Categoría',
 	'total_this_year'	=>	'Total este año',
 	'average_this_year'	=>	'Media este año',
-	'total'		=>	'Total',
+	'average_unit'		=>	'Media de una compra',
+	'total'		=>	'Total final',
 	'average'	=>	'Media',
 	// User, login, etc.
 	'new_user'	=>	'Nuevo usuario',
