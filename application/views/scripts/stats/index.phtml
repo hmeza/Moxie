@@ -13,19 +13,20 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <h2><?php echo $st_lang['stats']; ?></h2>
 <tr>
 <th align="left"><?= $st_lang['category']; ?></th>
+<th align="right"><?= $st_lang['total']; ?></th>
 <th align="right"><?= $st_lang['total_this_year']; ?></th>
 <th align="right"><?= $st_lang['average_this_year']; ?></th>
-<th align="right"><?= $st_lang['total']; ?></th>
-<th align="right"><?= $st_lang['average']; ?></th>
+<th align="right"><?= $st_lang['average_unit']; ?></th>
 </tr>
 <?php
 foreach ($this->data as $key => $value) {
+	$i_currentMonth = date('m');
 	echo '<tr>
 	<td>'.$value['name'].'</td>
-	<td align="right">'.number_format($value['sumyear'],2).' &euro;</td>
-	<td align="right">'.number_format($value['avgyear'],2).' &euro;</td>
 	<td align="right">'.number_format($value['sumtotal'],2).' &euro;</td>
-	<td align="right">'.number_format($value['avgtotal'],2).' &euro;</td>
+	<td align="right">'.number_format($value['sumyear'],2).' &euro;</td>
+	<td align="right">'.number_format($value['sumyear']/$i_currentMonth,2).' &euro;</td>
+	<td align="right">'.number_format($value['avgyear'],2).' &euro;</td>
 	</tr>';
 }
 ?>

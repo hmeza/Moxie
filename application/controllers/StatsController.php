@@ -34,15 +34,13 @@ class StatsController extends Zend_Controller_Action {
 			$s_select = $db->select()
 				->from('expenses',
 					array(
-						new Zend_Db_Expr('SUM(amount)'),
-						new Zend_Db_Expr('AVG(amount)')
+						new Zend_Db_Expr('SUM(amount)')
 					)
 				)
 				->where("user_owner = ".$_SESSION['user_id'])
 				->where("category = ".$key);
 			$st_data = $db->fetchRow($s_select);
 			$data[$key]['sumtotal'] = $st_data['SUM(amount)'];
-			$data[$key]['avgtotal'] = $st_data['AVG(amount)'];
 			$s_select = $db->select()
 				->from('expenses',
 					array(
