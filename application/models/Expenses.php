@@ -33,7 +33,8 @@ class Expenses extends Zend_Db_Table_Abstract {
 	 * @param	int $month
 	 * @param	int $year
 	 */
-	public function getExpenses($user_id, $month, $year) {
+	public function getExpenses($user_id, $month, $year, $i_category = 0) {
+		$s_category = ($i_category != 0) ? "e.category = ".$i_category : "1=1";
 		$query = $this->database->select()
 		->from(array('e'=>'expenses'),array(
 					'id'	=>	'e.id',
@@ -50,6 +51,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 					->where('YEAR(e.expense_date) = '.$year)
 					->where('MONTH(e.expense_date) = '.$month)
 					->where('e.user_owner = '.$user_id)
+					->where($s_category)
 					->order('e.expense_date asc');
 					$stmt = $this->database->query($query);
 					$result = $stmt->fetchAll();

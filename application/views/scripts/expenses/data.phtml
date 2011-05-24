@@ -30,10 +30,25 @@ echo '</form>';
 $f_totalAmount = 0;
 echo '
 <table border=1 width=600 class="list">
-<td colspan=7>
+<td colspan=5>
 Marcar:&nbsp;
 <span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
 <span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>&nbsp;&nbsp;&nbsp;
+</td>
+<td colspan=2 align=right>
+Filtrar por <select id="category_filter" onchange="filter();">
+<option value="0">---</option>
+';
+foreach ($this->form->getElement('category') as $key => $value) {
+	if ($key == "options") {
+		foreach ($value as $key2 => $value2) {
+			echo '<option value="'.$key2.'">'.$value2.'</option>';
+		}
+	}
+}
+
+echo '
+</select>
 </td>
 ';
 
@@ -48,7 +63,7 @@ foreach ($this->list as $key=>$value) {
 <td class="list" width="10"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
 <td class="list" width="16"><div class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'></div></td>
 <td class="list" width="16"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>'
-.'<td align="right" class="list">'.number_format($value['amount'],2).' &euro;</td>
+.'<td align="right" class="list" width="100">'.number_format($value['amount'],2).' &euro;</td>
 <td width="100" align="center" class="list">'.$expense_date.'</td>
 <td class="list" width="80"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
 <td class="list">'.$value['note'].'</td>
@@ -57,7 +72,7 @@ foreach ($this->list as $key=>$value) {
 }
 echo '<tr>
 <td colspan=3></td>
-<td>'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
+<td align="right" class="list">'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
 </table>
 ';
 ?>

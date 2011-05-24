@@ -95,6 +95,8 @@ class ExpensesController extends Zend_Controller_Action
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
+		$i_category = $this->getRequest()->getParam('category_filter');
+		$i_category = (isset($i_category)) ? $i_category : 0;
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
@@ -118,7 +120,7 @@ class ExpensesController extends Zend_Controller_Action
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('budget', $st_budget);
-		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
+		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
