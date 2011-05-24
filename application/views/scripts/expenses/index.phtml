@@ -23,6 +23,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 			window.location="/expenses/delete/id/"+id;
 		}
 	}
+
+	function filter() {
+		var chosen;
+		var redirect;
+		chosen = document.getElementById('category_filter').selectedIndex;
+		redirect = document.getElementById('category_filter').options[chosen].value;
+		window.location="/expenses/index/category_filter/"+redirect;
+	}
 </script>
 <link rel="stylesheet" type="text/css" href="/moxie.css"/>
 <link rel="stylesheet" type="text/css" href="/dropdown.css"/>
@@ -38,7 +46,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 <table>
 <tr>
-<td>
+<td valign="top">
 <?php
 echo $this->partial('expenses/data.phtml',
 					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month));
