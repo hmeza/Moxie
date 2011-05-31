@@ -54,7 +54,6 @@ echo $this->partial('expenses/data.phtml',
 </td>
 <td valign="top">
 <?php
-error_log(print_r($this->expenses,true));
 echo $this->partial('expenses/stats.phtml',
 					array('budget'=>$this->budget,'expenses'=>$this->expenses,'year'=>$this->year,'month'=>$this->month));
 ?>
