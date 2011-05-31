@@ -14,6 +14,11 @@ $st_lang = array(
 	'new_user'	=>	'Already don\'t have an account?',
 	'forgot_password'	=>	'Forgot your password?',
 	// Expenses
+	'expenses_amount'	=>	'Amount',
+	'expenses_category'	=>	'Category',
+	'expenses_note'		=>	'Note',
+	'expenses_date'		=>	'Date',
+	'expenses_send'		=>	'Send',
 	// Incomes
 	// Budgets
 	// Categories
