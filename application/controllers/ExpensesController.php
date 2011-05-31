@@ -17,6 +17,8 @@ class ExpensesController extends Zend_Controller_Action
 	private function getAddForm() {
 		include('Zend/Form.php');
 		include('application/models/Categories.php');
+		global $st_lang;
+		
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
@@ -25,15 +27,15 @@ class ExpensesController extends Zend_Controller_Action
 		     
 		$form->setAttrib('id', 'login');
 
-		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
-			'label' => 'Category name',
+			'label' => $st_lang['expenses_category'],
 			'multioptions' => $categories->getCategoriesForView()
 			)
 		);
-		$form->addElement('text', 'note', array('label' => 'Note'));
-		$form->addElement('text', 'date', array('label' => 'Date', 'value' => date('Y-m-d')));
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => date('Y-m-d')));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
 	
