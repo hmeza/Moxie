@@ -20,7 +20,8 @@ function web_login() {
 }
 
 function web_userData($i_userId, $s_userName) {
-	return $s_userName.' <a href="/login/logout">Logout</a>';
+	global $st_lang;
+	return $s_userName.' <a href="/login/logout">'.$st_lang['logout'].'</a>';
 }
 
 function web_header($s_name, $b_loggedIn = false) {
