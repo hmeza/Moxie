@@ -19,19 +19,24 @@ echo '
 foreach ($this->list as $key=>$value) {
 	foreach ($value as $subkey => $subvalue) {
 		$checked = ($subvalue->in_sum == 1) ? "checked":"";
+		$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 		$datetime = explode(" ",$subvalue->date);
-		echo '<tr>';
-		echo '<td><input type="checkbox" class="my-checkbox" id="'.$subvalue->id.'" name="'.$subvalue->id.'" onClick="markLine('.$subvalue->id.');" '.$checked.'></td>';
-		echo '<td align="right">'.number_format($subvalue->amount,2).' &euro;</td>';
-		echo '<td align="center">'.$datetime[0].'</td>';
-		echo '<td><div alt="'.$subvalue->note.'" title="'.$subvalue->note.'">'.$subvalue->note.'</div></td>';
-		echo '</tr>';
+		echo '
+<tr>
+<td class="list"><input type="checkbox" class="my-checkbox" id="'.$subvalue->id.'" name="'.$subvalue->id.'" onClick="markLine('.$subvalue->id.');" '.$checked.'></td>
+<td class="list" width="16"><div class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$subvalue->id.$s_dateGet.'")\'></div></td>
+<td class="list" width="16"><a class="moxieedit" href="/incomes/edit/id/'.$subvalue->id.$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td align="right">'.number_format($subvalue->amount,2).' &euro;</td>
+<td align="center">'.$datetime[0].'</td>
+<td><div alt="'.$subvalue->note.'" title="'.$subvalue->note.'">'.$subvalue->note.'</div></td>
+</tr>';
 		$f_totalAmount = $f_totalAmount + $subvalue->amount;
 	}
 	$f_finalAmount = $f_finalAmount + $f_totalAmount;
 }
 echo '<tr>
-<td></td>
+<td colspan=3></td>
 <td align="right">'.number_format($f_totalAmount,2).' &euro;</td><td colspan=3></td></tr>
 </table>
 ';
+?>
