@@ -3,12 +3,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Incomes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php global $st_lang; echo $st_lang['incomes']; ?></title>
+<script type="text/javascript" language="text/javascript">
+	function confirmDelete(id) {
+		var response;
+		response = confirm("Are you sure you want to delete this income?");
+		if (response == true) {
+			window.location="/incomes/delete/id/"+id;
+		}
+	}
+</script>
 </head>
 <body>
 
-<h2>Incomes</h2>
+<h2><?php echo $st_lang['incomes']; ?></h2>
 
 <table>
 <tr>
