@@ -13,6 +13,7 @@ class CategoriesController extends Zend_Controller_Action
 	
 	private function getForm() {
     	include('Zend/Form.php');
+    	include('Zend/Form/Element/Radio.php');
     	$form  = new Zend_Form();
     	
     	$form->setAction('/categories/add')->setMethod('post');
@@ -23,6 +24,14 @@ class CategoriesController extends Zend_Controller_Action
 		);
 		$form->addElement('text', 'name', array('label' => 'Category name'));
 		$form->addElement('text', 'description', array('label' => 'Category description'));
+		
+		$categoryTypes = array('1' => 'Expense', '2' => 'Income', '3' => 'Both');
+		$types = new Zend_Form_Element_Radio('type');
+		$types->setRequired(true)  // field required
+		->setValue('3') // first radio button selected
+		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
+		$form->addElement($types);
+		
 		$form->addElement('submit','submit', array('label' => 'Enviar'));
     	
 		return $form;
@@ -30,6 +39,7 @@ class CategoriesController extends Zend_Controller_Action
 	
 	private function getEditForm($i_categoryPK) {
 		include('Zend/Form.php');
+		include('Zend/Form/Element/Radio.php');
 		$form  = new Zend_Form();
 		
 		// retrieve data to fill the form
@@ -47,6 +57,14 @@ class CategoriesController extends Zend_Controller_Action
 		);
 		$form->addElement('text', 'name', array('label' => 'Category name', 'value' => $st_category[0]['name']));
 		$form->addElement('text', 'description', array('label' => 'Category description', 'value' => $st_category[0]['description']));
+		
+		$categoryTypes = array('1' => 'Expense', '2' => 'Income', '3' => 'Both');
+		$types = new Zend_Form_Element_Radio('type');
+		$types->setRequired(true)  // field required
+		->setValue($st_category[0]['type']) // first radio button selected
+		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
+		$form->addElement($types);
+		
 		$form->addElement('submit','submit', array('label' => 'Enviar'));
 		return $form;
 	}
@@ -89,7 +107,7 @@ class CategoriesController extends Zend_Controller_Action
     public function editAction() {
     	$this->view->assign('form', $this->getEditForm($this->_request->getParam('id')));
     	$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser($_SESSION['user_id'])));
-    	$this->render('index');
+    	$this->_forward('index', 'budgets');
     }
     
     public function updateAction() {
@@ -98,7 +116,8 @@ class CategoriesController extends Zend_Controller_Action
 	    	$st_update = array(
 	    		'name'	=>	$data['name'],
 	    		'description'	=>	$data['description'],
-	    		'parent'		=>	$data['parent']
+	    		'parent'		=>	$data['parent'],
+	    		'type'			=>	$data['type']
 	    	);
 	    	$this->categories->update($st_update,'id = '.$data['id'].' AND user_owner = '.$_SESSION['user_id']);
 		} catch (Exception $e) {
