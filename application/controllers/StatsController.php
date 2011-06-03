@@ -10,11 +10,49 @@ class StatsController extends Zend_Controller_Action {
 	private $expenses;
 	private $incomes;
 	private $categories;
-	
+		
 	public function init() {
 		$this->expenses = new Expenses();
 		$this->incomes = new Incomes();
 		$this->categories = new Categories();
+	}
+	
+	/**
+	 * @desc	Print detailed stats from user expenses and incomes.
+	 * @todo	Use a group by to retrieve data and match with array
+	 */
+	public function indexAction() {
+		$incomeStatsByCategory = $this->categories->getCategoriesForView(3);
+		$data = array();
+		$db = Zend_Registry::get('db');
+		foreach ($incomeStatsByCategory as $key => $value) {
+			$data[$key]['index'] = $key;
+			$data[$key]['name'] = $value;
+			$s_select = $db->select()
+				->from('expenses',
+					array(
+						new Zend_Db_Expr('SUM(amount)')
+					)
+				)
+				->where("user_owner = ".$_SESSION['user_id'])
+				->where("category = ".$key);
+			$st_data = $db->fetchRow($s_select);
+			$data[$key]['sumtotal'] = $st_data['SUM(amount)'];
+			$s_select = $db->select()
+				->from('expenses',
+					array(
+						new Zend_Db_Expr('SUM(amount)'),
+						new Zend_Db_Expr('AVG(amount)')
+					)
+				)
+				->where("user_owner = ".$_SESSION['user_id'])
+				->where("category = ".$key)
+				->where("YEAR(expense_date) = ".date('Y'));
+			$st_data = $db->fetchRow($s_select);
+			$data[$key]['sumyear'] = $st_data['SUM(amount)'];
+			$data[$key]['avgyear'] = $st_data['AVG(amount)'];
+		}
+		$this->view->assign('data', $data);
 	}
 	
 	/**
