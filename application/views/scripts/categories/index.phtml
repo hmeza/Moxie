@@ -16,14 +16,27 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 echo '<h2>'.$st_lang['categories'].'</h2>';
 echo $this->form;
 
+echo '<table width=100%>';
 foreach ($this->list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-		echo '<a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
+		echo '<td><a href="/categories/delete/id/'.$value['id1'].'" alt="Borrar" title="Borrar">X</a>&nbsp;';
 		echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="Editar" title="Editar">E</a>&nbsp;&nbsp;&nbsp;';
-		echo $first_name.$value['name2']."<br>";
+		echo $first_name.$value['name2']."</td><td>";
+		switch($value['type']) {
+			case 1:
+				echo "Expense";
+				break;
+			case 2:
+				echo "Income";
+				break;
+			case 3:
+				echo "Both income and expense";
+		}
+		echo "</td><tr>";
 	}
 }
+echo '</table>';
 ?>
 </td>
 <td valign=top>
