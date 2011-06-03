@@ -30,7 +30,7 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => $st_lang['expenses_category'],
-			'multioptions' => $categories->getCategoriesForView()
+			'multioptions' => $categories->getCategoriesForView(1)
 			)
 		);
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
@@ -67,8 +67,8 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
 		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_expense['amount']));
 		// Add select
-		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView());
-		$multiOptions->addMultiOptions($categories->getCategoriesForView());
+		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(1));
+		$multiOptions->addMultiOptions($categories->getCategoriesForView(1));
 		$multiOptions->setValue(array($st_expense['category']));
 		$form->addElement($multiOptions);
 		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_expense['note']));

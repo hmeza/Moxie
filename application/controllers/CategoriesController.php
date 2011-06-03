@@ -19,7 +19,7 @@ class CategoriesController extends Zend_Controller_Action
     	$form->setAction('/categories/add')->setMethod('post');
     	$form->addElement('select', 'parent', array(
 			'label' => 'Category parent',
-			'multioptions' => $this->categories->getCategoriesForSelect(),
+			'multioptions' => $this->categories->getCategoriesForSelect(3),
 			)
 		);
 		$form->addElement('text', 'name', array('label' => 'Category name'));
@@ -51,7 +51,7 @@ class CategoriesController extends Zend_Controller_Action
 		// Add select
 		$form->addElement('select', 'parent', array(
 			'label' => 'Category parent',
-			'multioptions' => $this->categories->getCategoriesForSelect(),
+			'multioptions' => $this->categories->getCategoriesForSelect(3),
 			'value'	=>	$st_category[0]['parent']
 			)
 		);
@@ -89,7 +89,7 @@ class CategoriesController extends Zend_Controller_Action
 		
     public function indexAction() {
     	$this->view->assign('form', $this->getForm());
-		$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser($_SESSION['user_id'])));
+		$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser(3)));
 		$this->_forward('index', 'budgets');
     }
     
@@ -106,7 +106,7 @@ class CategoriesController extends Zend_Controller_Action
     
     public function editAction() {
     	$this->view->assign('form', $this->getEditForm($this->_request->getParam('id')));
-    	$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser($_SESSION['user_id'])));
+    	$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser(3)));
     	$this->_forward('index', 'budgets');
     }
     
