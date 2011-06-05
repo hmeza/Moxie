@@ -19,6 +19,8 @@ $st_lang = array(
 	'expenses_note'		=>	'Nota',
 	'expenses_date'		=>	'Fecha',
 	'expenses_send'		=>	'Enviar',
+	'expenses_monthly'	=>	'Gasto mensual',
+	'expenses_by_months'	=>	'Por meses',
 	// Incomes
 	// Budgets
 	// Categories
@@ -31,6 +33,8 @@ $st_lang = array(
 	'total'		=>	'Total final',
 	'average'	=>	'Media',
 	// User, login, etc.
+	'users'		=>	'Menú de usuario',
+	'users_my_account'	=>	'Mi cuenta',
 	'new_user'	=>	'Nuevo usuario',
 	'register'	=>	'Formulario de registro',
 	'registration_ok'	=>	'<h2>Registrado con éxito!</h2>
