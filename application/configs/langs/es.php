@@ -21,6 +21,8 @@ $st_lang = array(
 	'expenses_send'		=>	'Enviar',
 	'expenses_monthly'	=>	'Gasto mensual',
 	'expenses_by_months'	=>	'Por meses',
+	'expenses_expended'	=>	'Gastado',
+	'expenses_budget'	=>	'Presupuesto',
 	// Incomes
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',
