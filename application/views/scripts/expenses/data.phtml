@@ -27,13 +27,14 @@ echo '</form>';
 ?>
 <pre>
 <?php
+global $st_lang;
 $f_totalAmount = 0;
 echo '
 <table border=1 width=600 class="list">
 <td colspan=5>
-Marcar:&nbsp;
-<span onClick="markAll(0);" alt="Desmarcar todos" title="Desmarcar todos">Ninguno</span>&nbsp;
-<span onClick="markAll(1);" alt="Marcar todos" title="Marcar todos">Todos</span>&nbsp;&nbsp;&nbsp;
+'.$st_lang['expenses_mark'].'
+<span onClick="markAll(0);" alt="'.$st_lang['expenses_unmark_all'].'" title="'.$st_lang['expenses_unmark_all'].'" style="cursor:hand; cursor:pointer">'.$st_lang['expenses_none'].'</span>&nbsp;
+<span onClick="markAll(1);" alt="'.$st_lang['expenses_mark_all'].'" title="'.$st_lang['expenses_mark_all'].'" style="cursor:hand; cursor:pointer">'.$st_lang['expenses_all'].'</span>&nbsp;&nbsp;&nbsp;
 </td>
 <td colspan=2 align=right>
 Filtrar por <select id="category_filter" onchange="filter();">

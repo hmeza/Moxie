@@ -23,6 +23,11 @@ $st_lang = array(
 	'expenses_by_months'	=>	'Por meses',
 	'expenses_expended'	=>	'Gastado',
 	'expenses_budget'	=>	'Presupuesto',
+	'expenses_mark'		=>	'Marcar:&nbsp;',
+	'expenses_unmark_all'	=>	'Desmarcar todos',
+	'expenses_mark_all'		=>	'Marcar todos',
+	'expenses_all'		=>	'Todos',
+	'expenses_none'		=>	'Ninguno',
 	// Incomes
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',
