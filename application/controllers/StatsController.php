@@ -199,9 +199,13 @@ class StatsController extends Zend_Controller_Action {
 		
 		mysql_connect("127.0.0.1","root","0nr3fn1");
 		mysql_select_db("moxie");
+
+		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
+
 		$sql = 'select YEAR(expense_date), MONTH(expense_date),sum(amount)'
 		.' from expenses'
-		.' where in_sum = 1 AND user_owner = '.$user;
+		.' where in_sum = 1 AND user_owner = '.$user
+		.' and expense_date >= "'.$i_dateLimit.'"';
 		if ($category != 0) $sql .= ' AND category = '.$category;
 		$sql .= ' group by MONTH(expense_date),YEAR(expense_date)'
 		.' order by YEAR(expense_date),MONTH(expense_date)';
