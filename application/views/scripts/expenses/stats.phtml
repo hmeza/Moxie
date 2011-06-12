@@ -10,11 +10,12 @@
 </center>
 <br><br><br><br>
 <?php
+global $st_lang;
 $st_budget = $this->budget;
 
-echo '<center><table width = 300>
-<tr><td></td><td align="right">Expended</td>';
-if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">Budget</td></tr>';
+echo '<center><table width = 350>
+<tr><td></td><td align="right">'.$st_lang['expenses_expended'].'</td>';
+if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
 
 $current = 0;
 $total = 0;
