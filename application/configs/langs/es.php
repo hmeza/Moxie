@@ -22,6 +22,9 @@ $st_lang = array(
 	'expenses_monthly'	=>	'Gasto mensual',
 	'expenses_by_months'	=>	'Por meses',
 	// Incomes
+	'incomes_stats'		=>	'Gráfica de ingresos',
+	'incomes_by_years'	=>	'Por años',
+	'incomes_yearly'	=>	'Ingresos anuales',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorias y presupuesto',

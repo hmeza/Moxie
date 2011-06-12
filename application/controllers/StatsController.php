@@ -61,35 +61,37 @@ class StatsController extends Zend_Controller_Action {
 	 * @since	2011-06-01
 	 */	
 	public function incomestatsAction() {
+		global $st_lang;
 		$mydata = $this->getRequest()->getParam('mydata');
 		// use the chart class to build the chart:
 		$data = explode(":",$mydata);
 		$user = (empty($data[1])) ? 0 : $data[1];
 		
-		mysql_connect("127.0.0.1","root","0nr3fn1");
-		mysql_select_db("moxie");
-		$sql = 'select YEAR(date), MONTH(date),sum(amount)'
-		.' from incomes'
-		.' where in_sum = 1 AND user_owner = '.$user
-		.' group by YEAR(date)'
-		.' order by YEAR(date)';
-		$rows = mysql_query($sql);
-		
+		$db = Zend_Registry::get('db');
+
+		$s_select = $db->select()
+			->from('incomes',array('YEAR(date)','MONTH(date)','sum(amount)'))
+			->where('in_sum = 1')
+			->where('user_owner = '.$user)
+			->group('YEAR(date)')
+			->order('YEAR(date)');
+		error_log($s_select);
+		$o_rows = $db->fetchAll($s_select);
+	
 		$data = array();
 		$labels = array();
 		
 		$bar = new bar_outline(50, '#060606', '#040404');
-		$bar->key('By years', 10);
+		$bar->key($st_lang['incomes_by_years'], 10);
 		$bar->data = array();
 		$months = array();
-		while ($value = mysql_fetch_array($rows)) {
-			$bar->data[] = $value[2];
-			$years[] = $value[0];
+		foreach($o_rows as $key => $value) {
+			$bar->data[] = $value['sum(amount)'];
+			$years[] = $value['YEAR(date)'];
 		}
-		mysql_free_result($rows);
 		
 		$g = new graph();
-		$g->title( 'Income stats', '{font-size: 20px;}' );
+		$g->title( $st_lang['incomes_stats'], '{font-size: 20px;}' );
 		$timestamp = mktime(0, 0, 0, $month, 1, $year);
 		$s_month = date("F", $timestamp);
 		$g->data_sets[] = $bar;
@@ -110,7 +112,7 @@ class StatsController extends Zend_Controller_Action {
 		
 		$g->set_y_max( 50000 );
 		$g->y_label_steps( 4 );
-		$g->set_y_legend( 'Yearly income', 12, '#736AFF' );
+		$g->set_y_legend($st_lang['incomes_yearly'], 12, '#736AFF' );
 		echo $g->render();
 		
 		
@@ -127,48 +129,45 @@ class StatsController extends Zend_Controller_Action {
 	public function dataAction() {
 		$mydata = $this->getRequest()->getParam('mydata');
 		$data = explode(":",$mydata);
-		//$data = explode(":",$_GET['mydata']);
 		$month = (empty($data[1])) ? date('n') : $data[1];
 		$year = (empty($data[3])) ? date('Y') : $data[3];
 		$user = (empty($data[5])) ? 0 : $data[5]; 
-		// use the chart class to build the chart:
 
 		$g = new graph();
-		
 		$g->bg_colour = '0xFFFFFF';
-		// Spoon sales, March 2007
 		$g->pie(60,'#000000','{font-size: 12px; color: #000000;');
-		//
-		// pass in two arrays, one of data, the other data labels
-		// get data from DB
-		// get categories from DB
-		mysql_connect("127.0.0.1","root","0nr3fn1");
-		mysql_select_db("moxie");
-		
+
+		$db = Zend_Registry::get('db');
+
 		// get root category ID
-		$sql = "select id from categories where parent IS NULL and user_owner = ".$user;
-		$data = mysql_query($sql);
-		$s_id = mysql_fetch_array($data);
-		$i_id = $s_id['id'];
-			
-		$sql = "select c.id, sum(e.amount), c.name from expenses e, categories c where c.id = e.category and e.in_sum = 1 and e.user_owner = ".$user." and YEAR(e.expense_date) = ".$year." AND month(e.expense_date) = ".$month." group by c.id order by c.id;";
-		
-		$rows = mysql_query($sql);
+		$s_select = $db->select()
+			->from('categories', array('id'))
+			->where('parent IS NULL')
+			->where('user_owner = '.$user);
+		$s_rows = $db->fetchAll($s_select);
+		$i_id = $s_rows[0]['id'];
+
+		$s_select = $db->select()
+			->from(array('e'=>'expenses'), array('c.id','sum(e.amount)', 'c.name'))
+			->join(array('c'=>'categories'), array())
+			->where('c.id = e.category')
+			->where('e.in_sum = 1')
+			->where('e.user_owner = '.$user)
+			->where('YEAR(e.expense_date) = '.$year)
+			->where('MONTH(e.expense_date) = '.$month)
+			->group('c.id')
+			->order('c.id');
+		$rows = $db->fetchAll($s_select);
 		
 		$data = array();
 		$labels = array();
-		while ($value = mysql_fetch_array($rows)) {
-			$data[] = $value[1];
-			$labels[] = $value[2];
+		foreach($rows as $key=>$value) {
+			error_log(print_r($value,true));
+			$data[] = $value['sum(e.amount)'];
+			$labels[] = $value['name'];
 		}
-		mysql_free_result($rows);
 		
 		$g->pie_values( $data, $labels);
-		//
-		// Colours for each slice, in this case some of the colours
-		// will be re-used (3 colurs for 5 slices means the last two
-		// slices will have colours colour[0] and colour[1]):
-		//
 		$g->pie_slice_colours( array('#d01f3c','#356aa0','#aaccaa','#adffaa','#aa5500','#060606','#CCFF66') );
 		
 		$g->set_tool_tip( '#val# €' );
@@ -177,7 +176,6 @@ class StatsController extends Zend_Controller_Action {
 		$s_month = date("F", $timestamp);
 		$g->title( $s_month." ".$year, '{font-size:18px; color: #000000}' );
 		
-		// display the data
 		echo $g->render();
 		$this->_helper->viewRenderer->setNoRender();
 	}
@@ -196,21 +194,23 @@ class StatsController extends Zend_Controller_Action {
 		//$category = (empty($data[1])) ? 0 : $data[1];
 		$scale = (empty($category)) ? 2500 : 500;
 		$user = (empty($data[1])) ? 0 : $data[1];
-		
-		mysql_connect("127.0.0.1","root","0nr3fn1");
-		mysql_select_db("moxie");
-
 		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
+                
+		$db = Zend_Registry::get('db');
 
-		$sql = 'select YEAR(expense_date), MONTH(expense_date),sum(amount)'
-		.' from expenses'
-		.' where in_sum = 1 AND user_owner = '.$user
-		.' and expense_date >= "'.$i_dateLimit.'"';
-		if ($category != 0) $sql .= ' AND category = '.$category;
-		$sql .= ' group by MONTH(expense_date),YEAR(expense_date)'
-		.' order by YEAR(expense_date),MONTH(expense_date)';
-		$rows = mysql_query($sql);
-		
+		$s_category = ($category != 0) ? 'category = '.$category : '1=1';
+
+		$s_query = $db->select()
+			->from('expenses', array('YEAR(expense_date)','MONTH(expense_date)','sum(amount)'))
+			->where('in_sum = 1')
+			->where('user_owner = '.$user)
+			->where('expense_date >= "'.$i_dateLimit.'"')
+			->where($s_category)
+			->group('MONTH(expense_date), YEAR(expense_date)')
+			->order('YEAR(expense_date), MONTH(expense_date)');
+
+		$o_rows = $db->fetchAll($s_query);
+	
 		$data = array();
 		$labels = array();
 		
@@ -218,12 +218,11 @@ class StatsController extends Zend_Controller_Action {
 		$bar->key($st_lang['expenses_by_months'], 10);
 		$bar->data = array();
 		$months = array();
-		while ($value = mysql_fetch_array($rows)) {
-			$bar->data[] = $value[2];
-			$timestamp = mktime(0, 0, 0, $value[1], 1, 2005);
+		foreach ($o_rows as $key => $value) {
+			$bar->data[] = $value['sum(amount)'];
+			$timestamp = mktime(0, 0, 0, $value['MONTH(expense_date)'], 1, 2005);
 			$months[] = date("M", $timestamp);
 		}
-		mysql_free_result($rows);
 		
 		$g = new graph();
 		$g->title( $st_lang['expenses_monthly'] , '{font-size: 20px;}' );
