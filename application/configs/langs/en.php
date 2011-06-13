@@ -35,6 +35,11 @@ $st_lang = array(
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorias y presupuesto',
+	'categories_delete'		=>	'Delete',
+	'categories_edit'		=>	'Edit',
+	'categories_income'		=>	'Income',
+	'categories_expense'	=>	'Expense',
+	'categories_both'		=>	'Both income and expense',
 	// Stats
 	'category'	=>	'Category',
 	'total_this_year'	=>	'Total this year',
