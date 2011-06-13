@@ -47,6 +47,46 @@ class IncomesController extends Zend_Controller_Action
 		return $form;
 	}
 	
+	private function getEditForm($st_income) {
+		include('Zend/Form.php');
+		include('Zend/Form/Element/Select.php');
+		include('application/models/Categories.php');
+		$form  = new Zend_Form();
+		$categories = new Categories();
+		
+		// get categories and prepare them for view
+		$s_categories = $categories->getCategoriesByUser(Categories::INCOMES);
+		foreach($s_categories as $key => $value) {
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
+		}
+		
+		$form->setAction('/incomes/update')
+		     ->setMethod('post');
+		     
+		$form->setAttrib('id', 'login');
+		
+		$form->addElement('hidden', 'user_owner', array('value' => $st_income[0]['user_owner']));
+		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
+		
+		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_income[0]['amount']));
+		
+		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::INCOMES));
+		$multiOptions->setLabel('Category name');
+		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
+		$multiOptions->setValue(array($st_income[0]['category']));
+		$form->addElement($multiOptions);
+		
+		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_income[0]['note']));
+		
+		$s_date = explode(" ", $st_income[0]['date']);
+		$form->addElement('text', 'date', array('label' => 'Date', 'value' => $s_date[0]));
+		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		return $form;
+	}
+	
 	/**
 	 * @desc	Shows the expenses view
 	 * @author	hmeza
@@ -94,61 +134,55 @@ class IncomesController extends Zend_Controller_Action
 		$this->_helper->redirector('index','incomes');
 	}
 	
-	// TODO
+	/**
+	 * @desc	Edit an income
+	 * @author	hmeza
+	 * @since	2011-06-13
+	 */
 	public function editAction() {
-		include 'application/models/Budgets.php';
 		$i_incomePK = $this->getRequest()->getParam('id');
-		$this->incomes->find($i_incomePK);
+		$st_income = $this->incomes->find($i_incomePK);
 		
-		$o_budget = new Budgets();
-		$st_data = $o_budget->fetchAll(
-						$o_budget->select()->where('user_owner = '.$_SESSION['user_id'])
-					);
-		$st_budget = array();
-		foreach($st_data as $key => $value) {
-			$st_budget[$value['category']] = $value['amount'];
-		}
-		
-		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
 		$db = Zend_Registry::get('db');
-		$s_select = $db->select()
-			->from(array('e'=>'expenses'),
-					array(
-						'sum(e.amount)'	=>	'sum(e.amount)'
-					))
-			->join(array('c'=>'categories'),'',array(
-						'id'		=>	'c.id',
-						'name'		=>	'c.name'
-					))
-			->joinLeft(array('c2'=>'categories'),'c.id = c2.parent',
-					array(
-						'son_id'	=>	'c2.id'
-					))
-			->joinLeft(array('c0'=>'categories'),'c0.id = c.parent',
-					array(
-						'parent_id'	=>	'c0.id'
-					))
-			->where('e.user_owner = '.$_SESSION['user_id'])
-			->where('c.id = e.category OR c2.id = e.category')
-			->where('YEAR(e.expense_date) = '.$i_year)
-			->where('MONTH(e.expense_date) = '.$i_month)
-			->where('e.in_sum = 1')
-			->group('c.id')
-			->order(array('c.id','c2.id'));
-		$st_data = $db->fetchAll($s_select);
 		
-		$this->view->assign('expenses', $st_data);
-		$this->view->assign('budget', $st_budget);
-		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
+		$list = array();
+		// get categories
+		for ($i=1;$i<=12;$i++) {
+			$s_select = $this->incomes->select()
+				->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i)
+				->where('user_owner = '.$_SESSION['user_id']);
+			$st_rows = $this->incomes->fetchAll($s_select);
+			if (count($st_rows) > 0) {
+				foreach($st_rows as $key => $value) {
+					$list[$i][$key] =  $value;
+				}
+			}
+		}
+		$this->view->assign('list', $list);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
-		$this->view->assign('form', $this->getEditForm($i_expensePK));
+		$this->view->assign('form', $this->getEditForm($st_income));
 		$this->render('index');
+	}
+	
+	/**
+	 * @desc	Update income
+	 * @author	hmeza
+	 * @since	2011-06-13
+	 */
+	public function updateAction() {
+		$st_params = $this->getRequest()->getPost();
+		$i_incomePK = $st_params['id'];
+		$i_userOwner = $st_params['user_owner'];
+		unset($st_params['submit']);
+		
+		$this->incomes->update($st_params, 'id = '.$i_incomePK.' AND user_owner = '.$i_userOwner);
+		$this->_helper->redirector('index','incomes');
 	}
 	
 	/**
