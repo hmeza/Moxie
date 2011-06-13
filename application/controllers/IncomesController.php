@@ -178,7 +178,12 @@ class IncomesController extends Zend_Controller_Action
 		$i_userOwner = $st_params['user_owner'];
 		unset($st_params['submit']);
 		
-		$this->incomes->update($st_params, 'id = '.$i_incomePK.' AND user_owner = '.$i_userOwner);
+		try {
+			$this->incomes->update($st_params, 'id = '.$i_incomePK.' AND user_owner = '.$i_userOwner);
+		}
+		catch (Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
 		$this->_helper->redirector('index','incomes');
 	}
 	
