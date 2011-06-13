@@ -159,7 +159,6 @@ class StatsController extends Zend_Controller_Action {
 		$data = array();
 		$labels = array();
 		foreach($rows as $key=>$value) {
-			error_log(print_r($value,true));
 			$data[] = $value['sum(e.amount)'];
 			$labels[] = $value['name'];
 		}
