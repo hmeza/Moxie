@@ -35,7 +35,8 @@ class Categories extends Zend_Db_Table_Abstract {
 					'user_owner' => $_SESSION['user_id'],
 					'parent' => $data['parent'],
 					'name' => $data['name'],
-					'description' => $data['description']
+					'description' => $data['description'],
+					'type'	=>	$data['type']
 				));
 		} catch (Exception $e) {
 			echo 'Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage();
