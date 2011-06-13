@@ -75,7 +75,6 @@ class StatsController extends Zend_Controller_Action {
 			->where('user_owner = '.$user)
 			->group('YEAR(date)')
 			->order('YEAR(date)');
-		error_log($s_select);
 		$o_rows = $db->fetchAll($s_select);
 	
 		$data = array();
@@ -92,8 +91,6 @@ class StatsController extends Zend_Controller_Action {
 		
 		$g = new graph();
 		$g->title( $st_lang['incomes_stats'], '{font-size: 20px;}' );
-		$timestamp = mktime(0, 0, 0, $month, 1, $year);
-		$s_month = date("F", $timestamp);
 		$g->data_sets[] = $bar;
 		$g->bg_colour = '0xEFFFEF';	// soft green
 		$g->bg_colour = '0xE3F0FD';
