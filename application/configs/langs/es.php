@@ -34,7 +34,7 @@ $st_lang = array(
 	'incomes_yearly'	=>	'Ingresos anuales',
 	// Budgets
 	// Categories
-	'categories_and_budget'	=>	'Categorias y presupuesto',
+	'categories_and_budget'	=>	'Categorías y presupuesto',
 	'categories_delete'		=>	'Borrar',
 	'categories_edit'		=>	'Editar',
 	'categories_income'		=>	'Ingreso',
