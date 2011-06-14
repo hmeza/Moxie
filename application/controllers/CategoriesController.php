@@ -12,32 +12,34 @@ class CategoriesController extends Zend_Controller_Action
 	}
 	
 	private function getForm() {
+		global $st_lang;
     	include('Zend/Form.php');
     	include('Zend/Form/Element/Radio.php');
     	$form  = new Zend_Form();
     	
     	$form->setAction('/categories/add')->setMethod('post');
     	$form->addElement('select', 'parent', array(
-			'label' => 'Category parent',
+			'label' => $st_lang['category_parent'],
 			'multioptions' => $this->categories->getCategoriesForSelect(3),
 			)
 		);
-		$form->addElement('text', 'name', array('label' => 'Category name'));
-		$form->addElement('text', 'description', array('label' => 'Category description'));
+		$form->addElement('text', 'name', array('label' => $st_lang['category_name']));
+		$form->addElement('text', 'description', array('label' => $st_lang['category_description']));
 		
-		$categoryTypes = array('1' => 'Expense', '2' => 'Income', '3' => 'Both');
+		$categoryTypes = array(Categories::EXPENSES => $st_lang['category_expense'], Categories::INCOMES => $st_lang['category_income'], Categories::BOTH => $st_lang['category_both']);
 		$types = new Zend_Form_Element_Radio('type');
 		$types->setRequired(true)  // field required
-		->setValue('3') // first radio button selected
+		->setValue(Categories::BOTH) // first radio button selected
 		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
 		$form->addElement($types);
 		
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send']));
     	
 		return $form;
 	}
 	
 	private function getEditForm($i_categoryPK) {
+		global $st_lang;
 		include('Zend/Form.php');
 		include('Zend/Form/Element/Radio.php');
 		$form  = new Zend_Form();
@@ -50,22 +52,22 @@ class CategoriesController extends Zend_Controller_Action
 		$form->addElement('hidden', 'id', array('value' => $i_categoryPK));
 		// Add select
 		$form->addElement('select', 'parent', array(
-			'label' => 'Category parent',
+			'label' => $st_lang['category_parent'],
 			'multioptions' => $this->categories->getCategoriesForSelect(3),
 			'value'	=>	$st_category[0]['parent']
 			)
 		);
-		$form->addElement('text', 'name', array('label' => 'Category name', 'value' => $st_category[0]['name']));
-		$form->addElement('text', 'description', array('label' => 'Category description', 'value' => $st_category[0]['description']));
+		$form->addElement('text', 'name', array('label' => $st_lang['category_name'], 'value' => $st_category[0]['name']));
+		$form->addElement('text', 'description', array('label' => $st_lang['category_description'], 'value' => $st_category[0]['description']));
 		
-		$categoryTypes = array('1' => 'Expense', '2' => 'Income', '3' => 'Both');
+		$categoryTypes = array(Categories::EXPENSES => $st_lang['category_expense'], Categories::INCOMES => $st_lang['category_income'], Categories::BOTH => $st_lang['category_both']);
 		$types = new Zend_Form_Element_Radio('type');
 		$types->setRequired(true)  // field required
 		->setValue($st_category[0]['type']) // first radio button selected
 		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
 		$form->addElement($types);
 		
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send']));
 		return $form;
 	}
 	

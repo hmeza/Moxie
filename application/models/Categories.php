@@ -136,6 +136,7 @@ class Categories extends Zend_Db_Table_Abstract {
 	}
 	
 	public function getCategoriesForSelect($i_typeFilter) {
+		global $st_lang;
 		// get categories and prepare them for view
 		$s_categories = $this->getCategoriesByUser($i_typeFilter);
 		// get root category
@@ -144,7 +145,7 @@ class Categories extends Zend_Db_Table_Abstract {
 			->where('parent IS NULL'));
 
 		$formCategories = array();
-		$formCategories[$st_parent->id] = 'New category';
+		$formCategories[$st_parent->id] = $st_lang['category_new'];
 		foreach($s_categories as $key => $value) {
 			$formCategories[$value['id1']] = $value['name2'];
 			if (!empty($value['name1'])) {
