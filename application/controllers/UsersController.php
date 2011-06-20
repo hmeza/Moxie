@@ -11,6 +11,7 @@ class UsersController extends Zend_Controller_Action {
 	
 	private function getForm($i_userPK) {
 		include('Zend/Form.php');
+		include('Zend/Form/Element/Select.php');
 		$form = new Zend_Form();
 		$st_user = $this->usersModel->find($i_userPK);
 		$row = $st_user->current();
@@ -23,6 +24,14 @@ class UsersController extends Zend_Controller_Action {
 		$form->addElement('password', 'password', array('label' => 'Password'));
 		$form->addElement('password', 'password_check', array('label' => 'Repeat password'));
 		$form->addElement('text', 'email', array('label' => 'Email', 'value' => $st_user[0]['email']));
+
+		$st_langs = array('es' => 'Español', 'en' => 'English');
+		$multiOptions = new Zend_Form_Element_Select('language', $st_langs);
+		$multiOptions->setLabel('Language');
+		$multiOptions->addMultiOptions($st_langs);
+		$multiOptions->setValue($st_user[0]['language']);
+		$form->addElement($multiOptions);
+		
 		$form->addElement('submit', 'submit', array('label'=>'Send'));
 		return $form;
 	}
@@ -47,8 +56,16 @@ class UsersController extends Zend_Controller_Action {
 		unset($st_params['password_check']);
 		unset($st_params['submit']);
 		$st_params['password'] = md5($st_params['password']);
-		$this->usersModel->update($st_params, 'id = '.$i_userPK);
-		$this->_helper->redirector('index','users');
+		try {
+			$this->usersModel->update($st_params, 'id = '.$i_userPK);
+			$_SESSION['user_lang'] = $st_params['language'];
+			include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
+			$this->_helper->redirector('index','users');
+		}
+		catch(Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
+
 	}
 }
 ?>
