@@ -109,15 +109,12 @@ fieldset {
 }
 
 table.list, td.list, th.list tr.list {
-	background: #fafafa;
 	padding: 2px;
 	border-collapse: collapse;
 	border-left: 1px solid #c5c5c5;
 	border-right: 1px solid #c5c5c5;
 	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #c5c5c5;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
 }
 
 input.default {
@@ -181,19 +178,11 @@ div.moxiedelete {
 div:hover.moxiedelete {
 	background:url("/img/delete_hover.png") no-repeat;
 }
-
-
-#submit-go {
-	margin-top:1em;
-	width:69px;
-	height:26px;
-	text-indent:-9999px;
-	overflow:hidden;
-	border:0;
-	background:url(submit-button.gif) no-repeat 0 0;
-	display:block;
-	cursor:pointer !important; cursor:hand;
+ 
+tr.alt td.alt {
+	background: #ecf6fc;
 }
-#submit-go:hover {
-	background-position:0 -26px;
+ 
+tr.over td, tr:hover td.over {
+	background: #bbffff;
 }
