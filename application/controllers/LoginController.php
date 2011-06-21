@@ -201,5 +201,83 @@ class LoginController extends Zend_Controller_Action {
 			error_log('MOXIE: Cannot populate user with demo categories');
 		}
 	}
+	
+	private function generateKey($email) {
+		return 'abc';
+	}
+	
+	private function validateKey($key, $email) {
+		
+	}
+	
+	/**
+	 * @desc	Generates forgot password form (just login request).
+	 * @author	hmeza
+	 * @since	2011-06-21
+	 */
+	private function getForgotPasswordForm() {
+		include('Zend/Form.php');
+		$form  = new Zend_Form();
+		
+		$form->setAction('/login/forgotpassword')
+			->setMethod('get');
+		     
+		$form->addElement('text', 'login', array('label' => 'Login', 'value' => ''));
+		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		return $form;
+	}
+	
+	/**
+	 * 
+	 * Enter description here ...
+	 */
+	public function forgotpasswordAction() {
+		$s_login = $this->getRequest()->getParam('login');
+		if (!empty($s_login)) {
+			// retrieve user email from login if exists. If not, sleep 10 and return error
+			try {
+				$email = $this->loginModel->fetchRow($this->loginModel->select()
+					->where('login = "'.$s_login.'"'));
+				if (empty($email)) {
+					sleep(10);
+					$s_infoText = 'Error en el login proporcionado. Por favor, intentalo de nuevo.';
+				}
+				else {
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, 'http://hytsolutions.com/mail_moxie.php?m='.$email['email'].'&k='.$this->generateKey($email['email']));
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
+					curl_exec($ch);
+					curl_close($ch);
+					$s_infoText = 'Se ha enviado un email a la cuenta de correo que nos proporcionaste. Por favor, sigue las instrucciones ahí descritas.';
+				}
+			}
+			catch (Exception $e) {
+				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+				$s_infoText = 'Error al conectar con el servidor de email. Por favor, intentalo mas tarde.';
+			}
+		}
+		else {
+			$s_infoText = 'Por favor, introduce el login para enviar un mail a tu cuenta y recuperar tu password.';
+		}
+		$this->view->assign('text', $s_infoText);
+		$this->view->assign('form', $this->getForgotPasswordForm($s_infoText));
+		$this->view->assign('info', $s_infoText);
+	}
+	
+	/**
+	 * 
+	 * Enter description here ...
+	 */
+	public function recoverpasswordAction() {
+		$s_key = $this->getRequest()->getParam('key');
+		$s_password = $this->getRequest()->getParam('password');
+		if (empty($s_password)) {
+			
+		}
+		else {
+			// validate key. If key is invalid sleep(20)
+			
+		}
+	}
 }
 ?>
