@@ -12,7 +12,9 @@ function web_login() {
 	<tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
 	<tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
 	<tr><td colspan=2 align="right"><input type="submit" value="Login"></td></tr>
-	<tr><td colspan=2 align="right"><a href="/login/newuser">'.$st_lang['new_user'].'</a></td></tr>
+	<tr><td colspan=2 align="right"><a href="/login/newuser">'.$st_lang['new_user'].'</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="/login/forgotpassword">'.$st_lang['forgot_password'].'</a></td></tr>
 	</table>
 	</fieldset>
 	</form>
@@ -21,7 +23,13 @@ function web_login() {
 
 function web_userData($i_userId, $s_userName) {
 	global $st_lang;
-	return $s_userName.' <a href="/login/logout">'.$st_lang['logout'].'</a>';
+	
+	$s_html = $s_userName.'<br>
+	
+	<a href="/users/index">'.$st_lang['users_my_account'].'</a>&nbsp;&nbsp;&nbsp;
+	<a href="/login/logout">'.$st_lang['logout'].'</a>';
+	
+	return $s_html;
 }
 
 function web_header($s_name, $b_loggedIn = false) {
