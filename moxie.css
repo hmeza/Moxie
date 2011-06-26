@@ -59,7 +59,7 @@ fieldset {
 	padding:0 0.5em 0.5em;
 }
 .date input {
-	background-image:url(/img/calendar-small.gif);
+	background-image:url(img/calendar-small.gif);
 	background-repeat:no-repeat;
 	background-position:100% 50%;
 }
@@ -131,11 +131,11 @@ form.budget {
 .moxietitle {
 	cursor: hand;
 	cursor: pointer;
-	background:url("/img/moxie-title.png") no-repeat;
+	background:url("img/moxie-title.png") no-repeat;
 }
 
 .moxietitle:hover {
-	background:url("/img/moxie-title-hover.png") no-repeat;
+	background:url("img/moxie-title-hover.png") no-repeat;
 }
 
 div.moxieicon {
