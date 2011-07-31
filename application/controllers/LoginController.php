@@ -203,7 +203,7 @@ class LoginController extends Zend_Controller_Action {
 	}
 	
 	private function generateKey($email) {
-		return 'abc';
+		return $email['password'].$email['email'];
 	}
 	
 	private function validateKey($key, $email) {
@@ -260,8 +260,7 @@ class LoginController extends Zend_Controller_Action {
 			$s_infoText = 'Por favor, introduce el login para enviar un mail a tu cuenta y recuperar tu password.';
 		}
 		$this->view->assign('text', $s_infoText);
-		$this->view->assign('form', $this->getForgotPasswordForm($s_infoText));
-		$this->view->assign('info', $s_infoText);
+		$this->view->assign('form', $this->getForgotPasswordForm());
 	}
 	
 	/**
@@ -269,15 +268,19 @@ class LoginController extends Zend_Controller_Action {
 	 * Enter description here ...
 	 */
 	public function recoverpasswordAction() {
-		$s_key = $this->getRequest()->getParam('key');
-		$s_password = $this->getRequest()->getParam('password');
-		if (empty($s_password)) {
-			
+		$s_key = $this->getRequest()->getParam('k');
+		if (empty($s_key)) {
+			$s_password = $this->getRequest()->getParam('password');
+			if (empty($s_password)) {
+				
+			}
 		}
 		else {
-			// validate key. If key is invalid sleep(20)
-			
+			// validate key. If key is invalid sleep(10)
+			sleep(10);
+			$s_infoText = 'No key was provided.';
 		}
+		$this->view->assign('text', $s_infoText);
 	}
 }
 ?>
