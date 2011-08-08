@@ -18,7 +18,7 @@ class StatsController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * @desc	Print detailed stats from user expenses and incomes.
+	 * Print detailed stats from user expenses and incomes.
 	 * @todo	Use a group by to retrieve data and match with array
 	 */
 	public function indexAction() {
@@ -56,7 +56,7 @@ class StatsController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * @desc	Generates year income graph.
+	 * Generates year income graph.
 	 * @author	hmeza
 	 * @since	2011-06-01
 	 */	
@@ -119,7 +119,7 @@ class StatsController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * @desc	Generates expenses pie graph.
+	 * Generates expenses pie graph.
 	 * @author	hmeza
 	 * @since	2011-06-01
 	 */
@@ -177,7 +177,7 @@ class StatsController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * @desc	Generates monthly expenses graph.
+	 * Generates monthly expenses graph.
 	 * @author	hmeza
 	 * @since	2011-06-01
 	 */
