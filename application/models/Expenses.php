@@ -2,7 +2,7 @@
 
 /**
  *
- * @desc
+ * 
  * 			id
  * 			user_owner
  * 			parent
@@ -26,7 +26,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * @desc	Gets expenses from a given user, month and year
+	 * Gets expenses from a given user, month and year
 	 * @author	hmeza
 	 * @since	2011-01-03
 	 * @param	int $user_id
@@ -59,7 +59,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 
 	/**
-	 * @desc	Retrieve an expense by its PK
+	 * Retrieve an expense by its PK
 	 * @author	hmeza
 	 * @since	2011-02-08
 	 * @param	int $i_expensePK
@@ -86,7 +86,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 
 	/**
-	 * @desc	Inserts a new expense on DB
+	 * Inserts a new expense on DB
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 * @param	int $user_id
@@ -112,7 +112,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * @desc	Updates expenses by setting in_sum to option value, filtering by year and month
+	 * Updates expenses by setting in_sum to option value, filtering by year and month
 	 * @author	hmeza
 	 * @since	2011-02-06
 	 * @param $user_id
@@ -134,7 +134,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * @desc	Updates an expense by setting in_sum to 0 or 1
+	 * Updates an expense by setting in_sum to 0 or 1
 	 * @author	hmeza
 	 * @since	2011-02-03
 	 * @param	int $i_expensePK
