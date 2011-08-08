@@ -49,6 +49,7 @@ $st_lang = array(
 	'category_send'			=>	'Enviar',
 	'category_new'			=>	'Nueva categoría',
 	// Stats
+	'stats_title'	=>	'Estadísticas (pulsa aquí para ocultar)',
 	'category'	=>	'Categoría',
 	'total_this_year'	=>	'Total este año',
 	'average_this_year'	=>	'Media este año',

@@ -186,3 +186,9 @@ tr.alt td.alt {
 tr.over td, tr:hover td.over {
 	background: #bbffff;
 }
+
+#box {
+	border:2px solid #D0E8F4;  
+	background-color:#ECF8FD; 
+    padding:5px;
+}
