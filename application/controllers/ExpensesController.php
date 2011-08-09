@@ -10,7 +10,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	This function generates the form to add expenses.
+	 * This function generates the form to add expenses.
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
@@ -22,7 +22,7 @@ class ExpensesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
-		$form->setAction('/expenses/add')
+		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.'/expenses/add')
 		     ->setMethod('post');
 		     
 		$form->setAttrib('id', 'login');
@@ -40,7 +40,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	This function generates the form to add expenses.
+	 * This function generates the form to add expenses.
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 * @param	int $i_expensePK
@@ -58,7 +58,7 @@ class ExpensesController extends Zend_Controller_Action
 		$s_date = explode(" ", $st_expense['expense_date']);
 		$st_expense['expense_date'] = $s_date[0];
 		
-		$form->setAction('/expenses/update')
+		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.'/expenses/update')
 		     ->setMethod('post');
 		     
 		$form->setAttrib('id', 'login');
@@ -78,11 +78,12 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Shows the expenses view
+	 * Shows the expenses view
 	 * @author	hmeza
 	 * @since	2011-01-03
 	 */
 	public function indexAction() {
+		global $s_viewPrefix;
 		include 'application/models/Budgets.php';
 		$o_budget = new Budgets();
 		$st_data = $o_budget->fetchAll(
@@ -126,10 +127,11 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
+		$this->render($s_viewPrefix.'index');
 	}
 	
 	/**
-	 * @desc	Adds an expense and shows expenses index again
+	 * Adds an expense and shows expenses index again
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
@@ -144,7 +146,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Edits a given expense
+	 * Edits a given expense
 	 * @author	hmeza
 	 * @since	2011-02-08
 	 */
@@ -201,6 +203,11 @@ class ExpensesController extends Zend_Controller_Action
 		$this->render('index');
 	}
 	
+	/**
+	 * Updates an expense
+	 * @author	hmeza
+	 * @since	2011-01-30
+	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
 		$i_expensePK = $st_params['id'];
@@ -209,7 +216,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Deletes a given expense
+	 * Deletes a given expense
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
@@ -224,10 +231,9 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc
+	 * Marks/unmarks all lines in a given month from a given year
 	 * @author	hmeza
 	 * @since	2011-02-06
-	 * @todo	Select year and month by sent parameters
 	 */
 	public function markallAction() {
 		$i_option = $this->getRequest()->getParam('option');
@@ -238,7 +244,7 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Marks an expense to appear or not in sums
+	 * Marks an expense to appear or not in sums
 	 * @author	hmeza
 	 * @since	2011-02-03
 	 */
