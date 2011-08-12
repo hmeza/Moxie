@@ -1,7 +1,8 @@
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="/moxie.css"/>
-<link rel="stylesheet" type="text/css" href="/dropdown.css"/>
+<meta name="google-site-verification" content="iE-pGhNJXHaAv1EEwkd5eCMStzQBHUtGZaiwKN-WJoA" />
+<link rel="stylesheet" type="text/css" href="moxie.css"/>
+<link rel="stylesheet" type="text/css" href="dropdown.css"/>
 <!-- Google Analytics script -->
 <script type="text/javascript">
 
@@ -43,6 +44,10 @@ switch($_SERVER['SERVER_NAME']) {
 	case 'moxie.com':
 	case 'moxie.redirectme.net':
 		$section = "staging";
+		break;
+	case 'hytsolutions.com':
+	case 'moxie.hytsolutions.com':
+		$section = "production";
 		break;
 	case 'moxie.dev':
 	default:
