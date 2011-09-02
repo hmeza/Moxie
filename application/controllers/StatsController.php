@@ -52,6 +52,7 @@ class StatsController extends Zend_Controller_Action {
 			$data[$key]['sumyear'] = $st_data['SUM(amount)'];
 			$data[$key]['avgyear'] = $st_data['AVG(amount)'];
 		}
+		//$this->view->assign('budget', $budget);
 		$this->view->assign('data', $data);
 	}
 	
