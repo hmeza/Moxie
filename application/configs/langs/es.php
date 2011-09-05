@@ -56,6 +56,10 @@ $st_lang = array(
 	'average_unit'		=>	'Media de una compra',
 	'total'		=>	'Total final',
 	'average'	=>	'Media',
+	'stats_budget_title' => 'Presupuesto (pulsa aquí para ocultar)',
+	'stats_budget_income' => 'TOTAL INGRESOS',
+	'stats_budget_expense' => 'TOTAL GASTOS',
+	'stats_budget_total' => 'SALDO (Ingresos - gastos)',
 	// User, login, etc.
 	'users'		=>	'Menú de usuario',
 	'users_my_account'	=>	'Mi cuenta',

@@ -52,7 +52,17 @@ class StatsController extends Zend_Controller_Action {
 			$data[$key]['sumyear'] = $st_data['SUM(amount)'];
 			$data[$key]['avgyear'] = $st_data['AVG(amount)'];
 		}
-		//$this->view->assign('budget', $budget);
+		// Get all categories, expenses and incomes from current year
+		$expenses = array();
+		$incomes = array();
+		for($month = 1; $month <= 12; $month++) {
+			$expenses[$month] = $this->expenses->getExpenses($_SESSION['user_id'], $month, date('Y'));
+			$incomes[$month] = $this->incomes->getIncomes($_SESSION['user_id'],$month,date('Y'));
+		}
+		$this->view->assign('budget_expenses', $this->categories->getCategoriesForView(1));
+		$this->view->assign('budget_incomes', $this->categories->getCategoriesForView(2));
+		$this->view->assign('expenses', $expenses);
+		$this->view->assign('incomes', $incomes);
 		$this->view->assign('data', $data);
 	}
 	
