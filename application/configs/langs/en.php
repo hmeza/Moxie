@@ -56,7 +56,10 @@ $st_lang = array(
 	'average_unit'		=>	'Average of one buy',
 	'total'		=>	'Total',
 	'average'	=>	'Average',
-
+	'stats_budget_title' => 'Budget (press here to hide)',
+	'stats_budget_income' => 'TOTAL INCOME',
+	'stats_budget_expense' => 'TOTAL EXPENSE',
+	'stats_budget_total' => 'BALANCE (Income - expense)',
 	// User, login, etc.
 	'users'		=>	'User menu',
 	'users_my_account'	=>	'My account',

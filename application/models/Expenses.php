@@ -26,12 +26,14 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * Gets expenses from a given user, month and year
+	 * Gets expenses from a given user, month and year.
+	 * If i_category is not set or is set to zero, all categories are retrieved.
 	 * @author	hmeza
 	 * @since	2011-01-03
 	 * @param	int $user_id
 	 * @param	int $month
 	 * @param	int $year
+	 * @param	int $i_category
 	 */
 	public function getExpenses($user_id, $month, $year, $i_category = 0) {
 		$s_category = ($i_category != 0) ? "e.category = ".$i_category : "1=1";
@@ -46,7 +48,8 @@ class Expenses extends Zend_Db_Table_Abstract {
 					))
 					->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
 					'name'	=>	'c.name',
-					'description'	=>	'c.description'
+					'description'	=>	'c.description',
+					'category'	=> 'c.id'
 					))
 					->where('YEAR(e.expense_date) = '.$year)
 					->where('MONTH(e.expense_date) = '.$month)

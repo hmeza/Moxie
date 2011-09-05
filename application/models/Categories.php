@@ -55,6 +55,12 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 	}
 	
+	/**
+	 * 
+	 * Gets categories for a given user.
+	 * i_typeFilter stands for the type of category to retrieve. 
+	 * @param int $i_typeFilter
+	 */
 	public function getCategoriesByUser($i_typeFilter) {
 		//select distinct(c2.id),c1.parent,c1.name, c2.name
 		//from categories c1 left join categories c2 on c2.parent = c1.id
