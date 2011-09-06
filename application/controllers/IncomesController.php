@@ -88,34 +88,6 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Get incomes for view
-	 * @author	hmeza
-	 * @since	2011-06-14
-	 * @return	incomes list
-	 */
-	private function getIncomes($i_year) {
-		$list = array();
-		// get categories
-		for ($i=1;$i<=12;$i++) {
-			try {
-				$s_select = $this->incomes->select()
-					->where('YEAR(date) = '.$i_year.' AND MONTH(date) = '.$i)
-					->where('user_owner = '.$_SESSION['user_id']);
-				$st_rows = $this->incomes->fetchAll($s_select);
-				if (count($st_rows) > 0) {
-					foreach($st_rows as $key => $value) {
-						$list[$i][$key] =  $value;
-					}
-				}
-			}
-			catch (Exception $e) {
-				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-			}
-		}
-		return $list;
-	}
-	
-	/**
 	 * @desc	Shows the expenses view
 	 * @author	hmeza
 	 * @since	2011-01-03
@@ -125,7 +97,7 @@ class IncomesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 
-		$this->view->assign('list', $this->getIncomes($i_year));
+		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('form', $this->getAddForm());
 	}
@@ -161,7 +133,7 @@ class IncomesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
-		$this->view->assign('list', $this->getIncomes($i_year));
+		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('form', $this->getEditForm($st_income));
 		$this->render('index');
