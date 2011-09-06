@@ -3,6 +3,7 @@ include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
 include_once( 'application/models/Expenses.php');
 include_once( 'application/models/Incomes.php');
 include_once( 'application/models/Categories.php');
+include_once( 'application/models/Budgets.php');
 include_once '../Zend/Zend/Db/Expr.php';
 include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
 
@@ -10,11 +11,13 @@ class StatsController extends Zend_Controller_Action {
 	private $expenses;
 	private $incomes;
 	private $categories;
+	private $budgets;
 		
 	public function init() {
 		$this->expenses = new Expenses();
 		$this->incomes = new Incomes();
 		$this->categories = new Categories();
+		$this->budgets = new Budgets();
 	}
 	
 	/**
@@ -63,6 +66,7 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('budget_incomes', $this->categories->getCategoriesForView(2));
 		$this->view->assign('expenses', $expenses);
 		$this->view->assign('incomes', $incomes);
+		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('data', $data);
 	}
 	

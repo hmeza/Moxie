@@ -34,6 +34,13 @@ $("#caja").click(function(event) {
 <?php
 $income = array();
 $expense = array();
+if (!empty($this->budget)) {
+	echo '<th align="right">'.$st_lang['budget'].'</th>';
+	$i_colspan = 14;
+}
+else {
+	$i_colspan = 13;
+}
 for ($month = 1; $month <= 12; $month++) {
 	$income[$month] = 0;
 	$expense[$month] = 0;
@@ -42,6 +49,7 @@ for ($month = 1; $month <= 12; $month++) echo '<th align="right">'.date('M',mkti
 echo '<tr>';
 foreach ($this->budget_incomes as $key => $category) {
 	echo '<td>'.$category.'</td>';
+	if (!empty($this->budget)) echo '<td></td>';
 	for ($month = 1; $month <= 12; $month++) {
 		$current_income = 0;
 		foreach ($this->incomes[$month] as $income_key => $value) {
@@ -53,25 +61,43 @@ foreach ($this->budget_incomes as $key => $category) {
 	echo '<tr>';
 }
 echo '<th align="left">'.$st_lang['stats_budget_income'].'</th>';
+if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">'.number_format($income[$month],2).' &euro;</th>';
 }
 echo '<tr>';
-echo '<td colspan=13>&nbsp;</td><tr>';
+echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 foreach ($this->budget_expenses as $key => $category) {
 	echo '<td>'.$category.'</td>';
+	if (!empty($this->budget)) {
+		$i_budget = (!empty($this->budget[$key])) ? $this->budget[$key] : 0;
+		echo '<td align="right" style="color: #00FF00">'.number_format($i_budget,2).' &euro;</td>';
+	}
 	for ($month = 1; $month <= 12; $month++) {
 		$current_expense = 0;
 		foreach ($this->expenses[$month] as $expense_key => $value) {
 			if ($value['category'] == $key) $current_expense += $value['amount'];
 		}
 		$expense[$month] += $current_expense;
-		echo '<td align="right">'.number_format($current_expense,2).' &euro;</td>';
+		if (!empty($this->budget)) {
+			if ($current_expense > $this->budget[$key]) {
+				$s_color = ' style="color: #FF0000"';
+			}
+			else {
+				//$s_color = ' style="color: #00FF00"';
+				$s_color = ' style="color: #000000"';
+			}
+		}
+		else {
+			$s_color = '';
+		}
+		echo '<td align="right"'.$s_color.'>'.number_format($current_expense,2).' &euro;</td>';
 	}
 	echo '<tr>';
 }
 echo '<th align="left">'.$st_lang['stats_budget_expense'].'</th>';
+if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">';
 	echo '<a href="/expenses/index/month/'.$month.'/year/'.date('Y').'">';
@@ -79,16 +105,17 @@ for ($month = 1; $month <= 12; $month++) {
 	echo ' &euro;</a></th>';
 }
 echo '<tr>';
-echo '<td colspan=13>&nbsp;</td><tr>';
+echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 echo '<th align="left">'.$st_lang['stats_budget_total'].'</th>';
+if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">'.number_format(($income[$month]-$expense[$month]),2).' &euro;</th>';
 }
 ?>
 </table>
 </div>
-<br></br><br></br>
+<br></br>
 <h2><span id="show_stats"><?php echo $st_lang['stats_title']; ?></span></h2>
 <div id="box">
 <table width=100%>
