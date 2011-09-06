@@ -17,7 +17,6 @@ class Budgets extends Zend_Db_Table_Abstract {
 	 * @param int $user_id
 	 */
 	public function getBudget($user_id) {
-		error_log($this->_db->select()->where('user_owner = '.$user_id));
 		$st_data = $this->_db->fetchAll(
 						$this->_db->select()
 								->from('budgets')

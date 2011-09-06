@@ -1,12 +1,15 @@
 <?php
 /** Zend_Controller_Action */
 include 'application/models/Expenses.php';
+include 'application/models/Budgets.php';
 class ExpensesController extends Zend_Controller_Action
 {
 	private $expenses;
+	private $budgets;
 	
 	public function init() {
-		$this->expenses = new Expenses();		
+		$this->expenses = new Expenses();
+		$this->budgets = new Budgets();	
 	}
 	
 	/**
@@ -84,15 +87,6 @@ class ExpensesController extends Zend_Controller_Action
 	 */
 	public function indexAction() {
 		global $s_viewPrefix;
-		include 'application/models/Budgets.php';
-		$o_budget = new Budgets();
-		$st_data = $o_budget->fetchAll(
-						$o_budget->select()->where('user_owner = '.$_SESSION['user_id'])
-					);
-		$st_budget = array();
-		foreach($st_data as $key => $value) {
-			$st_budget[$value['category']] = $value['amount'];
-		}
 		
 		// list current month by default
 		// allow navigate through months and years
@@ -122,7 +116,7 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
-		$this->view->assign('budget', $st_budget);
+		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
@@ -151,16 +145,6 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-02-08
 	 */
 	public function editAction() {
-		include 'application/models/Budgets.php';
-		$o_budget = new Budgets();
-		$st_data = $o_budget->fetchAll(
-						$o_budget->select()->where('user_owner = '.$_SESSION['user_id'])
-					);
-		$st_budget = array();
-		foreach($st_data as $key => $value) {
-			$st_budget[$value['category']] = $value['amount'];
-		}
-		
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
@@ -195,7 +179,7 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
-		$this->view->assign('budget', $st_budget);
+		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
