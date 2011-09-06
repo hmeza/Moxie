@@ -32,7 +32,7 @@ class Incomes extends Zend_Db_Table_Abstract {
 					'user_owner'	=>	'i.user_owner',
 					'amount'		=>	'i.amount',
 					'note'			=>	'i.note',
-					'expense_date'	=>	'i.date',
+					'date'			=>	'i.date',
 					'in_sum'		=>	'i.in_sum'
 					))
 					->joinLeft(array('c'=>'categories'), 'c.id = i.category', array(
