@@ -237,8 +237,6 @@ class StatsController extends Zend_Controller_Action {
 		
 		$g = new graph();
 		$g->title( $st_lang['expenses_monthly'] , '{font-size: 20px;}' );
-		$timestamp = mktime(0, 0, 0, $month, 1, $year);
-		$s_month = date("F", $timestamp);
 		$g->data_sets[] = $bar;
 		$g->bg_colour = '0xEFFFEF';	// soft green
 		$g->bg_colour = '0xE3F0FD';
