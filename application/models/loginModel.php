@@ -2,6 +2,13 @@
 include_once '../Zend/Zend/Db/Table.php';
 include_once '../Zend/Zend/Registry.php';
 
+/**
+ * 
+ * Login and users model.
+ * @todo	rename to Users to use Zend MVC notation
+ * @author	hmeza
+ *
+ */
 class loginModel extends Zend_Db_Table_Abstract {
 	protected $_name = 'users';
 	protected $_primary = 'id';
