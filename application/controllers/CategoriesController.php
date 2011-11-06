@@ -13,8 +13,8 @@ class CategoriesController extends Zend_Controller_Action
 	
 	private function getForm() {
 		global $st_lang;
-    	include('Zend/Form.php');
-    	include('Zend/Form/Element/Radio.php');
+    	include_once('Zend/Form.php');
+    	include_once('Zend/Form/Element/Radio.php');
     	$form  = new Zend_Form();
     	
     	$form->setAction('/categories/add')->setMethod('post');

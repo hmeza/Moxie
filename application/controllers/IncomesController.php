@@ -16,8 +16,8 @@ class IncomesController extends Zend_Controller_Action
 	 * @since	2011-01-30
 	 */
 	private function getAddForm() {
-		include('Zend/Form.php');
-		include('application/models/Categories.php');
+		include_once('Zend/Form.php');
+		include_once('application/models/Categories.php');
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
@@ -48,9 +48,9 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	private function getEditForm($st_income) {
-		include('Zend/Form.php');
-		include('Zend/Form/Element/Select.php');
-		include('application/models/Categories.php');
+		include_once('Zend/Form.php');
+		include_once('Zend/Form/Element/Select.php');
+		include_once('application/models/Categories.php');
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
