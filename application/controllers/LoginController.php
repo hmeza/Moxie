@@ -10,7 +10,7 @@ class LoginController extends Zend_Controller_Action {
 	}
 	
 	private function getForm() {
-		include('Zend/Form.php');
+		include_once('Zend/Form.php');
 		$form = new Zend_Form();
 		
 		$form->addElement('text', 'login', array('label' => 'Login'));
@@ -216,7 +216,7 @@ class LoginController extends Zend_Controller_Action {
 	 * @since	2011-06-21
 	 */
 	private function getForgotPasswordForm() {
-		include('Zend/Form.php');
+		include_once('Zend/Form.php');
 		$form  = new Zend_Form();
 		
 		$form->setAction('/login/forgotpassword')

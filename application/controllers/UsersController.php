@@ -10,8 +10,8 @@ class UsersController extends Zend_Controller_Action {
 	}
 	
 	private function getForm($i_userPK) {
-		include('Zend/Form.php');
-		include('Zend/Form/Element/Select.php');
+		include_once('Zend/Form.php');
+		include_once('Zend/Form/Element/Select.php');
 		$form = new Zend_Form();
 		$st_user = $this->usersModel->find($i_userPK);
 		$row = $st_user->current();
