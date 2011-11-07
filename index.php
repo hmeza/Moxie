@@ -19,76 +19,25 @@
 </script>
 </head>
 <body>
+<div style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -4em;">
 <?php
 session_start();
-include_once 'html/web.php';
 
-include 'Zend/Controller/Front.php';
-include_once 'Zend/Db.php';
-include_once 'Zend/Db/Adapter/Pdo/Mysql.php';
-include 'Zend/Registry.php';
-include_once 'Zend/Db/Table.php';
-include_once 'Zend/Config/Ini.php';
-
-// Set translation
-if (isset($_SESSION['user_lang'])) {
-	include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
+define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/application'));
+define('APPLICATION_ENV', 'development');
+include_once 'Zend/Application.php';
+try {
+	$application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+	$application->bootstrap()->run();
 }
-else {
-	include 'application/configs/langs/es.php';
+catch (Exception $e) {
+	throw new Exception('Error bootstrapping: '.$e->getMessage());
 }
-
-// Set config vars
-switch($_SERVER['SERVER_NAME']) {
-	case 'hugoboss666.no-ip.com':
-	case 'moxie.com':
-	case 'moxie.redirectme.net':
-		$section = "staging";
-		break;
-	case 'hytsolutions.com':
-	case 'moxie.hytsolutions.com':
-		$section = "production";
-		break;
-	case 'moxie.dev':
-	default:
-		$section = "development";
-		break;
-}
-
-$o_config = new Zend_Config_Ini('application/configs/application.ini', $section, array('allowModifications'=>true));
-$o_registry = Zend_Registry::getInstance();
-$o_registry->set('config', $o_config);
-
-$db = new Zend_Db_Adapter_Pdo_Mysql(array(
-    'host'     => Zend_Registry::get('config')->moxie->db->host,
-    'username' => Zend_Registry::get('config')->moxie->db->username,
-    'password' => Zend_Registry::get('config')->moxie->db->password,
-    'dbname'   => Zend_Registry::get('config')->moxie->db->database
-));
-$GLOBALS['db'] = $db;
-
-if ($db != null) {
-	Zend_Registry::set('db', $db);
-}
-else {
-	throw new Exception('Moxie: cannot create database adapter');
-}
-Zend_Db_Table_Abstract::setDefaultAdapter($db);
-
-$front = Zend_Controller_Front::getInstance();
- 
-// Set several module directories at once:
-$front->setControllerDirectory(array(
-    'default' => 'application/controllers',
-	'categories'	=>	'application/controllers',
-	'expenses'		=>	'application/controllers'
-));
-
-echo web_header(Zend_Registry::get('config')->moxie->app->name,
-				Zend_Registry::get('config')->moxie->settings->url);
-echo web_menu();
-
-$front->run('application/controllers/');
+?>
+</div>
+<br><br><br>
+<?php
+//echo web_footer();
 ?>
 </body>
 </html>
