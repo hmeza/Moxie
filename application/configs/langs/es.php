@@ -69,5 +69,6 @@ $st_lang = array(
 Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'logout'	=>	'Salir',
 	// Other stuff
+	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
 );
 ?>

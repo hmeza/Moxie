@@ -47,6 +47,13 @@ class UsersController extends Zend_Controller_Action {
 		$this->view->assign('form', $this->getForm($_SESSION['user_id']));
 	}
 	
+	/**
+	 * 
+	 * Update user parameters
+	 * @author	hmeza
+	 * @since	2011-04-11
+	 * @version	2011-11-07	hmeza: Password not updated if field is empty
+	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
 		$i_userPK = $st_params['id'];
@@ -55,17 +62,29 @@ class UsersController extends Zend_Controller_Action {
 		unset($st_params['login']);
 		unset($st_params['password_check']);
 		unset($st_params['submit']);
-		$st_params['password'] = md5($st_params['password']);
-		try {
-			$this->usersModel->update($st_params, 'id = '.$i_userPK);
-			$_SESSION['user_lang'] = $st_params['language'];
-			include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
-			$this->_helper->redirector('index','users');
+		if (!empty($st_params['password'])) {
+			error_log('changing password');
+			$st_updatePassword = array('password' => md5($st_params['password']));
+			try {
+				$this->usersModel->update($st_updatePassword, 'id = '.$i_userPK);
+			}
+			catch (Exception $e) {
+				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			}
 		}
-		catch(Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		unset($st_params['password']);
+		if (!empty($st_params)) {
+			try {
+				error_log('changing '.print_r($st_params,true));
+				$this->usersModel->update($st_params, 'id = '.$i_userPK);
+				$_SESSION['user_lang'] = $st_params['language'];
+				include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
+			}
+			catch(Exception $e) {
+				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			}
 		}
-
+		$this->_helper->redirector('index','users');
 	}
 }
 ?>

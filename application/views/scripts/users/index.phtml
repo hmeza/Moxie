@@ -5,17 +5,39 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title><?php global $st_lang; echo $st_lang['users']; ?></title>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript">
+function sendForm() {
+	var error_message = "<?php echo $st_lang['myaccount_password_error']?>";
+	if ($("#password").val() == $("#password_check").val()) {
+		$("#myaccountform").submit();
+	}
+	else {
+		alert(error_message);
+	}
+}
+</script>
 </head>
 <body>
-    <h1><?php echo $st_lang['users']; ?></h1>
+    <h1><?php echo $st_lang['users_my_account']; ?></h1>
     
 <table width="100%" cellspacing="20">
 <tr>
 <td valign=top>
+<form id="myaccountform" enctype="application/x-www-form-urlencoded" action="/users/update" method="post">
 <?php
-echo $this->form;
+//echo $this->form;
+echo $this->form->id;
+echo $this->form->login;
+echo $this->form->password;
+echo $this->form->password_check;
+echo $this->form->email;
+echo $this->form->language;
 ?>
+<input type="button" onclick="sendForm();" value="Send"/>
+</form>
 </td>
+</tr>
 </table>
 </body>
 </html>
