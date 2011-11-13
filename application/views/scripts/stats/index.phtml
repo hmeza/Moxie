@@ -34,22 +34,22 @@ $("#caja").click(function(event) {
 <?php
 $income = array();
 $expense = array();
+$balance = 0;
+for ($month = 1; $month <= 12; $month++) {
+	$income[$month] = 0;
+	$expense[$month] = 0;
+	echo '<th align="right"><a href="/expenses/index/month/'.$month.'/year/'.date('Y').'">'.date('M',mktime(1,1,1,$month,1,date('Y'))).'</a></th>';
+}
 if (!empty($this->budget)) {
-	echo '<th align="right">'.$st_lang['budget'].'</th>';
+	echo '<th align="right"><a href="/categories/index">'.$st_lang['budget'].'</a></th>';
 	$i_colspan = 14;
 }
 else {
 	$i_colspan = 13;
 }
-for ($month = 1; $month <= 12; $month++) {
-	$income[$month] = 0;
-	$expense[$month] = 0;
-}
-for ($month = 1; $month <= 12; $month++) echo '<th align="right">'.date('M',mktime(1,1,1,$month,1,date('Y'))).'</th>';
 echo '<tr>';
 foreach ($this->budget_incomes as $key => $category) {
 	echo '<td>'.$category.'</td>';
-	if (!empty($this->budget)) echo '<td></td>';
 	for ($month = 1; $month <= 12; $month++) {
 		$current_income = 0;
 		foreach ($this->incomes[$month] as $income_key => $value) {
@@ -58,22 +58,19 @@ foreach ($this->budget_incomes as $key => $category) {
 		$income[$month] += $current_income;
 		echo '<td align="right">'.number_format($current_income,2).' &euro;</td>';
 	}
+	if (!empty($this->budget)) echo '<td></td>';
 	echo '<tr>';
 }
 echo '<th align="left">'.$st_lang['stats_budget_income'].'</th>';
-if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">'.number_format($income[$month],2).' &euro;</th>';
 }
+if (!empty($this->budget)) echo '<th></th>';
 echo '<tr>';
 echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 foreach ($this->budget_expenses as $key => $category) {
 	echo '<td>'.$category.'</td>';
-	if (!empty($this->budget)) {
-		$i_budget = (!empty($this->budget[$key])) ? $this->budget[$key] : 0;
-		echo '<td align="right" style="color: #00FF00">'.number_format($i_budget,2).' &euro;</td>';
-	}
 	for ($month = 1; $month <= 12; $month++) {
 		$current_expense = 0;
 		foreach ($this->expenses[$month] as $expense_key => $value) {
@@ -94,24 +91,30 @@ foreach ($this->budget_expenses as $key => $category) {
 		}
 		echo '<td align="right"'.$s_color.'>'.number_format($current_expense,2).' &euro;</td>';
 	}
+	if (!empty($this->budget)) {
+		$i_budget = (!empty($this->budget[$key])) ? $this->budget[$key] : 0;
+		echo '<td align="right" style="color: #00FF00">'.number_format($i_budget,2).' &euro;</td>';
+	}
 	echo '<tr>';
 }
 echo '<th align="left">'.$st_lang['stats_budget_expense'].'</th>';
-if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">';
 	echo '<a href="/expenses/index/month/'.$month.'/year/'.date('Y').'">';
 	echo number_format($expense[$month],2);
 	echo ' &euro;</a></th>';
 }
+if (!empty($this->budget)) echo '<th></th>';
 echo '<tr>';
 echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 echo '<th align="left">'.$st_lang['stats_budget_total'].'</th>';
-if (!empty($this->budget)) echo '<th></th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">'.number_format(($income[$month]-$expense[$month]),2).' &euro;</th>';
+	$balance += ($income[$month]-$expense[$month]);
 }
+echo '<th align="right">'.number_format($balance,2).' &euro;</th>
+</tr>';
 ?>
 </table>
 </div>
