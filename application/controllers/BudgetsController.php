@@ -43,6 +43,7 @@ class BudgetsController extends Zend_Controller_Action
 			$o_budget = $this->budgets->fetchRow(
 							$this->budgets->select()
 							->where('category = '.$i_categoryPK)
+							->where('date_ended IS NULL')
 						);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
