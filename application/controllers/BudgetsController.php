@@ -50,28 +50,63 @@ class BudgetsController extends Zend_Controller_Action
 		$this->renderScript('categories/index.phtml'); 
 	}
 	
+	/**
+	 * 
+	 * Enter description here ...
+	 * @todo	Handle exception with proper message
+	 */
 	public function addAction() {
+		$b_found = false;
 		header("Cache-Control: no-cache");
-		$st_data = array(
-			'user_owner'	=>	$_SESSION['user_id'],
-			'category'		=>	$this->getRequest()->getParam('category'),
-			'amount'		=>	$this->getRequest()->getParam('amount'),
-			'date_created'	=>	date('Y-m-d H:i:s'),
-		);
-		try {
-			$result = $this->budgets->insert($st_data);
+		$st_budget = $this->budgets->getBudget($_SESSION['user_id']);
+		foreach ($st_budget as $key => $value) {
+			if ($key == $this->getRequest()->getParam('category')) $b_found = true;
 		}
-		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		if ($b_found) {
+			$cond = 'category = '.$this->getRequest()->getParam('category').' AND date_ended IS NULL';
+			$st_data = array('amount'=>$this->getRequest()->getParam('amount'));
 			try {
-				$cond = 'category = '.$st_data['category'];
 				$result = $this->budgets->update($st_data,$cond);
 			}
 			catch(Exception $e) {
 				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 			}
-			error_log($result.' row(s) updated');
 		}
+		else {
+			$st_data = array(
+				'user_owner'	=>	$_SESSION['user_id'],
+				'category'		=>	$this->getRequest()->getParam('category'),
+				'amount'		=>	$this->getRequest()->getParam('amount'),
+				'date_created'	=>	date('Y-m-d H:i:s'),
+			);
+			try {
+				$result = $this->budgets->insert($st_data);
+			}
+			catch (Exception $e) {
+				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * Makes a snapshot of current budget and generates a new one.
+	 * @todo	Handle exception with proper message
+	 * @author	hmeza
+	 * @since	2011-11-12
+	 */
+	public function snapshotAction() {
+		header("Cache-Control: no-cache");
+		try {
+			error_log('snapshoting');
+			$this->budgets->snapshot($_SESSION['user_id']);
+			error_log('snapshoted');
+		}
+		catch (Exception $e) {
+			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+		}
+		$this->render('index','categories');
+		return true;
 	}
 }
 ?>
