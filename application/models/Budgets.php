@@ -75,21 +75,44 @@ class Budgets extends Zend_Db_Table_Abstract {
 	 * Returns all budgets applicable this year.
 	 * @author	hmeza
 	 * @since	2011-11-12
-	 * @param unknown_type $user_id
+	 * @param int $user_id
+	 * @param int $i_year
 	 * @return	array
 	 */
-	public function getYearBudgets($user_id) {
-		$st_data = $this->_db->fetchAll(
-						$this->_db->select()
-								->from('budgets')
-								->where('user_owner = '.$user_id)
-								->where('YEAR(date IS NULL')
+	public function getYearBudgets($user_id, $i_year = null) {
+		if (!isset($i_year)) $i_year = date('Y');
+		$st_yearBudget = array();
+		for ($i=1;$i<13;$i++) {
+			$s_nextMonthDate = ($i == 12)
+					? strtotime('-1 day', mktime(23, 59, 59, 1, 1, $i_year+1))
+					: strtotime('-1 day', mktime(23, 59, 59, $i+1, 1, $i_year));
+			$st_data = $this->_db->fetchAll(
+				$this->_db->select()
+						->from('budgets')
+						->where('user_owner = '.$user_id)
+						->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
+						->where('unix_timestamp(date_created) <= '.$s_nextMonthDate)
+						->where('unix_timestamp(date_ended) >= '.$s_nextMonthDate.' OR date_ended IS NULL')
+						->order('date_created ASC')
+				);
+			if (empty($st_data)) {
+				$st_data = $this->_db->fetchAll(
+					$this->_db->select()
+							->from('budgets')
+							->where('user_owner = '.$user_id)
+							->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
+							->where('date_ended IS NULL')
+							->order('date_created ASC')
 					);
-		$st_budget = array();
-		foreach($st_data as $key => $value) {
-			$st_budget[$value['category']] = $value['amount'];
+			}
+			$st_budget = array();
+			$s_currentDate = null;
+			foreach($st_data as $key => $value) {
+				$st_budget[$value['category']] = $value['amount'];
+			}
+			$st_yearBudget[$i] = $st_budget;
 		}
-		return $st_budget;
+		return $st_yearBudget;
 	}
 }
 

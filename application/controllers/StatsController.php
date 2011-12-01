@@ -66,7 +66,7 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('budget_incomes', $this->categories->getCategoriesForView(2));
 		$this->view->assign('expenses', $expenses);
 		$this->view->assign('incomes', $incomes);
-		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
+		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], date('Y')));
 		$this->view->assign('data', $data);
 	}
 	

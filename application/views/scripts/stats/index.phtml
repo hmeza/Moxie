@@ -8,6 +8,19 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript">
+<?php
+/*
+$s_budget = 'var budgets = new Array();';
+foreach ($this->budgets as $key => $value) {
+	
+	$s_budget .= 'budgets['..'] = new Array(';
+	foreach ($value as $inner_key => $inner_value) {
+		$s_budget .= 
+	}
+	$s_budget .= ']
+}
+$s_budget .= ']';*/
+?>
 $(document).ready(function() {
     $("#show_stats").click(
 		function(event) {
@@ -23,6 +36,10 @@ $("#caja").click(function(event) {
     $("#box").slideUp();
 });
 });
+function showBudget() {
+	// hide all budgets
+	// show budget for hover month
+}
 </script>
 </head>
 
@@ -78,13 +95,18 @@ foreach ($this->budget_expenses as $key => $category) {
 		}
 		$expense[$month] += $current_expense;
 		if (!empty($this->budget)) {
-			if ($current_expense > $this->budget[$key]) {
-				$s_color = ' style="color: #FF0000"';
+			if (!isset($this->budget[$month][$key])) {
+				// search for this key in forward months
+				for ($i = $month+1; $i < 13; $i++) {
+					if (isset($this->budget[$i][$key]))
+						$this->budget[$month][$key] = $this->budget[$i][$key];
+				}
+				// if still unset...
+				if (!isset($this->budget[$month][$key]))
+					$this->budget[$month][$key] = $current_expense;
 			}
-			else {
-				//$s_color = ' style="color: #00FF00"';
-				$s_color = ' style="color: #000000"';
-			}
+			$s_color = ($current_expense > $this->budget[$month][$key]) ?
+				' style="color: #FF0000"' : ' style="color: #000000"';
 		}
 		else {
 			$s_color = '';
@@ -92,7 +114,7 @@ foreach ($this->budget_expenses as $key => $category) {
 		echo '<td align="right"'.$s_color.'>'.number_format($current_expense,2).' &euro;</td>';
 	}
 	if (!empty($this->budget)) {
-		$i_budget = (!empty($this->budget[$key])) ? $this->budget[$key] : 0;
+		$i_budget = (!empty($this->budget[date('m')][$key])) ? $this->budget[date('m')][$key] : 0;
 		echo '<td align="right" style="color: #00FF00">'.number_format($i_budget,2).' &euro;</td>';
 	}
 	echo '<tr>';
