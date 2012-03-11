@@ -4,25 +4,25 @@ class TextsController extends Zend_Controller_Action
 {
 	private $text;
 	
-	public function init() {		
+	public function init() {
+		global $st_lang;
+		$this->text = $st_lang;
 	}
 	
 	public function indexAction() {
+		$this->render('index');
 	}
 	
 	public function aboutAction() {
-		$s_about = '
-		PHP<br>
-		Zend framework<br>
-		Apache<br>
-		MySQL<br>
-		';
-		$this->text = $s_about;
-		$this->view->assign('text', $this->text);
+		$this->view->assign('title', $this->text['text_about_title']);
+		$this->view->assign('text', $this->text['text_about_text']);
+		$this->render('index');
 	}
 	
 	public function benefitsAction() {
-		$this->_helper->redirector('index','texts');
+		$this->view->assign('title', $this->text['text_features_title']);
+		$this->view->assign('text', $this->text['text_features_text']);
+		$this->render('index');
 	}
 	
 	public function helpAction() {

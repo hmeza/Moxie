@@ -70,6 +70,16 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'logout'	=>	'Salir',
 	// Other stuff
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
-	'error_nouser' => 'No estás identificado. Por favor accede o <a href="login/newuser">registrate</a> como usuario.'
+	'error_nouser' => 'No estás identificado. Por favor accede o <a href="login/newuser">registrate</a> como usuario.',
+	'text_about_title' => 'Acerca de...',
+	'text_about_text' => 'Moxie utiliza:<br> 
+		<a href="http://www.php.net" target="blank">PHP</a><br>
+		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
+		<a href="http://teethgrinder.co.uk/open-flash-chart/" target="blank">Open flash chart</a><br>
+		<a href="">MySQL</a><br>
+		<a href="">Apache</a><br>',
+	'text_features_title' => 'Características',
+	'text_features_text' => ''
+
 );
 ?>
