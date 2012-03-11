@@ -70,6 +70,15 @@ Now you can log in with your login and password to start using Moxie.',
 	'logout'	=>	'Logout',
 	// Other stuff
 	'myaccount_password_error'	=>	'Error: Passwords do not match',
-	'error_nouser' => 'You are not logged in. Please log in or <a href="login/newuser">register</a> a new user.'
+	'error_nouser' => 'You are not logged in. Please log in or <a href="login/newuser">register</a> a new user.',
+	'text_about_title' => 'About...',
+	'text_about_text' => 'Moxie uses:<br> 
+		<a href="http://www.php.net" target="blank">PHP</a><br>
+		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
+		<a href="http://teethgrinder.co.uk/open-flash-chart/" target="blank">Open flash chart</a><br>
+		<a href="">MySQL</a><br>
+		<a href="">Apache</a><br>',
+	'text_features_title' => 'Features',
+	'text_features_text' => ''
 );
 ?>
