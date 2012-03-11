@@ -6,10 +6,18 @@ class BudgetsController extends Zend_Controller_Action
 {
 	private $budgets;
 	
+	/**
+	 * Initialize Budgets controller class.
+	 */
 	public function init() {
 		$this->budgets = new Budgets();		
 	}
 	
+	/**
+	 * Mount the category tree for the current budget.
+	 * @param array $st_categories
+	 * @return array
+	 */
 	private function prepareCategoriesTree($st_categories) {
 		$st_preparedTree = array();
 		foreach($st_categories as $key => $value) {
@@ -34,6 +42,9 @@ class BudgetsController extends Zend_Controller_Action
 		return $st_preparedTree;
 	}
 	
+	/**
+	 * Retrieves the current budget and shows it.
+	 */
 	public function indexAction() {
 		$o_categories = new Categories();
 		$st_categories = $this->prepareCategoriesTree($o_categories->getCategoriesTree());
@@ -52,8 +63,7 @@ class BudgetsController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
+	 * Adds an amount to a category for the current budget.
 	 * @todo	Handle exception with proper message
 	 */
 	public function addAction() {
@@ -90,7 +100,6 @@ class BudgetsController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * 
 	 * Makes a snapshot of current budget and generates a new one.
 	 * @todo	Handle exception with proper message
 	 * @author	hmeza
