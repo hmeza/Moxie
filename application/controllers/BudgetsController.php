@@ -80,7 +80,7 @@ class BudgetsController extends Zend_Controller_Action
 				$result = $this->budgets->update($st_data,$cond);
 			}
 			catch(Exception $e) {
-				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+				error_log(__METHOD__.": ".$e->getMessage());
 			}
 		}
 		else {
@@ -94,7 +94,7 @@ class BudgetsController extends Zend_Controller_Action
 				$result = $this->budgets->insert($st_data);
 			}
 			catch (Exception $e) {
-				error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+				error_log(__METHOD__.": ".$e->getMessage());
 			}
 		}
 	}
@@ -113,7 +113,7 @@ class BudgetsController extends Zend_Controller_Action
 			error_log('snapshoted');
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.": ".$e->getMessage());
 		}
 		$this->render('index','categories');
 		return true;
