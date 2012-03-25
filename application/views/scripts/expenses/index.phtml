@@ -5,6 +5,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php global $st_lang; echo $st_lang['expenses']; ?></title>
+<script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" language="text/javascript">
 	var year = <?php echo $this->year; ?>;
 	var month = <?php echo $this->month; ?>;
@@ -14,14 +15,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 	function markLine(id) {
 		window.location="/expenses/markline/id/"+id;
-	}
-
-	function confirmDelete(id) {
-		var response;
-		response = confirm("Are you sure to delete this expense?");
-		if (response == true) {
-			window.location="/expenses/delete/id/"+id;
-		}
 	}
 
 	function filter() {
@@ -37,7 +30,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <script type="text/javascript" src="/js/helpers.js"></script>
 <script type="text/javascript" src="/js/calendar.js"></script>
 <script type="text/javascript" src="/js/form.js"></script>
-<script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/zebra.js"></script>
 </head>
 <body>
