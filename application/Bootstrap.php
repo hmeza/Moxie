@@ -27,7 +27,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 */
 	protected function _initBrowser() {
 		$navigator = get_browser(null, true);
-		error_log(print_r($navigator,true));
+		//error_log(print_r($navigator,true));
 		if ($navigator['platform'] == 'Android' || $navigator['browser'] == 'Android') {
 			include_once 'html/mobile.php';
 			$s_viewPrefix = "m-";
