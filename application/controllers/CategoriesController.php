@@ -29,6 +29,7 @@ class CategoriesController extends Zend_Controller_Action
 		$categoryTypes = array(Categories::EXPENSES => $st_lang['category_expense'], Categories::INCOMES => $st_lang['category_income'], Categories::BOTH => $st_lang['category_both']);
 		$types = new Zend_Form_Element_Radio('type');
 		$types->setRequired(true)  // field required
+		->setLabel($st_lang['category_type'])
 		->setValue(Categories::BOTH) // first radio button selected
 		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
 		$form->addElement($types);
