@@ -43,6 +43,7 @@ $st_lang = array(
 	'category_name'			=>	'Nombre',
 	'category_parent'		=>	'Categoría raiz',
 	'category_description'	=>	'Descripción',
+	'category_type'			=>	'Tipo',
 	'category_expense'		=>	'Gasto',
 	'category_income'		=>	'Ingreso',
 	'category_both'			=>	'Ambos',
