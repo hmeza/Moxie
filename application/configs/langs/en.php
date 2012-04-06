@@ -79,7 +79,5 @@ Now you can log in with your login and password to start using Moxie.',
 		<a href="http://teethgrinder.co.uk/open-flash-chart/" target="blank">Open flash chart</a><br>
 		<a href="">MySQL</a><br>
 		<a href="">Apache</a><br>',
-	'text_features_title' => 'Features',
-	'text_features_text' => ''
 );
 ?>
