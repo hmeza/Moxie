@@ -19,12 +19,6 @@ class TextsController extends Zend_Controller_Action
 		$this->render('index');
 	}
 	
-	public function benefitsAction() {
-		$this->view->assign('title', $this->text['text_features_title']);
-		$this->view->assign('text', $this->text['text_features_text']);
-		$this->render('index');
-	}
-	
 	public function helpAction() {
 		$s_helpExpenses = '
 		En la vista de expenses podemos distinguir dos partes. La parte de
