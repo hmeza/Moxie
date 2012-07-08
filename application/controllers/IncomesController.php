@@ -11,7 +11,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	This function generates the form to add incomes.
+	 * This function generates the form to add incomes.
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
@@ -88,7 +88,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Shows the expenses view
+	 * Shows the expenses view
 	 * @author	hmeza
 	 * @since	2011-01-03
 	 */
@@ -103,7 +103,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Adds an expense and shows expenses index again
+	 * Adds an expense and shows expenses index again
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
@@ -122,7 +122,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Edit an income
+	 * Edit an income
 	 * @author	hmeza
 	 * @since	2011-06-13
 	 */
@@ -140,7 +140,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Update income
+	 * Update income
 	 * @author	hmeza
 	 * @since	2011-06-13
 	 */
@@ -160,7 +160,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * @desc	Deletes a given income
+	 * Deletes a given income
 	 * @author	hmeza
 	 * @since	2011-01-30
 	 */
