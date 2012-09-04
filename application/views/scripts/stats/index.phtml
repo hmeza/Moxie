@@ -9,18 +9,34 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript">
 <?php
-/*
-$s_budget = 'var budgets = new Array();';
-foreach ($this->budgets as $key => $value) {
-	
-	$s_budget .= 'budgets['..'] = new Array(';
+
+$s_budget = "var budgets = new Array();\n";
+$s_categories = array();
+foreach ($this->budget as $key => $value) {
+	$s_budget .= "budgets[".$key."] = new Array();\n";
 	foreach ($value as $inner_key => $inner_value) {
-		$s_budget .= 
+		$s_budget .= "budgets[".$key."][".$inner_key."] = ".$inner_value.";\n";
+		if(!in_array($inner_key, $s_categories)) {
+			$s_categories[] = $inner_key;
+		}
 	}
-	$s_budget .= ']
 }
-$s_budget .= ']';*/
+echo $s_budget;
+
 ?>
+var categories = [<?php echo implode(',', $s_categories);?>];
+function onmouseoverchange(month) {
+	for (category in categories) {
+		$("#budget"+category).html((budgets[month][categories[category]].toFixed(2))+" &euro;");
+	}
+}
+
+function onmouseoutchange() {
+	for (category in categories) {
+		$("#budget"+category).html((budgets[<?php echo date('m'); ?>][categories[category]].toFixed(2))+" &euro;");
+	}
+}
+
 $(document).ready(function() {
     $("#show_stats").click(
 		function(event) {
@@ -32,14 +48,35 @@ $(document).ready(function() {
         		$("#budget").slideToggle();
     		}
     	);
-$("#caja").click(function(event) {
-    $("#box").slideUp();
+	$("#caja").click(function(event) {
+	    $("#box").slideUp();
+	});
+	$("[name='month1']").mouseover(function() { onmouseoverchange(1); });
+	$("[name='month2']").mouseover(function() { onmouseoverchange(2); });
+	$("[name='month3']").mouseover(function() { onmouseoverchange(3); });
+	$("[name='month4']").mouseover(function() { onmouseoverchange(4); });
+	$("[name='month5']").mouseover(function() { onmouseoverchange(5); });
+	$("[name='month6']").mouseover(function() { onmouseoverchange(6); });
+	$("[name='month7']").mouseover(function() { onmouseoverchange(7); });
+	$("[name='month8']").mouseover(function() { onmouseoverchange(8); });
+	$("[name='month9']").mouseover(function() { onmouseoverchange(9); });
+	$("[name='month10']").mouseover(function() { onmouseoverchange(10); });
+	$("[name='month11']").mouseover(function() { onmouseoverchange(11); });
+	$("[name='month12']").mouseover(function() { onmouseoverchange(12); });
+	$("[name='month1']").mouseout(function() { onmouseoutchange(1); });
+	$("[name='month2']").mouseout(function() { onmouseoutchange(2); });
+	$("[name='month3']").mouseout(function() { onmouseoutchange(3); });
+	$("[name='month4']").mouseout(function() { onmouseoutchange(4); });
+	$("[name='month5']").mouseout(function() { onmouseoutchange(5); });
+	$("[name='month6']").mouseout(function() { onmouseoutchange(6); });
+	$("[name='month7']").mouseout(function() { onmouseoutchange(7); });
+	$("[name='month8']").mouseout(function() { onmouseoutchange(8); });
+	$("[name='month9']").mouseout(function() { onmouseoutchange(9); });
+	$("[name='month10']").mouseout(function() { onmouseoutchange(10); });
+	$("[name='month11']").mouseout(function() { onmouseoutchange(11); });
+	$("[name='month12']").mouseout(function() { onmouseoutchange(12); });
 });
-});
-function showBudget() {
-	// hide all budgets
-	// show budget for hover month
-}
+
 </script>
 </head>
 
@@ -111,11 +148,11 @@ foreach ($this->budget_expenses as $key => $category) {
 		else {
 			$s_color = '';
 		}
-		echo '<td align="right"'.$s_color.'>'.number_format($current_expense,2).' &euro;</td>';
+		echo '<td align="right"'.$s_color.' name="month'.$month.'">'.number_format($current_expense,2).' &euro;</td>';
 	}
 	if (!empty($this->budget)) {
 		$i_budget = (!empty($this->budget[date('m')][$key])) ? $this->budget[date('m')][$key] : 0;
-		echo '<td align="right" style="color: #00FF00">'.number_format($i_budget,2).' &euro;</td>';
+		echo '<td align="right" style="color: #00FF00" id="budget'.$key.'">'.number_format($i_budget,2).' &euro;</td>';
 	}
 	echo '<tr>';
 }
