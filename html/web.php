@@ -5,7 +5,7 @@ function web_login() {
 	global $st_lang;
 	
 	return '
-	<form name="login" id="login" action="/login/login" method="POST">
+	<form name="login" id="login" action="'.Zend_Registry::get('config')->moxie->settings->url.'/login/login" method="POST">
 	<fieldset class="login contact">
 	<legend>Login</legend>
 	<table width=200>
@@ -26,8 +26,8 @@ function web_userData($i_userId, $s_userName) {
 	
 	$s_html = $s_userName.'<br>
 	
-	<a href="/users/index">'.$st_lang['users_my_account'].'</a>&nbsp;&nbsp;&nbsp;
-	<a href="/login/logout">'.$st_lang['logout'].'</a>';
+	<a href="'.Zend_Registry::get('config')->moxie->settings->url.'/users/index">'.$st_lang['users_my_account'].'</a>&nbsp;&nbsp;&nbsp;
+	<a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a>';
 	
 	return $s_html;
 }
@@ -65,16 +65,16 @@ function web_menu() {
 	';
 	if (isset($_SESSION['user_id'])) {
 		$s_webMenu .= '
-		<td><a href="/categories/index">'.$st_lang['categories'].'</a></td>
-		<td><a href="/incomes/index">'.$st_lang['incomes'].'</a></td>
-		<td><a href="/expenses/index">'.$st_lang['expenses'].'</a></td>
-		<td><a href="/stats/index">'.$st_lang['stats'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/categories/index">'.$st_lang['categories'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/incomes/index">'.$st_lang['incomes'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/expenses/index">'.$st_lang['expenses'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/stats/index">'.$st_lang['stats'].'</a></td>
 		';
 	}
 	else {
 		$s_webMenu .= '
-		<td><a href="/">'.$st_lang['index'].'</a></td>
-		<td><a href="/texts/about">'.$st_lang['about'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/">'.$st_lang['index'].'</a></td>
+		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/texts/about">'.$st_lang['about'].'</a></td>
 		';
 	}
 	$s_webMenu .= '
@@ -84,9 +84,7 @@ function web_menu() {
 }
 
 function web_footer() {
-	return '
-	<table><td>&copy; 2011 Hytsolutions.com</td></table>
-	';	
+	return '<div style="height: 4em;"><table width=100%><td align="center">&copy; 2011 Hytsolutions.com</td></table></div>';	
 }
 
 ?>
