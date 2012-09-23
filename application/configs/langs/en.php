@@ -80,9 +80,9 @@ Now you can log in with your login and password to start using Moxie.',
 		<a href="">MySQL</a><br>
                 <a href="">Apache</a><br><br>
          Moxie is hosted at:<br>
-         <a href="http://api.hostinger.es/redir/457908">Hostinger.es</a><br><br>
+         <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>
          El código de Moxie está disponible en:<br>
-         <a href="https://github.com/hmeza/Moxie.git">https://github.com/hmeza/Moxie.git</a>',
+         <a href="https://github.com/hmeza/Moxie.git" target="blank">https://github.com/hmeza/Moxie.git</a>',
 
 );
 ?>
