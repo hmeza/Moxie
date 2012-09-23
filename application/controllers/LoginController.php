@@ -65,7 +65,6 @@ class LoginController extends Zend_Controller_Action {
 		}
 		$b_result = session_destroy();
 		if (!$b_result) error_log('MOXIE: Unable to destroy session');
-		else error_log('MOXIE: Logged out');
 		$this->_helper->redirector('index','index');
 	}
 	

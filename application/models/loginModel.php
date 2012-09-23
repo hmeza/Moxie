@@ -1,6 +1,6 @@
 <?php
-include_once '../Zend/Zend/Db/Table.php';
-include_once '../Zend/Zend/Registry.php';
+include_once 'Zend/Db/Table.php';
+include_once 'Zend/Registry.php';
 
 /**
  * 

@@ -4,7 +4,7 @@ include_once( 'application/models/Expenses.php');
 include_once( 'application/models/Incomes.php');
 include_once( 'application/models/Categories.php');
 include_once( 'application/models/Budgets.php');
-include_once '../Zend/Zend/Db/Expr.php';
+include_once 'Zend/Db/Expr.php';
 include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
 
 class StatsController extends Zend_Controller_Action {
