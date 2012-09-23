@@ -78,7 +78,11 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
 		<a href="http://teethgrinder.co.uk/open-flash-chart/" target="blank">Open flash chart</a><br>
 		<a href="">MySQL</a><br>
-		<a href="">Apache</a><br>',
+		<a href="">Apache</a><br><br>
+        Moxie está alojado en:<br>
+        <a href="http://api.hostinger.es/redir/457908">Hostinger.es</a><br><br>
+        El código de Moxie está disponible en:<br>
+        <a href="https://github.com/hmeza/Moxie.git">https://github.com/hmeza/Moxie.git</a>',
 
 );
 ?>
