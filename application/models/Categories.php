@@ -12,7 +12,7 @@
  *
  */
 
-include_once '../Zend/Zend/Registry.php';
+include_once 'Zend/Registry.php';
 class Categories extends Zend_Db_Table_Abstract {
 	const EXPENSES = 1;
 	const INCOMES = 2;
