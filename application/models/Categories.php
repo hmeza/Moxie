@@ -66,8 +66,8 @@ class Categories extends Zend_Db_Table_Abstract {
 		//from categories c1 left join categories c2 on c2.parent = c1.id
 		//where c2.id is not null
 		//order by c1.parent,c2.parent;
-		if ($i_typeFilter == 3) $s_typeFilter = '1 = 1';
-		else $s_typeFilter = 'c2.type = 3 OR c2.type = '.$i_typeFilter;
+		if ($i_typeFilter == self::BOTH) $s_typeFilter = '1 = 1';
+		else $s_typeFilter = 'c2.type = '.self::BOTH.' OR c2.type = '.$i_typeFilter;
 		
 		$query = $this->database->select()
 			->from(array('c1'=>'categories'), array(

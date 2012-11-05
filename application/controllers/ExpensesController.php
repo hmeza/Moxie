@@ -33,7 +33,7 @@ class ExpensesController extends Zend_Controller_Action
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => $st_lang['expenses_category'],
-			'multioptions' => $categories->getCategoriesForView(1)
+			'multioptions' => $categories->getCategoriesForView(Categories::EXPENSES)
 			)
 		);
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
