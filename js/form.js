@@ -1,10 +1,8 @@
 function init() {
-	var now = new Date();
-	var currentMonth;
-	var currentDay;
 	var els = getElementsByClassName(document, '*','date');
 	var dateSel = document.createElement('input');
 	var label = document.createElement('label');
+	var currentDate = els[0].innerHTML;
 	label.appendChild(document.createTextNode('Date'));
 	label.setAttribute('for','dob');
 	label.setAttribute('id', 'date_label');
@@ -22,9 +20,5 @@ function init() {
 	els[0].appendChild(dateSel);
 	
 	date = new calendarInput(dateSel);
-	currentMonth = now.getMonth()+1;
-	if (currentMonth<10) currentMonth = "0"+currentMonth;
-	currentDay = now.getDate();
-	if (currentDay<10) currentDay = "0"+currentDay;
-	dateSel.value = now.getRealYear()+"-"+currentMonth+"-"+currentDay;
+	dateSel.value = currentDate;
 }

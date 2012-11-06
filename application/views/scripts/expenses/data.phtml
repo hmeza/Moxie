@@ -64,12 +64,7 @@ echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
 echo "\n";
 echo $this->form->getElement('note');
-if (isset($i_expensePK)) {
-	echo $this->form->getElement('date');	
-}
-else {
-	echo '<div class="date"></div>';
-}
+echo '<div class="date">'.$this->form->getValue('date').'</div>';
 echo $this->form->getElement('submit');
 echo '</form>';
 ?>
