@@ -7,6 +7,7 @@ function init() {
 	var label = document.createElement('label');
 	label.appendChild(document.createTextNode('Date'));
 	label.setAttribute('for','dob');
+	label.setAttribute('id', 'date_label');
 	
 	removeChildren(els[0]);	
 	els[0].appendChild(label);
@@ -27,5 +28,3 @@ function init() {
 	if (currentDay<10) currentDay = "0"+currentDay;
 	dateSel.value = now.getRealYear()+"-"+currentMonth+"-"+currentDay;
 }
-
-AttachEvent(window,'load',init,false);

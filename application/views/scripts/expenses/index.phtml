@@ -24,6 +24,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		redirect = document.getElementById('category_filter').options[chosen].value;
 		window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
 	}
+
+	$(document).ready(function() {
+		init();
+		$('#date_label').html("<?php echo $st_lang['expenses_date']; ?>");
+	});
 </script>
 <link rel="stylesheet" type="text/css" href="/moxie.css"/>
 <link rel="stylesheet" type="text/css" href="/dropdown.css"/>
