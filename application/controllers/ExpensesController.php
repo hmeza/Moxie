@@ -52,6 +52,7 @@ class ExpensesController extends Zend_Controller_Action
 		include_once('Zend/Form.php');
 		include_once('Zend/Form/Element/Select.php');
 		include_once('application/models/Categories.php');
+		global $st_lang;
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
@@ -68,15 +69,16 @@ class ExpensesController extends Zend_Controller_Action
 		
 		$form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
 		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
-		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_expense['amount']));
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
 		// Add select
 		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::EXPENSES));
+		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::EXPENSES));
 		$multiOptions->setValue(array($st_expense['category']));
 		$form->addElement($multiOptions);
-		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_expense['note']));
-		$form->addElement('text', 'date', array('label' => 'Date', 'value' => $st_expense['expense_date']));
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['expense_date']));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
 	
