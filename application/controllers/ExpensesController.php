@@ -18,8 +18,6 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-01-30
 	 */
 	private function getAddForm() {
-		include_once('Zend/Form.php');
-		include_once('application/models/Categories.php');
 		global $st_lang;
 		
 		$form  = new Zend_Form();
@@ -49,9 +47,6 @@ class ExpensesController extends Zend_Controller_Action
 	 * @param	int $i_expensePK
 	 */
 	private function getEditForm($i_expensePK) {
-		include_once('Zend/Form.php');
-		include_once('Zend/Form/Element/Select.php');
-		include_once('application/models/Categories.php');
 		global $st_lang;
 		$form  = new Zend_Form();
 		$categories = new Categories();

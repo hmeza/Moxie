@@ -16,8 +16,7 @@ class IncomesController extends Zend_Controller_Action
 	 * @since	2011-01-30
 	 */
 	private function getAddForm() {
-		include_once('Zend/Form.php');
-		include_once('application/models/Categories.php');
+		global $st_lang;
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
@@ -30,27 +29,21 @@ class IncomesController extends Zend_Controller_Action
 			}
 		}
 		
-		$form->setAction('/incomes/add')
-		     ->setMethod('post');
-		     
+		$form->setAction('/incomes/add')->setMethod('post');
 		$form->setAttrib('id', 'login');
-		
-		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => '0.00'));
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
-			'label' => 'Category name',
+			'label' => $st_lang['expenses_category'],
 			'multioptions' => $formCategories		
 			)
 		);
-		$form->addElement('text', 'note', array('label' => 'Note'));
-		$form->addElement('text', 'date', array('label' => 'Date', 'value' => date('Y-m-d')));
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => date('Y-m-d')));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
 	
 	private function getEditForm($st_income) {
-		include_once('Zend/Form.php');
-		include_once('Zend/Form/Element/Select.php');
-		include_once('application/models/Categories.php');
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
@@ -63,27 +56,24 @@ class IncomesController extends Zend_Controller_Action
 			}
 		}
 		
-		$form->setAction('/incomes/update')
-		     ->setMethod('post');
-		     
-		$form->setAttrib('id', 'login');
-		
+		$form->setAction('/incomes/update')->setMethod('post');
+		$form->setAttrib('id', 'login');		
 		$form->addElement('hidden', 'user_owner', array('value' => $st_income[0]['user_owner']));
 		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
 		
-		$form->addElement('text', 'amount', array('label' => 'Amount', 'value' => $st_income[0]['amount']));
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_income[0]['amount']));
 		
 		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::INCOMES));
-		$multiOptions->setLabel('Category name');
+		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$form->addElement($multiOptions);
 		
-		$form->addElement('text', 'note', array('label' => 'Note', 'value' => $st_income[0]['note']));
+		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note']));
 		
 		$s_date = explode(" ", $st_income[0]['date']);
-		$form->addElement('text', 'date', array('label' => 'Date', 'value' => $s_date[0]));
-		$form->addElement('submit','submit', array('label' => 'Enviar'));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $s_date[0]));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
 	
