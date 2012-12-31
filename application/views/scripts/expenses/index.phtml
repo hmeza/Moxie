@@ -39,6 +39,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 <body>
 
+<?php
+include '/html/web.php';
+echo web_header(Zend_Registry::get('config')->moxie->app->name,
+		Zend_Registry::get('config')->moxie->settings->url);
+echo web_menu();
+?>
+
 <h2><?php echo $st_lang['expenses']; ?></h2>
 
 <table>

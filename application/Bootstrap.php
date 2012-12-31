@@ -22,7 +22,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 	
 	/**
-	 * 
 	 * Get browser platform and load library
 	 */
 	protected function _initBrowser() {
@@ -46,7 +45,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 	
 	/**
-	 *
 	 * Init database
 	 * @throws Exception
 	 */
@@ -90,12 +88,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 
 	/**
-	 * 
 	 * Start Moxie
 	 */
 	protected function _initApp() {
-		echo web_header(Zend_Registry::get('config')->moxie->app->name,
-				Zend_Registry::get('config')->moxie->settings->url);
-		echo web_menu();
 	}
 }

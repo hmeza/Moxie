@@ -19,6 +19,12 @@ function sendForm() {
 </script>
 </head>
 <body>
+<?php
+include '/html/web.php';
+echo web_header(Zend_Registry::get('config')->moxie->app->name,
+		Zend_Registry::get('config')->moxie->settings->url);
+echo web_menu();
+?>
     <h1><?php echo $st_lang['users_my_account']; ?></h1>
     
 <table width="100%" cellspacing="20">

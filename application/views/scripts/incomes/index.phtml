@@ -20,6 +20,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <script type="text/javascript" src="/js/zebra.js"></script>
 </head>
 <body>
+<?php
+include '/html/web.php';
+echo web_header(Zend_Registry::get('config')->moxie->app->name,
+		Zend_Registry::get('config')->moxie->settings->url);
+echo web_menu();
+?>
 
 <h2><?php echo $st_lang['incomes']; ?></h2>
 
