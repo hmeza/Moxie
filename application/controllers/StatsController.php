@@ -25,7 +25,7 @@ class StatsController extends Zend_Controller_Action {
 	 * @todo	Use a group by to retrieve data and match with array
 	 */
 	public function indexAction() {
-		$incomeStatsByCategory = $this->categories->getCategoriesForView(3);
+		$incomeStatsByCategory = $this->categories->getCategoriesForView(Categories::BOTH);
 		$data = array();
 		$db = Zend_Registry::get('db');
 		foreach ($incomeStatsByCategory as $key => $value) {
