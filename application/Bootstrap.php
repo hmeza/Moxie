@@ -51,13 +51,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initDb() {
 		// Set config vars
 		switch($_SERVER['SERVER_NAME']) {
-			case 'hugoboss666.no-ip.com':
-			case 'moxie.com':
 			case 'moxie.redirectme.net':
 				$section = "staging";
 				break;
-			case 'hytsolutions.com':
-			case 'moxie.hytsolutions.com':
+			case 'moxie.dootic.com':
 				$section = "production";
 				break;
 			case 'moxie.dev':
