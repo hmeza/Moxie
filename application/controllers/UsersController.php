@@ -1,7 +1,5 @@
 <?php
 
-include ("application/models/loginModel.php");
-
 class UsersController extends Zend_Controller_Action {
 	private $usersModel;
 	
@@ -37,9 +35,7 @@ class UsersController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * @desc	Perform login
-	 * @author	hmeza
-	 * @since	2011-04-11
+	 * @desc	Show My account.
 	 * @param	$login		string	login
 	 * @param	$password	string	password
 	 */
@@ -48,11 +44,7 @@ class UsersController extends Zend_Controller_Action {
 	}
 	
 	/**
-	 * 
-	 * Update user parameters
-	 * @author	hmeza
-	 * @since	2011-04-11
-	 * @version	2011-11-07	hmeza: Password not updated if field is empty
+	 * Update user parameters.
 	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();

@@ -1,7 +1,5 @@
 <?php
 /** Zend_Controller_Action */
-include 'application/models/Expenses.php';
-include 'application/models/Budgets.php';
 class ExpensesController extends Zend_Controller_Action
 {
 	private $expenses;
