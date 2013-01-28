@@ -192,3 +192,12 @@ tr.over td, tr:hover td.over {
 	background-color:#ECF8FD; 
     padding:5px;
 }
+
+#bottom {
+	background: #ffffff;
+	position: fixed;
+	left: 0; right: 0;
+	height: 30px;
+	color: #222;
+	bottom: 0;
+}

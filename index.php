@@ -44,7 +44,7 @@ catch (Exception $e) {
 </div>
 <br><br><br>
 <?php
-//echo web_footer();
+echo web_footer();
 ?>
 </body>
 </html>

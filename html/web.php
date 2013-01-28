@@ -84,7 +84,7 @@ function web_menu() {
 }
 
 function web_footer() {
-	return '<div style="height: 4em;"><table width=100%><td align="center">&copy; 2011 Hytsolutions.com</td></table></div>';	
+	return '<div id="bottom"><center>2013 - <a href="mailto:'.Zend_Registry::get('config')->moxie->email.'">Moxie</a></center></div>';	
 }
 
 ?>
