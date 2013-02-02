@@ -43,6 +43,7 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	private function getEditForm($st_income) {
+		global $st_lang;
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
