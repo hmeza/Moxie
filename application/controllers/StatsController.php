@@ -205,6 +205,7 @@ class StatsController extends Zend_Controller_Action {
 
 		$s_category = ($category != 0) ? 'category = '.$category : '1=1';
 
+		// TODO: This must reside in the model
 		$s_query = $db->select()
 			->from('expenses', array('YEAR(expense_date)','MONTH(expense_date)','sum(amount)'))
 			->where('in_sum = 1')
@@ -223,9 +224,10 @@ class StatsController extends Zend_Controller_Action {
 		$bar->key($st_lang['expenses_by_months'], 10);
 		$bar->data = array();
 		$months = array();
+		$s_url = Zend_Registry::get('config')->moxie->settings->url.'/expenses/index';
 		foreach ($o_rows as $key => $value) {
-			$bar->data[] = $value['sum(amount)'];
-			$timestamp = mktime(0, 0, 0, $value['MONTH(expense_date)'], 1, 2005);
+			$bar->add_link($value['sum(amount)'], $s_url.'/month/'.$value['MONTH(expense_date)'].'/year/'.$value['YEAR(expense_date)']);
+			$timestamp = mktime(0, 0, 0, $value['MONTH(expense_date)'], 1, $value['YEAR(expense_date)']);
 			$months[] = date("M", $timestamp);
 			while($scale < (float)$value['sum(amount)']) {
 				$scale = $scale + 500;
