@@ -197,7 +197,7 @@ class StatsController extends Zend_Controller_Action {
 		
 		$data = explode(":",$mydata);
 		//$category = (empty($data[1])) ? 0 : $data[1];
-		$scale = (empty($category)) ? 2500 : 500;
+		$scale = 500;
 		$user = (empty($data[1])) ? 0 : $data[1];
 		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
                 
@@ -227,6 +227,9 @@ class StatsController extends Zend_Controller_Action {
 			$bar->data[] = $value['sum(amount)'];
 			$timestamp = mktime(0, 0, 0, $value['MONTH(expense_date)'], 1, 2005);
 			$months[] = date("M", $timestamp);
+			while($scale < (float)$value['sum(amount)']) {
+				$scale = $scale + 500;
+			}
 		}
 		
 		$g = new graph();
