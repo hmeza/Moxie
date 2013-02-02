@@ -207,7 +207,7 @@ class StatsController extends Zend_Controller_Action {
 
 		// TODO: This must reside in the model
 		$s_query = $db->select()
-			->from('expenses', array('YEAR(expense_date)','MONTH(expense_date)','sum(amount)'))
+			->from('expenses', array('YEAR(expense_date) as year','MONTH(expense_date) as month','sum(amount) as amount'))
 			->where('in_sum = 1')
 			->where('user_owner = '.$user)
 			->where('expense_date >= "'.$i_dateLimit.'"')
@@ -226,10 +226,10 @@ class StatsController extends Zend_Controller_Action {
 		$months = array();
 		$s_url = Zend_Registry::get('config')->moxie->settings->url.'/expenses/index';
 		foreach ($o_rows as $key => $value) {
-			$bar->add_link($value['sum(amount)'], $s_url.'/month/'.$value['MONTH(expense_date)'].'/year/'.$value['YEAR(expense_date)']);
-			$timestamp = mktime(0, 0, 0, $value['MONTH(expense_date)'], 1, $value['YEAR(expense_date)']);
+			$bar->add_link($value['amount'], $s_url.'/month/'.$value['month'].'/year/'.$value['year']);
+			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
 			$months[] = date("M", $timestamp);
-			while($scale < (float)$value['sum(amount)']) {
+			while($scale < (float)$value['amount']) {
 				$scale = $scale + 500;
 			}
 		}
