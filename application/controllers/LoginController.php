@@ -95,10 +95,7 @@ class LoginController extends Zend_Controller_Action {
 			$i_lastInsertId = $this->loginModel->insert($data);
 		}
 		catch (Exception $e) {
-			// Check if user exists
-			// Return to user registering
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-			error_log('MOXIE: Cannot create user');
+			$this->view->assign('text', "Duplicated user name.");
 			$this->_helper->redirector('newuser','login');
 		}
 		// create default categories
@@ -199,8 +196,31 @@ class LoginController extends Zend_Controller_Action {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 			error_log('MOXIE: Cannot populate user with demo categories');
 		}
+		// Email user with register data
+		$s_server = Zend_Registry::get('config')->moxie->settings->url;
+		$s_site = Zend_Registry::get('config')->moxie->app->name;
+		$email = $st_form['email'];
+		$subject = $s_site.' - ¡Bienvenido/a!';
+		$body = 'Bienvenido/a a Moxie. Te has registrado con los siguientes datos:
+Welcome to Moxie. You have registered with the following data:
+
+Login: '.$st_form['login'].'
+Password: '.$st_form['password'].'
+			
+'.$s_site.'
+'.$s_server.'
+';
+		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+				'Reply-To: moxie@dootic.com' . "\r\n" .
+				'X-Mailer: PHP/' . phpversion() . "\r\n";
+		$result = mail($email, $subject, $body, $headers);
 	}
 	
+	/**
+	 * Generates a key to access the restore password function through web.
+	 * @param string $email
+	 * @return string
+	 */
 	private function generateKey($email) {
 		return $email['password'].$email['email'];
 	}
@@ -242,11 +262,28 @@ class LoginController extends Zend_Controller_Action {
 					$s_infoText = 'Error en el login proporcionado. Por favor, intentalo de nuevo.';
 				}
 				else {
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, 'http://hytsolutions.com/mail_moxie.php?m='.$email['email'].'&k='.$this->generateKey($email['email']));
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
-					curl_exec($ch);
-					curl_close($ch);
+					$s_server = Zend_Registry::get('config')->moxie->settings->url;
+					$s_site = Zend_Registry::get('config')->moxie->app->name;
+					$email = $email['email'];
+					$key = $this->generateKey($email['email']);
+					$subject = $s_site.' - Restore password';
+					$body = 'Si recibes este email es o bien porque estás intentando restaurar tu contraseña. En tal caso,
+por favor pulsa el siguiente link:
+					
+You are receiving this email because you want to restore your password. If so, please click
+the following link:
+					
+'.$s_server.'/login/recoverpassword/k/'.$key.'
+					
+'.$s_site.'
+'.$s_server.'
+';
+					$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+							'Reply-To: moxie@dootic.com' . "\r\n" .
+							'X-Mailer: PHP/' . phpversion() . "\r\n";
+					$result = mail($email, $subject, $body, $headers);
+					$this->view->assign('text', $email." ".(($result)?"true":"false"));
+					
 					$s_infoText = 'Se ha enviado un email a la cuenta de correo que nos proporcionaste. Por favor, sigue las instrucciones ahí descritas.';
 				}
 			}
