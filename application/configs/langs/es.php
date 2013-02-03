@@ -66,7 +66,7 @@ $st_lang = array(
 	'users_my_account'	=>	'Mi cuenta',
 	'new_user'	=>	'Nuevo usuario',
 	'register'	=>	'Formulario de registro',
-	'registration_ok'	=>	'<h2>Registrado con éxito!</h2>
+	'registration_ok'	=>	'<h2>Registro efectuado con éxito!</h2>
 Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'logout'	=>	'Salir',
 	// Other stuff
