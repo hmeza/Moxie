@@ -86,6 +86,11 @@ class LoginController extends Zend_Controller_Action {
 		include 'application/models/Categories.php';
 		
 		$st_form = $this->getRequest()->getPost();
+		if(!isset($_SESSION['captcha']['code'])
+			|| strtoupper($_SESSION['captcha']['code']) != strtoupper($st_form['captcha'])) {
+			$this->view->assign('text', "Verify the captcha.");
+			$this->_helper->redirector('newuser','login');
+		}
 		$data = array(
 			'login'		=> $st_form['login'],
 			'password'	=> md5($st_form['password']),
