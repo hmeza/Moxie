@@ -9,8 +9,15 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 
 <body>
+<?php
+include '/html/web.php';
+echo web_header(Zend_Registry::get('config')->moxie->app->name,
+		Zend_Registry::get('config')->moxie->settings->url);
+echo web_menu();
+?>
 <h2><?= $st_lang['register']; ?></h2>
 <?php
+echo $this->text;
 $this->form->setAction('/login/registeruser')->setMethod('post');
 echo $this->form;
 ?>
