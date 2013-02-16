@@ -25,5 +25,33 @@ class loginModel extends Zend_Db_Table_Abstract {
 		}
 		return 0;
 	}
+	
+	public function checkKey($s_key) {
+		$s_select = $this->_db->select()
+			->from("login_keys", array('login'))
+			->joinInner("users", "login_keys.login = users.login")
+			->where('generated_key = ?', $s_key)
+			->where('expiration_date > ?', date('Y-m-d'));
+		$st_data = $this->_db->fetchAll($s_select);
+		$st_data = $st_data[0];
+		if(empty($st_data) || empty($st_data['login']))
+			throw new Exception("Invalid key");
+		return $st_data;
+	}
+	
+	/**
+	 * Generates a key for a login to allow tokenized access.
+	 * @param string $s_login
+	 * @return string
+	 */
+	public function generateKey($s_login) {
+		$s_key = uniqid();
+		$this->_db->insert("login_keys", array(
+			'generated_key' => $s_key,
+			'login' => $s_login,
+			'expiration_date' => date('Y-m-d H:i:s', strtotime('+1 day'))
+		));
+		return $s_key;
+	}
 }
 ?>

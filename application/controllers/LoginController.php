@@ -3,6 +3,9 @@
 include ("application/models/loginModel.php");
 
 class LoginController extends Zend_Controller_Action {
+	/**
+	 * @var loginModel
+	 */
 	private $loginModel;
 	
 	public function init() {
@@ -221,15 +224,6 @@ Password: '.$st_form['password'].'
 		$result = mail($email, $subject, $body, $headers);
 	}
 	
-	/**
-	 * Generates a key to access the restore password function through web.
-	 * @param string $email
-	 * @return string
-	 */
-	private function generateKey($email) {
-		return $email['password'].$email['email'];
-	}
-	
 	private function validateKey($key, $email) {
 		
 	}
@@ -252,8 +246,7 @@ Password: '.$st_form['password'].'
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
+	 * Sends the forgot password email.
 	 */
 	public function forgotpasswordAction() {
 		$s_login = $this->getRequest()->getParam('login');
@@ -261,7 +254,7 @@ Password: '.$st_form['password'].'
 			// retrieve user email from login if exists. If not, sleep 10 and return error
 			try {
 				$email = $this->loginModel->fetchRow($this->loginModel->select()
-					->where('login = "'.$s_login.'"'));
+					->where('login = ?', $s_login));
 				if (empty($email)) {
 					sleep(10);
 					$s_infoText = 'Error en el login proporcionado. Por favor, intentalo de nuevo.';
@@ -270,7 +263,7 @@ Password: '.$st_form['password'].'
 					$s_server = Zend_Registry::get('config')->moxie->settings->url;
 					$s_site = Zend_Registry::get('config')->moxie->app->name;
 					$email = $email['email'];
-					$key = $this->generateKey($email['email']);
+					$key = $this->loginModel->generateKey($s_login);
 					$subject = $s_site.' - Restore password';
 					$body = 'Si recibes este email es o bien porque estás intentando restaurar tu contraseña. En tal caso,
 por favor pulsa el siguiente link:
@@ -283,8 +276,8 @@ the following link:
 '.$s_site.'
 '.$s_server.'
 ';
-					$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-							'Reply-To: moxie@dootic.com' . "\r\n" .
+					$headers = 'From: Moxie <'.Zend_Registry::get('config')->moxie->email.'>' . "\r\n" .
+							'Reply-To: '.Zend_Registry::get('config')->moxie->email. "\r\n" .
 							'X-Mailer: PHP/' . phpversion() . "\r\n";
 					$result = mail($email, $subject, $body, $headers);
 					$this->view->assign('text', $email." ".(($result)?"true":"false"));
@@ -305,23 +298,21 @@ the following link:
 	}
 	
 	/**
-	 * 
-	 * Enter description here ...
+	 * Tries to recover a password.
 	 */
 	public function recoverpasswordAction() {
 		$s_key = $this->getRequest()->getParam('k');
-		if (empty($s_key)) {
-			$s_password = $this->getRequest()->getParam('password');
-			if (empty($s_password)) {
-				
-			}
+		if (!empty($s_key)) {
+			$st_result = $this->loginModel->checkKey($s_key);
+			$_SESSION['user_id'] = $st_result['id'];
+			$_SESSION['user_name'] = $st_result['login'];
+			$_SESSION['user_lang'] = $st_result['language'];
+			$this->view->assign('loginMessage', 'login OK');
+			$this->_helper->redirector('index','users');
 		}
-		else {
-			// validate key. If key is invalid sleep(10)
-			sleep(10);
-			$s_infoText = 'No key was provided.';
-		}
-		$this->view->assign('text', $s_infoText);
+ 		$this->view->assign('text', print_r($st_result,true));
+		$this->_helper->viewRenderer('login/forgotpassword', null, true);
+		$this->_helper->redirector('forgotpassword', 'login');
 	}
 }
 ?>

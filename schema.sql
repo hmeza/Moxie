@@ -125,3 +125,9 @@ CREATE TABLE `users` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2012-09-18  2:36:19
+
+CREATE TABLE login_keys(
+	login varchar(12),
+	generated_key varchar(255),
+	expiration_date datetime
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
