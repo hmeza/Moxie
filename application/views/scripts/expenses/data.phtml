@@ -68,12 +68,11 @@ echo '<div class="date">'.$this->form->getValue('date').'</div>';
 echo $this->form->getElement('submit');
 echo '</form>';
 ?>
-<pre>
 <?php
 global $st_lang;
 $f_totalAmount = 0;
 echo '
-<table border=1 width=600 class="list" id="mytable">
+<table border=1 width=600 class="list moxie" id="mytable">
 <tr>
 <td colspan=5>
 '.$st_lang['expenses_mark'].'
@@ -123,4 +122,3 @@ echo '<tr>
 </table>
 ';
 ?>
-</pre>

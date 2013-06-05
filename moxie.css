@@ -187,6 +187,10 @@ tr.over td, tr:hover td.over {
 	background: #bbffff;
 }
 
+table.moxie, td.moxie, tr.moxie, th.moxie {
+	font-family: Monospace;
+}
+
 #box {
 	border:2px solid #D0E8F4;  
 	background-color:#ECF8FD; 
