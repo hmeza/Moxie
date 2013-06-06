@@ -6,13 +6,29 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <a href="/incomes/index/year/<?php echo $this->year+1; ?>">Next</a>
 <?php
-echo $this->form;
+$i_incomePK = $this->form->getElement('id');
+if (isset($i_incomePK)) {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
+	echo $this->form->getElement('user_owner');
+	echo $this->form->getElement('id');
+}
+else {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/add" method="post">';
+}
+echo $this->form->getElement('amount');
+echo $this->form->getElement('category');
+echo "\n";
+echo $this->form->getElement('note');
+echo '<div class="date">'.$this->form->getValue('date').'</div>';
+echo $this->form->getElement('submit');
+echo '</form>';
+
 ?>
 
 <?php
 $f_totalAmount = 0;
 echo '
-<table border=1 width=600 class="list" id="mytable">
+<table border=1 width=600 class="list moxie" id="mytable">
 <tr><td colspan="6"></tr>
 ';
 

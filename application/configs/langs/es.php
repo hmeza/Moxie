@@ -32,6 +32,7 @@ $st_lang = array(
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',
 	'incomes_yearly'	=>	'Ingresos anuales',
+	'incomes_date'		=>	'Fecha',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorías y presupuesto',
@@ -81,8 +82,8 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 		<a href="">Apache</a><br><br>
         Moxie está alojado en:<br>
         <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>
-        El código de Moxie está disponible en:<br>
-        <a href="https://github.com/hmeza/Moxie.git" target="blank">https://github.com/hmeza/Moxie.git</a>',
+        <!--El código de Moxie está disponible en:<br>
+        <a href="https://github.com/hmeza/Moxie.git" target="blank">https://github.com/hmeza/Moxie.git</a>-->',
 
 );
 ?>
