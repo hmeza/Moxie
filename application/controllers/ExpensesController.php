@@ -76,12 +76,49 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * Shows the expenses view
-	 * @author	hmeza
-	 * @since	2011-01-03
+	 * Returns the monthly expense for a year.
+	 * @todo Move to model, make it accessible from controller method.
+	 * @return array
+	 */
+	public function getMonthExpensesData() {
+		$st_data = array();
+		$st_links = array();
+		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
+		
+		$db = Zend_Registry::get('db');
+		
+		$s_category = (!empty($category)) ? 'category = '.$category : '1=1';
+		
+		// TODO: This must reside in the model
+		$s_query = $db->select()
+			->from('expenses', array('YEAR(expense_date) as year','MONTH(expense_date) as month','sum(amount) as amount'))
+			->where('in_sum = 1')
+			->where('user_owner = '.$_SESSION['user_id'])
+			->where('expense_date >= "'.$i_dateLimit.'"')
+			->where($s_category)
+			->group('MONTH(expense_date), YEAR(expense_date)')
+			->order('YEAR(expense_date), MONTH(expense_date)');
+		
+		$o_rows = $db->fetchAll($s_query);
+		$s_url = Zend_Registry::get('config')->moxie->settings->url.'/expenses/index';
+		foreach ($o_rows as $key => $value) {
+			//$st_links[] = ($value['amount'], $s_url.'/month/'.$value['month'].'/year/'.$value['year']);
+			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
+			$st_data[] = array(
+					date("M", $timestamp),
+					(float)$value['amount']
+			);
+		}
+		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
+		return $st_data;
+	}
+	
+	/**
+	 * Shows the expenses view.
 	 */
 	public function indexAction() {
 		global $s_viewPrefix;
+		global $st_lang;
 		
 		// list current month by default
 		// allow navigate through months and years
@@ -111,6 +148,8 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
+		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
+		$this->view->assign('month_expenses_label', $st_lang['expenses_monthly']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);

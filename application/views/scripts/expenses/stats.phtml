@@ -34,9 +34,12 @@ if (!empty($st_budget)) {
 }
 $s_out .= '</tr></table></center>';
 $s_jsonData = "[".implode(",", $st_jsonData)."]";
+error_log("received: ".$this->month_expenses);
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
+	var barChartData = <?php echo $this->month_expenses; ?>;
+	var barTitle = "<?php echo $this->month_expenses_label; ?>";
 	var chart;
 	// Load the Visualization API and the piechart package.
 	google.load('visualization', '1.0', {'packages':['corechart']});
@@ -64,6 +67,17 @@ $s_jsonData = "[".implode(",", $st_jsonData)."]";
             $('#category_filter').find('option[text="'+filter+'"]').attr('selected', true);
         });
         chart.draw(data, options);
+
+
+        var data2 = google.visualization.arrayToDataTable(barChartData);
+
+		var options2 = {
+			title: barTitle,
+			hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+		};
+
+		var chart2 = new google.visualization.ColumnChart(document.getElementById('expenses_all'));
+		chart2.draw(data2, options2);
 	}
 </script>
 <div id="expenses_month"></div>
@@ -75,11 +89,4 @@ print_r($this->form_sent);
 <br></br><br></br>
 <!-- Graphic -->
 <div id="expenses_all">
-<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
-<param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/stats/mydata/user:<?php echo $_SESSION['user_id']; ?>" />
-<param name="quality" value="high" />
-<param name="bgcolor" value="#FFFFFF" />
-<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/stats/mydata/user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
-</object>
 </div>

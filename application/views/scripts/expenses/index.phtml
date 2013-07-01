@@ -57,7 +57,14 @@ echo $this->partial('expenses/data.phtml',
 <td valign="top">
 <?php
 echo $this->partial('expenses/stats.phtml',
-					array('budget'=>$this->budget,'expenses'=>$this->expenses,'year'=>$this->year,'month'=>$this->month));
+					array(
+						'budget'=>$this->budget,
+						'expenses'=>$this->expenses,
+						'year'=>$this->year,
+						'month'=>$this->month,
+						'month_expenses' => $this->month_expenses,
+						'month_expenses_label' => $this->month_expenses_label
+					));
 ?>
 </td></tr></table>
 </body>
