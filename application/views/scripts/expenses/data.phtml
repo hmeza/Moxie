@@ -1,5 +1,9 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" language="text/javascript">
+	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
+	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
+	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
+	
 	function confirmDelete(id) {
 		var response;
 		var name;
@@ -13,7 +17,7 @@
 			$.ajax({
 				type: "GET",
 				data: "",
-				url: "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/"+id,
+				url: dodeleteUrl+id,
 			});
 
 			new_value = $("#total").html().replace(" &euro;", "").replace(" €", "");
@@ -26,12 +30,12 @@
 
 			$.ajax({
 				type: "GET",
-				url: "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year"
+				url: getyearUrl
 			}).done(function(data) {
 				barChartData = eval(data);
 				$.ajax({
 					type: "GET",
-					url: "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
+					url: getmonthUrl
 				}).done(function(data) {
 					pieData = eval(data);
 					drawChart();
