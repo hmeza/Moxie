@@ -23,26 +23,24 @@
 			new_value = parseFloat(new_value) - parseFloat(deleted_value);
 			$("#total").html(new_value.toFixed(2)+" &euro;");
 			$("#tr"+name[0]).toggle(1000);
+
+			$.ajax({
+				type: "GET",
+				url: "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year"
+			}).done(function(data) {
+				barChartData = eval(data);
+				drawChart();
+			});
 		}
 <?php
-$variable = "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='300' height='300' id='graph-2' align='middle'>"
+/*$variable = "<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='300' height='300' id='graph-2' align='middle'>"
 ."<param name='allowScriptAccess' value='sameDomain' />"
 ."<param name='movie' value='".Zend_Registry::get('config')->moxie->settings->url."/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=".Zend_Registry::get('config')->moxie->settings->url."/stats/stats/mydata/user:".$_SESSION['user_id']."' />"
 ."<param name='quality' value='high' />"
 ."<param name='bgcolor' value='#FFFFFF' />"
 ."<embed src='".Zend_Registry::get('config')->moxie->settings->url."/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=".Zend_Registry::get('config')->moxie->settings->url."/stats/stats/mydata/user:".$_SESSION['user_id']."' quality='high' bgcolor='#FFFFFF' width='500' height='250' name='open-flash-chart' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />"
 ."</object>";
-echo '		$("#expenses_all").html("'.$variable.'");'."\n";
-
-$variable = "<center>"
-."<object classid='clsid:d27cdb6e-ae6d-11cf-96b8-444553540000' codebase='http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0' width='300' height='300' id='graph-2' align='middle'>"
-."<param name='allowScriptAccess' value='sameDomain' />"
-."<param name='movie' value='".Zend_Registry::get('config')->moxie->settings->url."/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=".Zend_Registry::get('config')->moxie->settings->url."/stats/data/mydata/month:".$this->month.":year:".$this->year.":user:".$_SESSION['user_id']."' />"
-."<param name='quality' value='high' />"
-."<param name='bgcolor' value='#FFFFFF' />"
-."<embed src='".Zend_Registry::get('config')->moxie->settings->url."/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=".Zend_Registry::get('config')->moxie->settings->url."/stats/data/mydata/month:".$this->month.":year:".$this->year.":user:".$_SESSION['user_id']."' quality='high' bgcolor='#FFFFFF' width='300' height='300' name='open-flash-chart' align='middle' allowScriptAccess='sameDomain' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' />"
-."</object>";
-echo '		$("#expenses_month").html("'.$variable.'");'."\n";
+echo '		$("#expenses_all").html("'.$variable.'");'."\n";*/
 ?>
 	}
 </script>

@@ -80,7 +80,7 @@ class ExpensesController extends Zend_Controller_Action
 	 * @todo Move to model, make it accessible from controller method.
 	 * @return array
 	 */
-	public function getMonthExpensesData() {
+	private function getMonthExpensesData() {
 		$st_data = array();
 		$st_links = array();
 		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
@@ -111,6 +111,19 @@ class ExpensesController extends Zend_Controller_Action
 		}
 		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
 		return $st_data;
+	}
+	
+	/**
+	 * Return the monthly expense for a year to the view.
+	 * @return string
+	 */
+	public function yearAction() {
+		$this->getResponse()->setHeader('Content-type', 'text/plain')
+							->setHeader('Cache-Control','no-cache');
+		$this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout();
+		echo json_encode($this->getMonthExpensesData());
+		exit();
 	}
 	
 	/**
