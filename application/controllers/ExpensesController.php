@@ -198,8 +198,9 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
+		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
-		$this->view->assign('month_expenses_label', $st_lang['expenses_monthly']);
+		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);
@@ -229,6 +230,8 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-02-08
 	 */
 	public function editAction() {
+		global $st_lang;
+		
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
@@ -263,6 +266,9 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
+		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
+		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
+		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);

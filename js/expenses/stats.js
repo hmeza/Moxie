@@ -15,7 +15,7 @@ function drawChart() {
     );
     formatter.format(data, 1);
     // Set chart options
-    var options = {'title':'Month expense', 'width':500, 'height':300};
+    var options = {'title':pieTitle, 'width':500, 'height':300};
     // Instantiate and draw our chart, passing in some options.
     chart = new google.visualization.PieChart(document.getElementById('expenses_month'));
     // TODO: Add listener for category_filter
