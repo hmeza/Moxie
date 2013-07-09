@@ -18,10 +18,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	}
 
 	function filter() {
-		var chosen;
-		var redirect;
-		chosen = document.getElementById('category_filter').selectedIndex;
-		redirect = document.getElementById('category_filter').options[chosen].value;
+		var chosen = document.getElementById('category_filter').selectedIndex;
+		var redirect = document.getElementById('category_filter').options[chosen].value;
 		window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
 	}
 
@@ -59,7 +57,15 @@ echo $this->partial('expenses/data.phtml',
 <td valign="top">
 <?php
 echo $this->partial('expenses/stats.phtml',
-					array('budget'=>$this->budget,'expenses'=>$this->expenses,'year'=>$this->year,'month'=>$this->month));
+					array(
+						'budget'=>$this->budget,
+						'expenses'=>$this->expenses,
+						'expenses_label' => $this->expenses_label,
+						'year'=>$this->year,
+						'month'=>$this->month,
+						'month_expenses' => $this->month_expenses,
+						'month_expenses_label' => $this->month_expenses_label
+					));
 ?>
 </td></tr></table>
 </body>

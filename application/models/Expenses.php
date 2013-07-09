@@ -1,19 +1,10 @@
 <?php
 
-/**
- *
- * 
- * 			id
- * 			user_owner
- * 			parent
- * 			name
- * 			description
- * @author root
- *
- */
-
 include_once 'Zend/Db/Table.php';
 include_once 'Zend/Registry.php';
+/**
+ * Expenses model.
+ */
 class Expenses extends Zend_Db_Table_Abstract {
 	private $database;
 	protected $_name = 'expenses';

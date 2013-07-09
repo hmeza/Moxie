@@ -76,12 +76,99 @@ class ExpensesController extends Zend_Controller_Action
 	}
 	
 	/**
-	 * Shows the expenses view
-	 * @author	hmeza
-	 * @since	2011-01-03
+	 * Returns the monthly expense for a year.
+	 * @todo Move to model, make it accessible from controller method.
+	 * @return array
+	 */
+	private function getMonthExpensesData() {
+		$st_data = array();
+		$st_links = array();
+		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
+		
+		$db = Zend_Registry::get('db');
+		
+		$s_category = (!empty($category)) ? 'category = '.$category : '1=1';
+		
+		// TODO: This must reside in the model
+		$s_query = $db->select()
+			->from('expenses', array('YEAR(expense_date) as year','MONTH(expense_date) as month','sum(amount) as amount'))
+			->where('in_sum = 1')
+			->where('user_owner = '.$_SESSION['user_id'])
+			->where('expense_date >= "'.$i_dateLimit.'"')
+			->where($s_category)
+			->group('MONTH(expense_date), YEAR(expense_date)')
+			->order('YEAR(expense_date), MONTH(expense_date)');
+		
+		$o_rows = $db->fetchAll($s_query);
+		$s_url = Zend_Registry::get('config')->moxie->settings->url.'/expenses/index';
+		foreach ($o_rows as $key => $value) {
+			//$st_links[] = ($value['amount'], $s_url.'/month/'.$value['month'].'/year/'.$value['year']);
+			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
+			$st_data[] = array(
+					date("M", $timestamp),
+					(float)$value['amount']
+			);
+		}
+		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
+		return $st_data;
+	}
+	
+	/**
+	 * Return the monthly expense for a year to the view.
+	 * @return string
+	 */
+	public function yearAction() {
+		$this->getResponse()->setHeader('Content-type', 'text/plain')
+							->setHeader('Cache-Control','no-cache');
+		$this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout();
+		echo json_encode($this->getMonthExpensesData());
+		exit();
+	}
+	
+	/**
+	 * Return the month expense.
+	 * @return string
+	 */
+	public function monthAction() {
+		$this->getResponse()->setHeader('Content-type', 'text/plain')
+							->setHeader('Cache-Control','no-cache');
+		$this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout();
+		
+		$db = Zend_Registry::get('db');
+		$i_month = $this->getRequest()->getParam('month');
+		$i_year = $this->getRequest()->getParam('year');
+		$s_select = $db->select()
+		->from(array('e'=>'expenses'),
+				array(
+						'sum(e.amount)' =>      'sum(e.amount)'
+				))
+				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
+						'id'            =>      'c.id',
+						'name'          =>      'c.name'
+				))
+				->where('e.user_owner = '.$_SESSION['user_id'])
+				->where('YEAR(e.expense_date) = '.$i_year)
+				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('e.in_sum = 1')
+				->group('c.id')
+				->order(array('c.id'));
+		$st_data = $db->fetchAll($s_select);
+		$st_response = array();
+		foreach($st_data as $st_row) {
+			$st_response[] = array($st_row['name'], (float)$st_row['sum(e.amount)']);
+		}
+		echo json_encode($st_response);
+		exit();
+	}
+	
+	/**
+	 * Shows the expenses view.
 	 */
 	public function indexAction() {
 		global $s_viewPrefix;
+		global $st_lang;
 		
 		// list current month by default
 		// allow navigate through months and years
@@ -111,6 +198,9 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
+		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
+		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
+		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);
@@ -140,6 +230,8 @@ class ExpensesController extends Zend_Controller_Action
 	 * @since	2011-02-08
 	 */
 	public function editAction() {
+		global $st_lang;
+		
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
@@ -174,6 +266,9 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = $db->fetchAll($s_select);
 		
 		$this->view->assign('expenses', $st_data);
+		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
+		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
+		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);

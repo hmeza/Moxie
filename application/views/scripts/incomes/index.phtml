@@ -46,9 +46,10 @@ echo $this->partial('incomes/data.phtml',
 					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
 ?>
 </td>
-<td valign="top">
+<td valign="top" width=50%>
 <?php
-echo $this->partial('incomes/stats.phtml', array());
+echo $this->partial('incomes/stats.phtml',
+					array('graphData' => $this->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
 ?>
 </td></tr></table>
 </body>

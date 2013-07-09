@@ -1,24 +1,13 @@
 <!-- Graphic -->
-<div id="expenses_month">
-<center>
-<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
-<param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/data/mydata/month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" />
-<param name="quality" value="high" />
-<param name="bgcolor" value="#FFFFFF" />
-<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/data/mydata/month:<?php echo $this->month; ?>:year:<?php echo $this->year; ?>:user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="300" height="300" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
-</object>
-</div>
-</center>
-<br><br><br><br>
 <?php
 global $st_lang;
 $st_budget = $this->budget;
 
-echo '<center><table width = 350>
+$s_out = '<center><table width = 350>
 <tr><td></td><td align="right">'.$st_lang['expenses_expended'].'</td>';
-if (!empty($st_budget)) echo '<td width=50>&nbsp;</td><td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
+if (!empty($st_budget)) $s_out .= '<td width=50>&nbsp;</td><td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
 
+$st_jsonData = array();
 $current = 0;
 $total = 0;
 $budget_total = 0;
@@ -28,32 +17,38 @@ foreach ($this->expenses as $key => $data) {
 	$current = $data['id'];
 	$category_name = $data['name'];
 	$total = $total + $amount;
+	$st_jsonData[] = "['".$category_name."', ".$amount."]";
 	$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
 	$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
-	echo '<tr><td>'.$category_name.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
+	$s_out .= '<tr><td>'.$category_name.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
 	if(!empty($st_budget)) {
-		echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
+		$s_out .= '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
 		$budget_total = $budget_total + $budget_amount;
 	}
-	echo '</tr>';
+	$s_out .= '</tr>';
 }
-echo '<tr><td><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
+$s_out .= '<tr><td><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
 if (!empty($st_budget)) {
 	$budget_color = ($budget_total <= $total) ? '#FF0000' : '#00FF00';
-	echo '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';
+	$s_out .= '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';
 }
-echo '</tr></table></center>';
-
+$s_out .= '</tr></table></center>';
+$s_jsonData = "[".implode(",", $st_jsonData)."]";
+error_log("received: ".$this->month_expenses);
+?>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	var pieData = <?php echo $s_jsonData; ?>;
+	var pieTitle = "<?php echo $this->expenses_label; ?>";
+	var barChartData = <?php echo $this->month_expenses; ?>;
+	var barTitle = "<?php echo $this->month_expenses_label; ?>";
+</script>
+<script type="text/javascript" src="/js/expenses/stats.js"></script>
+<div id="expenses_month"></div>
+<br><br>
+<?php
+echo $s_out;
 print_r($this->form_sent);
 ?>
 <br></br><br></br>
-<!-- Graphic -->
-<div id="expenses_all">
-<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="300" height="300" id="graph-2" align="middle">
-<param name="allowScriptAccess" value="sameDomain" />
-<param name="movie" value="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/stats/mydata/user:<?php echo $_SESSION['user_id']; ?>" />
-<param name="quality" value="high" />
-<param name="bgcolor" value="#FFFFFF" />
-<embed src="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/application/3rdparty/ofc/open-flash-chart.swf?width=150&height=250&data=<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/stats/stats/mydata/user:<?php echo $_SESSION['user_id']; ?>" quality="high" bgcolor="#FFFFFF" width="500" height="250" name="open-flash-chart" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
-</object>
-</div>
+<div id="expenses_all"></div>
