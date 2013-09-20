@@ -54,8 +54,14 @@ class StatsController extends Zend_Controller_Action {
 			$expenses[$month] = $this->expenses->getExpenses($_SESSION['user_id'], $month, date('Y'));
 			$incomes[$month] = $this->incomes->getIncomes($_SESSION['user_id'],$month,date('Y'));
 		}
-		$this->view->assign('budget_expenses', $this->categories->getCategoriesForView(1));
-		$this->view->assign('budget_incomes', $this->categories->getCategoriesForView(2));
+		// get categories and order strings
+		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
+		$st_incomes = $this->categories->getCategoriesForView(Categories::INCOMES);
+		asort($st_expenses);
+		asort($st_incomes);
+		
+		$this->view->assign('budget_expenses', $st_expenses);
+		$this->view->assign('budget_incomes', $st_incomes);
 		$this->view->assign('expenses', $expenses);
 		$this->view->assign('incomes', $incomes);
 		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], date('Y')));
