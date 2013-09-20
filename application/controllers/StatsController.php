@@ -1,6 +1,4 @@
 <?php
-include_once( 'application/3rdparty/ofc/open-flash-chart.php' );
-
 class StatsController extends Zend_Controller_Action {
 	private $expenses;
 	private $incomes;
