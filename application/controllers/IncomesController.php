@@ -10,6 +10,23 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
+	 * Get categories and prepare them for view
+	 * @return array
+	 */
+	private function getCategories() {
+		$categories = new Categories();
+		$s_categories = $categories->getCategoriesByUser(Categories::INCOMES);
+		foreach($s_categories as $key => $value) {
+			$formCategories[$value['id1']] = $value['name2'];
+			if (!empty($value['name1'])) {
+				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
+			}
+		}
+		asort($formCategories);
+		return $formCategories;
+	}
+	
+	/**
 	 * This function generates the form to add incomes.
 	 * @author	hmeza
 	 * @since	2011-01-30
@@ -17,23 +34,13 @@ class IncomesController extends Zend_Controller_Action
 	private function getAddForm() {
 		global $st_lang;
 		$form  = new Zend_Form();
-		$categories = new Categories();
-		
-			// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser(2);
-		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name2'];
-			if (!empty($value['name1'])) {
-				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-			}
-		}
-		
+
 		$form->setAction('/incomes/add')->setMethod('post');
 		$form->setAttrib('id', 'login');
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => $st_lang['expenses_category'],
-			'multioptions' => $formCategories		
+			'multioptions' => $this->getCategories()		
 			)
 		);
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
@@ -47,15 +54,6 @@ class IncomesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 		
-		// get categories and prepare them for view
-		$s_categories = $categories->getCategoriesByUser(Categories::INCOMES);
-		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name2'];
-			if (!empty($value['name1'])) {
-				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-			}
-		}
-		
 		$form->setAction('/incomes/update')->setMethod('post');
 		$form->setAttrib('id', 'login');		
 		$form->addElement('hidden', 'user_owner', array('value' => $st_income[0]['user_owner']));
@@ -65,7 +63,7 @@ class IncomesController extends Zend_Controller_Action
 		
 		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
+		$multiOptions->addMultiOptions($this->getCategories());
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$form->addElement($multiOptions);
 		
