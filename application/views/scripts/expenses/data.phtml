@@ -112,10 +112,10 @@ foreach ($this->list as $key=>$value) {
 </tr>';
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
-echo '<tr>
+?>
+<tr>
 <td colspan=3></td>
-<td align="right" class="list"><span id="total">'.number_format($f_totalAmount,2).' &euro;</span></td><td colspan=3></td>
+<td align="right" class="list"><span id="total"><?php echo number_format($f_totalAmount,2); ?> &euro;</span></td><td colspan=3></td>
 </tr>
 </table>
-';
-?>
+<br><br><br>
