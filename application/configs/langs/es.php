@@ -72,7 +72,7 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'logout'	=>	'Salir',
 	// Other stuff
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
-	'error_nouser' => 'No estás identificado. Por favor accede o <a href="login/newuser">registrate</a> como usuario.',
+	'error_nouser' => 'No estás identificado. Por favor <a href="/">accede</a> o <a href="login/newuser">registrate</a> como usuario.',
 	'text_about_title' => 'Acerca de...',
 	'text_about_text' => 'Moxie utiliza:<br> 
 		<a href="http://www.php.net" target="blank">PHP</a><br>
