@@ -87,13 +87,11 @@ foreach ($this->form->getElement('category') as $key => $value) {
 		}
 	}
 }
-
-echo '
+?>
 </select>
 </td>
 </tr>
-';
-
+<?php
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
