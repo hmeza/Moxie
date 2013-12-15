@@ -209,8 +209,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
-		$this->view->assign('form', $this->getAddForm());
 		$this->view->assign('most_frequent_expenses', $this->expenses->getMostFrequentExpenses($_SESSION['user_id']));
+		$this->view->assign('form', $this->getAddForm());
 		$this->render($s_viewPrefix.'index');
 	}
 	
@@ -278,6 +278,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
+		$this->view->assign('most_frequent_expenses', $this->expenses->getMostFrequentExpenses($_SESSION['user_id']));
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
 		$this->render('index');
 	}
