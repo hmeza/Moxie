@@ -150,6 +150,15 @@ form.budget {
 	background:url("img/moxie-title-hover.png") no-repeat;
 }
 
+div.moxiebutton {
+	border-radius: 15px;
+	background: #D0E8F4;
+	padding: 10px;
+	margin: 4px;
+	cursor: hand;
+	cursor: pointer;
+}
+
 div.moxieicon {
 	width: 16px;
 	height: 16px;
