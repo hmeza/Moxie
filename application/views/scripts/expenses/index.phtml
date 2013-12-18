@@ -38,23 +38,28 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <body>
 
 <?php
-include '/html/web.php';
 echo web_header(Zend_Registry::get('config')->moxie->app->name,
 		Zend_Registry::get('config')->moxie->settings->url);
 echo web_menu();
 ?>
 
 <h2><?php echo $st_lang['expenses']; ?></h2>
+<div class="moxie-submenu">
+<div><a href="#data">Ir a gastos</a></div>
+<div><a href="#stats">Ir a estadísticas</a></div>
+</div>
 
-<table>
-<tr>
-<td valign="top">
+
+<div class="moxie-container">
+<div class="moxie-left">
+<a name="data"/>
 <?php
 echo $this->partial('expenses/data.phtml',
 					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month));
 ?>
-</td>
-<td valign="top">
+</div>
+<div class="moxie-right">
+<a name="stats"/>
 <?php
 echo $this->partial('expenses/stats.phtml',
 					array(
@@ -67,6 +72,7 @@ echo $this->partial('expenses/stats.phtml',
 						'month_expenses_label' => $this->month_expenses_label
 					));
 ?>
-</td></tr></table>
+</div>
+</div>
 </body>
 </html>

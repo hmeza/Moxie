@@ -205,3 +205,33 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	color: #222;
 	bottom: 0;
 }
+
+.moxie-container {
+}
+	
+/* Mobile (<600px) */
+@media only screen and (min-width: 985px) {
+	.moxie-left {
+		float: left;
+	}
+	
+	.moxie-right {
+		float: right;
+	}
+	
+	.moxie-submenu {
+		display: none;
+	}
+}
+
+/* Desktop */
+@media only screen and (min-width: 300px) and (max-width: 984px) {
+	.moxie-left {
+	}
+	
+	.moxie-right {
+	}
+	
+	.moxie-submenu {
+	}
+}
