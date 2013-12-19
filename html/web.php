@@ -24,10 +24,7 @@ function web_login() {
 function web_userData($i_userId, $s_userName) {
 	global $st_lang;
 	
-	$s_html = $s_userName.'<br>
-	
-	<a href="'.Zend_Registry::get('config')->moxie->settings->url.'/users/index">'.$st_lang['users_my_account'].'</a>&nbsp;&nbsp;&nbsp;
-	<a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a>';
+	$s_html = $s_userName.'<br>';
 	
 	return $s_html;
 }
@@ -42,10 +39,11 @@ function web_header($s_name, $b_loggedIn = false) {
 	<td align="right">';
 	
 	if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
+		
 		$header .= web_login();
 	}
 	else {
-		$header .= web_userData($_SESSION['user_id'], $_SESSION['user_name']);
+		$header .= '';
 	}
 	
 	$header .= '
@@ -60,15 +58,29 @@ function web_header($s_name, $b_loggedIn = false) {
 function web_menu() {
 	global $st_lang;
 	
+	$url = $_SERVER['REQUEST_URI'];
+	$st_url = explode("/", $url);
+	$st_urls = array(
+		'categories' => '/categories/index',
+		'incomes' => '/incomes/index',
+		'expenses' => '/expenses/index',
+		'stats' => '/stats/index',
+		'users' => '/users/index'
+	);
+	$st_lang['users'] = $st_lang['users_my_account'];
+	$style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
+	
 	$s_webMenu = '
 	<table cellspacing=10>
 	';
 	if (isset($_SESSION['user_id'])) {
 		$s_webMenu .= '
-		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/categories/index">'.$st_lang['categories'].'</a></td>
-		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/incomes/index">'.$st_lang['incomes'].'</a></td>
-		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/expenses/index">'.$st_lang['expenses'].'</a></td>
-		<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/stats/index">'.$st_lang['stats'].'</a></td>
+		<td>'.web_userData($_SESSION['user_id'], $_SESSION['user_name']).'</td>';
+		
+		foreach($st_urls as $key => $value) {
+			$s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'><a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'.$st_lang[$key].'</a></td>';
+		}
+		$s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a></td>
 		';
 	}
 	else {
