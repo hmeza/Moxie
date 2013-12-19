@@ -243,11 +243,11 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 /* Mobile */
 @media only screen and (min-width: 300px) and (max-width: 984px) {
 	html {
-		font-size: 22px;
+		font-size: 30px;
 	}
 	legend {
 		color:#0b77b7;
-		font-size:22px;
+		font-size:30px;
 	}
 	
 	.moxie-left {
@@ -262,11 +262,11 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	
 	.moxie-data {
 		width: 100%;
-		font-size: 22px;
+		font-size: 30px;
 	}
 	
 	.moxie-stats {
 		width: 100%;
-		font-size: 22px;
+		font-size: 30px;
 	}
 }
