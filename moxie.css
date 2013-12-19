@@ -209,8 +209,15 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 .moxie-container {
 }
 	
-/* Mobile (<600px) */
+/* Desktop */
 @media only screen and (min-width: 985px) {
+	html {
+	}
+	legend {
+		color:#0b77b7;
+		font-size:1.2em;
+	}
+	
 	.moxie-left {
 		float: left;
 	}
@@ -222,16 +229,44 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	.moxie-submenu {
 		display: none;
 	}
+	
+	.moxie-data {
+		width: 600px;
+	}
+	
+	.moxie-stats {
+		width: 350px;
+		font-size: 22px;
+	}
 }
 
-/* Desktop */
+/* Mobile */
 @media only screen and (min-width: 300px) and (max-width: 984px) {
+	html {
+		font-size: 22px;
+	}
+	legend {
+		color:#0b77b7;
+		font-size:22px;
+	}
+	
 	.moxie-left {
+		width: 100%
 	}
 	
 	.moxie-right {
 	}
 	
 	.moxie-submenu {
+	}
+	
+	.moxie-data {
+		width: 100%;
+		font-size: 22px;
+	}
+	
+	.moxie-stats {
+		width: 100%;
+		font-size: 22px;
 	}
 }
