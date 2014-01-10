@@ -56,8 +56,7 @@ foreach ($this->form->getElement('category') as $key => $value) {
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$st_expenseDate = explode(' ',$value['expense_date']);
-	$expense_date = '<span alt="'.$st_expenseDate[1].'" title="'.$st_expenseDate[1].'">'.$st_expenseDate[0].'</span>';
+	$expense_date = date('d-m', strtotime($value['expense_date']));
 	
 	echo '
 <tr id="tr'.$value['id'].'">
