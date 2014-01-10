@@ -47,9 +47,6 @@ input {
 	-moz-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
-.my-checkbox {
-	width: 1em;
-}
 input:hover, input:focus {
 	border-color:#c5c5c5;
 	background:#f6f6f6;
@@ -166,18 +163,6 @@ div:hover.moxieprevious {
 	height: 15px;
 	background:url("/img/previous_hover.png") no-repeat;
 }
-div.moxieedit {
-	background:url("/img/edit.png") no-repeat;
-}
-div:hover.moxieedit {
-	background:url("/img/edit_hover.png") no-repeat;
-}
-div.moxiedelete {
-	background:url("/img/delete.png") no-repeat;
-}
-div:hover.moxiedelete {
-	background:url("/img/delete_hover.png") no-repeat;
-}
  
 tr.alt td.alt {
 	background: #ecf6fc;
@@ -212,6 +197,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 /* Desktop */
 @media only screen and (min-width: 985px) {
 	html {
+		color: #000000;
 	}
 	legend {
 		color:#0b77b7;
@@ -238,12 +224,33 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 350px;
 		font-size: 22px;
 	}
+	
+	.my-checkbox {
+		width: 1em;
+	}
+	
+	div.moxieedit {
+		background:url("/img/edit.png") no-repeat;
+	}
+	div:hover.moxieedit {
+		background:url("/img/edit_hover.png") no-repeat;
+	}
+	div.moxiedelete {
+		background:url("/img/delete.png") no-repeat;
+	}
+	div:hover.moxiedelete {
+		background:url("/img/delete_hover.png") no-repeat;
+	}
 }
 
 /* Mobile */
 @media only screen and (min-width: 300px) and (max-width: 984px) {
 	html {
-		font-size: 30px;
+		font-size: 25px;
+		color: #000000;
+	}
+	table {
+		font-size: 25px;
 	}
 	legend {
 		color:#0b77b7;
@@ -262,11 +269,45 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	
 	.moxie-data {
 		width: 100%;
-		font-size: 30px;
+		font-size: 25px;
 	}
 	
 	.moxie-stats {
 		width: 100%;
-		font-size: 30px;
+		font-size: 25px;
+	}
+	
+	.my-checkbox {
+		width: 40px;
+		height: 40px;
+	}
+	
+	div.moxieedit {
+		background:url("/img/edit.png") no-repeat;
+		background-size: 40 40;
+		width: 40px;
+		height: 40px;
+	}
+	div:hover.moxieedit {
+		background:url("/img/edit_hover.png") no-repeat;
+		background-size: 40 40;
+		width: 40px;
+		height: 40px;
+	}
+	div.moxiedelete {
+		background:url("/img/delete.png") no-repeat;
+		background-size: 40 40;
+		width: 40px;
+		height: 40px;
+	}
+	div:hover.moxiedelete {
+		background:url("/img/delete_hover.png") no-repeat;
+		background-size: 40 40;
+		width: 40px;
+		height: 40px;
+	}
+	
+	select {
+		font-size: 25px;
 	}
 }
