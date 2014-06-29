@@ -15,7 +15,14 @@ function drawChart() {
     );
     formatter.format(data, 1);
     // Set chart options
-    var options = {'title':pieTitle, 'width':500, 'height':300};
+    // width 500|800
+    // height 300|500
+    // fontsize none|25
+    var options = {
+    		'title':pieTitle, 'height':600, is3D: true,
+    		legend: {position: 'right', textStyle: {color: 'black', fontSize: 25}},
+    		titleTextStyle: {color: 'black', fontSize: 25},
+    };
     // Instantiate and draw our chart, passing in some options.
     chart = new google.visualization.PieChart(document.getElementById('expenses_month'));
     // TODO: Add listener for category_filter
@@ -31,9 +38,14 @@ function drawChart() {
 
 	var options2 = {
 		title: barTitle,
-		hAxis: {title: 'Year', titleTextStyle: {color: 'red'}}
+		hAxis: {title: 'Year', titleTextStyle: {color: 'red'}},
+		chartArea:{width:"80%",height:"80%"}
 	};
 
 	var chart2 = new google.visualization.ColumnChart(document.getElementById('expenses_all'));
 	chart2.draw(data2, options2);
 }
+
+$(window).resize(function() {
+	chart.replot( { resetAxes: true } );
+});
