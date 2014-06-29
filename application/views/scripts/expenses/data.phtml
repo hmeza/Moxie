@@ -1,49 +1,10 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" language="text/javascript">
+<script type="text/javascript">
 	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
 	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
 	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
-	
-	function confirmDelete(id) {
-		var response;
-		var name;
-		var delete_success;
-		var new_value = 0;
-		var deleted_value = 0;
-
-		response = confirm("Are you sure to delete this expense?");
-		if (response == true) {
-			name = id.split("/");
-			$.ajax({
-				type: "GET",
-				data: "",
-				url: dodeleteUrl+id,
-			});
-
-			new_value = $("#total").html().replace(" &euro;", "").replace(" €", "");
-			deleted_value = id.split("/");
-			deleted_value = deleted_value[0];
-			deleted_value = $("#val"+deleted_value).html().replace(" &euro;", "").replace(" €", "");
-			new_value = parseFloat(new_value) - parseFloat(deleted_value);
-			$("#total").html(new_value.toFixed(2)+" &euro;");
-			$("#tr"+name[0]).toggle(1000);
-
-			$.ajax({
-				type: "GET",
-				url: getyearUrl
-			}).done(function(data) {
-				barChartData = eval(data);
-				$.ajax({
-					type: "GET",
-					url: getmonthUrl
-				}).done(function(data) {
-					pieData = eval(data);
-					drawChart();
-				});
-			});
-		}
-	}
 </script>
+<script type="text/javascript" src="/js/expenses/data.js"></script>
 <table>
 <td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div></a></td>
 <td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div></a></td>
@@ -69,7 +30,7 @@ echo '</form>';
 global $st_lang;
 $f_totalAmount = 0;
 echo '
-<table border=1 width=600 class="list moxie" id="mytable">
+<table border=1 class="list moxie moxie-data" id="mytable">
 <tr>
 <td colspan=5>
 '.$st_lang['expenses_mark'].'
@@ -95,8 +56,7 @@ foreach ($this->form->getElement('category') as $key => $value) {
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$st_expenseDate = explode(' ',$value['expense_date']);
-	$expense_date = '<span alt="'.$st_expenseDate[1].'" title="'.$st_expenseDate[1].'">'.$st_expenseDate[0].'</span>';
+	$expense_date = date('d-m', strtotime($value['expense_date']));
 	
 	echo '
 <tr id="tr'.$value['id'].'">

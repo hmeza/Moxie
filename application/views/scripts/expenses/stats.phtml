@@ -3,7 +3,7 @@
 global $st_lang;
 $st_budget = $this->budget;
 
-$s_out = '<center><table width = 350>
+$s_out = '<center><table class="moxie-stats">
 <tr><td></td><td align="right">'.$st_lang['expenses_expended'].'</td>';
 if (!empty($st_budget)) $s_out .= '<td width=50>&nbsp;</td><td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
 
@@ -52,3 +52,4 @@ print_r($this->form_sent);
 ?>
 <br></br><br></br>
 <div id="expenses_all"></div>
+<br><br>
