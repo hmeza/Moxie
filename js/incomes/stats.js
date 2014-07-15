@@ -9,7 +9,8 @@ function drawChart() {
     
 	var options = {
 		title: barTitle,
-		hAxis: {title: barYearLabel, titleTextStyle: {color: 'green'}}
+		hAxis: {title: barYearLabel, titleTextStyle: {color: 'green'}},
+		vAxis: { viewWindow: { min: 0}}
 	};
 
 	var chart = new google.visualization.ColumnChart(document.getElementById('incomes_all'));
