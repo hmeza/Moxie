@@ -107,6 +107,7 @@ fieldset {
 }
 
 table.list, td.list, th.list tr.list {
+	color: #000000;
 	padding: 2px;
 	border-collapse: collapse;
 	border-left: 1px solid #c5c5c5;
@@ -193,6 +194,9 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 }
 
 .moxie-container {
+	padding-bottom: 50px;
+	position: absolute;
+	min-width: 1350px;
 }
 
 .moxie-left {
