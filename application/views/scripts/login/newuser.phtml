@@ -18,7 +18,7 @@ echo web_menu();
 <h2><?= $st_lang['register']; ?></h2>
 <?php
 echo $this->text;
-include($_SERVER['DOCUMENT_ROOT']."/application/3rdparty/simple-php-captcha/simple-php-captcha.php");
+include("application/3rdparty/simple-php-captcha/simple-php-captcha.php");
 $_SESSION['captcha'] = simple_php_captcha();
 $this->form->setAction('/login/registeruser')->setMethod('post');
 ?>
