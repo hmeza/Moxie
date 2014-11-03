@@ -9,16 +9,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		//Required classes 
 		Zend_Loader::loadClass('Zend_Controller_Front');
 		Zend_Loader::loadClass('Zend_Registry');  
-		//Zend_Loader::loadClass('Zend_Session');
-		//Zend_Loader::loadClass('Zend_Auth');  
 		Zend_Loader::loadClass('Zend_Db');  
 		Zend_Loader::loadClass('Zend_Db_Table');
 		Zend_Loader::loadClass('Zend_Db_Adapter_Pdo_Mysql');  
 		Zend_Loader::loadClass('Zend_Config_Ini');
-		
-		//include_once('Zend/Form.php');
-		//include_once('application/models/Categories.php');
-		//Zend_Loader::loadClass('Zend_Form');
 	}
 	
 	/**

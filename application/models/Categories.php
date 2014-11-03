@@ -1,18 +1,9 @@
 <?php
 
-/**
- * 
- * @desc
- * 			id
- * 			user_owner
- * 			parent
- * 			name
- * 			description
- * @author root
- *
- */
-
 include_once 'Zend/Registry.php';
+/**
+ * Categories model.
+ */
 class Categories extends Zend_Db_Table_Abstract {
 	const EXPENSES = 1;
 	const INCOMES = 2;
@@ -39,7 +30,7 @@ class Categories extends Zend_Db_Table_Abstract {
 					'type'	=>	$data['type']
 				));
 		} catch (Exception $e) {
-			echo 'Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage();
+			error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
 		}
 	}
 	
@@ -51,7 +42,7 @@ class Categories extends Zend_Db_Table_Abstract {
 					'description' => $description
 				));
 		} catch (Exception $e) {
-			echo 'Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage();
+			error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
 		}
 	}
 	
@@ -123,7 +114,7 @@ class Categories extends Zend_Db_Table_Abstract {
 			return $stmt->fetchAll();
 		}
 		catch (Exception $e) {
-			echo 'Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage();
+			error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
 		}
 		return array();
 	}

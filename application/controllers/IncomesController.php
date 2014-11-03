@@ -5,8 +5,7 @@ class IncomesController extends Zend_Controller_Action
 	private $incomes;
 	
 	public function init() {
-		//$this->incomes = new Incomes();
-		$this->incomes = new Incomes(array('name' => 'incomes', 'schema' => 'moxie'));	
+		$this->incomes = new Incomes();
 	}
 	
 	/**

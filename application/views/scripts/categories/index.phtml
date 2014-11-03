@@ -8,12 +8,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 <body>
 <?php
-include '/html/web.php';
 echo web_header(Zend_Registry::get('config')->moxie->app->name,
 		Zend_Registry::get('config')->moxie->settings->url);
 echo web_menu();
 ?>
-    <h1><?php echo $st_lang['categories_and_budget']; ?></h1>
     
 <table width="100%" cellspacing="20">
 <tr>

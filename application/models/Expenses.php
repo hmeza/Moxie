@@ -6,8 +6,6 @@ include_once 'Zend/Registry.php';
  * Expenses model.
  */
 class Expenses extends Zend_Db_Table_Abstract {
-	const MOST_FREQUENT_EXPENSES_LIMIT = 6;
-	
 	private $database;
 	protected $_name = 'expenses';
 	protected $_primary = 'id';
@@ -170,31 +168,6 @@ class Expenses extends Zend_Db_Table_Abstract {
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
-	}
-	
-	/**
-	 * Returns the most used expenses for the user specified.
-	 * @param int $i_userOwner
-	 * @return array, each position contains number_of_rows, category, note, category_id, name
-	 */
-	public function getMostFrequentExpenses($i_userOwner) {
-		$query = " e.user_owner = 1 group by category,note order by number_of_rows;";
-		try {
-			$query = $this->database->select()
-				->from(array("e" => "expenses"), array("count(e.id) as number_of_rows", "category", "note"))
-				->joinInner(array("c" => "categories"), "c.id = e.category", array("id as category_id", "name"))
-				->where("e.user_owner = ?", $i_userOwner)
-				->where("e.expense_date >= ?", date('Y-m-d H:i:s', strtotime("-3 months")))
-				->group("category,note")
-				->order("number_of_rows DESC")
-				->limit(self::MOST_FREQUENT_EXPENSES_LIMIT);
-			$query = str_replace("`", "", $query);	
-			$rows = $this->database->fetchAll($query);
-		}
-		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage()."\n", 3, '/tmp/hmeza.log');
-		}
-		return $rows;
 	}
 }
 
