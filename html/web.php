@@ -61,7 +61,6 @@ function web_menu() {
 	$url = $_SERVER['REQUEST_URI'];
 	$st_url = explode("/", $url);
 	$st_urls = array(
-		'categories' => '/categories/index',
 		'incomes' => '/incomes/index',
 		'expenses' => '/expenses/index',
 		'stats' => '/stats/index',
