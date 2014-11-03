@@ -46,5 +46,10 @@ echo $this->form->language;
 </td>
 </tr>
 </table>
+
+<?php
+echo $this->partial('/categories/index.phtml',
+					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+?>
 </body>
 </html>

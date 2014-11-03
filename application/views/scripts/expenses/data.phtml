@@ -5,9 +5,9 @@
 	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
-<table>
-<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div></a></td>
-<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div></a></td>
+<table width=100%>
+<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> Last month</a></td>
+<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> Next month</a></td>
 </table>
 <?php
 $i_expensePK = $this->form->getElement('id');
@@ -53,21 +53,41 @@ foreach ($this->form->getElement('category') as $key => $value) {
 </td>
 </tr>
 <?php
+$i = 0;
 foreach ($this->list as $key=>$value) {
+	$i++;
+	$bgcolor = ($i % 2 == 0) ? "background: #FFFFFF" : "background: #D0E8F4";
+
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$expense_date = date('d-m', strtotime($value['expense_date']));
+	$expense_date = date('d-m-Y', strtotime($value['expense_date']));
 	
+	if(true) {
+		echo '
+<tr id="tr'.$value['id'].'">
+<td class="list" width="10" style="'.$bgcolor.'" rowspan=2><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
+<td class="list" width="16" style="'.$bgcolor.'" rowspan=2><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'></div></td>
+<td class="list" width="16" style="'.$bgcolor.'" rowspan=2><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td align="right" class="list" width="100" style="'.$bgcolor.'; padding: 15px;"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td colspan="3" class="list" width="80" style="'.$bgcolor.'; padding: 15px;"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+</tr>
+<tr>
+<td colspan="1" width="100" align="right" class="list" style="'.$bgcolor.'">'.$expense_date.'</td>
+<td colspan="3" class="list" style="'.$bgcolor.'; padding: 15px;">'.$value['note'].'</td>
+</tr>';
+	}
+	else {
 	echo '
 <tr id="tr'.$value['id'].'">
 <td class="list" width="10"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
 <td class="list" width="16"><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'></div></td>
-<td class="list" width="16"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>'
-.'<td align="right" class="list" width="100"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td class="list" width="16"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td align="right" class="list" width="100"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 <td width="100" align="center" class="list">'.$expense_date.'</td>
 <td class="list" width="80"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
 <td class="list">'.$value['note'].'</td>
 </tr>';
+	}
 	$f_totalAmount = $f_totalAmount + $value['amount'];
 }
 ?>
