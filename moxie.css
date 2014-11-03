@@ -205,10 +205,12 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 	
 	.moxie-left {
+		width: 50%;
 		float: left;
 	}
 	
 	.moxie-right {
+		width: 450px;
 		float: right;
 	}
 	
@@ -221,7 +223,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 	
 	.moxie-stats {
-		width: 350px;
+		width: 100%;
 		font-size: 22px;
 	}
 	
