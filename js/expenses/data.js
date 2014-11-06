@@ -1,3 +1,17 @@
+function markAll(option) {
+	window.location="/expenses/markall/option/"+option+"/year/"+year+"/month/"+month;
+}
+
+function markLine(id) {
+	window.location="/expenses/markline/id/"+id;
+}
+
+function filter() {
+	var chosen = document.getElementById('category_filter').selectedIndex;
+	var redirect = document.getElementById('category_filter').options[chosen].value;
+	window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
+}
+
 function confirmDelete(id) {
 	var response;
 	var name;
