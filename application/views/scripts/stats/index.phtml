@@ -51,30 +51,14 @@ $(document).ready(function() {
 	$("#caja").click(function(event) {
 	    $("#box").slideUp();
 	});
-	$("[name='month1']").mouseover(function() { onmouseoverchange(1); });
-	$("[name='month2']").mouseover(function() { onmouseoverchange(2); });
-	$("[name='month3']").mouseover(function() { onmouseoverchange(3); });
-	$("[name='month4']").mouseover(function() { onmouseoverchange(4); });
-	$("[name='month5']").mouseover(function() { onmouseoverchange(5); });
-	$("[name='month6']").mouseover(function() { onmouseoverchange(6); });
-	$("[name='month7']").mouseover(function() { onmouseoverchange(7); });
-	$("[name='month8']").mouseover(function() { onmouseoverchange(8); });
-	$("[name='month9']").mouseover(function() { onmouseoverchange(9); });
-	$("[name='month10']").mouseover(function() { onmouseoverchange(10); });
-	$("[name='month11']").mouseover(function() { onmouseoverchange(11); });
-	$("[name='month12']").mouseover(function() { onmouseoverchange(12); });
-	$("[name='month1']").mouseout(function() { onmouseoutchange(1); });
-	$("[name='month2']").mouseout(function() { onmouseoutchange(2); });
-	$("[name='month3']").mouseout(function() { onmouseoutchange(3); });
-	$("[name='month4']").mouseout(function() { onmouseoutchange(4); });
-	$("[name='month5']").mouseout(function() { onmouseoutchange(5); });
-	$("[name='month6']").mouseout(function() { onmouseoutchange(6); });
-	$("[name='month7']").mouseout(function() { onmouseoutchange(7); });
-	$("[name='month8']").mouseout(function() { onmouseoutchange(8); });
-	$("[name='month9']").mouseout(function() { onmouseoutchange(9); });
-	$("[name='month10']").mouseout(function() { onmouseoutchange(10); });
-	$("[name='month11']").mouseout(function() { onmouseoutchange(11); });
-	$("[name='month12']").mouseout(function() { onmouseoutchange(12); });
+	$("[name^='month']").mouseover(function() {
+		var monthId = $(this).attr('name').replace('month', '');
+		onmouseoverchange(monthId);
+	});
+	$("[name^='month']").mouseout(function() {
+		var monthId = $(this).attr('name').replace('month', '');
+		onmouseoutchange(monthId);
+	});
 });
 
 </script>
