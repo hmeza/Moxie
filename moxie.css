@@ -4,7 +4,6 @@ html {
 	font: 90%/1.3 arial,sans-serif;
 	padding:1em;
 	background:#ffffff;
-	color: #000000;
 }
 form {
 	background:#fafafa;
@@ -47,6 +46,9 @@ input {
 	font:bold 0.95em arial, sans-serif;
 	-moz-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
+}
+.my-checkbox {
+	width: 1em;
 }
 input:hover, input:focus {
 	border-color:#c5c5c5;
@@ -115,6 +117,14 @@ table.list, td.list, th.list tr.list {
 	border-top: 1px solid #c5c5c5;
 }
 
+.list_money {
+	width: 100px;
+}
+
+.total_amount {
+	color: #777777;
+}
+
 input.default {
 	color:#bbb;
 }
@@ -164,6 +174,18 @@ div:hover.moxieprevious {
 	height: 15px;
 	background:url("/img/previous_hover.png") no-repeat;
 }
+div.moxieedit {
+	background:url("/img/edit.png") no-repeat;
+}
+div:hover.moxieedit {
+	background:url("/img/edit_hover.png") no-repeat;
+}
+div.moxiedelete {
+	background:url("/img/delete.png") no-repeat;
+}
+div:hover.moxiedelete {
+	background:url("/img/delete_hover.png") no-repeat;
+}
  
 tr.alt td.alt {
 	background: #ecf6fc;
@@ -194,41 +216,65 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie-container {
 }
-
-.moxie-left {
-	float: left;
+	
+/* Desktop */
+@media only screen and (min-width: 985px) {
+	html {
+	}
+	legend {
+		color:#0b77b7;
+		font-size:1.2em;
+	}
+	
+	.moxie-left {
+		float: left;
+	}
+	
+	.moxie-right {
+		float: right;
+	}
+	
+	.moxie-submenu {
+		display: none;
+	}
+	
+	.moxie-data {
+		width: 600px;
+	}
+	
+	.moxie-stats {
+		width: 350px;
+		font-size: 22px;
+	}
 }
 
-.moxie-right {
-	float: right;
-}
-
-.moxie-submenu {
-	display: none;
-}
-
-.moxie-data {
-	width: 600px;
-}
-
-.moxie-stats {
-	font-size: 22px;
-	width: 100%;
-}
-
-.my-checkbox {
-	width: 1em;
-}
-
-div.moxieedit {
-	background:url("/img/edit.png") no-repeat;
-}
-div:hover.moxieedit {
-	background:url("/img/edit_hover.png") no-repeat;
-}
-div.moxiedelete {
-	background:url("/img/delete.png") no-repeat;
-}
-div:hover.moxiedelete {
-	background:url("/img/delete_hover.png") no-repeat;
+/* Mobile */
+@media only screen and (min-width: 300px) and (max-width: 984px) {
+	html {
+		font-size: 30px;
+	}
+	legend {
+		color:#0b77b7;
+		font-size:30px;
+	}
+	
+	.moxie-left {
+		width: 100%
+	}
+	
+	.moxie-right {
+	}
+	
+	.moxie-submenu {
+	}
+	
+	.moxie-data {
+		width: 100%;
+		font-size: 30px;
+	}
+	
+	.moxie-stats {
+		width: 100%;
+		font-size: 30px;
+	}
 }

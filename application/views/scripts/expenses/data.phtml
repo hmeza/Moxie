@@ -67,7 +67,6 @@ echo $this->form->getElement('submit');
 echo '</form>';
 
 global $st_lang;
-$f_totalAmount = 0;
 echo '
 <table border=1 class="list moxie moxie-data" id="mytable">
 <tr>
@@ -92,6 +91,9 @@ foreach ($this->form->getElement('category') as $key => $value) {
 </td>
 </tr>
 <?php
+$f_totalAmount = 0;
+$f_currentAmount = 0;
+$b_showTotalAmount = false;
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
@@ -109,11 +111,19 @@ foreach ($this->list as $key=>$value) {
 <td class="list">'.$value['note'].'</td>
 </tr>';
 	$f_totalAmount = $f_totalAmount + $value['amount'];
+	$f_currentAmount += ($value['in_sum'] == 1) ? $value['amount'] : 0;
+	$b_showTotalAmount = ($value['in_sum'] != 1) || $b_showTotalAmount;
 }
+
+$s_total = number_format($f_currentAmount,2)." &euro;";
+if($b_showTotalAmount) {
+	$s_total .= '<br><span class="total_amount">('.number_format($f_totalAmount, 2)." &euro;)";
+}
+
 ?>
 <tr>
 <td colspan=3></td>
-<td align="right" class="list"><span id="total"><?php echo number_format($f_totalAmount,2); ?> &euro;</span></td><td colspan=3></td>
+<td align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td><td colspan=3></td>
 </tr>
 </table>
 <br><br><br>
