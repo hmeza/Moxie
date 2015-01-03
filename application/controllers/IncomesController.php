@@ -5,6 +5,7 @@ class IncomesController extends BaseController
 	private $incomes;
 	
 	public function init() {
+		parent::init();
 		$this->incomes = new Incomes();
 	}
 	

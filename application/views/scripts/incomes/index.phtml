@@ -1,3 +1,6 @@
+<?php
+echo $this->header;
+?>
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -5,8 +8,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php global $st_lang; echo $st_lang['incomes']; ?></title>
-<link rel="stylesheet" type="text/css" href="/moxie.css"/>
-<link rel="stylesheet" type="text/css" href="/dropdown.css"/>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" language="text/javascript">
 	function confirmDelete(id) {
@@ -49,5 +50,6 @@ echo $this->partial('incomes/stats.phtml',
 					array('graphData' => $this->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
 ?>
 </td></tr></table>
-</body>
-</html>
+<?php
+echo $this->footer;
+?>
