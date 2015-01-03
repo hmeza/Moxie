@@ -4,6 +4,7 @@ class UsersController extends BaseController {
 	private $usersModel;
 	
 	public function init() {
+		parent::init();
 		$this->usersModel = new loginModel();
 	}
 	
