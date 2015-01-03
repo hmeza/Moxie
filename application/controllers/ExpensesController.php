@@ -1,11 +1,12 @@
 <?php
 /** Zend_Controller_Action */
-class ExpensesController extends Zend_Controller_Action
+class ExpensesController extends BaseController
 {
 	private $expenses;
 	private $budgets;
 	
 	public function init() {
+		parent::init();
 		$this->expenses = new Expenses();
 		$this->budgets = new Budgets();	
 	}

@@ -26,20 +26,6 @@ function __autoloader($s_originalClass) {
 }
 spl_autoload_register("__autoloader");
 
-?>
-<html>
-<head>
-<?php if($_SESSION['device'] == 'mobile') { ?>
-<link rel="stylesheet" type="text/css" href="moxie-mobile.css"/>
-<?php } else { ?>
-<link rel="stylesheet" type="text/css" href="moxie.css"/>
-<?php } ?>
-<link rel="stylesheet" type="text/css" href="dropdown.css"/>
-</head>
-<body>
-<div style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -4em;">
-<?php
-
 try {
 	$application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
 	$application->bootstrap()->run();
@@ -48,5 +34,4 @@ catch (Exception $e) {
 	throw new Exception('Error bootstrapping: '.$e->getMessage());
 }
 
-echo web_footer();
 ?>

@@ -1,3 +1,6 @@
+<?php
+echo $this->header;
+?>
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -28,8 +31,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		$('#date_label').html("<?php echo $st_lang['expenses_date']; ?>");
 	});
 </script>
-<link rel="stylesheet" type="text/css" href="/moxie.css"/>
-<link rel="stylesheet" type="text/css" href="/dropdown.css"/>
 <script type="text/javascript" src="/js/helpers.js"></script>
 <script type="text/javascript" src="/js/calendar.js"></script>
 <script type="text/javascript" src="/js/form.js"></script>
@@ -73,5 +74,7 @@ echo $this->partial('expenses/stats.phtml',
 ?>
 </div>
 </div>
-</body>
-</html>
+
+<?php
+echo $this->footer;
+?>
