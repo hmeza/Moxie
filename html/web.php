@@ -95,7 +95,10 @@ function web_menu() {
 }
 
 function web_footer() {
-	return '<div id="fb-root"></div>
+	return '
+			</div>
+			<br><br><br>
+			<div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
@@ -119,7 +122,7 @@ function web_footer() {
   })();
 </script>
 </center></div>
-			</center></div>';	
+			</center></div>
+		</body>
+</html>';
 }
-
-?>

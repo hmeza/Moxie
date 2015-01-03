@@ -3,7 +3,7 @@
 include_once 'application/models/Categories.php';
 include 'application/controllers/BudgetsController.php';
 
-class CategoriesController extends Zend_Controller_Action
+class CategoriesController extends BaseController
 {
 	private $categories;
 	
