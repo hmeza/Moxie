@@ -8,6 +8,7 @@ class CategoriesController extends BaseController
 	private $categories;
 	
 	public function init() {
+		parent::init();
 		$this->categories = new Categories();		
 	}
 	
