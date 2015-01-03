@@ -1,5 +1,5 @@
 <?php
-class ErrorController extends Zend_Controller_Action
+class ErrorController extends BaseController
 {
     public function errorAction() {
     	$errors = $this->_getParam('error_handler');

@@ -1,6 +1,6 @@
 <?php
 /** Zend_Controller_Action */
-class IncomesController extends Zend_Controller_Action
+class IncomesController extends BaseController
 {
 	private $incomes;
 	

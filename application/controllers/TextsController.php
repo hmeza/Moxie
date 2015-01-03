@@ -1,6 +1,6 @@
 <?php
 /** Zend_Controller_Action */
-class TextsController extends Zend_Controller_Action
+class TextsController extends BaseController
 {
 	private $text;
 	

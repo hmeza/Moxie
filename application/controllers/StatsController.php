@@ -1,5 +1,5 @@
 <?php
-class StatsController extends Zend_Controller_Action {
+class StatsController extends BaseController {
 	private $expenses;
 	private $incomes;
 	private $categories;
