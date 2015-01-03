@@ -1,3 +1,6 @@
+<?php
+echo $this->header;
+?>
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -8,7 +11,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 </head>
 <body>
 <?php
-include '/html/web.php';
+include_once '/html/web.php';
 echo web_header(Zend_Registry::get('config')->moxie->app->name,
 		Zend_Registry::get('config')->moxie->settings->url);
 echo web_menu();
@@ -46,5 +49,6 @@ Lecturas recomendadas:<br>
 </form>
 </td>
 </table>
-</body>
-</html>
+<?php
+echo $this->header;
+?>
