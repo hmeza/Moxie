@@ -2,7 +2,7 @@
 
 include ("application/models/loginModel.php");
 
-class LoginController extends Zend_Controller_Action {
+class LoginController extends BaseController {
 	/**
 	 * @var loginModel
 	 */

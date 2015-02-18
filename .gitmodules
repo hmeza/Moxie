@@ -1,3 +1,6 @@
 [submodule "application/3rdparty/simple-php-captcha"]
 	path = application/3rdparty/simple-php-captcha
 	url = https://github.com/claviska/simple-php-captcha.git
+[submodule "application/3rdparty/mobile-detect"]
+	path = application/3rdparty/mobile-detect
+	url = https://github.com/serbanghita/Mobile-Detect.git

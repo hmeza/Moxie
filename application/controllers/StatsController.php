@@ -1,5 +1,8 @@
 <?php
-class StatsController extends Zend_Controller_Action {
+class StatsController extends BaseController {
+	/**
+	 * @var Expenses
+	 */
 	private $expenses;
 	private $incomes;
 	private $categories;
@@ -66,6 +69,7 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('incomes', $incomes);
 		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], date('Y')));
 		$this->view->assign('data', $data);
+		$this->view->assign('per_item_data', $st_perItemData);
 	}
 }
 ?>
