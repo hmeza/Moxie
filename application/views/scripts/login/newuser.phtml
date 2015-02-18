@@ -1,20 +1,3 @@
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php global $st_lang; echo $st_lang['stats']; ?></title>
-<link rel="stylesheet" type="text/css" href="../../../moxie.css"/>
-</head>
-
-<body>
-<?php
-include '/html/web.php';
-echo web_header(Zend_Registry::get('config')->moxie->app->name, Zend_Registry::get('config')->moxie->settings->url);
-echo web_menu();
-?>
-
 <h2><?= $st_lang['register']; ?></h2>
 <?php
 echo $this->text;
@@ -42,5 +25,3 @@ echo '<img src="'.$_SESSION['captcha']['image_src'].'">';
 <input type="submit" name="submit" id="submit" value="Send"></dd>
 </dl></form>
 <br>
-</body>
-</html>

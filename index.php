@@ -1,18 +1,10 @@
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="moxie.css"/>
-<link rel="stylesheet" type="text/css" href="dropdown.css"/>
-</head>
-<body>
-<div style="min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -4em;">
 <?php
 session_start();
-
 define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/application'));
-define('APPLICATION_ENV', 'development');
+define('APPLICATION_ENV', 'production');
 include_once 'Zend/Application.php';
 
-set_include_path(get_include_path().PATH_SEPARATOR."./lib".PATH_SEPARATOR."../Zend/Zend");
+set_include_path(get_include_path().PATH_SEPARATOR."./lib".PATH_SEPARATOR."./Zend/");
 
 function __autoloader($s_originalClass) {
 	@include_once $s_originalClass;
@@ -40,11 +32,3 @@ try {
 catch (Exception $e) {
 	throw new Exception('Error bootstrapping: '.$e->getMessage());
 }
-?>
-</div>
-<br><br><br>
-<?php
-echo web_footer();
-?>
-</body>
-</html>
