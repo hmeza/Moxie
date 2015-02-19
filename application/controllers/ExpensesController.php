@@ -1,6 +1,6 @@
 <?php
 /** Zend_Controller_Action */
-class ExpensesController extends BaseController
+class ExpensesController extends Zend_Controller_Action
 {
 	private $expenses;
 	private $budgets;

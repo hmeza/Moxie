@@ -1,5 +1,5 @@
 <?php
-class StatsController extends BaseController {
+class StatsController extends Zend_Controller_Action {
 	/**
 	 * @var Expenses
 	 */

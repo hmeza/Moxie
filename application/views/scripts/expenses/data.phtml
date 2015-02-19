@@ -68,10 +68,10 @@ foreach ($this->list as $key=>$value) {
 <td class="list" width="10" style="'.$bgcolor.'"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
 <td class="list" width="16" style="'.$bgcolor.'"><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'\')\'></div></td>
 <td class="list" width="16" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-<td align="right" class="list" width="100" style="'.$bgcolor.'; padding: 15px;"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
-<td class="list" width="80" style="'.$bgcolor.'; padding: 15px;"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<td align="right" class="list" width="100" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td class="list" width="80" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
 <td width="100" align="right" class="list" style="'.$bgcolor.'">'.$expense_date.'</td>
-<td class="list" style="'.$bgcolor.'; padding: 15px;">'.$value['note'].'</td>
+<td class="list" style="'.$bgcolor.';">'.$value['note'].'</td>
 </tr>';
 
 	$f_totalAmount = $f_totalAmount + $value['amount'];
