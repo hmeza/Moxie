@@ -2,6 +2,8 @@
 	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
 	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
 	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
+
+</script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
 <td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> Last month</a></td>
