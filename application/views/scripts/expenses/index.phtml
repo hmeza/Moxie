@@ -6,7 +6,7 @@
 
 	$(document).ready(function() {
 		init();
-		$('#date_label').html("<?php echo $st_lang['expenses_date']; ?>");
+		$('#date_label').html("<?php global $st_lang; echo $st_lang['expenses_date']; ?>");
 	});
 </script>
 </head>
