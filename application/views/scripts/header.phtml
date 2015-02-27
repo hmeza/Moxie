@@ -53,7 +53,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
 <?php
 }
 else {
-        echo $s_userName.'<br>';
+        echo $_SESSION['user_name'].'<br>';
 }
 ?>
 </td>
@@ -81,7 +81,7 @@ else {
         ';
         if (isset($_SESSION['user_id'])) {
                 $s_webMenu .= '
-                <td>'.$s_userName.'</td>';
+                <td>'.$_SESSION['user_name'].'</td>';
 
                 foreach($st_urls as $key => $value) {
                         $s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'><a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'.$st_lang[$key].'</a></td>';
