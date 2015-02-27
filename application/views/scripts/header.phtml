@@ -1,0 +1,102 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Moxie</title>
+<link rel="stylesheet" type="text/css" href="/moxie.css"/>
+<link rel="stylesheet" type="text/css" href="/dropdown.css"/>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/zebra.js"></script>
+<script type="text/javascript" src="/js/helpers.js"></script>
+<script type="text/javascript" src="/js/calendar.js"></script>
+<script type="text/javascript" src="/js/form.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10754954-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+
+<!-- this does not come from index.php -->
+<table width=100%>
+<tr>
+<td valign="top" class="moxietitle" width="233" height="65" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
+<td align="right">
+<?php
+global $st_lang;
+if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
+?>
+        <form name="login" id="login" action="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/login" method="POST">
+        <fieldset class="login contact">
+        <legend>Login</legend>
+        <table width=200>
+        <tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
+        <tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
+        <tr><td colspan=2 align="right"><input type="submit" value="Login"></td></tr>
+        <tr><td colspan=2 align="right"><a href="/login/newuser"><?php echo $st_lang['new_user']; ?></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="/login/forgotpassword"><?php echo $st_lang['forgot_password']; ?></a></td></tr>
+        </table>
+        </fieldset>
+        </form>
+<?php
+}
+else {
+        echo $s_userName.'<br>';
+}
+?>
+</td>
+</tr>
+</table>
+
+<!-- web menu -->
+<?php
+        global $st_lang;
+
+        $url = $_SERVER['REQUEST_URI'];
+        $st_url = explode("/", $url);
+        $st_urls = array(
+                'categories' => '/categories/index',
+                'incomes' => '/incomes/index',
+                'expenses' => '/expenses/index',
+                'stats' => '/stats/index',
+                'users' => '/users/index'
+        );
+        $st_lang['users'] = $st_lang['users_my_account'];
+        $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
+
+        $s_webMenu = '
+        <table cellspacing=10>
+        ';
+        if (isset($_SESSION['user_id'])) {
+                $s_webMenu .= '
+                <td>'.$s_userName.'</td>';
+
+                foreach($st_urls as $key => $value) {
+                        $s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'><a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'.$st_lang[$key].'</a></td>';
+                }
+                $s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a></td>
+                ';
+        }
+        else {
+                $s_webMenu .= '
+                <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/">'.$st_lang['index'].'</a></td>
+                <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/texts/about">'.$st_lang['about'].'</a></td>
+                ';
+        }
+        $s_webMenu .= '
+        </table>
+        ';
+	echo $s_webMenu;
+?>

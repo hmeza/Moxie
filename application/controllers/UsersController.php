@@ -1,6 +1,6 @@
 <?php
 
-class UsersController extends BaseController {
+class UsersController extends Zend_Controller_Action {
 	private $usersModel;
 	
 	public function init() {

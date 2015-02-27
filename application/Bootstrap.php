@@ -19,8 +19,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 * Get browser platform and load library
 	 */
 	protected function _initBrowser() {
-		include_once 'html/web.php';
+		Zend_Layout::startMvc(array('layout' => 'default'));
 		$s_viewPrefix = "";
+//		$this->headScript()->appendFile('js/incomes/stats.js');
 	}
 	
 	/**

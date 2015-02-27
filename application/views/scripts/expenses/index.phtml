@@ -1,13 +1,4 @@
-<?php
-echo $this->header;
-?>
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><?php global $st_lang; echo $st_lang['expenses']; ?></title>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" language="text/javascript">
 	var year = <?php echo $this->year; ?>;
@@ -18,18 +9,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 		$('#date_label').html("<?php echo $st_lang['expenses_date']; ?>");
 	});
 </script>
-<script type="text/javascript" src="/js/helpers.js"></script>
-<script type="text/javascript" src="/js/calendar.js"></script>
-<script type="text/javascript" src="/js/form.js"></script>
-<script type="text/javascript" src="/js/zebra.js"></script>
 </head>
-<body>
-
-<?php
-echo web_header(Zend_Registry::get('config')->moxie->app->name,
-		Zend_Registry::get('config')->moxie->settings->url);
-echo web_menu();
-?>
 
 <div class="moxie-submenu">
 <div><a href="#data">Ir a gastos</a></div>

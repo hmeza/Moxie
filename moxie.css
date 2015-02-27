@@ -109,7 +109,6 @@ fieldset {
 }
 
 table.list, td.list, th.list tr.list {
-	width: 100%;
 	color: #000000;
 	padding: 2px;
 	border-collapse: collapse;
@@ -117,6 +116,10 @@ table.list, td.list, th.list tr.list {
 	border-right: 1px solid #c5c5c5;
 	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #c5c5c5;
+}
+
+.list td {
+	padding: 3px;
 }
 
 .list_money {
@@ -233,10 +236,12 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	
 	.moxie-left {
 		float: left;
+		width: 50%;
 	}
 	
 	.moxie-right {
 		float: right;
+		width: 50%;
 	}
 	
 	.moxie-submenu {
@@ -291,58 +296,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie-data {
 	width: 600px;
-
-/* Desktop */
-/*@media only screen and (min-width: 985px) {
-	html {
-		color: #000000;
-	}
-	legend {
-		color:#0b77b7;
-		font-size:1.2em;
-	}
-	
-	.moxie-left {
-		width: 50%;
-		float: left;
-	}
-	
-	.moxie-right {
-		width: 450px;
-		float: right;
-	}
-	
-	.moxie-submenu {
-		display: none;
-	}
-	
-	.moxie-data {
-		width: 600px;
-	}
-	
-	.moxie-stats {
-		width: 100%;
-		font-size: 22px;
-	}
-	
-	.my-checkbox {
-		width: 1em;
-	}
-	
-	div.moxieedit {
-		background:url("/img/edit.png") no-repeat;
-	}
-	div:hover.moxieedit {
-		background:url("/img/edit_hover.png") no-repeat;
-	}
-	div.moxiedelete {
-		background:url("/img/delete.png") no-repeat;
-	}
-	div:hover.moxiedelete {
-		background:url("/img/delete_hover.png") no-repeat;
-	}
 }
-*/
 
 .moxie-stats {
 	font-size: 22px;

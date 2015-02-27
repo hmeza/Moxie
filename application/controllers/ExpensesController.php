@@ -1,6 +1,6 @@
 <?php
 /** Zend_Controller_Action */
-class ExpensesController extends BaseController
+class ExpensesController extends Zend_Controller_Action
 {
 	private $expenses;
 	private $budgets;
@@ -172,7 +172,6 @@ class ExpensesController extends BaseController
 	 * Shows the expenses view.
 	 */
 	public function indexAction() {
-		global $s_viewPrefix;
 		global $st_lang;
 		
 		// list current month by default
@@ -211,7 +210,6 @@ class ExpensesController extends BaseController
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
-		$this->render($s_viewPrefix.'index');
 	}
 	
 	/**
