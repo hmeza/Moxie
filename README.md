@@ -6,10 +6,8 @@ Moxie is an application that will allow you to control home expenses, incomes an
 
 If you need more than a spreadsheet or you have never controlled your home economy, this application can help you to have a better control of it.
 
-### Thanks to:
+### Requirements:
 
 [Zend Framework](http://framework.zend.com/)
-
-[Open flash charts](http://teethgrinder.co.uk/open-flash-chart/)
 
 [Simple PHP captcha](https://github.com/claviska/simple-php-captcha)
