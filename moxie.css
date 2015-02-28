@@ -322,6 +322,9 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 155px;
 	}
 
+	.moxie-container {
+		width: 100%;
+	}
 }
 
 .moxie-submenu {
