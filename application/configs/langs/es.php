@@ -28,6 +28,8 @@ $st_lang = array(
 	'expenses_mark_all'		=>	'Marcar todos',
 	'expenses_all'		=>	'Todos',
 	'expenses_none'		=>	'Ninguno',
+	'expenses_next_month' => 'Mes siguiente',
+	'expenses_last_month' => 'Mes anterior',
 	// Incomes
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',

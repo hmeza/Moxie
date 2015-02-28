@@ -9,6 +9,7 @@ class StatsController extends Zend_Controller_Action {
 	private $budgets;
 		
 	public function init() {
+		parent::init();
 		$this->expenses = new Expenses();
 		$this->incomes = new Incomes();
 		$this->categories = new Categories();
@@ -60,6 +61,7 @@ class StatsController extends Zend_Controller_Action {
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
 		$st_incomes = $this->categories->getCategoriesForView(Categories::INCOMES);
+		$st_perItemData = array();
 		asort($st_expenses);
 		asort($st_incomes);
 		

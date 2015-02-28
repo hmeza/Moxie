@@ -5,6 +5,7 @@ class IncomesController extends Zend_Controller_Action
 	private $incomes;
 	
 	public function init() {
+		parent::init();
 		$this->incomes = new Incomes();
 	}
 	

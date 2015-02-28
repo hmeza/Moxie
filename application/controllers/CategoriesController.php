@@ -8,6 +8,7 @@ class CategoriesController extends Zend_Controller_Action
 	private $categories;
 	
 	public function init() {
+		parent::init();
 		$this->categories = new Categories();		
 	}
 	

@@ -1,13 +1,14 @@
 <script type="text/javascript" language="text/javascript">
 	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
 	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
-	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>
+	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>;
 
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
-<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> Last month</a></td>
-<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> Next month</a></td>
+<?php global $st_lang; ?>
+<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> <?php echo $st_lang['expenses_last_month']; ?></a></td>
+<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a></td>
 </table>
 <?php
 $i_expensePK = $this->form->getElement('id');
@@ -29,7 +30,7 @@ echo '</form>';
 
 global $st_lang;
 echo '
-<table border=1 class="list moxie moxie-data" id="mytable">
+<table class="list moxie moxie-data" id="mytable">
 <tr>
 <td colspan=5>
 '.$st_lang['expenses_mark'].'
@@ -66,13 +67,13 @@ foreach ($this->list as $key=>$value) {
 	
 	echo '
 <tr id="tr'.$value['id'].'">
-<td class="list" width="10" style="'.$bgcolor.'"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
-<td class="list" width="16" style="'.$bgcolor.'"><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'\')\'></div></td>
-<td class="list" width="16" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-<td align="right" class="list" width="100" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
-<td class="list" width="80" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td width="100" align="right" class="list" style="'.$bgcolor.'">'.$expense_date.'</td>
-<td class="list" style="'.$bgcolor.';">'.$value['note'].'</td>
+<td class="list moxie_checkbox" width="10" style="'.$bgcolor.'"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
+<td class="list moxie_delete" width="16" style="'.$bgcolor.'"><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'\')\'></div></td>
+<td class="list moxie_edit" width="16" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td class="list moxie_category" width="80" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<td width="100" align="right" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>
+<td class="list moxie_note" style="'.$bgcolor.';">'.$value['note'].'</td>
 </tr>';
 
 	$f_totalAmount = $f_totalAmount + $value['amount'];

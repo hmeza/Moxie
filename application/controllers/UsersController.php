@@ -4,6 +4,7 @@ class UsersController extends Zend_Controller_Action {
 	private $usersModel;
 	
 	public function init() {
+		parent::init();
 		$this->usersModel = new loginModel();
 	}
 	

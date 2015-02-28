@@ -6,7 +6,7 @@
 
 	$(document).ready(function() {
 		init();
-		$('#date_label').html("<?php echo $st_lang['expenses_date']; ?>");
+		$('#date_label').html("<?php global $st_lang; echo $st_lang['expenses_date']; ?>");
 	});
 </script>
 </head>
@@ -19,14 +19,14 @@
 
 <div class="moxie-container">
 <div class="moxie-left">
-<a name="data"></a>
+<a id="data"></a>
 <?php
 echo $this->partial('expenses/data.phtml',
 					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month));
 ?>
 </div>
 <div class="moxie-right">
-<a name="stats"></a>
+<a id="stats"></a>
 <?php
 echo $this->partial('expenses/stats.phtml',
 					array(
@@ -41,7 +41,3 @@ echo $this->partial('expenses/stats.phtml',
 ?>
 </div>
 </div>
-
-<?php
-echo $this->footer;
-?>
