@@ -224,9 +224,13 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	position: absolute;
 	min-width: 1350px;
 }
+
+.my-checkbox {
+	width: 1em;
+}
 	
 /* Desktop */
-@media only screen and (min-width: 985px) {
+@media only screen and (min-width: 801px) {
 	html {
 	}
 	legend {
@@ -249,6 +253,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 	
 	.moxie-data {
+		border: 1px;
 		width: 600px;
 	}
 	
@@ -256,21 +261,36 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 350px;
 		font-size: 22px;
 	}
+	
+	.moxie_amount {
+		width: 100px;
+	}
+	
+	.my-checkbox {
+		width: 1em;
+	}
 }
 
 
 /* Mobile */
-@media only screen and (min-width: 300px) and (max-width: 984px) {
+@media only screen and (min-width: 100px) and (max-width: 800px) {
 	html {
-		font-size: 30px;
+		font-size: 25px;
 	}
 	legend {
 		color:#0b77b7;
 		font-size:30px;
 	}
+	form {
+		background:#fafafa;
+		padding:1em;
+		border:1px solid #eee;
+		margin: 1em 0em 1em 0em;
+		width:27em;	
+	}
 	
 	.moxie-left {
-		width: 100%
+		width: 100%;
 	}
 	
 	.moxie-right {
@@ -280,29 +300,35 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 	
 	.moxie-data {
-		width: 100%;
-		font-size: 30px;
+		border: 1px;
+		font-size: 25px;
 	}
 	
 	.moxie-stats {
 		width: 100%;
 		font-size: 30px;
 	}
+	
+	.my-checkbox {
+		zoom: 1.1;
+		width: 30px;
+		height: 30px;
+	}
+	
+	.moxie_amount {
+		width: 150px;
+	}
+	.moxie_date {
+		width: 155px;
+	}
+
 }
 
 .moxie-submenu {
 	display: none;
 }
 
-.moxie-data {
-	width: 600px;
-}
-
 .moxie-stats {
 	font-size: 22px;
 	width: 100%;
-}
-
-.my-checkbox {
-	width: 1em;
 }
