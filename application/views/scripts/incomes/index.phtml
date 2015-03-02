@@ -10,7 +10,7 @@
 
 	$(document).ready(function() {
 		init();
-		$('#date_label').html("<?php echo $st_lang['incomes_date']; ?>");
+		$('#date_label').html("<?php global $st_lang; echo $st_lang['incomes_date']; ?>");
 	});
 </script>
 </head>
