@@ -72,7 +72,7 @@ foreach ($this->list as $key=>$value) {
 <td class="list moxie_edit" width="16" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 <td class="list moxie_category" width="80" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td width="100" align="right" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>
+<td align="right" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>
 <td class="list moxie_note" style="'.$bgcolor.';">'.$value['note'].'</td>
 </tr>';
 

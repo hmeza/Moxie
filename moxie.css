@@ -191,6 +191,10 @@ div.moxiedelete {
 div:hover.moxiedelete {
 	background:url("/img/delete_hover.png") no-repeat;
 }
+
+.moxie_date {
+	width: 100px;
+}
  
 tr.alt td.alt {
 	background: #ecf6fc;
@@ -277,53 +281,81 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	html {
 		font-size: 25px;
 	}
+
 	legend {
-		color:#0b77b7;
-		font-size:30px;
+		color: #0b77b7;
+		font-size: 30px;
 	}
+
 	form {
-		background:#fafafa;
-		padding:1em;
-		border:1px solid #eee;
+		background: #fafafa;
+		padding: 1em;
+		border: 1px solid #eee;
 		margin: 1em 0em 1em 0em;
-		width:27em;	
+		width: 27em;
 	}
-	
+
 	.moxie-left {
 		width: 100%;
 	}
-	
+
 	.moxie-right {
 	}
-	
+
 	.moxie-submenu {
 	}
-	
+
 	.moxie-data {
 		border: 1px;
 		font-size: 25px;
 	}
-	
+
 	.moxie-stats {
 		width: 100%;
 		font-size: 30px;
 	}
-	
+
 	.my-checkbox {
 		zoom: 1.1;
 		width: 30px;
 		height: 30px;
 	}
-	
+
 	.moxie_amount {
 		width: 150px;
 	}
+
 	.moxie_date {
-		width: 155px;
+		width: 100px;
 	}
 
 	.moxie-container {
 		width: 100%;
+	}
+}
+
+
+/* Mobile */
+@media only screen and (max-device-width: 800px) {
+	.moxie-data {
+		width: 100%;
+	}
+
+	.moxie-left {
+		width: 100%;
+	}
+
+	.moxie-right {
+		width: 100%;
+	}
+
+	.moxie_date {
+		width: 250px;
+	}
+
+	.list td {
+		font-size:40px;
+		padding: 20px 10px 20px 10px;
 	}
 }
 
