@@ -1,7 +1,3 @@
-function markAll(option) {
-	window.location="/expenses/markall/option/"+option+"/year/"+year+"/month/"+month;
-}
-
 function markLine(id) {
 	window.location="/expenses/markline/id/"+id;
 }

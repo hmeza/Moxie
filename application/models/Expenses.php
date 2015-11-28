@@ -104,29 +104,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 	}
-	
-	/**
-	 * Updates expenses by setting in_sum to option value, filtering by year and month
-	 * @author	hmeza
-	 * @since	2011-02-06
-	 * @param $user_id
-	 * @param $i_option 1 or 0
-	 * @param $i_year
-	 * @param $i_month
-	 * @todo	Implement to update different attributes
-	 * @todo	Implement to check user owner
-	 */
-	public function updateAllExpenses($user_id, $i_option, $i_year, $i_month) {
-		$where[] = "MONTH(expense_date) = ".$i_month;
-		$where[] = "YEAR(expense_date) = ".$i_year;
-		$where[] = "user_owner = ".$user_id;
-		try {
-			$query = $this->database->update("expenses", array("in_sum"=>$i_option), $where);
-		} catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
-		}
-	}
-	
+
 	/**
 	 * Updates an expense by setting in_sum to 0 or 1
 	 * @author	hmeza

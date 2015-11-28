@@ -8,36 +8,36 @@
 <table width=100%>
 <?php global $st_lang; ?>
 <td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> <?php echo $st_lang['expenses_last_month']; ?></a></td>
+<td><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
 <td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a></td>
 </table>
 <?php
-$i_expensePK = $this->form->getElement('id');
+$i_expensePK = $this->form->getValue('id');
+$checked = $this->form->getElement('in_sum') == 1 ? "checked": "";
 if (isset($i_expensePK)) {
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post">';
+?>
+	<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>
+	<div>Delete <div id="del<?php echo $i_expensePK; ?>" class="moxieicon moxiedelete" onclick='confirmDelete("<?php echo $i_expensePK.$s_dateGet; ?>")'></div></div>
+<?php
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post" class="moxie_form">';
 	echo $this->form->getElement('user_owner');
 	echo $this->form->getElement('id');
 }
 else {
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post">';
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">';
 }
 echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
-echo "\n";
+echo "<br>\n";
 echo $this->form->getElement('note');
 echo '<div class="date">'.$this->form->getValue('date').'</div>';
 echo $this->form->getElement('submit');
 echo '</form>';
 
-global $st_lang;
 echo '
 <table class="list moxie moxie-data" id="mytable">
 <tr>
-<td colspan=5>
-'.$st_lang['expenses_mark'].'
-<span onClick="markAll(0);" alt="'.$st_lang['expenses_unmark_all'].'" title="'.$st_lang['expenses_unmark_all'].'" style="cursor:hand; cursor:pointer">'.$st_lang['expenses_none'].'</span>&nbsp;
-<span onClick="markAll(1);" alt="'.$st_lang['expenses_mark_all'].'" title="'.$st_lang['expenses_mark_all'].'" style="cursor:hand; cursor:pointer">'.$st_lang['expenses_all'].'</span>&nbsp;&nbsp;&nbsp;
-</td>
-<td colspan=2 align=right>
+<td colspan=4 align=right>
 Filtrar por <select id="category_filter" onchange="filter();">
 <option value="0">---</option>
 ';
@@ -63,17 +63,15 @@ foreach ($this->list as $key=>$value) {
 
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$expense_date = date('d-m-Y', strtotime($value['expense_date']));
+	$expense_date = (int)substr(date('d-m-Y', strtotime($value['expense_date'])),0,2);
 	
 	echo '
 <tr id="tr'.$value['id'].'">
-<td class="list moxie_checkbox" width="10" style="'.$bgcolor.'"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>
-<td class="list moxie_delete" width="16" style="'.$bgcolor.'"><div id="del'.$value['id'].'" class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'\')\'></div></td>
-<td class="list moxie_edit" width="16" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-<td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
-<td class="list moxie_category" width="80" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td align="right" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>
+<td class="list moxie_edit" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td class="list moxie_category" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<!--<td align="center" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>-->
 <td class="list moxie_note" style="'.$bgcolor.';">'.$value['note'].'</td>
+<td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';
 
 	$f_totalAmount = $f_totalAmount + $value['amount'];
@@ -88,8 +86,7 @@ if($b_showTotalAmount) {
 
 ?>
 <tr>
-<td colspan=3></td>
-<td align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td><td colspan=3></td>
+<td colspan=4 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
 </tr>
 </table>
 <br><br><br>

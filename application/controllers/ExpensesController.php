@@ -2,6 +2,7 @@
 /** Zend_Controller_Action */
 class ExpensesController extends Zend_Controller_Action
 {
+	/** @var Expenses */
 	private $expenses;
 	private $budgets;
 	
@@ -62,7 +63,8 @@ class ExpensesController extends Zend_Controller_Action
 		     ->setMethod('post');
 		     
 		$form->setAttrib('id', 'login');
-		
+
+		$form->addElement('hidden', 'checked', array('value' => $st_expense['in_sum']));
 		$form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
 		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
@@ -245,7 +247,7 @@ class ExpensesController extends Zend_Controller_Action
 		$s_select = $db->select()
 			->from(array('e'=>'expenses'),
 					array(
-						'sum(e.amount)'	=>	'sum(e.amount)'
+						'sum(e.amount)'	=>	'sum(e.amount)',
 					))
 			->join(array('c'=>'categories'),'',array(
 						'id'		=>	'c.id',
@@ -325,20 +327,7 @@ class ExpensesController extends Zend_Controller_Action
 		}
 		return $i_expensePK;
 	}
-	
-	/**
-	 * Marks/unmarks all lines in a given month from a given year
-	 * @author	hmeza
-	 * @since	2011-02-06
-	 */
-	public function markallAction() {
-		$i_option = $this->getRequest()->getParam('option');
-		$i_year = $this->getRequest()->getParam('year');
-		$i_month = $this->getRequest()->getParam('month');
-		$this->expenses->updateAllExpenses($_SESSION['user_id'], $i_option, $i_year, $i_month);
-		$this->_helper->redirector('index','expenses');
-	}
-	
+
 	/**
 	 * Marks an expense to appear or not in sums
 	 * @author	hmeza
