@@ -4,6 +4,7 @@ class ExpensesController extends Zend_Controller_Action
 {
 	/** @var Expenses */
 	private $expenses;
+	/** @var Budgets */
 	private $budgets;
 	
 	public function init() {
@@ -185,23 +186,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
-		$db = Zend_Registry::get('db');
-                $s_select = $db->select()
-                        ->from(array('e'=>'expenses'),
-                                        array(
-                                                'sum(e.amount)' =>      'sum(e.amount)'
-                                        ))
-                        ->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
-                                                'id'            =>      'c.id',
-                                                'name'          =>      'c.name'
-                                        ))
-                        ->where('e.user_owner = '.$_SESSION['user_id'])
-                        ->where('YEAR(e.expense_date) = '.$i_year)
-                        ->where('MONTH(e.expense_date) = '.$i_month)
-                        ->where('e.in_sum = 1')
-                        ->group('c.id')
-                        ->order(array('c.id'));
-		$st_data = $db->fetchAll($s_select);
+		$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
@@ -243,32 +228,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
-		$db = Zend_Registry::get('db');
-		$s_select = $db->select()
-			->from(array('e'=>'expenses'),
-					array(
-						'sum(e.amount)'	=>	'sum(e.amount)',
-					))
-			->join(array('c'=>'categories'),'',array(
-						'id'		=>	'c.id',
-						'name'		=>	'c.name'
-					))
-			->joinLeft(array('c2'=>'categories'),'c.id = c2.parent',
-					array(
-						'son_id'	=>	'c2.id'
-					))
-			->joinLeft(array('c0'=>'categories'),'c0.id = c.parent',
-					array(
-						'parent_id'	=>	'c0.id'
-					))
-			->where('e.user_owner = '.$_SESSION['user_id'])
-			->where('c.id = e.category OR c2.id = e.category')
-			->where('YEAR(e.expense_date) = '.$i_year)
-			->where('MONTH(e.expense_date) = '.$i_month)
-			->where('e.in_sum = 1')
-			->group('c.id')
-			->order(array('c.id','c2.id'));
-		$st_data = $db->fetchAll($s_select);
+		$st_data = $this->expenses->getExpensesForEdit($_SESSION['user_id'], $i_month, $i_year);
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);

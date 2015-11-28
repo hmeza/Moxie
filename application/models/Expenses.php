@@ -53,6 +53,69 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 
 	/**
+	 * @param int $user_id
+	 * @param int $i_month
+	 * @param int $i_year
+	 * @return array
+	 * @throws Zend_Exception
+	 */
+	public function getExpensesForIndex($user_id, $i_month, $i_year) {
+		$s_select = $this->select()
+				->setIntegrityCheck(false)
+				->from(array('e'=>'expenses'),
+						array(
+								'sum(e.amount)' =>      'sum(e.amount)'
+						))
+				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
+						'id'            =>      'c.id',
+						'name'          =>      'c.name'
+				))
+				->where('e.user_owner = '.$user_id)
+				->where('YEAR(e.expense_date) = '.$i_year)
+				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('e.in_sum = 1')
+				->group('c.id')
+				->order(array('c.id'));
+		return $this->fetchAll($s_select);
+	}
+
+	/**
+	 * @param int $user_id
+	 * @param int $i_month
+	 * @param int $i_year
+	 * @return array
+	 * @throws Zend_Exception
+	 */
+	public function getExpensesForEdit($user_id, $i_month, $i_year) {
+		$s_select = $this->select()
+				->setIntegrityCheck(false)
+				->from(array('e'=>'expenses'),
+						array(
+								'sum(e.amount)'	=>	'sum(e.amount)',
+						))
+				->join(array('c'=>'categories'),'',array(
+						'id'		=>	'c.id',
+						'name'		=>	'c.name'
+				))
+				->joinLeft(array('c2'=>'categories'),'c.id = c2.parent',
+						array(
+								'son_id'	=>	'c2.id'
+						))
+				->joinLeft(array('c0'=>'categories'),'c0.id = c.parent',
+						array(
+								'parent_id'	=>	'c0.id'
+						))
+				->where('e.user_owner = '.$user_id)
+				->where('c.id = e.category OR c2.id = e.category')
+				->where('YEAR(e.expense_date) = '.$i_year)
+				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('e.in_sum = 1')
+				->group('c.id')
+				->order(array('c.id','c2.id'));
+		return $this->fetchAll($s_select);
+	}
+
+	/**
 	 * Retrieve an expense by its PK
 	 * @author	hmeza
 	 * @since	2011-02-08
