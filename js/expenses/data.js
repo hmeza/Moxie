@@ -11,7 +11,6 @@ function filter() {
 function confirmDelete(id) {
 	var response;
 	var name;
-	var delete_success;
 	var new_value = 0;
 	var deleted_value = 0;
 
