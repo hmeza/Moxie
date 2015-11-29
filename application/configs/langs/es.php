@@ -24,12 +24,11 @@ $st_lang = array(
 	'expenses_expended'	=>	'Gastado',
 	'expenses_budget'	=>	'Presupuesto',
 	'expenses_mark'		=>	'Marcar:&nbsp;',
-	'expenses_unmark_all'	=>	'Desmarcar todos',
-	'expenses_mark_all'		=>	'Marcar todos',
 	'expenses_all'		=>	'Todos',
 	'expenses_none'		=>	'Ninguno',
 	'expenses_next_month' => 'Mes siguiente',
 	'expenses_last_month' => 'Mes anterior',
+	'expenses_delete'   => 'Borrar',
 	// Incomes
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',
