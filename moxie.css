@@ -10,7 +10,7 @@ form {
 	padding:1em;
 	border:1px solid #eee;
 	margin:1em;
-	width:27em;	
+	width:27em;
 }
 fieldset div {
 	margin:0.3em 0;
@@ -26,7 +26,7 @@ a:hover {
 
 label {
 	float:left;
-	width:10em;
+	width:5em;
 	text-align:right;
 	margin-right:1em;
 }
@@ -187,19 +187,17 @@ div:hover.moxieedit {
 }
 div.moxiedelete {
 	background:url("/img/delete.png") no-repeat;
+	display:inline-block;
+	border-top: 5px;
 }
 div:hover.moxiedelete {
 	background:url("/img/delete_hover.png") no-repeat;
 }
 
-.moxie_date {
-	width: 100px;
-}
- 
 tr.alt td.alt {
 	background: #ecf6fc;
 }
- 
+
 tr.over td, tr:hover td.over {
 	background: #bbffff;
 }
@@ -209,8 +207,8 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 }
 
 #box {
-	border:2px solid #D0E8F4;  
-	background-color:#ECF8FD; 
+	border:2px solid #D0E8F4;
+	background-color:#ECF8FD;
     padding:5px;
 }
 
@@ -226,50 +224,82 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 .moxie-container {
 	padding-bottom: 50px;
 	position: absolute;
-	min-width: 1350px;
+	/*min-width: 1150px;*/
+}
+
+.moxie_header_date {
+	font-family: Arial;
+	font-size: 25px;
+	font-weight: bold;
 }
 
 .my-checkbox {
 	width: 1em;
 }
-	
+
+.moxie_form {
+	padding: 14px;
+	border: 1px solid #eee;
+	margin: 10px;
+	width:80%;
+}
+
+@media only screen and (min-width: 1060px) {
+	.moxie-container {
+		width: 100%;
+	}
+
+	.moxie-left {
+		float: left;
+	}
+
+	.moxie-right {
+		float: right;
+	}
+}
+
 /* Desktop */
-@media only screen and (min-width: 801px) {
+@media only screen and (min-width: 801px) and (max-width: 1059px) {
 	html {
 	}
 	legend {
 		color:#0b77b7;
 		font-size:1.2em;
 	}
-	
+
 	.moxie-left {
-		float: left;
-		width: 50%;
 	}
-	
+
 	.moxie-right {
-		float: right;
-		width: 50%;
 	}
-	
+
 	.moxie-submenu {
 		display: none;
 	}
-	
+
 	.moxie-data {
 		border: 1px;
-		width: 600px;
+		width: 100%;
+        font-size: 20px;
 	}
-	
+
 	.moxie-stats {
 		width: 350px;
 		font-size: 22px;
 	}
-	
+
+    .moxie_category {
+        width: 15%;
+    }
+
 	.moxie_amount {
-		width: 100px;
+		width: 15%;
 	}
-	
+
+    .moxie_note {
+        width: 55%
+    }
+
 	.my-checkbox {
 		width: 1em;
 	}
@@ -325,9 +355,9 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 150px;
 	}
 
-	.moxie_date {
-		width: 100px;
-	}
+    .moxie_none {
+
+    }
 
 	.moxie-container {
 		width: 100%;
@@ -349,13 +379,50 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 100%;
 	}
 
-	.moxie_date {
-		width: 250px;
+	.moxie_edit {
+		width: 55px;
+	}
+
+	.moxie_category {
+		width: 22%;
+	}
+
+	.moxie_note {
+		width: 30%;
 	}
 
 	.list td {
 		font-size:40px;
 		padding: 20px 10px 20px 10px;
+	}
+
+	.moxie_form {
+		padding: 0px;
+		border: 0px;
+		font-size: 80px;
+		margin: 0px;
+		width:100%;
+	}
+
+	.my-checkbox {
+		-ms-transform: scale(3); /* IE */
+		-moz-transform: scale(3); /* FF */
+		-webkit-transform: scale(3); /* Safari and Chrome */
+		-o-transform: scale(3); /* Opera */
+	}
+
+	div.moxieicon {
+		width: 50px;
+		height: 50px;
+	}
+
+	div.moxieedit {
+		background:url("/img/edit.png") no-repeat;
+		background-size: 50px;
+	}
+	div:hover.moxieedit {
+		background:url("/img/edit_hover.png") no-repeat;
+		background-size: 50px;
 	}
 }
 
