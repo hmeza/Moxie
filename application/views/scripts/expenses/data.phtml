@@ -13,25 +13,32 @@
 </table>
 <?php
 $i_expensePK = $this->form->getValue('id');
-$checked = $this->form->getElement('in_sum') == 1 ? "checked": "";
+$checked = ($this->form->getElement('in_sum') == 1) ? "checked": "";
 if (isset($i_expensePK)) {
 ?>
-	<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>
-	<div>Delete <div id="del<?php echo $i_expensePK; ?>" class="moxieicon moxiedelete" onclick='confirmDelete("<?php echo $i_expensePK.$s_dateGet; ?>")'></div></div>
+<!--<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>-->
 <?php
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post" class="moxie_form">';
+?>
+	<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>
+<?php
 	echo $this->form->getElement('user_owner');
 	echo $this->form->getElement('id');
 }
 else {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">';
 }
+?>
+<?php
 echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
 echo "<br>\n";
 echo $this->form->getElement('note');
 echo '<div class="date">'.$this->form->getValue('date').'</div>';
 echo $this->form->getElement('submit');
+if(isset($i_expensePK)) {
+	echo '<input type="button" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . $s_dateGet . '")\'/>';
+}
 echo '</form>';
 
 echo '
@@ -63,14 +70,14 @@ foreach ($this->list as $key=>$value) {
 
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$expense_date = (int)substr(date('d-m-Y', strtotime($value['expense_date'])),0,2);
+	$expense_date = date('d-m-Y', strtotime($value['expense_date']));
 	
 	echo '
 <tr id="tr'.$value['id'].'">
 <td class="list moxie_edit" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <td class="list moxie_category" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
 <!--<td align="center" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>-->
-<td class="list moxie_note" style="'.$bgcolor.';">'.$value['note'].'</td>
+<td class="list moxie_note" style="'.$bgcolor.';"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
 <td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';
 
@@ -81,7 +88,7 @@ foreach ($this->list as $key=>$value) {
 
 $s_total = number_format($f_currentAmount,2)." &euro;";
 if($b_showTotalAmount) {
-	$s_total .= '<br><span class="total_amount">('.number_format($f_totalAmount, 2)." &euro;)";
+	$s_total .= '<br><span class="total_amount">'.number_format($f_totalAmount, 2)." &euro;";
 }
 
 ?>
