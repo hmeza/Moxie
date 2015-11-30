@@ -2,7 +2,7 @@
 
 html {
 	font: 90%/1.3 arial,sans-serif;
-	padding:1em;
+	padding:2px;
 	background:#ffffff;
 }
 form {
@@ -242,6 +242,22 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	/*width:80%;*/
 }
 
+.moxie_edit {
+	width: 5%;
+}
+
+.moxie_category {
+	width: 18%;
+}
+
+.moxie_amount {
+	width: 35%;
+}
+
+.moxie_note {
+}
+
+
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
 		width: 100%;
@@ -265,12 +281,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		font-size:1.2em;
 	}
 
-	.moxie-left {
-	}
-
-	.moxie-right {
-	}
-
 	.moxie-submenu {
 		display: none;
 	}
@@ -286,20 +296,12 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		font-size: 22px;
 	}
 
-    .moxie_category {
-        width: 15%;
-    }
-
-	.moxie_amount {
-		width: 15%;
-	}
-
-    .moxie_note {
-        width: 55%
-    }
-
 	.my-checkbox {
 		width: 1em;
+	}
+
+	.moxie_amount {
+		width: 16%;
 	}
 }
 
@@ -353,10 +355,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 150px;
 	}
 
-    .moxie_none {
-
-    }
-
 	.moxie-container {
 		width: 100%;
 	}
@@ -377,31 +375,15 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		width: 100%;
 	}
 
-	.moxie_edit {
-		width: 5%;
-	}
-
-	.moxie_category {
-		width: 18%;
-	}
-
-	.moxie_note {
-		/*width: 30%;*/
-	}
-
-	.moxie_amount {
-		width: 35%;
-	}
-
 	.list td {
-		font-size:40px;
+		font-size:38px;
 		padding: 20px 10px 20px 10px;
 	}
 
 	.moxie_form {
 		padding: 0px;
 		border: 0px;
-		font-size: 80px;
+		font-size: 45px;
 		margin: 0px;
 		width:100%;
 	}
@@ -425,6 +407,10 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	div:hover.moxieedit {
 		background:url("/img/edit_hover.png") no-repeat;
 		background-size: 50px;
+	}
+
+	a {
+		font-size: 32px;
 	}
 }
 
