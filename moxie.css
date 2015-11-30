@@ -223,8 +223,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie-container {
 	padding-bottom: 50px;
-	position: absolute;
-	/*min-width: 1150px;*/
 }
 
 .moxie_header_date {
@@ -241,7 +239,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	padding: 14px;
 	border: 1px solid #eee;
 	margin: 10px;
-	width:80%;
+	/*width:80%;*/
 }
 
 @media only screen and (min-width: 1060px) {
@@ -380,15 +378,19 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 
 	.moxie_edit {
-		width: 55px;
+		width: 5%;
 	}
 
 	.moxie_category {
-		width: 22%;
+		width: 18%;
 	}
 
 	.moxie_note {
-		width: 30%;
+		/*width: 30%;*/
+	}
+
+	.moxie_amount {
+		width: 35%;
 	}
 
 	.list td {
