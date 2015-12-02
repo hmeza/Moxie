@@ -1,7 +1,5 @@
 <?php
 
-include_once 'Zend/Db/Table.php';
-include_once 'Zend/Registry.php';
 /**
  * Expenses model.
  */
