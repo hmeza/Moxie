@@ -1,0 +1,16 @@
+{
+    "name": "hmeza/moxie",
+    "require": {
+        "zendframework/zendframework1": "^1.12",
+        "robmorgan/phinx": "^0.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4"
+    },
+    "authors": [
+        {
+            "name": "hmeza",
+            "email": "hugo.meza.macias@gmail.com"
+        }
+    ]
+}
