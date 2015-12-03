@@ -57,8 +57,8 @@ class ExpensesController extends Zend_Controller_Action
 		// retrieve data to fill the form
 		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
 		// little fix to pass only date and discarding hour
-		$s_date = explode(" ", $st_expense['expense_date']);
-		$st_expense['expense_date'] = $s_date[0];
+		$s_date = explode(" ", $st_expense['date']);
+		$st_expense['date'] = $s_date[0];
 		
 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.'/expenses/update')
 		     ->setMethod('post');
@@ -78,39 +78,24 @@ class ExpensesController extends Zend_Controller_Action
 		$multiOptions->setValue(array($st_expense['category']));
 		$form->addElement($multiOptions);
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
-		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['expense_date']));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
 	
 	/**
 	 * Returns the monthly expense for a year.
-	 * @todo Move to model, make it accessible from controller method.
 	 * @return array
 	 */
 	private function getMonthExpensesData() {
 		$st_data = array();
-		$st_links = array();
 		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
 		
-		$db = Zend_Registry::get('db');
-		
 		$s_category = (!empty($category)) ? 'category = '.$category : '1=1';
-		
-		// TODO: This must reside in the model
-		$s_query = $db->select()
-			->from('expenses', array('YEAR(expense_date) as year','MONTH(expense_date) as month','sum(amount) as amount'))
-			->where('in_sum = 1')
-			->where('user_owner = '.$_SESSION['user_id'])
-			->where('expense_date >= "'.$i_dateLimit.'"')
-			->where($s_category)
-			->group('MONTH(expense_date), YEAR(expense_date)')
-			->order('YEAR(expense_date), MONTH(expense_date)');
-		
-		$o_rows = $db->fetchAll($s_query);
-		$s_url = Zend_Registry::get('config')->moxie->settings->url.'/expenses/index';
+
+        $o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
+
 		foreach ($o_rows as $key => $value) {
-			//$st_links[] = ($value['amount'], $s_url.'/month/'.$value['month'].'/year/'.$value['year']);
 			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
 			$st_data[] = array(
 					date("M", $timestamp),
@@ -157,8 +142,8 @@ class ExpensesController extends Zend_Controller_Action
 						'name'          =>      'c.name'
 				))
 				->where('e.user_owner = '.$_SESSION['user_id'])
-				->where('YEAR(e.expense_date) = '.$i_year)
-				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('YEAR(e.date) = '.$i_year)
+				->where('MONTH(e.date) = '.$i_month)
 				->where('e.in_sum = 1')
 				->group('c.id')
 				->order(array('c.id'));

@@ -5,7 +5,7 @@
  */
 class Expenses extends Zend_Db_Table_Abstract {
 	private $database;
-	protected $_name = 'expenses';
+	protected $_name = 'transactions';
 	protected $_primary = 'id';
 	
 	public function __construct() {
@@ -27,12 +27,12 @@ class Expenses extends Zend_Db_Table_Abstract {
 	public function getExpenses($user_id, $month, $year, $i_category = 0) {
 		$s_category = ($i_category != 0) ? "e.category = ".$i_category : "1=1";
 		$query = $this->database->select()
-		->from(array('e'=>'expenses'),array(
+		->from(array('e'=>$this->_name),array(
 					'id'	=>	'e.id',
 					'user_owner'	=>	'e.user_owner',
 					'amount'		=>	'e.amount',
 					'note'			=>	'e.note',
-					'expense_date'	=>	'e.expense_date',
+					'date'	=>	'e.date',
 					'in_sum'		=>	'e.in_sum'
 					))
 					->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
@@ -40,11 +40,12 @@ class Expenses extends Zend_Db_Table_Abstract {
 					'description'	=>	'c.description',
 					'category'	=> 'c.id'
 					))
-					->where('YEAR(e.expense_date) = '.$year)
-					->where('MONTH(e.expense_date) = '.$month)
+					->where('YEAR(e.date) = '.$year)
+					->where('MONTH(e.date) = '.$month)
 					->where('e.user_owner = '.$user_id)
 					->where($s_category)
-					->order('e.expense_date asc');
+                    ->where('amount < 0')
+					->order('e.date asc');
 					$stmt = $this->database->query($query);
 					$result = $stmt->fetchAll();
 					return $result;
@@ -60,7 +61,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	public function getExpensesForIndex($user_id, $i_month, $i_year) {
 		$s_select = $this->select()
 				->setIntegrityCheck(false)
-				->from(array('e'=>'expenses'),
+				->from(array('e'=> $this->_name),
 						array(
 								'sum(e.amount)' =>      'sum(e.amount)'
 						))
@@ -69,9 +70,10 @@ class Expenses extends Zend_Db_Table_Abstract {
 						'name'          =>      'c.name'
 				))
 				->where('e.user_owner = '.$user_id)
-				->where('YEAR(e.expense_date) = '.$i_year)
-				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('YEAR(e.date) = '.$i_year)
+				->where('MONTH(e.date) = '.$i_month)
 				->where('e.in_sum = 1')
+                ->where('amount < 0')
 				->group('c.id')
 				->order(array('c.id'));
 		return $this->fetchAll($s_select);
@@ -87,7 +89,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	public function getExpensesForEdit($user_id, $i_month, $i_year) {
 		$s_select = $this->select()
 				->setIntegrityCheck(false)
-				->from(array('e'=>'expenses'),
+				->from(array('e'=> $this->_name),
 						array(
 								'sum(e.amount)'	=>	'sum(e.amount)',
 						))
@@ -105,9 +107,10 @@ class Expenses extends Zend_Db_Table_Abstract {
 						))
 				->where('e.user_owner = '.$user_id)
 				->where('c.id = e.category OR c2.id = e.category')
-				->where('YEAR(e.expense_date) = '.$i_year)
-				->where('MONTH(e.expense_date) = '.$i_month)
+				->where('YEAR(e.date) = '.$i_year)
+				->where('MONTH(e.date) = '.$i_month)
 				->where('e.in_sum = 1')
+                ->where('amount < 0')
 				->group('c.id')
 				->order(array('c.id','c2.id'));
 		return $this->fetchAll($s_select);
@@ -122,19 +125,20 @@ class Expenses extends Zend_Db_Table_Abstract {
 	public function getExpenseByPK($i_expensePK) {
 		try {
 			$query = $this->database->select()
-				->from(array('e'=>'expenses'),array(
+				->from(array('e'=> $this->_name),array(
 						'id'			=>	'e.id',
 						'user_owner'	=>	'e.user_owner',
 						'amount'		=>	'e.amount',
 						'note'			=>	'e.note',
-						'expense_date'	=>	'e.expense_date',
+						'date'	=>	'e.date',
 						'in_sum'		=>	'e.in_sum',
 						'category'		=>	'e.category'
 						))
-				->where('id = '.$i_expensePK);
+				->where('id = '.$i_expensePK)
+                ->where('amount < 0');
 			$stmt = $this->database->query($query);
 			$result = $stmt->fetch();
-		} catch (Expenses $e) {
+		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 		return $result;
@@ -156,10 +160,10 @@ class Expenses extends Zend_Db_Table_Abstract {
 			'amount'		=>	$amount,
 			'category'		=>	$category,
 			'note'			=>	$note,
-			'expense_date'	=>	$date
+			'date'	=>	$date
 		);
 		try {
-			$query = $this->database->insert("expenses",$st_data);
+			$this->database->insert($this->_name,$st_data);
 		}
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
@@ -178,7 +182,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 		try {
 			if ($st_params == null) {
 				$query = $this->database->select()
-				->from("expenses","in_sum")
+				->from($this->_name,"in_sum")
 				->where("id = ".$i_expensePK);
 				$stmt = $this->database->query($query);
 				$result = $stmt->fetchAll();
@@ -191,18 +195,18 @@ class Expenses extends Zend_Db_Table_Abstract {
 				}
 	
 				$where[] = "id = ".$i_expensePK;
-				$query = $this->database->update("expenses", array("in_sum"=>$up), $where);
+				$query = $this->database->update($this->_name, array("in_sum"=>$up), $where);
 			}
 			else {
 				$st_data = array(
 					'amount'	=>	$st_params['amount'],
 					'category'	=>	$st_params['category'],
 					'note'		=>	$st_params['note'],
-					'expense_date'	=>	$st_params['date']
+					'date'	=>	$st_params['date']
 					
 				);
 				$s_where = 'id = '.$st_params['id'];
-				$this->database->update('expenses',$st_data,$s_where);
+				$this->database->update($this->_name,$st_data,$s_where);
 			}
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
@@ -218,10 +222,11 @@ class Expenses extends Zend_Db_Table_Abstract {
 		$query = " e.user_owner = 1 group by category,note order by number_of_rows;";
 		try {
 			$query = $this->database->select()
-				->from(array("e" => "expenses"), array("count(e.id) as number_of_rows", "category", "note"))
+				->from(array("e" => $this->_name), array("count(e.id) as number_of_rows", "category", "note"))
 				->joinInner(array("c" => "categories"), "c.id = e.category", array("id as category_id", "name"))
 				->where("e.user_owner = ?", $i_userOwner)
-				->where("e.expense_date >= ?", date('Y-m-d H:i:s', strtotime("-3 months")))
+				->where("e.date >= ?", date('Y-m-d H:i:s', strtotime("-3 months")))
+                ->where('amount < 0')
 				->group("category,note")
 				->order("number_of_rows DESC")
 				->limit(self::MOST_FREQUENT_EXPENSES_LIMIT);
@@ -244,8 +249,9 @@ class Expenses extends Zend_Db_Table_Abstract {
 		//select note, count(id) as number, sum(amount), avg(amount), max(amount), min(amount)  from expenses where user_owner = 1 group by note order by number DESC;
 		try {
 			$query = $this->database->select()
-				->from(array('e' => 'expenses'), array('note', 'count(id) as number', 'avg(amount)', 'max(amount)', 'min(amount)'))
+				->from(array('e' => $this->_name), array('note', 'count(id) as number', 'avg(amount)', 'max(amount)', 'min(amount)'))
 				->where('user_owner = ?', $i_userOwner)
+                ->where('amount < 0')
 				->group('note')
 				->order('number DESC')
 				->limit(10);
@@ -256,6 +262,23 @@ class Expenses extends Zend_Db_Table_Abstract {
 		}
 		return $rows;
 	}
-}
 
-?>
+    /**
+     * @param int $i_dateLimit
+     * @param string $s_category
+     * @return mixed
+     */
+    public function getMonthExpensesData($i_userId, $i_dateLimit, $s_category) {
+        $s_query = $this->database->select()
+            ->from($this->_name, array('YEAR(date) as year','MONTH(date) as month','sum(amount) as amount'))
+            ->where('in_sum = 1')
+            ->where('user_owner = '.$i_userId)
+            ->where('date >= "'.$i_dateLimit.'"')
+            ->where($s_category)
+            ->group('MONTH(date), YEAR(date)')
+            ->order('YEAR(date), MONTH(date)');
+
+        $o_rows = $this->database->fetchAll($s_query);
+        return $o_rows;
+    }
+}
