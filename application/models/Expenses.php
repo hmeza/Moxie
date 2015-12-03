@@ -183,19 +183,14 @@ class Expenses extends Zend_Db_Table_Abstract {
 			if ($st_params == null) {
 				$query = $this->database->select()
 				->from($this->_name,"in_sum")
-				->where("id = ".$i_expensePK);
+				->where("id = ?", $i_expensePK);
 				$stmt = $this->database->query($query);
 				$result = $stmt->fetchAll();
 				$result = $result[0];
-				if ($result['in_sum'] == '1') {
-					$up = 0;
-				}
-				else {
-					$up = 1;
-				}
-	
+                $up = ($result['in_sum'] == '1') ? 0 : 1;
+
 				$where[] = "id = ".$i_expensePK;
-				$query = $this->database->update($this->_name, array("in_sum"=>$up), $where);
+				$this->database->update($this->_name, array("in_sum"=>$up), $where);
 			}
 			else {
 				$st_data = array(
@@ -275,10 +270,41 @@ class Expenses extends Zend_Db_Table_Abstract {
             ->where('user_owner = '.$i_userId)
             ->where('date >= "'.$i_dateLimit.'"')
             ->where($s_category)
+            ->where('amount < 0')
             ->group('MONTH(date), YEAR(date)')
             ->order('YEAR(date), MONTH(date)');
 
         $o_rows = $this->database->fetchAll($s_query);
         return $o_rows;
+    }
+
+    public function getSum($userId, $key) {
+        $s_select = $this->database->select()
+            ->from($this->_name,
+                array(
+                    new Zend_Db_Expr('-SUM(amount)')
+                )
+            )
+            ->where("user_owner = ".$userId)
+            ->where("category = ".$key)
+            ->where('amount < 0');
+        $st_data = $this->database->fetchRow($s_select);
+        return $st_data;
+    }
+
+    public function getStats($userId, $key) {
+        $s_select = $this->database->select()
+            ->from($this->_name,
+                array(
+                    new Zend_Db_Expr('-SUM(amount) as sum'),
+                    new Zend_Db_Expr('AVG(amount) as avg')
+                )
+            )
+            ->where("user_owner = ".$userId)
+            ->where("category = ".$key)
+            ->where("YEAR(date) = ".date('Y'))
+            ->where('amount < 0');
+        $st_data = $this->database->fetchRow($s_select);
+        return $st_data;
     }
 }

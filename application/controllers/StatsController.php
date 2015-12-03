@@ -23,33 +23,18 @@ class StatsController extends Zend_Controller_Action {
 	public function indexAction() {
 		$incomeStatsByCategory = $this->categories->getCategoriesForView(Categories::BOTH);
 		$data = array();
-		$db = Zend_Registry::get('db');
 		foreach ($incomeStatsByCategory as $key => $value) {
 			$data[$key]['index'] = $key;
 			$data[$key]['name'] = $value;
-			$s_select = $db->select()
-				->from('expenses',
-					array(
-						new Zend_Db_Expr('SUM(amount)')
-					)
-				)
-				->where("user_owner = ".$_SESSION['user_id'])
-				->where("category = ".$key);
-			$st_data = $db->fetchRow($s_select);
+
+            $st_data = $this->expenses->getSum($_SESSION['user_id'], $key);
+
 			$data[$key]['sumtotal'] = $st_data['SUM(amount)'];
-			$s_select = $db->select()
-				->from('expenses',
-					array(
-						new Zend_Db_Expr('SUM(amount)'),
-						new Zend_Db_Expr('AVG(amount)')
-					)
-				)
-				->where("user_owner = ".$_SESSION['user_id'])
-				->where("category = ".$key)
-				->where("YEAR(expense_date) = ".date('Y'));
-			$st_data = $db->fetchRow($s_select);
-			$data[$key]['sumyear'] = $st_data['SUM(amount)'];
-			$data[$key]['avgyear'] = $st_data['AVG(amount)'];
+
+            $st_data = $this->expenses->getStats($_SESSION['user_id'], $key);
+
+			$data[$key]['sumyear'] = $st_data['sum'];
+			$data[$key]['avgyear'] = $st_data['avg'];
 		}
 		// Get all categories, expenses and incomes from current year
 		$expenses = array();
@@ -74,4 +59,3 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('per_item_data', $st_perItemData);
 	}
 }
-?>
