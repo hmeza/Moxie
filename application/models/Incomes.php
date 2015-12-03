@@ -2,7 +2,7 @@
 
 class Incomes extends Zend_Db_Table_Abstract {
 	
-	protected $_name = 'incomes';
+	protected $_name = 'transactions';
 	protected $_primary = 'id';
 	
 	public function __construct() {
@@ -25,7 +25,7 @@ class Incomes extends Zend_Db_Table_Abstract {
 		if ($i_year==0) $i_year = date('Y');
 		$s_category = ($i_category != 0) ? "i.category = ".$i_category : "1=1";
 		$query = $this->_db->select()
-		->from(array('i'=>'incomes'),array(
+		    ->from(array('i'=> $this->_name),array(
 					'id'	=>	'i.id',
 					'user_owner'	=>	'i.user_owner',
 					'amount'		=>	'i.amount',
@@ -33,19 +33,36 @@ class Incomes extends Zend_Db_Table_Abstract {
 					'date'			=>	'i.date',
 					'in_sum'		=>	'i.in_sum'
 					))
-					->joinLeft(array('c'=>'categories'), 'c.id = i.category', array(
-					'name'	=>	'c.name',
-					'description'	=>	'c.description',
-					'category'	=> 'c.id'
-					))
-					->where('YEAR(i.date) = '.$i_year)
-					->where($s_month)
-					->where('i.user_owner = '.$user_id)
-					->where($s_category)
-					->order('i.date asc');
-					$stmt = $this->_db->query($query);
-					$result = $stmt->fetchAll();
-					return $result;
+            ->joinLeft(array('c'=>'categories'), 'c.id = i.category', array(
+            'name'	=>	'c.name',
+            'description'	=>	'c.description',
+            'category'	=> 'c.id'
+            ))
+            ->where('YEAR(i.date) = '.$i_year)
+            ->where($s_month)
+            ->where('i.user_owner = '.$user_id)
+            ->where($s_category)
+            ->where('amount >= 0')       // incomes only
+            ->order('i.date asc');
+        $stmt = $this->_db->query($query);
+        $result = $stmt->fetchAll();
+        return $result;
 	}
+
+    /**
+     * @param int $userId
+     * @return mixed
+     */
+    public function getYearlyIncome($userId) {
+        $s_select = $this->_db->select()
+            ->from($this->_name,array('sum(amount) as amount','YEAR(date) as date'))
+            ->where('in_sum = 1')
+            ->where('user_owner = ?', $userId)
+            ->where('amount >= 0')
+            ->group('YEAR(date)')
+            ->order('YEAR(date)');
+        $o_rows = $this->_db->fetchAll($s_select);
+        return $o_rows;
+    }
 }
 ?>

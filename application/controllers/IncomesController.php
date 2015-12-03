@@ -2,6 +2,7 @@
 /** Zend_Controller_Action */
 class IncomesController extends Zend_Controller_Action
 {
+    /** @var Incomes */
 	private $incomes;
 	
 	public function init() {
@@ -82,15 +83,7 @@ class IncomesController extends Zend_Controller_Action
 	public function getYearlyIncome() {
 		global $st_lang;
 		
-		$db = Zend_Registry::get('db');
-	
-		$s_select = $db->select()
-			->from('incomes',array('sum(amount) as amount','YEAR(date) as date'))
-			->where('in_sum = 1')
-			->where('user_owner = '.$_SESSION['user_id'])
-			->group('YEAR(date)')
-			->order('YEAR(date)');
-		$o_rows = $db->fetchAll($s_select);
+        $o_rows = $this->incomes->getYearlyIncome($_SESSION['user_id']);
 	
 		$st_data = array(array($st_lang['incomes_date'], $st_lang['expenses_amount']));
 		foreach($o_rows as $key => $value) {
