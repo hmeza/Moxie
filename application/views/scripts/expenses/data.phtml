@@ -70,7 +70,7 @@ foreach ($this->list as $key=>$value) {
 
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
-	$expense_date = date('d-m-Y', strtotime($value['expense_date']));
+	$expense_date = date('d-m-Y', strtotime($value['date']));
 	
 	echo '
 <tr id="tr'.$value['id'].'">
