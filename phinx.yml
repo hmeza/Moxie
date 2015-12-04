@@ -8,8 +8,8 @@ environments:
         adapter: mysql
         host: 127.0.0.1
         name: moxie
-        user: username
-        pass: password
+        user: root
+        pass: '0nr3fn1'
         port: 3306
         charset: utf8
 
@@ -17,7 +17,7 @@ environments:
         adapter: mysql
         host: 127.0.0.1
         name: moxie
-        user: username
-        pass: password
+        user: root
+        pass: '0nr3fn1'
         port: 3306
         charset: utf8
