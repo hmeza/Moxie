@@ -1,11 +1,12 @@
 <?php
 class StatsController extends Zend_Controller_Action {
-	/**
-	 * @var Expenses
-	 */
+	/** @var Expenses */
 	private $expenses;
+    /** @var Incomes */
 	private $incomes;
+    /** @var Categories */
 	private $categories;
+    /** @var Budgets */
 	private $budgets;
 		
 	public function init() {
@@ -29,7 +30,7 @@ class StatsController extends Zend_Controller_Action {
 
             $st_data = $this->expenses->getSum($_SESSION['user_id'], $key);
 
-			$data[$key]['sumtotal'] = $st_data['SUM(amount)'];
+			$data[$key]['sumtotal'] = $st_data['sum'];
 
             $st_data = $this->expenses->getStats($_SESSION['user_id'], $key);
 
