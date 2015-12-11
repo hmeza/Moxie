@@ -91,7 +91,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 				->setIntegrityCheck(false)
 				->from(array('e'=> $this->_name),
 						array(
-								'sum(e.amount)'	=>	'-sum(e.amount)',
+								'sum(e.amount)'	=>	new Zend_Db_Expr('-sum(e.amount)'),
 						))
 				->join(array('c'=>'categories'),'',array(
 						'id'		=>	'c.id',
@@ -128,7 +128,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 				->from(array('e'=> $this->_name),array(
 						'id'			=>	'e.id',
 						'user_owner'	=>	'e.user_owner',
-						'amount'		=>	'-e.amount',
+						'amount'		=>	new Zend_Db_Expr('-e.amount'),
 						'note'			=>	'e.note',
 						'date'	=>	'e.date',
 						'in_sum'		=>	'e.in_sum',
@@ -139,6 +139,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 			$stmt = $this->database->query($query);
 			$result = $stmt->fetch();
 		} catch (Exception $e) {
+			error_log($e->getMessage(),3,'/tmp/hmeza.log');
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 		return $result;
@@ -194,7 +195,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 			}
 			else {
 				$st_data = array(
-					'amount'	=>	$st_params['amount'],
+					'amount'	=>	-$st_params['amount'],
 					'category'	=>	$st_params['category'],
 					'note'		=>	$st_params['note'],
 					'date'	=>	$st_params['date']
