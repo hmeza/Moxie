@@ -1,8 +1,10 @@
 <script type="text/javascript" language="text/javascript">
 	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
 	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
-	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+<?php echo (isset($this->month) ? $this->month : date('n')); ?>+"/year/"+<?php echo $this->year; ?>;
-
+	var settingsMonth = <?php echo (isset($this->month) ? $this->month : date('n')); ?>;
+	var settingsYear = <?php echo $this->year; ?>;
+	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+settingsMonth+"/year/"+settingsYear;
+	console.log(getmonthUrl);
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
