@@ -3,8 +3,8 @@ session_start();
 date_default_timezone_set("Europe/Madrid");
 define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/application'));
 define('APPLICATION_ENV', 'production');
-include_once 'Zend/Application.php';
-set_include_path(get_include_path().PATH_SEPARATOR."./lib".PATH_SEPARATOR."./Zend/");
+include_once 'vendor/zendframework/zendframework1/library/Zend/Application.php';
+set_include_path(get_include_path().PATH_SEPARATOR."./vendor/zendframework/zendframework1/library");
 
 function __autoloader($s_originalClass) {
 	@include_once $s_originalClass;

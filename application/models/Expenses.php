@@ -30,7 +30,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 		->from(array('e'=>$this->_name),array(
 					'id'	=>	'e.id',
 					'user_owner'	=>	'e.user_owner',
-					'amount'		=>	'-(e.amount)',
+					'amount'		=>	new Zend_Db_Expr('-(e.amount)'),
 					'note'			=>	'e.note',
 					'date'	=>	'e.date',
 					'in_sum'		=>	'e.in_sum'
@@ -63,7 +63,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 				->setIntegrityCheck(false)
 				->from(array('e'=> $this->_name),
 						array(
-								'sum(e.amount)' =>      '-sum(e.amount)'
+								'sum(e.amount)' =>     new Zend_Db_Expr('-sum(e.amount)')
 						))
 				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
 						'id'            =>      'c.id',
@@ -265,14 +265,18 @@ class Expenses extends Zend_Db_Table_Abstract {
      */
     public function getMonthExpensesData($i_userId, $i_dateLimit, $s_category) {
         $s_query = $this->database->select()
-            ->from($this->_name, array('YEAR(date) as year','MONTH(date) as month','-sum(amount) as amount'))
+            ->from($this->_name, array(
+		            'year' => new Zend_Db_Expr('YEAR('.$this->_name.'.date)'),
+		            'month' => new Zend_Db_Expr('MONTH('.$this->_name.'.date)'),
+		            'amount' => new Zend_Db_Expr('-sum('.$this->_name.'.amount)'))
+            )
             ->where('in_sum = 1')
             ->where('user_owner = '.$i_userId)
             ->where('date >= "'.$i_dateLimit.'"')
             ->where($s_category)
             ->where('amount < 0')
-            ->group('MONTH(date), YEAR(date)')
-            ->order('YEAR(date), MONTH(date)');
+            ->group(new Zend_Db_Expr('MONTH(date)'), new Zend_Db_Expr('YEAR(date)'))
+            ->order(new Zend_Db_Expr('YEAR(date)'), new Zend_Db_Expr('MONTH(date)'));
 
         $o_rows = $this->database->fetchAll($s_query);
         return $o_rows;
