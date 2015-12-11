@@ -157,13 +157,13 @@ class Expenses extends Zend_Db_Table_Abstract {
 	public function addExpense($user_id,$date,$amount,$category,$note) {
 		$st_data = array(
 			'user_owner'	=>	$user_id,
-			'amount'		=>	$amount,
+			'amount'		=>	-$amount,
 			'category'		=>	$category,
 			'note'			=>	$note,
 			'date'	=>	$date
 		);
 		try {
-			$this->database->insert($this->_name,$st_data);
+			$this->insert($st_data);
 		}
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
