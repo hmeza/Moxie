@@ -26,14 +26,16 @@ if (isset($i_expensePK)) {
 <?php
 	echo $this->form->getElement('user_owner');
 	echo $this->form->getElement('id');
+	$amount = $this->form->getValue('amount');
 }
 else {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">';
+	$amount = '';
 }
 ?>
 <dt id="amount-label"><label for="amount" class="optional"><?php echo $st_lang['expenses_amount']; ?></label></dt>
 <dd>
-<input type="number" id="amount" name="amount" step="any" value="<?php echo $this->form->getValue('amount'); ?>">
+<input type="number" id="amount" name="amount" step="any" value="<?php echo $amount; ?>">
 </dd>
 <?php
 
