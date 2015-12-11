@@ -257,6 +257,14 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 .moxie_note {
 }
 
+.moxie_login_header {
+}
+
+.moxie_login_body {
+	width: 100%;
+	display:none;
+}
+
 
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
@@ -279,6 +287,20 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	legend {
 		color:#0b77b7;
 		font-size:1.2em;
+	}
+
+	.moxie_login_header {
+		display:none;
+	}
+
+	.moxie_login_body {
+		font-size: x-large;
+		display: block;
+	}
+
+	.moxie_login_body_table {
+		font-size: larger;
+		width: 50%;
 	}
 
 	.moxie-submenu {
@@ -322,7 +344,24 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 		padding: 1em;
 		border: 1px solid #eee;
 		margin: 1em 0em 1em 0em;
-		width: 27em;
+		width: 90%;
+	}
+
+	.moxie_login_header {
+		display:none;
+	}
+
+	.moxie_login_body {
+		display: block;
+	}
+
+	.moxie_login_body_table {
+		font-size: larger;
+		width: 50%;
+	}
+
+	table, label {
+		font-size: larger;
 	}
 
 	.moxie-left {

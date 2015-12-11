@@ -29,10 +29,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <body>
 
 <!-- this does not come from index.php -->
+
 <table width=100%>
 <tr>
 <td valign="top" class="moxietitle" width="233" height="65" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
-<td align="right">
+<td align="right" class="moxie_login_header">
 <?php
 global $st_lang;
 if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
