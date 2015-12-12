@@ -1,7 +1,7 @@
 * {margin:0; padding:0;}
 
 html {
-	font: 90%/1.3 arial,sans-serif;
+	font: 90% arial,sans-serif;
 	padding:2px;
 	background:#ffffff;
 }
@@ -10,7 +10,6 @@ form {
 	padding:1em;
 	border:1px solid #eee;
 	margin:1em;
-	width:27em;
 }
 fieldset div {
 	margin:0.3em 0;
@@ -264,7 +263,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	width: 100%;
 	display:none;
 }
-
 
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
