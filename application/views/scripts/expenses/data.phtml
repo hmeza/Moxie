@@ -48,21 +48,22 @@ echo '<div class="date">'.$this->form->getValue('date').'</div>';
     <span class='selectArrow'>&#9660</span>
     <div class="selectOptions" >
 <?php
+$values = $this->form->getElement('category')->getValue();
 foreach($this->form->getElement('category') as $key => $option) {
+    $selectedSpanId = (!empty($values)) ? $values[0] : null;
 	if($key == "options") {
 		foreach($option as $key2 => $option2) {
-			echo "<span class='selectOption' value='".$key2."'>".$option2."</span>";
+            $selectedSpan = ($selectedSpanId == $key2) ? " selectedSpan" : "";
+			echo "<span class='selectOption".$selectedSpan."' value='".$key2."'>".$option2."</span>";
 		}
 	}
 }
 ?>
     </div>
 </div>
-<input type="hidden" name="category" id="category" value=""/>
+<input type="hidden" name="category" id="category" value="<?php echo $selectedSpanId; ?>"/>
 </dd>
 <?php
-/*echo $this->form->getElement('note');
-echo '<div class="date">'.$this->form->getValue('date').'</div>';*/
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
 	echo '<input type="button" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . $s_dateGet . '")\'/>';

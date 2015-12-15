@@ -73,4 +73,11 @@ function enableSelectBoxes(){
             $('#category').val($(this).attr('value'));
         });
     });
+
+    if($(".selectedSpan")[0]) {
+        spanText = $(".selectedSpan").text();
+        spanValue = $(".selectedSpan").attr('value');
+        $(".selected").text(spanText);
+        $('#category').val(spanValue);
+    }
 }
