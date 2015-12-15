@@ -407,63 +407,13 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	}
 
 	.moxie_amount {
-		width: 150px;
+		width: 34%;
+		height: 40px;
 	}
 
 	.moxie-container {
 		width: 100%;
 	}
-
-	/*
-	.moxie-data {
-		width: 100%;
-	}
-
-	.moxie-left {
-		width: 100%;
-	}
-
-	.moxie-right {
-		width: 100%;
-	}
-
-	.list td {
-		font-size:38px;
-		padding: 20px 10px 20px 10px;
-	}
-
-	.moxie_form {
-		padding: 0px;
-		border: 0px;
-		font-size: 45px;
-		margin: 0px;
-		width:100%;
-	}
-
-	.my-checkbox {
-		-ms-transform: scale(3); /* IE */
-/*		-moz-transform: scale(3); /* FF */
-	/*		-webkit-transform: scale(3); /* Safari and Chrome */
-	/*		-o-transform: scale(3); /* Opera */
-/*	}
-
-	div.moxieicon {
-		width: 50px;
-		height: 50px;
-	}
-
-	div.moxieedit {
-		background:url("/img/edit.png") no-repeat;
-		background-size: 50px;
-	}
-	div:hover.moxieedit {
-		background:url("/img/edit_hover.png") no-repeat;
-		background-size: 50px;
-	}
-
-	a {
-		font-size: 32px;
-	}*/
 }
 
 .moxie-submenu {
