@@ -264,6 +264,72 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	display:none;
 }
 
+/*** pseudo-select box ***/
+div.selectBox {
+    position:relative;
+    display:inline-block;
+    cursor:default;
+    text-align:left;
+    clear:both;
+    color:#888;
+}
+span.selected {
+    width:116px;
+    padding: 0.15em;
+    text-indent:2px;
+    border:1px solid #ccc;
+    border-right:none;
+    background:#f6f6f6;
+    overflow:hidden;
+}
+span.selectArrow {
+    width:26px;
+    height: 18px;
+    padding: 2px 0 0 0;
+    border:1px solid #60abf8;
+    text-align:center;
+    font-size:inherit;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    color: #bbb;
+    background:#4096ee;
+}
+
+span.selectArrow,span.selected {
+    position:relative;
+    float:left;
+    z-index:300000000;
+}
+div.selectOptions {
+    position:absolute;
+    top:28px;
+    left:0;
+    width:94%;
+    border:1px solid #ccc;
+    border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;
+    overflow:hidden;
+    background:#f6f6f6;
+    padding-top:2px;
+    display:none;
+}
+
+span.selectOption {
+    display:block;
+    width:80%;
+    line-height:20px;
+    padding:5px 10%;
+}
+
+span.selectOption:hover {
+    color:#f6f6f6;
+    background:#4096ee;
+}
+
+
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
 		width: 100%;
@@ -413,6 +479,21 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 	.moxie-container {
 		width: 100%;
+	}
+
+	
+	div.selectBox {
+		width: 97%;
+		line-height: 30px;
+	}
+	
+	span.selected {
+		text-indent: 20px;
+		width:85%;
+	}
+
+	span.selectArrow,span.selected {
+		height: 34px;
 	}
 }
 

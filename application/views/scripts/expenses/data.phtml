@@ -36,12 +36,62 @@ else {
 <dd>
 <input type="number" id="amount" name="amount" step="any" placeholder="0,00" value="<?php echo $amount; ?>">
 </dd>
-<?php
 
-echo $this->form->getElement('category');
-echo "<br>\n";
+<?php
 echo $this->form->getElement('note');
 echo '<div class="date">'.$this->form->getValue('date').'</div>';
+?>
+<script>
+$(document).ready(function() {
+    enableSelectBoxes();
+});
+
+	function enableSelectBoxes(){
+		$('div.selectBox').each(function(){
+			$(this).children('span.selected').html($(this).children('div.selectOptions').children('span.selectOption:first').html());
+			$(this).attr('value',$(this).children('div.selectOptions').children('span.selectOption:first').attr('value'));
+					
+			$(this).children('span.selected,span.selectArrow').click(function(){
+				if($(this).parent().children('div.selectOptions').css('display') == 'none'){
+					$(this).parent().children('div.selectOptions').css('display','block');
+				}
+				else
+				{
+					$(this).parent().children('div.selectOptions').css('display','none');
+				}
+			});
+					
+			$(this).find('span.selectOption').click(function(){
+				$(this).parent().css('display','none');
+				$(this).closest('div.selectBox').attr('value',$(this).attr('value'));
+				$(this).parent().siblings('span.selected').html($(this).html());
+				$('#category').val($(this).attr('value'));
+			});
+		});
+	} 
+</script>
+<dt id="category-label"><label for="category" class="optional">Categoría</label></dt
+<dd id="category-element">
+<div class='selectBox'>
+    <span class='selected'></span>
+    <span class='selectArrow'>&#9660</span>
+    <div class="selectOptions" >
+<?php
+foreach($this->form->getElement('category') as $key => $option) {
+	if($key == "options") {
+		foreach($option as $key2 => $option2) {
+			echo "<span class='selectOption' value='".$key2."'>".$option2."</span>";
+		}
+	}
+}
+?>
+    </div>
+</div>
+<input type="hidden" name="category" id="category" value=""/>
+</dd>
+<?php
+/*echo $this->form->getElement('note');
+echo '<div class="date">'.$this->form->getValue('date').'</div>';*/
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
 	echo '<input type="button" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . $s_dateGet . '")\'/>';
