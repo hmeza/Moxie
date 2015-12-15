@@ -18,10 +18,7 @@ $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getElement('in_sum') == 1) ? "checked": "";
 if (isset($i_expensePK)) {
 ?>
-<!--<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>-->
-<?php
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post" class="moxie_form">';
-?>
+	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post" class="moxie_form">
 	<div>Check/uncheck to show in totals <input type="checkbox" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>"/></div>
 <?php
 	echo $this->form->getElement('user_owner');
@@ -29,7 +26,9 @@ if (isset($i_expensePK)) {
 	$amount = $this->form->getValue('amount');
 }
 else {
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">';
+?>
+	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">
+<?php
 	$amount = '';
 }
 ?>
@@ -48,14 +47,13 @@ if(isset($i_expensePK)) {
 	echo '<input type="button" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . $s_dateGet . '")\'/>';
 }
 echo '</form>';
-
-echo '
+?>
 <table class="list moxie moxie-data" id="mytable">
 <tr>
 <td colspan=4 align=right>
 Filtrar por <select id="category_filter" onchange="filter();">
 <option value="0">---</option>
-';
+<?php
 foreach ($this->form->getElement('category') as $key => $value) {
 	if ($key == "options") {
 		foreach ($value as $key2 => $value2) {
