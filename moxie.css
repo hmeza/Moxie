@@ -238,7 +238,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	padding: 14px;
 	border: 1px solid #eee;
 	margin: 10px;
-	/*width:80%;*/
 }
 
 .moxie_edit {
@@ -262,6 +261,9 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 .moxie_login_body {
 	width: 100%;
 	display:none;
+}
+
+.moxie_login_button {
 }
 
 /*** pseudo-select box ***/
@@ -430,11 +432,6 @@ span.selectOption:hover {
 
 	.moxie_login_body_table {
 		padding: 20px 0 0 0;
-		width: 100%;
-	}
-
-	.moxie_login_button {
-		padding: 2px;
 		width: 100%;
 	}
 
