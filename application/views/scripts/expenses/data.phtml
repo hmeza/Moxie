@@ -94,7 +94,6 @@ $f_currentAmount = 0;
 $b_showTotalAmount = false;
 foreach ($this->list as $key=>$value) {
 	$i++;
-	$bgcolor = ($i % 2 == 0) ? "background: #FFFFFF" : "background: #D0E8F4";
 
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
@@ -102,11 +101,11 @@ foreach ($this->list as $key=>$value) {
 	
 	echo '
 <tr id="tr'.$value['id'].'">
-<td class="list moxie_edit" style="'.$bgcolor.'"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-<td class="list moxie_category" style="'.$bgcolor.';"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<!--<td align="center" class="list moxie_date" style="'.$bgcolor.'">'.$expense_date.'</td>-->
-<td class="list moxie_note" style="'.$bgcolor.';"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
-<td align="right" class="list moxie_amount" style="'.$bgcolor.';"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td class="list moxie_edit"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td class="list moxie_category"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<!--<td align="center" class="list moxie_date">'.$expense_date.'</td>-->
+<td class="list moxie_note"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
+<td align="right" class="list moxie_amount"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';
 
 	$f_totalAmount = $f_totalAmount + $value['amount'];

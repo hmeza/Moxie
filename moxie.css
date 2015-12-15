@@ -443,7 +443,7 @@ span.selectOption:hover {
 	}
 
 	input {
-		width: 90%;
+		width: 100%;
 	}
 
 	.moxie-left {
@@ -465,6 +465,17 @@ span.selectOption:hover {
 		width: 100%;
 		font-size: 30px;
 	}
+
+    .moxie_note td {
+        padding-left: 5px;
+    }
+
+    .list td {
+        border-top: 0px;
+        border-left: none 0px;
+        border-right: none 0px #ffffff;
+        border-bottom: 1px solid #dddddd;
+    }
 
 	.my-checkbox {
 		zoom: 1.1;
