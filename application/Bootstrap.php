@@ -80,32 +80,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 	
 	/**
-	 * Detect type of browser
-	 */
-	protected function _initBrowserDetection() {
-		// Detect mobile
-		if(!isset($_SESSION['device'])) {
-			include 'application/3rdparty/mobile-detect/Mobile_Detect.php';
-			$detect = new Mobile_Detect();
-		
-			if($detect->isMobile() && !$detect->isTablet())
-				$_SESSION['device'] = 'mobile';
-			else if($detect->isTablet())
-				$_SESSION['device'] = 'tablet';
-			else
-				$_SESSION['device'] = 'desktop';
-		}
-		else {
-			if ($_SESSION['device'] == "mobile") {
-			}
-			if($_SESSION['device'] == "tablet") {
-			}
-		}
-		// Remove this after developing
-		//$_SESSION['device'] = 'mobile';
-	}
-
-	/**
 	 * Start Moxie
 	 */
 	protected function _initApp() {
