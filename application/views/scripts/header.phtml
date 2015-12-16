@@ -1,9 +1,22 @@
+<header>
 <table width=100%>
 <tr>
 <td valign="top" class="moxietitle" width="233" height="65" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
 <td align="right" class="moxie_login_header">
 <?php
 global $st_lang;
+
+$url = $_SERVER['REQUEST_URI'];
+$st_url = explode("/", $url);
+$st_urls = array(
+    'categories' => '/categories/index',
+    'incomes' => '/incomes/index',
+    'expenses' => '/expenses/index',
+    'stats' => '/stats/index',
+    'users' => '/users/index'
+);
+$settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
+
 if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
 ?>
         <form name="login" id="login" action="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/login" method="POST">
@@ -22,26 +35,26 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
 <?php
 }
 else {
-        echo $_SESSION['user_name'].'<br>';
-}
+    ?>
+    <nav>
+        <ul>
+        <?php
+        echo '<li>'.$_SESSION['user_name'].'</li>';
+        foreach($st_urls as $key => $value) {
+            echo '<li><a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
+        }
+        ?>
+        </ul>
+    </nav>
+    <?php
+}g
 ?>
 </td>
 </tr>
 </table>
-
+</header>
 <!-- web menu -->
 <?php
-        global $st_lang;
-
-        $url = $_SERVER['REQUEST_URI'];
-        $st_url = explode("/", $url);
-        $st_urls = array(
-                'categories' => '/categories/index',
-                'incomes' => '/incomes/index',
-                'expenses' => '/expenses/index',
-                'stats' => '/stats/index',
-                'users' => '/users/index'
-        );
         $st_lang['users'] = $st_lang['users_my_account'];
         $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
 
