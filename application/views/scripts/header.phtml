@@ -36,12 +36,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] == 0) {
 }
 else {
     ?>
-    <nav>
+    <input type="checkbox" class="checkbox" id="menu-toogle"/>
+    <label for="menu-toogle" class="menu-toogle"></label>
+    <nav class="nav">
         <ul>
         <?php
-        echo '<li>'.$_SESSION['user_name'].'</li>';
+        echo '<li class="nav__item">'.$_SESSION['user_name'].'</li>';
         foreach($st_urls as $key => $value) {
-            echo '<li><a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
+            echo '<li class="nav__item"><a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
         }
         ?>
         </ul>
