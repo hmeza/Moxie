@@ -184,13 +184,13 @@ div.moxieedit {
 div:hover.moxieedit {
 	background:url("/img/edit_hover.png") no-repeat;
 }
-div.moxiedelete {
-	background:url("/img/delete.png") no-repeat;
+input.moxiedelete {
+	/*background:url("/img/delete.png") no-repeat;
+	delete-hover.png*/
 	display:inline-block;
 	border-top: 5px;
-}
-div:hover.moxiedelete {
-	background:url("/img/delete_hover.png") no-repeat;
+    margin-top: 5px;
+    background-color: #ff9999;
 }
 
 tr.alt td.alt {
