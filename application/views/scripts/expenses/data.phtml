@@ -87,13 +87,10 @@ foreach ($this->form->getElement('category') as $key => $value) {
 </td>
 </tr>
 <?php
-$i = 0;
 $f_totalAmount = 0;
 $f_currentAmount = 0;
 $b_showTotalAmount = false;
 foreach ($this->list as $key=>$value) {
-	$i++;
-
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	$expense_date = date('d-m-Y', strtotime($value['date']));
@@ -102,7 +99,6 @@ foreach ($this->list as $key=>$value) {
 <tr id="tr'.$value['id'].'">
 <td class="list moxie_edit"><a class="moxieedit" href="/expenses/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <td class="list moxie_category"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<!--<td align="center" class="list moxie_date">'.$expense_date.'</td>-->
 <td class="list moxie_note"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
 <td align="right" class="list moxie_amount"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';

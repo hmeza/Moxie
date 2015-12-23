@@ -2,7 +2,10 @@
 <!-- Form + expenses list --> 
 <tr>
 <td>
-<?php global $st_lang; ?>
+<?php
+global $st_lang;
+$editSlug = '/incomes/edit/id/';
+?>
 <div width="100%">
 <a href="/incomes/index/year/<?php echo $this->year-1; ?>">Last</a>
 <a href="/incomes/index/year/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> <?php echo $st_lang['expenses_last_month']; ?></a>
@@ -41,30 +44,57 @@ echo '</form>';
 </td>
 </table>
 
-<table border=1 width=600 class="list moxie" id="mytable">
-
+<!--<table border=1 width=600 class="list moxie" id="mytable">-->
+<table class="list moxie moxie-data" id="mytable">
+    <tr>
+        <td colspan=4 align=right>
+            Filtrar por <select id="category_filter" onchange="filter();">
+                <option value="0">---</option>
+                <?php
+                foreach ($this->form->getElement('category') as $key => $value) {
+                    if ($key == "options") {
+                        foreach ($value as $key2 => $value2) {
+                            echo '<option value="'.$key2.'">'.$value2.'</option>';
+                        }
+                    }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
 <?php
 $f_totalAmount = 0;
+$f_currentAmount = 0;
+$b_showTotalAmount = false;
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == 1) ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	$datetime = explode(" ",$value['date']);
+
 	echo '
 <tr>
 <!--<td class="list"><input type="checkbox" class="my-checkbox" id="'.$value['id'].'" name="'.$value['id'].'" onClick="markLine('.$value['id'].');" '.$checked.'></td>-->
 <!--<td class="list" width="16"><div class="moxieicon moxiedelete" onclick=\'confirmDelete("'.$value['id'].$s_dateGet.'")\'></div></td>-->
-<td class="list" width="16"><a class="moxieedit" href="/incomes/edit/id/'.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-
+<td class="list" width="16"><a class="moxieedit" href="'.$editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <!--<td class="list" align="center">'.$datetime[0].'</td>-->
 <td class="list" align="left">'.$value['name'].'</td>
 <td><div alt="'.$value['note'].'" title="'.$value['note'].'">'.$value['note'].'</div></td>
 <td class="list" align="right">'.number_format($value['amount'],2).' &euro;</td>
 </tr>';
+
 	$f_totalAmount = $f_totalAmount + $value['amount'];
+    $f_currentAmount += ($value['in_sum'] == 1) ? $value['amount'] : 0;
+    $b_showTotalAmount = ($value['in_sum'] != 1) || $b_showTotalAmount;
+}
+
+$s_total = number_format($f_currentAmount,2)." &euro;";
+if($b_showTotalAmount) {
+    $s_total .= '<br><span class="total_amount">'.number_format($f_totalAmount, 2)." &euro;";
 }
 ?>
+
 <tr>
-<td align="right" colspan="4"><?php echo number_format($f_totalAmount,2); ?> &euro;</td>
+<td colspan=4 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
 </tr>
 </table>
 <br><br><br>
