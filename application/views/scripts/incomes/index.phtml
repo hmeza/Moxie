@@ -18,8 +18,10 @@
 <tr>
 <td>
 <?php
-echo $this->partial('incomes/data.phtml',
-					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+echo $this->partial('incomes/data_header.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+echo $this->partial('common/data.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year, 'editSlug'  => '/incomes/edit/id/'));
 ?>
 </td>
 <td valign="top" width=50%>

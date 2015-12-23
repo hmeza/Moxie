@@ -1,0 +1,45 @@
+<table width=100%>
+<!-- Form + expenses list --> 
+<tr>
+<td>
+<?php
+global $st_lang;
+$editSlug = '/incomes/edit/id/';
+?>
+<div width="100%">
+<a href="/incomes/index/year/<?php echo $this->year-1; ?>">Last</a>
+<a href="/incomes/index/year/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> <?php echo $st_lang['expenses_last_month']; ?></a>
+<span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span>
+<a href="/incomes/index/year/<?php echo $this->year+1; ?>">Next</a>
+<a href="/incomes/index/year/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a>
+</div>
+</td>
+    <tr>
+        <td>
+<?php
+$i_incomePK = $this->form->getElement('id');
+if (isset($i_incomePK)) {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
+	echo $this->form->getElement('user_owner');
+	echo $this->form->getElement('id');
+}
+else {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/add" method="post">';
+}
+echo $this->form->getElement('amount');
+echo $this->form->getElement('category');
+echo "\n";
+echo $this->form->getElement('note');
+echo '<div class="date">'.$this->form->getValue('date').'</div>';
+echo $this->form->getElement('submit');
+
+if(isset($i_incomePK)) {
+?>
+<input type="button" class="moxiedelete" onclick='confirmDelete("<?php echo $value['id'].$s_dateGet; ?>")' value="<?php echo "Borrar"; ?>"/>
+<?php
+}
+echo '</form>';
+
+?>
+</td>
+</table>

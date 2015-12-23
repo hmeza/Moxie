@@ -21,8 +21,10 @@
 <div class="moxie-left">
 <a id="data"></a>
 <?php
-echo $this->partial('expenses/data.phtml',
-					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month));
+echo $this->partial('expenses/data_header.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month));
+echo $this->partial('common/data.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month, 'editSlug'  => '/incomes/edit/id/'));
 ?>
 </div>
 <div class="moxie-right">
