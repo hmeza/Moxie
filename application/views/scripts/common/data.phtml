@@ -26,7 +26,7 @@ foreach ($this->list as $key=>$value) {
 	
 	echo '
 <tr id="tr'.$value['id'].'">
-<td class="list moxie_edit"><a class="moxieedit" href="'.$editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td class="list moxie_edit"><a class="moxieedit" href="'.$this->editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <td class="list moxie_category"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
 <td class="list moxie_note"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
 <td align="right" class="list moxie_amount"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
