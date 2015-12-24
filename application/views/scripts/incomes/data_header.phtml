@@ -17,7 +17,7 @@ $editSlug = '/incomes/edit/id/';
     <tr>
         <td>
 <?php
-$i_incomePK = $this->form->getElement('id');
+$i_incomePK = $this->form->getValue('id');
 if (isset($i_incomePK)) {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
 	echo $this->form->getElement('user_owner');
@@ -35,7 +35,7 @@ echo $this->form->getElement('submit');
 
 if(isset($i_incomePK)) {
 ?>
-<input type="button" class="moxiedelete" onclick='confirmDelete("<?php echo $value['id'].$s_dateGet; ?>")' value="<?php echo "Borrar"; ?>"/>
+<input type="button" class="moxiedelete" onclick='confirmDelete("<?php echo $i_incomePK; ?>")' value="<?php echo "Borrar"; ?>"/>
 <?php
 }
 echo '</form>';
