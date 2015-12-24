@@ -1,0 +1,43 @@
+<table width=100%>
+<!-- Form + expenses list --> 
+<tr>
+<td>
+<?php
+global $st_lang;
+$editSlug = '/incomes/edit/id/';
+?>
+<table width="100%">
+<td><a href="/incomes/index/year/<?php echo $this->year-1; ?>"><?php echo $st_lang['incomes_last_year']; ?></a></td>
+<td align="center"><span class="moxie_header_date"><?php echo date("Y", strtotime("01-01-".$this->year)); ?></span></td>
+<td align="right"><a href="/incomes/index/year/<?php echo $this->year+1; ?>"><?php echo $st_lang['incomes_next_year']; ?></a></td>
+</table>
+</td>
+    <tr>
+        <td>
+<?php
+$i_incomePK = $this->form->getValue('id');
+if (isset($i_incomePK)) {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
+	echo $this->form->getElement('user_owner');
+	echo $this->form->getElement('id');
+}
+else {
+	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/add" method="post">';
+}
+echo $this->form->getElement('amount');
+echo $this->form->getElement('category');
+echo "\n";
+echo $this->form->getElement('note');
+echo '<div class="date">'.$this->form->getValue('date').'</div>';
+echo $this->form->getElement('submit');
+
+if(isset($i_incomePK)) {
+?>
+<input type="button" class="moxiedelete" onclick='confirmDelete("<?php echo $i_incomePK; ?>")' value="<?php echo "Borrar"; ?>"/>
+<?php
+}
+echo '</form>';
+
+?>
+</td>
+</table>

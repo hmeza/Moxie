@@ -34,6 +34,8 @@ $st_lang = array(
 	'income_by_years'	=>	'By years',
 	'incomes_yearly'	=>	'Yearly income',
 	'incomes_date'		=>	'Date',
+	'incomes_next_year' => 'Next year',
+	'incomes_last_year' => 'Last year',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorias y presupuesto',

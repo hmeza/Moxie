@@ -13,14 +13,15 @@
 		$('#date_label').html("<?php global $st_lang; echo $st_lang['incomes_date']; ?>");
 	});
 </script>
-</head>
 
 <table>
 <tr>
 <td>
 <?php
-echo $this->partial('incomes/data.phtml',
-					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+echo $this->partial('incomes/data_header.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+echo $this->partial('common/data.phtml',
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year, 'editSlug'  => '/incomes/edit/id/'));
 ?>
 </td>
 <td valign="top" width=50%>
