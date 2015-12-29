@@ -346,6 +346,10 @@ span.selectOption:hover {
 
 
 @media only screen and (min-width: 1060px) {
+	nav {
+		display: none;
+	}
+
 	.moxie-container {
 		width: 100%;
 	}
@@ -366,6 +370,10 @@ span.selectOption:hover {
 	legend {
 		color:#0b77b7;
 		font-size:1.2em;
+	}
+
+	nav {
+		display: none;
 	}
 
 	.moxie_login_header {
@@ -423,6 +431,10 @@ span.selectOption:hover {
 		padding: 0;
 	}
 
+	nav {
+		display: block;
+	}
+
 	legend {
 		color: #0b77b7;
 		font-size: 30px;
@@ -433,6 +445,14 @@ span.selectOption:hover {
 		padding: 5px;
 		border: 1px solid #eee;
 		margin: 5px;
+	}
+
+	.moxie_expenses_form_div {
+		width: 100%;
+	}
+
+	.moxie_expenses_suggest_div {
+		width: 100%;
 	}
 
 	.moxie_login_header {

@@ -12,6 +12,7 @@
 <td><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
 <td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a></td>
 </table>
+<br>
 
 <div id="form">
 <div class="moxie_expenses_form_div" style="float: left">
@@ -73,8 +74,9 @@ if(isset($i_expensePK)) {
 echo '</form>';
 ?>
 </div>
-<div style="float: right;">
-		<?php
+<div class="moxie_expenses_suggest_div" style="float: right;">
+	<?php
+	echo $st_lang['expenses_most_used'];
 		foreach($this->most_frequent_expenses as $expense) {
 			echo '
 		<div class="moxiebutton" onclick="useExpense('.$expense['category_id'].', \''.$expense['note'].'\')">

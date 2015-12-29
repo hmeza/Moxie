@@ -29,6 +29,7 @@ $st_lang = array(
 	'expenses_next_month' => 'Next month',
 	'expenses_last_month' => 'Last month',
 	'expenses_delete'   => 'Delete',
+	'expenses_most_used' => 'Most used expenses',
 	// Incomes
 	'income_stats'		=>	'Income stats',
 	'income_by_years'	=>	'By years',
