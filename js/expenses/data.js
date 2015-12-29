@@ -83,5 +83,10 @@ function enableSelectBoxes() {
 
 function useExpense(category, note) {
 	$('#note').val(note);
-	$('#category select option[value="' + category + '"]').html();
+	$('#category').val(category);
+	$('.selectOption').each(function(e, span) {
+		if($(this).attr('value') == category) {
+			$(this).parent().siblings('span.selected').html($(this).html());
+		}
+	});
 }

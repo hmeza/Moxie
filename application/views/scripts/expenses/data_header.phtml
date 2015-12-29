@@ -12,6 +12,9 @@
 <td><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
 <td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a></td>
 </table>
+
+<div id="form">
+<div class="moxie_expenses_form_div" style="float: left">
 <?php
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getElement('in_sum') == 1) ? "checked": "";
@@ -58,7 +61,7 @@ foreach($this->form->getElement('category') as $key => $option) {
 	}
 }
 ?>
-    </div>
+</div>
 </div>
 <input type="hidden" name="category" id="category" value="<?php echo $selectedSpanId; ?>"/>
 </dd>
@@ -69,3 +72,15 @@ if(isset($i_expensePK)) {
 }
 echo '</form>';
 ?>
+</div>
+<div style="float: right;">
+		<?php
+		foreach($this->most_frequent_expenses as $expense) {
+			echo '
+		<div class="moxiebutton" onclick="useExpense('.$expense['category_id'].', \''.$expense['note'].'\')">
+			'.$expense['note'].' ('.$expense['name'].')
+		</div>';
+		}
+		?>
+	</div>
+</div>

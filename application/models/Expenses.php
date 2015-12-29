@@ -4,6 +4,9 @@
  * Expenses model.
  */
 class Expenses extends Zend_Db_Table_Abstract {
+	/** @var int Number of frequent expenses to retrieve */
+	const MOST_FREQUENT_EXPENSES_LIMIT = 5;
+
 	private $database;
 	protected $_name = 'transactions';
 	protected $_primary = 'id';
@@ -215,22 +218,35 @@ class Expenses extends Zend_Db_Table_Abstract {
 	 * @return array, each position contains number_of_rows, category, note, category_id, name
 	 */
 	public function getMostFrequentExpenses($i_userOwner) {
-		$query = " e.user_owner = 1 group by category,note order by number_of_rows;";
 		try {
-			$query = $this->database->select()
+			$query = $this->select()
+				->setIntegrityCheck(false)
 				->from(array("e" => $this->_name), array("count(e.id) as number_of_rows", "category", "note"))
 				->joinInner(array("c" => "categories"), "c.id = e.category", array("id as category_id", "name"))
 				->where("e.user_owner = ?", $i_userOwner)
-				->where("e.date >= ?", date('Y-m-d H:i:s', strtotime("-3 months")))
                 ->where('amount < 0')
-				->group("category,note")
+				->group(array("e.category", "e.note"))
 				->order("number_of_rows DESC")
 				->limit(self::MOST_FREQUENT_EXPENSES_LIMIT);
-			$query = str_replace("`", "", $query);	
-			$rows = $this->database->fetchAll($query);
+
+			$first_query = clone($query);
+			$first_query = $first_query->where("e.date >= ?", date('Y-m-d H:i:s', strtotime("-2 months")));
+
+			$rows = $this->fetchAll($first_query);
+			if(empty($rows)) {
+				throw new Exception("Empty expenses at first retrieval");
+			}
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage()."\n", 3, '/tmp/hmeza.log');
+			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
+			// try getting all
+			try {
+				$rows = $this->fetchAll($query);
+			}
+			catch(Exception $e) {
+				error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
+				$rows = array();
+			}
 		}
 		return $rows;
 	}
