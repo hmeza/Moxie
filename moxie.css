@@ -23,12 +23,6 @@ a:hover {
 	color: #0202a7;
 }
 
-label {
-	float:left;
-	width:5em;
-	text-align:right;
-	margin-right:1em;
-}
 legend {
 	color:#0b77b7;
 	font-size:1.2em;
