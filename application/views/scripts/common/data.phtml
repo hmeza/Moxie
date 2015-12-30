@@ -1,6 +1,10 @@
 <table class="list moxie moxie-data" style="width: 100%" id="mytable">
 <tr>
-<td colspan=4 align=right>
+<?php
+$exportUrl = $_SERVER['REQUEST_URI']."/to_excel/true";
+?>
+<td colspan=2><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
+<td colspan=2 align=right>
 Filtrar por <select id="category_filter" onchange="filter();">
 <option value="0">---</option>
 <?php

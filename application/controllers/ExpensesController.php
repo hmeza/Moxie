@@ -168,21 +168,51 @@ class ExpensesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_category = $this->getRequest()->getParam('category_filter');
 		$i_category = (isset($i_category)) ? $i_category : 0;
+		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
 		$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
+		$st_list = $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category);
+
+		if($s_toExcel == true) {
+			$this->exportToExcel($st_list);
+		}
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
 		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category));
+		$this->view->assign('list', $st_list);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
 		$this->view->assign('most_frequent_expenses', $this->expenses->getMostFrequentExpenses($_SESSION['user_id']));
+	}
+
+	/**
+	 * Exports to excel the data currently shown in the view.
+	 * @param array|array[] $st_data containing rows with columns date, amount, name and note.
+	 */
+	private function exportToExcel($st_data) {
+		header('Content-Type: text/csv; charset=utf-8');
+		header('Content-Disposition: attachment; filename='.date('Y-m-d').'.csv');
+
+		$output = fopen('php://output', 'w');
+
+		fputcsv($output, array('Fecha', 'Euros', 'Categoria', 'Nota'));
+
+		foreach($st_data as $row) {
+			$outputRow = array(
+				'Fecha' => $row['date'],
+				'Euros' => $row['amount'],
+				'Categoria' => $row['name'],
+				'Nota' => $row['note']
+			);
+			fputcsv($output, $outputRow);
+		}
+		exit(0);
 	}
 	
 	/**
