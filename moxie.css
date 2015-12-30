@@ -38,8 +38,8 @@ legend span {
 	text-align:right;
 }
 input {
-	padding:0.15em;
-	width:8em;
+	padding:2px;
+	width:110px;
 	border:1px solid #ddd;
 	background:#fafafa;
 	font:bold 0.95em arial, sans-serif;
@@ -289,17 +289,18 @@ div.selectBox {
     color:#888;
 }
 span.selected {
-    width:116px;
-    padding: 0.15em;
+    width:110px;
+    padding: 2px 2px 2px 0px;
     text-indent:2px;
     border:1px solid #ccc;
     border-right:none;
     background:#f6f6f6;
     overflow:hidden;
+	font: bold 0.95em arial, sans-serif;
 }
 span.selectArrow {
-    width:26px;
-    height: 18px;
+    width:20px;
+    height: 17px;
     padding: 2px 0 0 0;
     border:1px solid #0b77b7;
     text-align:center;
@@ -322,7 +323,7 @@ div.selectOptions {
     position:absolute;
     top:28px;
     left:0;
-    width:94%;
+    width:95%;
     border:1px solid #ccc;
     border-bottom-right-radius:5px;
     border-bottom-left-radius:5px;
@@ -336,7 +337,8 @@ span.selectOption {
     display:block;
     width:80%;
     line-height:20px;
-    padding:5px 10%;
+    padding:5px 2%;
+	font: bold 0.95em arial, sans-serif;
 }
 
 span.selectOption:hover {
