@@ -22,6 +22,6 @@ echo $this->partial('common/data.phtml',
 <td valign="top" width=50%>
 <?php
 echo $this->partial('incomes/stats.phtml',
-					array('graphData' => $thmoxieis->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
+					array('graphData' => $this->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
 ?>
 </td></tr></table>
