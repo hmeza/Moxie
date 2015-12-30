@@ -39,12 +39,12 @@ else {
 <dd>
 <input type="number" id="amount" name="amount" step="any" placeholder="0,00" value="<?php echo $amount; ?>">
 </dd>
-
 <?php
 echo $this->form->getElement('note');
-echo '<div class="date">'.$this->form->getValue('date').'</div>';
 ?>
-<dt id="category-label"><label for="category" class="optional">Categoría</label></dt
+<dt id="date-label"><label for="date" class="optional">Fecha</label></dt>
+<dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
+<dt id="category-label"><label for="category" class="optional">Categoría</label></dt>
 <dd id="category-element">
 <div class='selectBox'>
     <span class='selected'></span>

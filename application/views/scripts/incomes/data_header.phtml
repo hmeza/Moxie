@@ -28,7 +28,10 @@ echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
 echo "\n";
 echo $this->form->getElement('note');
-echo '<div class="date">'.$this->form->getValue('date').'</div>';
+?>
+<dt id="date-label"><label for="date" class="optional">Fecha</label></dt>
+<dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
+<?php
 echo $this->form->getElement('submit');
 
 if(isset($i_incomePK)) {

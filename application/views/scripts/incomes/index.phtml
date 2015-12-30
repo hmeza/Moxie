@@ -7,11 +7,6 @@
 			window.location="/incomes/delete/id/"+id;
 		}
 	}
-
-	$(document).ready(function() {
-		init();
-		$('#date_label').html("<?php global $st_lang; echo $st_lang['incomes_date']; ?>");
-	});
 </script>
 
 <table>
@@ -27,6 +22,6 @@ echo $this->partial('common/data.phtml',
 <td valign="top" width=50%>
 <?php
 echo $this->partial('incomes/stats.phtml',
-					array('graphData' => $this->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
+					array('graphData' => $thmoxieis->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
 ?>
 </td></tr></table>
