@@ -4,9 +4,34 @@
 <?php
 global $st_lang;
 echo '<h2>'.$st_lang['categories'].'</h2>';
-echo $this->form;
+?>
+<form enctype="application/x-www-form-urlencoded" action="/categories/add" method="post">
+<dl class="zend_form">
+<?php
+echo $this->form->getElement('category');
+echo $this->form->getElement('name');
+echo $this->form->getElement('description');
+?>
+<dt id="type-label"><label class="required">Tipo</label></dt>
+<dd id="type-element">
+	<ul>
+		<li>Gasto<input type="radio" name="type" id="type-1" value="1"></li>
+		<li>Ingreso<input type="radio" name="type" id="type-2" value="2"></li>
+		<li>Ambos<input type="radio" name="type" id="type-3" value="3" checked="checked"></li>
+	</ul>
+<label>Gasto</label>
+<label><input type="radio" name="type" id="type-2" value="2">Ingreso</label>
+<label><input type="radio" name="type" id="type-3" value="3" checked="checked">Ambos</label>
+</dd>
+<br>
+<?php
+echo $this->form->getElement('submit');
+?>
+</dl>
+</form>
 
-echo '<table width=100%>';
+<table width=100%>
+<?php
 foreach ($this->list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
@@ -27,8 +52,8 @@ foreach ($this->list as $key => $value) {
 		echo "</td><tr>";
 	}
 }
-echo '</table>';
 ?>
+</table>
 </td>
 <td valign=top>
 <?php
