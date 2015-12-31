@@ -1,4 +1,5 @@
 <script type="text/javascript">
+<?php global $st_lang; ?>
 function sendForm() {
 	var error_message = "<?php echo $st_lang['myaccount_password_error']?>";
 	if ($("#password").val() == $("#password_check").val()) {
@@ -30,10 +31,3 @@ echo $this->form->language;
 </td>
 </tr>
 </table>
-
-<?php
-echo $this->partial('/categories/index.phtml',
-					array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
-
-echo $this->footer;
-?>
