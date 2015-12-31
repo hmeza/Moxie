@@ -296,6 +296,17 @@ class Expenses extends Zend_Db_Table_Abstract {
             ->order(array(new Zend_Db_Expr('YEAR(date)'), new Zend_Db_Expr('MONTH(date)')));
 
         $o_rows = $this->database->fetchAll($s_query);
+
+	    if(empty($o_rows)) {
+		    // set default values to avoid error on empty data chart
+		    $o_rows = array(
+			    array(
+				    'month' => date('M'),
+				    'year' => date('Y'),
+				    'amount' => 0
+			    )
+		    );
+	    }
         return $o_rows;
     }
 
