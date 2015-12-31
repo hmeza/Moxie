@@ -1,12 +1,10 @@
+<?php
+global $st_lang;
+?>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" language="text/javascript">
-	function confirmDelete(id) {
-		var response;
-		response = confirm("Are you sure you want to delete this income?");
-		if (response == true) {
-			window.location="/incomes/delete/id/"+id;
-		}
-	}
+    var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/incomes/delete/id/";
+    var deleteMessage = "<?php echo $st_lang['incomes_delete_message']; ?>";
 </script>
 
 <table>

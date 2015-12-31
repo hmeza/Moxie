@@ -30,6 +30,7 @@ $st_lang = array(
 	'expenses_last_month' => 'Mes anterior',
 	'expenses_delete'   => 'Borrar',
 	'expenses_most_used' => 'Notas más usadas',
+    'expenses_delete_message' => '¿Borrar este gasto?',
 	// Incomes
 	'incomes_stats'		=>	'Gráfica de ingresos',
 	'incomes_by_years'	=>	'Por años',
@@ -37,6 +38,7 @@ $st_lang = array(
 	'incomes_date'		=>	'Fecha',
 	'incomes_next_year' => 'Año siguiente',
 	'incomes_last_year' => 'Año anterior',
+    'incomes_delete_message' => '¿Borrar este ingreso?',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorías y presupuesto',

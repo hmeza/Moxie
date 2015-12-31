@@ -8,15 +8,6 @@ function filter() {
 	window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
 }
 
-function confirmDelete(id) {
-	var response;
-
-	response = confirm("Are you sure to delete this expense?");
-	if (response == true) {
-        window.location = deleteUrl + id;
-	}
-}
-
 $(document).ready(function() {
     enableSelectBoxes();
 });
