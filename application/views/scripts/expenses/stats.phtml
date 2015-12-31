@@ -3,9 +3,9 @@
 global $st_lang;
 $st_budget = $this->budget;
 
-$s_out = '<center><table class="moxie-stats">
+$s_out = '<table class="moxie-stats">
 <tr><td></td><td align="right">'.$st_lang['expenses_expended'].'</td>';
-if (!empty($st_budget)) $s_out .= '<td width=50>&nbsp;</td><td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
+if (!empty($st_budget)) $s_out .= '<td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
 
 $st_jsonData = array();
 $current = 0;
@@ -22,7 +22,7 @@ foreach ($this->expenses as $key => $data) {
 	$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
 	$s_out .= '<tr><td>'.$category_name.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
 	if(!empty($st_budget)) {
-		$s_out .= '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
+		$s_out .= '<td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
 		$budget_total = $budget_total + $budget_amount;
 	}
 	$s_out .= '</tr>';
@@ -30,9 +30,9 @@ foreach ($this->expenses as $key => $data) {
 $s_out .= '<tr><td><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';
 if (!empty($st_budget)) {
 	$budget_color = ($budget_total <= $total) ? '#FF0000' : '#00FF00';
-	$s_out .= '<td>&nbsp;</td><td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';
+	$s_out .= '<td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';
 }
-$s_out .= '</tr></table></center>';
+$s_out .= '</tr></table>';
 $s_jsonData = "[".implode(",", $st_jsonData)."]";
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -51,4 +51,4 @@ print_r($this->form_sent);
 ?>
 <br><br>
 <div id="expenses_all"></div>
-<br><br><br><br>
+<br><br>

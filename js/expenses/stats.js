@@ -18,10 +18,16 @@ function drawChart() {
     // width 500|800
     // height 300|500
     // fontsize none|25
+
+    width = $('.moxie-right').width();
+    height = 0.61 * width;
+    fontsize = width > 450 ? 16 : 12;
     var options = {
-    		'title':pieTitle, 'height':600, is3D: true,
-    		legend: {position: 'right', textStyle: {color: 'black', fontSize: 25}},
-    		titleTextStyle: {color: 'black', fontSize: 25},
+    		'title':pieTitle,
+            'height': height ,
+            is3D: true,
+    		legend: {position: 'right', textStyle: {color: 'black', fontSize: fontsize}},
+    		titleTextStyle: {color: 'black', fontSize: 25}
     };
     // Instantiate and draw our chart, passing in some options.
     chart = new google.visualization.PieChart(document.getElementById('expenses_month'));
@@ -35,11 +41,11 @@ function drawChart() {
 
 
     var data2 = google.visualization.arrayToDataTable(barChartData);
-
+    width -= 100;
 	var options2 = {
 		title: barTitle,
-		hAxis: {title: 'Year', titleTextStyle: {color: 'red'}},
-		chartArea:{width:"80%",height:"80%"}
+		hAxis: {title: 'Meses', titleTextStyle: {color: 'red'}},
+		chartArea:{width:width}
 	};
 
 	var chart2 = new google.visualization.ColumnChart(document.getElementById('expenses_all'));
@@ -47,5 +53,5 @@ function drawChart() {
 }
 
 $(window).resize(function() {
-	chart.replot( { resetAxes: true } );
+    drawChart();
 });

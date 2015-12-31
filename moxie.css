@@ -336,10 +336,12 @@ span.selectOption:hover {
 
 	.moxie-left {
 		float: left;
+        width: 50%;
 	}
 
 	.moxie-right {
 		float: right;
+        width: 48%;
 	}
 
     div.moxieprevious {
