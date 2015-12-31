@@ -45,6 +45,7 @@ function drawChart() {
 	var options2 = {
 		title: barTitle,
 		hAxis: {title: 'Meses', titleTextStyle: {color: 'red'}},
+        vAxis: { viewWindow: { min: 0}},
 		chartArea:{width:width}
 	};
 
