@@ -86,8 +86,6 @@ class LoginController extends Zend_Controller_Action {
 	 * @since	2011-04-25
 	 */
 	public function registeruserAction() {
-		include 'application/models/Categories.php';
-		
 		$st_form = $this->getRequest()->getPost();
 		if(!isset($_SESSION['captcha']['code'])
 			|| strtoupper($_SESSION['captcha']['code']) != strtoupper($st_form['captcha'])) {
@@ -201,7 +199,7 @@ class LoginController extends Zend_Controller_Action {
 			$o_categories->insert($st_categoriesData);
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
 			error_log('MOXIE: Cannot populate user with demo categories');
 		}
 		// Email user with register data
