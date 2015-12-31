@@ -40,6 +40,9 @@ input {
 	-moz-border-radius:0.4em;
 	-khtml-border-radius:0.4em;
 }
+input[type="radio"] {
+    width: 25px;
+}
 .my-checkbox {
 	width: 1em;
 }
