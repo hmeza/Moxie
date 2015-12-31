@@ -62,6 +62,14 @@ class Incomes extends Zend_Db_Table_Abstract {
             ->group('YEAR(date)')
             ->order('YEAR(date)');
         $o_rows = $this->_db->fetchAll($s_select);
+
+	    if(empty($o_rows)) {
+		    // set default values for empty graph
+		    $o_rows = array(
+				array('date' => date('Y'), 'amount' => 0)
+		    );
+	    }
+
         return $o_rows;
     }
 }
