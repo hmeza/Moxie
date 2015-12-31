@@ -7,9 +7,9 @@ global $st_lang;
 $editSlug = '/incomes/edit/id/';
 ?>
 <table width="100%">
-<td><a href="/incomes/index/year/<?php echo $this->year-1; ?>"><?php echo $st_lang['incomes_last_year']; ?></a></td>
+<td><a href="/incomes/index/year/<?php echo $this->year-1; ?>"><div class="moxieicon moxieprevious"></div> <span class="moxieprevious"><?php echo $st_lang['incomes_last_year']; ?></span></a></td>
 <td align="center"><span class="moxie_header_date"><?php echo date("Y", strtotime("01-01-".$this->year)); ?></span></td>
-<td align="right"><a href="/incomes/index/year/<?php echo $this->year+1; ?>"><?php echo $st_lang['incomes_next_year']; ?></a></td>
+<td align="right"><a href="/incomes/index/year/<?php echo $this->year+1; ?>"><div class="moxieicon moxienext"></div> <span class="moxienext"><?php echo $st_lang['incomes_next_year']; ?></span></a></td>
 </table>
 </td>
     <tr>

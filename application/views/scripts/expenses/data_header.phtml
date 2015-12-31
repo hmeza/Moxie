@@ -8,9 +8,9 @@
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
 <?php global $st_lang; ?>
-<td><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div> <?php echo $st_lang['expenses_last_month']; ?></a></td>
-<td><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
-<td><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div> <?php echo $st_lang['expenses_next_month']; ?></a></td>
+<td align="left"><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div><span class="moxieprevious"> <?php echo $st_lang['expenses_last_month']; ?></span></a></td>
+<td align="center"><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
+<td align="right"><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div><span class="moxienext"> <?php echo $st_lang['expenses_next_month']; ?></span></a></td>
 </table>
 <br>
 

@@ -341,6 +341,14 @@ span.selectOption:hover {
 	.moxie-right {
 		float: right;
 	}
+
+    div.moxieprevious {
+        display:none;
+    }
+
+    div.moxienext {
+        display:none;
+    }
 }
 
 /* Desktop */
@@ -392,6 +400,14 @@ span.selectOption:hover {
 	.moxie_amount {
 		width: 16%;
 	}
+
+    div.moxieprevious {
+        display:none;
+    }
+
+    div.moxienext {
+        display:none;
+    }
 }
 
 
@@ -516,6 +532,14 @@ span.selectOption:hover {
 	span.selectArrow,span.selected {
 		height: 34px;
 	}
+
+    span.moxieprevious {
+        display:none;
+    }
+
+    span.moxienext {
+        display:none;
+    }
 }
 
 .moxie-submenu {
