@@ -228,7 +228,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 }
 
 .moxie_expenses_form_div {
-	width: 66%;
+	width: auto;
 }
 
 .moxie_edit {
