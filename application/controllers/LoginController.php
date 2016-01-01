@@ -100,10 +100,9 @@ class LoginController extends Zend_Controller_Action {
 		try {
 			$i_lastInsertId = $this->loginModel->insert($data);
 		}
-		catch (Exception $e) {
-			$this->view->assign('text', "Duplicated user name.");
-			$this->_helper->redirector('newuser','login');
-		}
+        catch (Zend_Db_Statement_Exception $e) {
+            throw new Exception("Duplicated username or email", 1);
+        }
 		// create default categories
 		$o_categories = new Categories();
 		// first insert root category

@@ -1,18 +1,11 @@
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>Error</title>
-</head>
-<body>
-<br></br><br></br>
-
+<br><br>
 <?php
 global $st_lang;
 
-if (!isset($_SESSION['user_id'])) {
+if ($this->code == 1) {
+    echo $this->message;
+}
+else if (!isset($_SESSION['user_id'])) {
 	echo $st_lang['error_nouser'];
 }
 else {
@@ -23,5 +16,3 @@ else {
 }
 
 ?>
-</body>
-</html>
