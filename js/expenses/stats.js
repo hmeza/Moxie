@@ -27,7 +27,7 @@ var expensesBarRedirector = function(chart, data) {
     if(currentMonth <= targetMonth) {
         targetYear -= 1;
     }
-    window.location.href = "http://moxie.dev/expenses/index/month/"+targetMonth+"/year/"+targetYear;
+    window.location.href = "http://moxie.dootic.com/expenses/index/month/"+targetMonth+"/year/"+targetYear;
 }
 
 
