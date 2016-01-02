@@ -285,25 +285,6 @@ class ExpensesController extends Zend_Controller_Action
 		}
 		$this->_helper->redirector('index','expenses');
 	}
-	
-	/**
-	 * Deletes a given expense returning expense id if success or zero if failed.
-	 * @author	hmeza
-	 * @since	2012-03-12
-	 * @return int
-	 */
-	public function dodeleteAction() {
-		header("Cache-Control: no-cache");
-		$this->_helper->viewRenderer->setNoRender(true);
-		$i_expensePK = $this->getRequest()->getParam('id');
-		try {
-			$this->expenses->delete('id = '.$i_expensePK.' AND user_owner = '.$_SESSION['user_id']);
-		} catch (Exception $e) {
-			error_log(__METHOD__.": ".$e->getMessage());
-			$i_expensePK = 0;
-		}
-		return $i_expensePK;
-	}
 
 	/**
 	 * Marks an expense to appear or not in sums

@@ -1,5 +1,9 @@
+<?php
+global $st_lang;
+?>
 <script type="text/javascript" language="text/javascript">
-	var dodeleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/dodelete/id/";
+	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
+    var deleteMessage = "<?php echo $st_lang['expenses_delete_message']; ?>";
 	var getyearUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/year";
 	var settingsMonth = <?php echo (isset($this->month) ? $this->month : date('n')); ?>;
 	var settingsYear = <?php echo $this->year; ?>;
