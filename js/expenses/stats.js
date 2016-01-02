@@ -3,6 +3,48 @@ var chart;
 google.load('visualization', '1.0', {'packages':['corechart']});
 // Set a callback to run when the Google Visualization API is loaded.
 google.setOnLoadCallback(drawChart);
+
+/**
+ * Sets the double click handler for google chart pie.
+ * @param chart
+ * @param data
+ */
+function addDoubleClickListener(chart, data) {
+    var firstClick = 0;
+    var secondClick = 0;
+
+    google.visualization.events.addListener(chart, 'click', function () {
+        var date = new Date();
+        var millis = date.getTime();
+
+        if (millis - secondClick > 1000) {
+            // add delayed check if a single click occured
+            setTimeout(function() {
+                // no second click fast enough, it is a single click
+                if (secondClick == 0) {
+                    //console.log("single click");
+                }
+            }, 250);
+        }
+
+        // try to measure if double-clicked
+        if (millis - firstClick < 250) {
+            firstClick = 0;
+            secondClick = millis;
+
+            var myFilter = data.getValue(chart.getSelection()[0].row, 0);
+            if($("#category_filter option").filter(":contains('"+myFilter+"')").length > 0) {
+                select_option = $("#category_filter option").filter(":contains('"+myFilter+"')").first().attr('value');;
+                $("#category_filter").find('option[value="'+select_option+'"]').attr('selected', true);
+                filter();
+            }
+        } else {
+            firstClick = millis;
+            secondClick = 0;
+        }
+    });
+}
+
 // Callback function
 function drawChart() {
 	// Create the data table.
@@ -32,11 +74,7 @@ function drawChart() {
     // Instantiate and draw our chart, passing in some options.
     chart = new google.visualization.PieChart(document.getElementById('expenses_month'));
     // TODO: Add listener for category_filter
-    google.visualization.events.addListener(chart, 'select', function() {
-        var filter = data.getValue(chart.getSelection()[0].row, 0);
-        console.log(filter);
-        $('#category_filter').find('option[text="'+filter+'"]').attr('selected', true);
-    });
+    addDoubleClickListener(chart, data);
     chart.draw(data, options);
 
 
