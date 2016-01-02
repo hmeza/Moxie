@@ -13,7 +13,6 @@ class LoginController extends Zend_Controller_Action {
 	}
 	
 	private function getForm() {
-		include_once('Zend/Form.php');
 		$form = new Zend_Form();
 		
 		$form->addElement('text', 'login', array('label' => 'Login'));
@@ -38,7 +37,6 @@ class LoginController extends Zend_Controller_Action {
 		if (!empty($s_user) && !empty($s_password)) {
 			$st_result = $this->loginModel->checkLogin($s_user, $s_password);
 			if ($st_result == 0) {
-				error_log('login error');
 				$this->view->assign('loginMessage', 'bad login');
 				$this->_helper->redirector('index','expenses');
 			}
@@ -78,6 +76,7 @@ class LoginController extends Zend_Controller_Action {
 	 */
 	public function newuserAction() {
 		$this->view->assign('form', $this->getForm());
+		$this->view->assign('message', '&nbsp;');
 	}
 	
 	/**
@@ -87,30 +86,32 @@ class LoginController extends Zend_Controller_Action {
 	 */
 	public function registeruserAction() {
 		$st_form = $this->getRequest()->getPost();
-		if(!isset($_SESSION['captcha']['code'])
-			|| strtoupper($_SESSION['captcha']['code']) != strtoupper($st_form['captcha'])) {
-			$this->view->assign('text', "Verify the captcha.");
-			$this->_helper->redirector('newuser','login');
-		}
-		$data = array(
-			'login'		=> $st_form['login'],
-			'password'	=> md5($st_form['password']),
-			'email'		=> $st_form['email']
-		);
 		try {
+			if(empty($st_form['login'])) {
+				throw new Exception("Empty username");
+			}
+			if(empty($st_form['email'])) {
+				throw new Exception("Empty email");
+			}
+			if(!isset($_SESSION['captcha']['code'])
+					|| strtoupper($_SESSION['captcha']['code']) != strtoupper($st_form['captcha'])) {
+				throw new Exception("Verify the captcha.");
+			}
+			$data = array(
+					'login'		=> $st_form['login'],
+					'password'	=> md5($st_form['password']),
+					'email'		=> $st_form['email']
+			);
 			$i_lastInsertId = $this->loginModel->insert($data);
-		}
-        catch (Zend_Db_Statement_Exception $e) {
-            throw new Exception("Duplicated username or email", 1);
-        }
-		// create default categories
-		$o_categories = new Categories();
-		// first insert root category
-		$st_categoriesData = array(
-			'user_owner'	=>	$i_lastInsertId,
-			'description'	=>	'root category'
-		);
-		try {
+
+			// create default categories
+			$o_categories = new Categories();
+			// first insert root category
+			$st_categoriesData = array(
+				'user_owner'	=>	$i_lastInsertId,
+				'description'	=>	'root category'
+			);
+			// add default categories for the new user
 			$i_rootCategory = $o_categories->insert($st_categoriesData);
 			$st_categoriesData = array(
 				'user_owner'	=>	$i_lastInsertId,
@@ -196,29 +197,38 @@ class LoginController extends Zend_Controller_Action {
 				'type'			=>	3
 			);
 			$o_categories->insert($st_categoriesData);
-		}
-		catch (Exception $e) {
-			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
-			error_log('MOXIE: Cannot populate user with demo categories');
-		}
-		// Email user with register data
-		$s_server = Zend_Registry::get('config')->moxie->settings->url;
-		$s_site = Zend_Registry::get('config')->moxie->app->name;
-		$email = $st_form['email'];
-		$subject = $s_site.' - ¡Bienvenido/a!';
-		$body = 'Bienvenido/a a Moxie. Te has registrado con los siguientes datos:
+
+			// Email user with register data
+			$s_server = Zend_Registry::get('config')->moxie->settings->url;
+			$s_site = Zend_Registry::get('config')->moxie->app->name;
+			$email = $st_form['email'];
+			$subject = $s_site.' - ¡Bienvenido/a!';
+			$body = 'Bienvenido/a a Moxie. Te has registrado con los siguientes datos:
 Welcome to Moxie. You have registered with the following data:
 
 Login: '.$st_form['login'].'
 Password: '.$st_form['password'].'
-			
+
 '.$s_site.'
 '.$s_server.'
 ';
-		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-				'Reply-To: moxie@dootic.com' . "\r\n" .
-				'X-Mailer: PHP/' . phpversion() . "\r\n";
-		$result = mail($email, $subject, $body, $headers);
+			$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+					'Reply-To: moxie@dootic.com' . "\r\n" .
+					'X-Mailer: PHP/' . phpversion() . "\r\n";
+  		$result = mail($email, $subject, $body, $headers);
+		}
+		catch (Zend_Db_Statement_Exception $e) {
+			$this->view->assign('message', 'Duplicated username or email');
+			$this->view->assign('form', $this->getForm());
+			$this->render('newuser');
+		}
+		catch (Exception $e) {
+			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log('MOXIE: Cannot populate user with demo categories');
+			$this->view->assign('message', $e->getMessage());
+			$this->view->assign('form', $this->getForm());
+			$this->render('newuser');
+		}
 	}
 	
 	private function validateKey($key, $email) {
