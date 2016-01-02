@@ -2,10 +2,7 @@
 <?php
 global $st_lang;
 
-if ($this->code == 1) {
-    echo $this->message;
-}
-else if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_id'])) {
 	echo $st_lang['error_nouser'];
 }
 else {
@@ -14,5 +11,4 @@ else {
 	echo $this->message;
 	echo '</pre>';
 }
-
 ?>

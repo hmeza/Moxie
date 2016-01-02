@@ -2,7 +2,8 @@
 class ErrorController extends Zend_Controller_Action
 {
     public function errorAction() {
-    	$errors = $this->_getParam('error_handler');
+	    $errors = $this->_getParam('error_handler');
+
 		switch ($errors->type) {
 			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
 			case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
@@ -16,7 +17,7 @@ class ErrorController extends Zend_Controller_Action
 				// change status code
 				break;
 		}
-		$this->view->assign('message', $errors->exception);
+		$this->view->assign('message', $errors->exception->getMessage());
 	}
 }
 ?>
