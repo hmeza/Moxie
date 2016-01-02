@@ -171,9 +171,14 @@ class ExpensesController extends Zend_Controller_Action
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
-		
-		$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
-		$st_list = $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year,$i_category);
+
+        try {
+            $st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
+            $st_list = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $i_category);
+        }
+        catch(Exception $e) {
+            throw new Exception("Error recovering expenses");
+        }
 
 		if($s_toExcel == true) {
 			$this->exportToExcel($st_list);
