@@ -3,6 +3,11 @@ Require all granted
 Satisfy any
 
 RewriteEngine On
+RewriteCond %{HTTP_HOST} ^moxie.dootic.com$
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteEngine On
 #RewriteCond %{HTTP_REFERER} ^hugoboss666.*$ [NC, OR]
 #RewriteCond %{HTTP_REFERER} !^moxie$ [NC]
 #RewriteRule ^/expenses$  /moxie/expenses [L]
