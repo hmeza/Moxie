@@ -13,7 +13,7 @@ $st_urls = array(
     'incomes' => '/incomes/index',
     'expenses' => '/expenses/index',
     'stats' => '/stats/index',
-    'finance' => '/finances/index',
+    'finances' => '/finances/index',
     'users' => '/users/index'
 );
 $settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
@@ -75,7 +75,7 @@ else {
         else {
                 $s_webMenu .= '
                 <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/">'.$st_lang['index'].'</a></td>
-                <td><a href="/finances/index">Finances</a></td>
+                <td><a href="/finances/index">'.$st_lang['finances'].'</a></td>
                 <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/texts/about">'.$st_lang['about'].'</a></td>
                 ';
         }
