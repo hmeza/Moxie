@@ -6,3 +6,4 @@ vendor/
 phinx.yml
 application.ini
 node_modules/
+npm-debug.log

@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       src : ['js/jquery.js', 'js/common.js'],
       options: {
         // Jasmine spec files
-        specs : 'test/js/spec/ExpensesSpec.js',
+        specs : 'test/js/spec/*Spec.js'
         // Spec helper files
        // helpers : 'test/js/spec/helpers/*.js'
       }
@@ -25,3 +25,5 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', 'jasmine');
 };
+
+//var mock = require('jasmine-mocks').mock;

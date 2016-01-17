@@ -1,24 +1,21 @@
-describe('JavaScript addition operator', function () {
-    it('adds two numbers together', function () {
-        expect(1 + 2).toEqual(3);
-    });
-});
+var deleteMessage = "test confirm redirect";
 
 describe("Confirm deletion", function() {
-  var windowObj = {location: href: ''}};
-
-  beforeEach(mock.module(function($provide) {
-     $provide.value('$window', windowObj);
-  }));
-  beforeEach(module('secure'));
+    var testRedirector;
+    beforeEach(function() {
+        testRedirector = new moxieRedirector();
+        spyOn(moxieRedirector, 'redirect').returnValue(true);
+    });
 
   it("User confirms redirect", function() {
-    spyOn(window, 'confirm').andReturn(true);
-    expect(windowObj.location.href).toEqual('/secure/regulations/1/attachment');
+      confirmDelete(1);
+      expect(testRedirector.redirect).toHaveBeenCalledWith('1');
   });
 
   it("User cancels", function() {
-    spyOn(window, 'confirm').andReturn(true);
-    expect(windowObj.location.href).toEqual('');
+      console.log(moxieRedirector);
+      var testRedirector = new moxieRedirector();
+      spyOn(testRedirector, 'redirect').returnValue(true);
+      confirmDelete(1);
   });
 });
