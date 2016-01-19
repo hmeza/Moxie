@@ -1,59 +1,41 @@
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/finances/utils.js"></script>
 <script type="text/javascript">
-<?php
-global $st_lang;
-
-$s_budget = "var budgets = new Array();\n";
-$s_categories = array();
-foreach ($this->budget as $key => $value) {
-	$s_budget .= "budgets[".$key."] = new Array();\n";
-	foreach ($value as $inner_key => $inner_value) {
-		$s_budget .= "budgets[".$key."][".$inner_key."] = ".$inner_value.";\n";
-		if(!in_array($inner_key, $s_categories)) {
-			$s_categories[] = $inner_key;
-		}
-	}
-}
-echo $s_budget;
-
-?>
-var categories = [<?php echo implode(',', $s_categories);?>];
-function onmouseoverchange(month) {
-	for (category in categories) {
-		$("#budget"+category).html((budgets[month][categories[category]].toFixed(2))+" &euro;");
-	}
-}
-
-function onmouseoutchange() {
-	for (category in categories) {
-		$("#budget"+category).html((budgets[<?php echo date('m'); ?>][categories[category]].toFixed(2))+" &euro;");
-	}
+var check = function() {
+    if($('#amount').val() != 0
+        && $('#rate').val() != 0
+        && $('#months').val() != 0) {
+        finances = new Finances();
+        finances.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
+        $('#interest').val(finances.interest);
+        $('#total').val(finances.getTotal());
+    }
 }
 
 $(document).ready(function() {
-    $("#show_stats").click(
-		function(event) {
-    		$("#box").slideToggle();
-		}
-	);
-    $("#show_budget").click(
-    		function(event) {
-        		$("#budget").slideToggle();
-    		}
-    	);
-	$("#caja").click(function(event) {
-	    $("#box").slideUp();
-	});
-	$("[name^='month']").mouseover(function() {
-		var monthId = $(this).attr('name').replace('month', '');
-		onmouseoverchange(monthId);
-	});
-	$("[name^='month']").mouseout(function() {
-		var monthId = $(this).attr('name').replace('month', '');
-		onmouseoutchange(monthId);
-	});
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
 });
 
 </script>
 
 <h2>Selecciona un tipo de depósito</h2>
+<form>
+    Dinero a depositar
+    <input id="amount" type="number" value="0" placeholder="0,00">
+    <br>
+    Interés
+    <input id="rate" type="number" value="0" placeholder="0">
+    <br>
+    Tiempo
+    <input id="months" type="number" value="0" placeholder="12">
+
+    <br><br>
+    Intereses
+    <input id="interest">
+    <br>
+    Total
+    <input id="total">
+</form>
 <div></div>
