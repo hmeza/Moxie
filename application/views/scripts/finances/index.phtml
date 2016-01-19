@@ -2,9 +2,9 @@
 <script type="text/javascript" src="/js/finances/utils.js"></script>
 <script type="text/javascript">
 var check = function() {
-    if($('#amount').val() != 0
-        && $('#rate').val() != 0
-        && $('#months').val() != 0) {
+    if($('#amount').val() != ""
+        && $('#rate').val() != ""
+        && $('#months').val() != "") {
         finances = new Finances();
         finances.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
         $('#interest').val(finances.interest);
@@ -20,28 +20,28 @@ $(document).ready(function() {
 
 </script>
 
-<h2>Selecciona un tipo de depósito</h2>
-<form>
+<h2>Calculadora de dep&oacute;sitos</h2>
+<form class="moxie_form">
 <?php global $st_lang; ?>
     <div>
-    <label for="amount"><?php echo $st_lang['finances_amount']; ?></label>
-    <input id="amount" type="number" value="0" placeholder="0,00">
+    <dt for="amount"><?php echo $st_lang['finances_amount']; ?></dt>
+    <dd><input id="amount" type="number" placeholder="0,00"></dd>
     </div>
     <div>
-    <label for="rate"><?php echo $st_lang['finances_interest']; ?></label>
-    <input id="rate" type="number" value="0" placeholder="0">
+    <dt for="rate"><?php echo $st_lang['finances_interest']; ?></dt>
+    <dd><input id="rate" type="number" placeholder="0"></dd>
     </div>
     <div>
-    <label for="months"><?php echo $st_lang['finances_period']; ?></label>
-    <input id="months" type="number" value="0" placeholder="12">
+    <dt for="months"><?php echo $st_lang['finances_period']; ?></dt>
+    <dd><input id="months" type="number" placeholder="12"></dd>
     </div>
     <div>
-    <label for="interest"><?php echo $st_lang['finances_revenue']; ?></label>
-    <input id="interest">
+    <dt for="interest"><?php echo $st_lang['finances_revenue']; ?></dt>
+    <dd><input id="interest"></dd>
     </div>
     <div>
-    <label for="total"><?php echo $st_lang['finances_total']; ?></label>
-    <input id="total">
+    <dt for="total"><?php echo $st_lang['finances_total']; ?></dt>
+    <dd><input id="total"></dd>
     </div>
 </form>
-<div></div>
+<div height=20px>&nbsp;</div>

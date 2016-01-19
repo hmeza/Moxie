@@ -14,7 +14,7 @@ Finances.prototype.calculateInterest = function(principal, rate, months) {
 
 Finances.prototype.finalCapital = function(principal, rate, months) {
     this.calculateInterest(principal, rate, months);
-    this.total = principal + this.interest;
+    this.total = parseInt(principal) + parseInt(this.interest);
     return this.roundToDecimal(this.total, 4);
 };
 
