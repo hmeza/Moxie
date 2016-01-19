@@ -8,6 +8,7 @@ global $st_lang;
 	var settingsMonth = <?php echo (isset($this->month) ? $this->month : date('n')); ?>;
 	var settingsYear = <?php echo $this->year; ?>;
 	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+settingsMonth+"/year/"+settingsYear;
+	var tagList = [];
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
@@ -70,6 +71,8 @@ foreach($this->form->getElement('category') as $key => $option) {
 </div>
 <input type="hidden" name="category" id="category" value="<?php echo $selectedSpanId; ?>"/>
 </dd>
+<dt for="form_tags">Tags</dt>
+<dd id="form_tags"><div id="tags"></div></dd>
 <?php
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {

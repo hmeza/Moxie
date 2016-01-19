@@ -10,6 +10,10 @@ function filter() {
 
 $(document).ready(function() {
     enableSelectBoxes();
+	new Taggle('tags', {
+		tags: tagList,
+		duplicateTagClass: 'bounce'
+	});
 });
 
 function enableSelectBoxes() {

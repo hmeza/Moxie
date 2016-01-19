@@ -29,7 +29,8 @@
     "grunt-cli": "^0.1.13",
     "grunt-util": "^0.5.3",
     "jasmine": "^2.4.1",
-    "phantomjs": "^1.9.19"
+    "phantomjs": "^1.9.19",
+    "taggle": "^1.6.2"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
