@@ -22,20 +22,26 @@ $(document).ready(function() {
 
 <h2>Selecciona un tipo de depósito</h2>
 <form>
-    Dinero a depositar
+<?php global $st_lang; ?>
+    <div>
+    <label for="amount"><?php echo $st_lang['finances_amount']; ?></label>
     <input id="amount" type="number" value="0" placeholder="0,00">
-    <br>
-    Interés
+    </div>
+    <div>
+    <label for="rate"><?php echo $st_lang['finances_interest']; ?></label>
     <input id="rate" type="number" value="0" placeholder="0">
-    <br>
-    Tiempo
+    </div>
+    <div>
+    <label for="months"><?php echo $st_lang['finances_period']; ?></label>
     <input id="months" type="number" value="0" placeholder="12">
-
-    <br><br>
-    Intereses
+    </div>
+    <div>
+    <label for="interest"><?php echo $st_lang['finances_revenue']; ?></label>
     <input id="interest">
-    <br>
-    Total
+    </div>
+    <div>
+    <label for="total"><?php echo $st_lang['finances_total']; ?></label>
     <input id="total">
+    </div>
 </form>
 <div></div>

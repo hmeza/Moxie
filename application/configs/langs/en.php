@@ -69,6 +69,12 @@ $st_lang = array(
 	'stats_budget_income' => 'TOTAL INCOME',
 	'stats_budget_expense' => 'TOTAL EXPENSE',
 	'stats_budget_total' => 'BALANCE (Income - expense)',
+	// Finances
+	'finances_amount' => 'Amount to deposit',
+	'finances_interest' => 'Interest',
+	'finances_period' => 'Months',
+	'finances_revenue' => 'Interests',
+	'finances_total' => 'Total',
 	// User, login, etc.
 	'users'		=>	'User menu',
 	'users_my_account'	=>	'My account',
