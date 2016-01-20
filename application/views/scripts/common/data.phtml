@@ -31,10 +31,15 @@ foreach ($this->tag_list as $key => $value) {
 $f_totalAmount = 0;
 $f_currentAmount = 0;
 $b_showTotalAmount = false;
+$s_currentExpenseDate = '';
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	$expense_date = date('d-m-Y', strtotime($value['date']));
+	if($expense_date != $s_currentExpenseDate) {
+		echo '<tr><th colspan="4" style="padding-top: 8px;">'.$expense_date.'</th></tr>';
+		$s_currentExpenseDate = $expense_date;
+	}
 	
 	echo '
 <tr id="tr'.$value['id'].'">
