@@ -55,6 +55,46 @@ class Expenses extends Zend_Db_Table_Abstract {
 	}
 
 	/**
+	 * Gets expenses from a given user, month and year.
+	 * If i_category is not set or is set to zero, all categories are retrieved.
+	 * @author	hmeza
+	 * @since	2011-01-03
+	 * @param	int $user_id
+	 * @param	int $month
+	 * @param	int $year
+	 * @param	string $s_tag
+	 */
+	public function getTaggedExpenses($user_id, $month, $year, $s_tag = null) {
+		$s_tag = (!empty($s_tag) ? "t.name = '".$s_tag."'" : "1=1");
+		$query = $this->database->select()
+				->from(array('e'=>$this->_name),array(
+						'id'	=>	'e.id',
+						'user_owner'	=>	'e.user_owner',
+						'amount'		=>	new Zend_Db_Expr('-(e.amount)'),
+						'note'			=>	'e.note',
+						'date'	=>	'e.date',
+						'in_sum'		=>	'e.in_sum'
+				))
+				->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
+						'name'	=>	'c.name',
+						'description'	=>	'c.description',
+						'category'	=> 'c.id'
+				))
+				->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = e.id', array())
+				->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
+				->where('YEAR(e.date) = '.$year)
+				->where('MONTH(e.date) = '.$month)
+				->where('e.user_owner = '.$user_id)
+				->where($s_tag)
+				->where('e.amount < 0')
+				->order('e.date asc');
+		error_log($query);
+		$stmt = $this->database->query($query);
+		$result = $stmt->fetchAll();
+		return $result;
+	}
+
+	/**
 	 * @param int $user_id
 	 * @param int $i_month
 	 * @param int $i_year
@@ -151,12 +191,12 @@ class Expenses extends Zend_Db_Table_Abstract {
 	/**
 	 * Inserts a new expense on DB
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 * @param	int $user_id
-	 * @param	date $date
+	 * @param	string $date
 	 * @param	float $amount
 	 * @param	int $category
-	 * @param	text $note
+	 * @param	string $note
+	 * @return int
 	 */
 	public function addExpense($user_id,$date,$amount,$category,$note) {
 		$st_data = array(
@@ -167,7 +207,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 			'date'	=>	$date
 		);
 		try {
-			$this->insert($st_data);
+			return $this->insert($st_data);
 		}
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());

@@ -16,9 +16,9 @@
 <a id="data"></a>
 <?php
 echo $this->partial('expenses/data_header.phtml',
-	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month, 'most_frequent_expenses' => $this->most_frequent_expenses));
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month, 'most_frequent_expenses' => $this->most_frequent_expenses, 'tags' => $this->tags));
 echo $this->partial('common/data.phtml',
-	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month, 'editSlug'  => '/expenses/edit/id/'));
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year,'month'=>$this->month, 'editSlug'  => '/expenses/edit/id/', 'tag_list' => $this->tag_list));
 ?>
 </div>
 <div class="moxie-right">

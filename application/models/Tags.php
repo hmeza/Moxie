@@ -47,13 +47,18 @@ class Tags extends Zend_Db_Table_Abstract {
 			throw new Exception("Empty user id");
 		}
 		try {
-			$query = $this->select()
-				->where('user_owner = ?', $userId);
+			$query = $this->select()->where('user_owner = ?', $userId);
 		
-			$rows = $this->fetchAll($query);
+			$rows = $this->fetchAll($query)->toArray();
+			$tags = array();
+			foreach($rows as $row) {
+				$tags[$row['id']] = $row['name'];
+			}
 		}
 		catch(Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
+			$tags = array();
 		}
+		return $tags;
 	}
 }

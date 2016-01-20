@@ -6,11 +6,17 @@ class ExpensesController extends Zend_Controller_Action
 	private $expenses;
 	/** @var Budgets */
 	private $budgets;
-	
+	/** @var Tags */
+	private $tags;
+	/** @var TransactionTags */
+	private $transactionTags;
+
 	public function init() {
 		parent::init();
 		$this->expenses = new Expenses();
-		$this->budgets = new Budgets();	
+		$this->budgets = new Budgets();
+		$this->tags = new Tags();
+		$this->transactionTags = new TransactionTags();
 	}
 	
 	/**
@@ -168,13 +174,20 @@ class ExpensesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year');
 		$i_category = $this->getRequest()->getParam('category_filter');
 		$i_category = (isset($i_category)) ? $i_category : 0;
+		$s_tag = $this->getRequest()->getParam('tag_filter');
+		$s_tag = (isset($s_tag) ? $s_tag : null);
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 
         try {
             $st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
-            $st_list = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $i_category);
+			if((empty($i_category) && empty($s_tag)) || !empty($i_category)) {
+				$st_list = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $i_category);
+			}
+	        else {
+		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
+	        }
         }
         catch(Exception $e) {
             throw new Exception("Error recovering expenses");
@@ -193,6 +206,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
+		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('most_frequent_expenses', $this->expenses->getMostFrequentExpenses($_SESSION['user_id']));
 	}
 
@@ -219,6 +233,22 @@ class ExpensesController extends Zend_Controller_Action
 		}
 		exit(0);
 	}
+
+	/**
+	 * @param array $tags
+	 * @param int $expenseId
+	 * @throws Exception
+	 */
+	private function updateTags($tags, $expenseId) {
+		$existingTags = $this->tags->getTagsByUser($_SESSION['user_id']);
+		foreach($tags as $tag) {
+			$tagId = array_search($tag, $existingTags);
+			if($tagId === FALSE) {
+				$tagId = $this->tags->addTag($_SESSION['user_id'], $tag);
+			}
+			$this->transactionTags->addTagToTransaction($expenseId, $tagId);
+		}
+	}
 	
 	/**
 	 * Adds an expense and shows expenses index again
@@ -231,7 +261,10 @@ class ExpensesController extends Zend_Controller_Action
 		if (!isset($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-		$this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
+		$expenseId = $this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
+		if(!empty($_POST['taggles'])) {
+			$this->updateTags($_POST['taggles'], $expenseId);
+		}
 		$this->_helper->redirector('index','expenses');
 	}
 	
@@ -260,6 +293,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
+		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
+		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('most_frequent_expenses', $this->expenses->getMostFrequentExpenses($_SESSION['user_id']));
 		$this->render('index');
 	}
@@ -272,6 +307,12 @@ class ExpensesController extends Zend_Controller_Action
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
 		$i_expensePK = $st_params['id'];
+
+		$this->transactionTags->removeTagsFromTransaction($i_expensePK);
+		if(!empty($_POST['taggles'])) {
+			$this->updateTags($_POST['taggles'], $i_expensePK);
+		}
+
 		$this->expenses->updateExpense($i_expensePK, $st_params);
 		$this->_helper->redirector('index','expenses');
 	}

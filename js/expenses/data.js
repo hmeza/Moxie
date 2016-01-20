@@ -8,6 +8,12 @@ function filter() {
 	window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
 }
 
+function filter_tag() {
+	var chosen = document.getElementById('tag_filter').selectedIndex;
+	var redirect = document.getElementById('tag_filter').options[chosen].text;
+	window.location="/expenses/index/tag_filter/"+redirect+"/year/"+year+"/month/"+month;
+}
+
 $(document).ready(function() {
     enableSelectBoxes();
 	new Taggle('tags', {
