@@ -34,6 +34,7 @@ legend span {
 input {
 	padding:2px;
 	width:129px;
+	height: 20px;
 	border:1px solid #ddd;
 	background:#fafafa;
 	font:bold 0.95em arial, sans-serif;
@@ -271,7 +272,7 @@ div.selectBox {
 }
 span.selected {
     width:110px;
-    padding: 2px 2px 2px 0px;
+    padding: 2px 2px 0px 0px;
     text-indent:2px;
     border:1px solid #ccc;
     border-right:none;
@@ -281,7 +282,7 @@ span.selected {
 }
 span.selectArrow {
     width:20px;
-    height: 17px;
+    height: 21px;
     padding: 2px 0 0 0;
     border:1px solid #0b77b7;
     text-align:center;
@@ -299,6 +300,7 @@ span.selectArrow,span.selected {
     position:relative;
     float:left;
     z-index:300000000;
+	height: 19px;
 }
 div.selectOptions {
     position:absolute;
@@ -557,4 +559,20 @@ span.selectOption:hover {
 .moxie-stats {
 	font-size: 22px;
 	width: 100%;
+}
+
+/*** taggle fixes ***/
+.taggle_list {
+	background: #fafafa;
+	border: #ddd 1px solid;
+	max-width: 186px;
+}
+
+.taggle_list .taggle {
+	background: #D0E8F4;
+}
+
+.taggle_placeholder {
+	position: relative;
+	top: 16px;
 }
