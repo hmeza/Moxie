@@ -51,13 +51,3 @@ function enableSelectBoxes() {
 		$('#category').val(spanValue);
 	}
 }
-
-function useExpense(category, note) {
-	$('#note').val(note);
-	$('#category').val(category);
-	$('.selectOption').each(function(e, span) {
-		if($(this).attr('value') == category) {
-			$(this).parent().siblings('span.selected').html($(this).html());
-		}
-	});
-}

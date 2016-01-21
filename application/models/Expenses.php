@@ -251,45 +251,6 @@ class Expenses extends Zend_Db_Table_Abstract {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 	}
-		
-	/**
-	 * Returns the most used expenses for the user specified.
-	 * @param int $i_userOwner
-	 * @return array, each position contains number_of_rows, category, note, category_id, name
-	 */
-	public function getMostFrequentExpenses($i_userOwner) {
-		try {
-			$query = $this->select()
-				->setIntegrityCheck(false)
-				->from(array("e" => $this->_name), array("count(e.id) as number_of_rows", "category", "note"))
-				->joinInner(array("c" => "categories"), "c.id = e.category", array("id as category_id", "name"))
-				->where("e.user_owner = ?", $i_userOwner)
-                ->where('amount < 0')
-				->group(array("e.category", "e.note"))
-				->order("number_of_rows DESC")
-				->limit(self::MOST_FREQUENT_EXPENSES_LIMIT);
-
-			$first_query = clone($query);
-			$first_query = $first_query->where("e.date >= ?", date('Y-m-d H:i:s', strtotime("-2 months")));
-
-			$rows = $this->fetchAll($first_query);
-			if(empty($rows)) {
-				throw new Exception("Empty expenses at first retrieval");
-			}
-		}
-		catch (Exception $e) {
-			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
-			// try getting all
-			try {
-				$rows = $this->fetchAll($query);
-			}
-			catch(Exception $e) {
-				error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
-				$rows = array();
-			}
-		}
-		return $rows;
-	}
 	
 	/**
 	 * Retrieve a list of item notes, number of times used, sum expent,

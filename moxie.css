@@ -34,7 +34,7 @@ legend span {
 input {
 	padding:2px;
 	width:129px;
-	height: 20px;
+	height: 26px;
 	border:1px solid #ddd;
 	background:#fafafa;
 	font:bold 0.95em arial, sans-serif;
@@ -44,6 +44,10 @@ input {
 input[type="radio"] {
     width: 25px;
 }
+input[type="submit"] {
+    height: 34px;
+}
+
 .my-checkbox {
 	width: 1em;
 }
@@ -454,10 +458,6 @@ span.selectOption:hover {
 	}
 
 	.moxie_expenses_form_div {
-		width: 100%;
-	}
-
-	.moxie_expenses_suggest_div {
 		width: 100%;
 	}
 
