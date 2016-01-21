@@ -550,6 +550,15 @@ span.selectOption:hover {
     span.moxienext {
         display:none;
     }
+
+    input {
+        width:120px;
+        height: 24px;
+    }
+
+    input[type="submit"] {
+        height: 34px;
+    }
 }
 
 .moxie-submenu {
