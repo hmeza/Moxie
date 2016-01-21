@@ -1,7 +1,11 @@
 <table class="list moxie moxie-data" style="width: 100%" id="mytable">
 <tr>
 <?php
-$exportUrl = $_SERVER['REQUEST_URI']."/to_excel/true";
+$url = $_SERVER['REQUEST_URI'];
+if(strpos($url, 'index') === false) {
+    $url .= 'index';
+}
+$exportUrl = $url."/to_excel/true";
 ?>
 <td colspan=2><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
 <td colspan=2 align=right>
