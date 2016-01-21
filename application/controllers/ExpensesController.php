@@ -258,7 +258,7 @@ class ExpensesController extends Zend_Controller_Action
 	public function addAction() {
 		$st_form = $this->getRequest()->getPost();
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
-		if (!isset($st_form['note'])) $st_form['note'] = "";
+		if (empty($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
 		$expenseId = $this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
@@ -325,6 +325,7 @@ class ExpensesController extends Zend_Controller_Action
 	public function deleteAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');
 		try {
+			$this->transactionTags->removeTagsFromTransaction($i_expensePK);
 			$this->expenses->delete('id = '.$i_expensePK.' AND user_owner = '.$_SESSION['user_id']);
 		} catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
