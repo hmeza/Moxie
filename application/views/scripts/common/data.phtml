@@ -8,7 +8,7 @@ if(strpos($url, 'index') === false) {
 $exportUrl = $url."/to_excel/true";
 ?>
 <td colspan=2><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
-<td colspan=2 align=right>
+<td colspan=3 align=right>
 Filtros <select id="category_filter" onchange="filter();">
 <option value="0">Categoria</option>
 <?php
@@ -41,7 +41,7 @@ foreach ($this->list as $key=>$value) {
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	$expense_date = date('d-m-Y', strtotime($value['date']));
 	if($expense_date != $s_currentExpenseDate) {
-		echo '<tr><th colspan="4" style="padding-top: 8px;">'.$expense_date.'</th></tr>';
+		echo '<tr><th colspan="5" class="list_moxie_top" style="padding-top: 8px;">'.$expense_date.'</th></tr>';
 		$s_currentExpenseDate = $expense_date;
 	}
 	
@@ -49,7 +49,8 @@ foreach ($this->list as $key=>$value) {
 <tr id="tr'.$value['id'].'">
 <td class="list moxie_edit"><a class="moxieedit" href="'.$this->editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
 <td class="list moxie_category"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td class="list moxie_note"><span alt="'.$expense_date.'" title="'.$expense_date.'">'.$value['note'].'</span></td>
+<td class="list moxie_note">'.$value['note'].'</td>
+<td class="list moxie_date_inline">'.$expense_date.'</td>
 <td align="right" class="list moxie_amount"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';
 
@@ -65,7 +66,7 @@ if($b_showTotalAmount) {
 
 ?>
 <tr>
-<td colspan=4 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
+<td colspan=5 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
 </tr>
 </table>
 <br><br><br>

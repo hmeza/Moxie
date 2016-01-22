@@ -333,6 +333,15 @@ span.selectOption:hover {
     background:#4096ee;
 }
 
+.list_moxie_top {
+	display:none;
+}
+
+.moxie_date_inline {
+	width: 20%;
+	text-align: center;
+}
+
 
 @media only screen and (min-width: 1060px) {
 	nav {
@@ -424,6 +433,16 @@ span.selectOption:hover {
     }
 }
 
+@media screen and (min-width: 481px) and (max-width: 749px) {
+	.list_moxie_top {
+		display: table-cell;
+	}
+
+	.moxie_date_inline {
+		display:none;
+		width: 0px;
+	}
+}
 
 /* Mobile */
 @media screen and (max-device-width: 480px) {
@@ -559,6 +578,15 @@ span.selectOption:hover {
     input[type="submit"] {
         height: 34px;
     }
+
+	.list_moxie_top {
+		display: table-cell;
+	}
+
+	.moxie_date_inline {
+		display:none;
+		width: 0px;
+	}
 }
 
 .moxie-submenu {
