@@ -76,7 +76,7 @@ $st_lang = array(
 	'finances_total' => 'Total',
 	// User, login, etc.
 	'users'		=>	'Menú de usuario',
-	'users_my_account'	=>	'Mi cuenta',
+	'users_my_account'	=>	'Configuración',
 	'new_user'	=>	'Nuevo usuario',
 	'register'	=>	'Formulario de registro',
 	'registration_ok'	=>	'<h2>Registro efectuado con éxito!</h2>
