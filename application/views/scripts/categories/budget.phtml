@@ -1,14 +1,10 @@
 <script type="text/javascript">
 function getSum() {
-	var node_list = document.getElementsByTagName('input');
 	var sum = 0;
-	for (var i = 0; i < node_list.length; i++) {
-	    var node = node_list[i];
-	 
-	    if (node.getAttribute('type') == 'text') {
-	        sum = sum + Math.round(node.value);
-	    }
-	}
+	$('[id^=amount]').each(function() {
+		sum += parseFloat(this.value);
+	});
+	sum = Math.round(sum * 100) / 100;
 	document.getElementById('sum').innerHTML = '<b>' + sum + ' &euro;</b>';
 }
 $(document).ready(function() {
