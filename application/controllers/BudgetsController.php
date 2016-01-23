@@ -1,9 +1,7 @@
 <?php
-/** Zend_Controller_Action */
-include 'application/models/Budgets.php';
-include_once 'application/models/Categories.php';
 class BudgetsController extends Zend_Controller_Action
 {
+	/** @var Budgets */
 	private $budgets;
 	
 	/**
