@@ -34,7 +34,7 @@ legend span {
 input {
 	padding:2px;
 	width:129px;
-	height: 26px;
+	height: 24px;
 	border:1px solid #ddd;
 	background:#fafafa;
 	font:bold 0.95em arial, sans-serif;
@@ -45,7 +45,7 @@ input[type="radio"] {
     width: 25px;
 }
 input[type="submit"] {
-    height: 34px;
+    height: 24px;
 }
 
 .my-checkbox {
