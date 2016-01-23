@@ -9,10 +9,24 @@ function sendForm() {
 		alert(error_message);
 	}
 }
+
+$(document).ready(function() {
+	$("#users_my_account").click(function (event) {
+		$("#my_account").slideToggle();
+	});
+	$("#categories_title").click(function (event) {
+		$("#categories_table").slideToggle();
+	});
+	$("#budget_title").click(function (event) {
+		$("#budget_table").slideToggle();
+	});
+});
 </script>
 
-<h1><?php echo $st_lang['users_my_account']; ?></h1>
-    
+<h1><?php echo $st_lang['users_title']; ?></h1>
+
+<h2 id="users_my_account"><?php echo $st_lang['users_my_account']." ".$st_lang['press_here_display']; ?></h2>
+<div id="my_account" style="display: none;">
 <table width="100%" cellspacing="20">
 <tr>
 <td valign=top>
@@ -31,3 +45,15 @@ echo $this->form->language;
 </td>
 </tr>
 </table>
+</div>
+<br><br>
+
+<?php
+echo $this->partial('categories/categories.phtml',
+		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display));
+?>
+
+<?php
+echo $this->partial('categories/budget.phtml',
+		array('categories'=>$this->categories));
+?>

@@ -6,7 +6,7 @@ class CategoriesController extends Zend_Controller_Action
 	
 	public function init() {
 		parent::init();
-		$this->categories = new Categories();		
+		$this->categories = new Categories();
 	}
 	
 	private function getForm() {
@@ -67,9 +67,10 @@ class CategoriesController extends Zend_Controller_Action
 	}
 	
     public function indexAction() {
-    	$this->view->assign('categories_form', $this->getForm());
-		$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
-		$this->_forward('index', 'budgets');
+	    $this->view->assign('categories_form', $this->getForm());
+	    $this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
+	    $this->view->assign('categories_display', '');
+		$this->_forward('index', 'users');
     }
     
    
@@ -86,7 +87,8 @@ class CategoriesController extends Zend_Controller_Action
     public function editAction() {
     	$this->view->assign('categories_form', $this->getEditForm($this->_request->getParam('id')));
     	$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
-    	$this->_forward('index', 'budgets');
+	    $this->view->assign('categories_display', '');
+    	$this->_forward('index', 'users');
     }
     
     public function updateAction() {

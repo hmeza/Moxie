@@ -1,16 +1,20 @@
 <?php
 global $st_lang;
-echo '<h2>'.$st_lang['categories'].'</h2>';
+?>
+<h2 id="categories_title"><?php echo $st_lang['categories']." ".$st_lang['press_here_display']; ?></h2>
+<div id="categories_table" style="<?php echo $this->categories_display; ?>">
+<?php
 echo $this->categories_form;
 ?>
 <table width=100%>
 <?php
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
+
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
 		echo '<td><a href="/categories/delete/id/'.$value['id1'].'" alt="'.$st_lang['categories_delete'].'" title="'.$st_lang['categories_delete'].'">X</a>&nbsp;';
-		echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="'.$st_lang['categories_edit'].'" title="'.$st_lang['categories_edit'].'">E</a>&nbsp;&nbsp;&nbsp;';
-		echo $first_name.$value['name2']."</td><td>";
+		echo '<td><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></td>';
+		echo '<td>'.$first_name.$value['name2']."</td><td>";
 		switch($value['type']) {
 			case 1:
 				echo $st_lang['categories_expense'];
@@ -27,3 +31,5 @@ foreach ($this->categories_list as $key => $value) {
 }
 ?>
 </table>
+</div>
+<br><br>

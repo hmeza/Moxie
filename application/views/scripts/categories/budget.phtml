@@ -42,7 +42,8 @@ function snapshot() {
 }
 </script>
 
-<h2><?php global $st_lang; echo $st_lang['budget']; ?></h2>
+<h2 id="budget_title"><?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?></h2>
+<div id="budget_table" style="display: none;"categ>
 <table width=100%>
 <?php
 $f_initialBudget = 0;
@@ -69,3 +70,5 @@ foreach ($this->categories as $key => $value) {
 <td colspan="2"><input type="button" value="Snapshot" onclick="snapshot();"></form></td>
 </tr>
 </table>
+</div>
+<br><br>

@@ -84,6 +84,7 @@ $st_lang = array(
 Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'logout'	=>	'Salir',
 	// Other stuff
+	'press_here_display' => '(pulsa aquí para mostrar/ocultar)',
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
 	'error_nouser' => 'No estás identificado. Por favor <a href="/">accede</a> o <a href="/login/newuser">registrate</a> como usuario.',
 	'text_about_title' => 'Acerca de...',

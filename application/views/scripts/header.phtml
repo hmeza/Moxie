@@ -9,7 +9,6 @@ global $st_lang;
 $url = $_SERVER['REQUEST_URI'];
 $st_url = explode("/", $url);
 $st_urls = array(
-    'categories' => '/categories/index',
     'incomes' => '/incomes/index',
     'expenses' => '/expenses/index',
     'stats' => '/stats/index',
@@ -56,7 +55,7 @@ else {
 </header>
 <!-- web menu -->
 <?php
-        $st_lang['users'] = $st_lang['users_my_account'];
+        $st_lang['users'] = $st_lang['users_title'];
         $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
 
         $s_webMenu = '

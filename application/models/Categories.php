@@ -174,4 +174,33 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 		return $st_parentCategories;
 	}
+
+	/**
+	 * Mount the category tree for the current budget.
+	 * @param array $st_categories
+	 * @return array
+	 */
+	public function prepareCategoriesTree($st_categories) {
+		$st_preparedTree = array();
+		foreach($st_categories as $key => $value) {
+			if (empty($value['id3'])) {
+				$i_key = null;
+				$st_value = null;
+			}
+			if (!empty($value['id3']) && $i_key == null) {
+				$i_key = $value['id2'];
+				$st_parentLine = array(
+						'id1'	=>	$value['id1'],
+						'name1'	=>	$value['name1'],
+						'id2'	=>	$value['id2'],
+						'name2'	=>	$value['name2'],
+						'id3'	=>	null,
+						'name3'	=>	null
+				);
+				$st_preparedTree[] = $st_parentLine;
+			}
+			$st_preparedTree[] = $value;
+		}
+		return $st_preparedTree;
+	}
 }
