@@ -1,8 +1,4 @@
 <?php
-/** Zend_Controller_Action */
-include_once 'application/models/Categories.php';
-include 'application/controllers/BudgetsController.php';
-
 class CategoriesController extends Zend_Controller_Action
 {
 	private $categories;
@@ -14,8 +10,6 @@ class CategoriesController extends Zend_Controller_Action
 	
 	private function getForm() {
 		global $st_lang;
-    	include_once('Zend/Form.php');
-    	include_once('Zend/Form/Element/Radio.php');
     	$form  = new Zend_Form();
     	
     	$form->setAction('/categories/add')->setMethod('post');
@@ -42,8 +36,6 @@ class CategoriesController extends Zend_Controller_Action
 	
 	private function getEditForm($i_categoryPK) {
 		global $st_lang;
-		include('Zend/Form.php');
-		include('Zend/Form/Element/Radio.php');
 		$form  = new Zend_Form();
 		
 		// retrieve data to fill the form

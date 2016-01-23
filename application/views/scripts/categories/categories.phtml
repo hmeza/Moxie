@@ -1,0 +1,29 @@
+<?php
+global $st_lang;
+echo '<h2>'.$st_lang['categories'].'</h2>';
+echo $this->form;
+?>
+<table width=100%>
+<?php
+foreach ($this->list as $key => $value) {
+	if (!empty($value['parent1'])) {
+		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
+		echo '<td><a href="/categories/delete/id/'.$value['id1'].'" alt="'.$st_lang['categories_delete'].'" title="'.$st_lang['categories_delete'].'">X</a>&nbsp;';
+		echo '<a href="/categories/edit/id/'.$value['id1'].'" alt="'.$st_lang['categories_edit'].'" title="'.$st_lang['categories_edit'].'">E</a>&nbsp;&nbsp;&nbsp;';
+		echo $first_name.$value['name2']."</td><td>";
+		switch($value['type']) {
+			case 1:
+				echo $st_lang['categories_expense'];
+				break;
+			case 2:
+				echo $st_lang['categories_income'];
+				break;
+			case 3:
+				echo $st_lang['categories_both'];
+				break;
+		}
+		echo "</td><tr>";
+	}
+}
+?>
+</table>
