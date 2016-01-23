@@ -1,6 +1,7 @@
 <?php
 class CategoriesController extends Zend_Controller_Action
 {
+	/** @var Categories */
 	private $categories;
 	
 	public function init() {
@@ -65,27 +66,9 @@ class CategoriesController extends Zend_Controller_Action
 		return $form;
 	}
 	
-	private function mountCategoryTree($st_categories) {
-		$st_parent = $this->categories->fetchRow($this->categories->select()
-			->where('user_owner = '.$_SESSION['user_id'])
-			->where('parent IS NULL'));
-		$st_root = array(
-			'id1'		=>	$st_parent->id,
-			'parent1'	=>	null,
-			'name1'		=>	null,
-			'name2'		=>	'New category'
-		);
-		$st_parentCategories = array();
-		$st_parentCategories[] = $st_root;
-		foreach ($st_categories as $key => $value) {
-			$st_parentCategories[] = $value;
-		}
-		return $st_parentCategories;
-	}
-		
     public function indexAction() {
-    	$this->view->assign('form', $this->getForm());
-		$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser(3)));
+    	$this->view->assign('categories_form', $this->getForm());
+		$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
 		$this->_forward('index', 'budgets');
     }
     
@@ -101,8 +84,8 @@ class CategoriesController extends Zend_Controller_Action
     }
     
     public function editAction() {
-    	$this->view->assign('form', $this->getEditForm($this->_request->getParam('id')));
-    	$this->view->assign('list', $this->mountCategoryTree($this->categories->getCategoriesByUser(3)));
+    	$this->view->assign('categories_form', $this->getEditForm($this->_request->getParam('id')));
+    	$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
     	$this->_forward('index', 'budgets');
     }
     

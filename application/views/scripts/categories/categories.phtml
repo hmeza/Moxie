@@ -1,11 +1,11 @@
 <?php
 global $st_lang;
 echo '<h2>'.$st_lang['categories'].'</h2>';
-echo $this->form;
+echo $this->categories_form;
 ?>
 <table width=100%>
 <?php
-foreach ($this->list as $key => $value) {
+foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
 		echo '<td><a href="/categories/delete/id/'.$value['id1'].'" alt="'.$st_lang['categories_delete'].'" title="'.$st_lang['categories_delete'].'">X</a>&nbsp;';

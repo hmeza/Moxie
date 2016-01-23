@@ -151,6 +151,27 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 		return $formCategories;
 	}
-}
 
-?>
+	/**
+	 * Returns the list of categories mounted as a tree.
+	 * @param array $st_categories
+	 * @return array
+	 */
+	public function mountCategoryTree($st_categories, $i_userId) {
+		$st_parent = $this->fetchRow($this->select()
+				->where('user_owner = '.$i_userId)
+				->where('parent IS NULL'));
+		$st_root = array(
+				'id1'		=>	$st_parent->id,
+				'parent1'	=>	null,
+				'name1'		=>	null,
+				'name2'		=>	'New category'
+		);
+		$st_parentCategories = array();
+		$st_parentCategories[] = $st_root;
+		foreach ($st_categories as $key => $value) {
+			$st_parentCategories[] = $value;
+		}
+		return $st_parentCategories;
+	}
+}
