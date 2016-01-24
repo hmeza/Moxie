@@ -10,6 +10,7 @@ global $st_lang;
 	var settingsYear = <?php echo $this->year; ?>;
 	var getmonthUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/month/month/"+settingsMonth+"/year/"+settingsYear;
 	var tagList = [<?php if(!empty($this->tags)) echo "'".implode($this->tags, "','")."'"; ?>];
+    var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>

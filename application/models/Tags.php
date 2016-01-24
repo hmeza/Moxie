@@ -61,4 +61,30 @@ class Tags extends Zend_Db_Table_Abstract {
 		}
 		return $tags;
 	}
+
+    public function getUsedTagsByUser($userId) {
+        if(empty($userId)) {
+            throw new Exception("Empty user id");
+        }
+        try {
+            $query = $this->select()
+                ->setIntegrityCheck(false)
+                ->from(array('t' => 'tags'), array('t.id as id', 't.name as name'))
+                ->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id', array())
+                ->where('user_owner = ?', $userId)
+                ->group('t.id')
+                ->order('t.name DESC');
+
+            $rows = $this->fetchAll($query)->toArray();
+            $tags = array();
+            foreach($rows as $row) {
+                $tags[$row['id']] = $row['name'];
+            }
+        }
+        catch(Exception $e) {
+            error_log(__METHOD__.": ".$e->getMessage());
+            $tags = array();
+        }
+        return $tags;
+    }
 }

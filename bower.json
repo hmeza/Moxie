@@ -1,0 +1,26 @@
+{
+  "name": "Moxie",
+  "version": "1.0.0",
+  "homepage": "https://github.com/hmeza/Moxie",
+  "authors": [
+    "Hugo Meza <hugo.meza.macias@gmail.com>"
+  ],
+  "description": "Expenses",
+  "keywords": [
+    "expenses",
+    "incomes",
+    "budget"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "~1.11.4",
+    "taggle": "~1.6.2"
+  }
+}
