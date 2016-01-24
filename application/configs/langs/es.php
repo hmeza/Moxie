@@ -91,13 +91,11 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'text_about_text' => 'Moxie utiliza:<br> 
 		<a href="http://www.php.net" target="blank">PHP</a><br>
 		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
-		<a href="http://teethgrinder.co.uk/open-flash-chart/" target="blank">Open flash chart</a><br>
-		<a href="">MySQL</a><br>
-		<a href="">Apache</a><br><br>
+		<a href="https://developers.google.com/chart/" target="blank">Google charts</a><br>
+		<a href="https://www.mysql.com/" target="blank">MySQL</a><br>
+		<a href="https://httpd.apache.org/" target="blank">Apache</a><br><br>
         Moxie está alojado en:<br>
-        <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>
-        <!--El código de Moxie está disponible en:<br>
-        <a href="https://github.com/hmeza/Moxie.git" target="blank">https://github.com/hmeza/Moxie.git</a>-->',
+        <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>',
 
 );
 ?>
