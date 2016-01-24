@@ -46,6 +46,7 @@ else {
             echo '<li class="nav__item"><a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
         }
         ?>
+        <li class="nav__item"><a href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/logout"><?php echo $st_lang['logout']; ?></a></li>
         </ul>
     </nav>
     <?php
@@ -61,7 +62,7 @@ else {
         $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
 
         $s_webMenu = '
-        <table cellspacing=10>
+        <table cellspacing=10 class="moxie_menu">
         ';
         if (isset($_SESSION['user_id'])) {
                 $s_webMenu .= '
