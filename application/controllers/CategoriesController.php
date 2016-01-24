@@ -63,6 +63,12 @@ class CategoriesController extends Zend_Controller_Action
 		$form->addElement($types);
 		
 		$form->addElement('submit','submit', array('label' => $st_lang['category_send']));
+		$form->addElement('button', 'delete',
+				array(
+					'label' => $st_lang['categories_delete'],
+					'onclick' => 'window.location.replace("/categories/delete/id/'.$i_categoryPK.'");'
+				)
+		);
 		return $form;
 	}
 	

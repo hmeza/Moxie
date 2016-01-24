@@ -31,7 +31,7 @@ legend span {
 	width:1em;
 	text-align:right;
 }
-input {
+input, button {
 	padding:2px;
 	width:129px;
 	height: 24px;
@@ -44,7 +44,7 @@ input {
 input[type="radio"] {
     width: 25px;
 }
-input[type="submit"] {
+input[type="submit"], button {
     height: 24px;
 }
 
@@ -179,7 +179,7 @@ div.moxieedit {
 div:hover.moxieedit {
 	background:url("/img/edit_hover.png") no-repeat;
 }
-input.moxiedelete {
+input.moxiedelete, button {
 	/*background:url("/img/delete.png") no-repeat;
 	delete-hover.png*/
 	display:inline-block;
@@ -497,7 +497,7 @@ span.selectOption:hover {
 		font-size: inherit;
 	}
 
-	input {
+	input, button{
 		width: 100%;
 	}
 
@@ -570,12 +570,12 @@ span.selectOption:hover {
         display:none;
     }
 
-    input {
+    input, button{
         width:120px;
         height: 24px;
     }
 
-    input[type="submit"] {
+    input[type="submit"], button {
         height: 34px;
     }
 

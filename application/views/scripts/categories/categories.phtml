@@ -12,7 +12,6 @@ foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
 
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-		echo '<td><a href="/categories/delete/id/'.$value['id1'].'" alt="'.$st_lang['categories_delete'].'" title="'.$st_lang['categories_delete'].'">X</a>&nbsp;';
 		echo '<td><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></td>';
 		echo '<td>'.$first_name.$value['name2']."</td><td>";
 		switch($value['type']) {
