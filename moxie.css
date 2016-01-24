@@ -454,6 +454,14 @@ span.selectOption:hover {
 		overflow-x: hidden;
 	}
 
+	h1 {
+		font-size: 24px;
+	}
+
+	h2 {
+		font-size: 20px;
+	}
+
 	body {
 		border: 0;
 		margin: 0;
@@ -493,8 +501,12 @@ span.selectOption:hover {
 		width: 100%;
 	}
 
-	table, label {
+	table {
 		font-size: inherit;
+	}
+
+	td {
+		font-size: 15px;
 	}
 
 	input, button{
