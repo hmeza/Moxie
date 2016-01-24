@@ -66,7 +66,8 @@ class CategoriesController extends Zend_Controller_Action
 		$form->addElement('button', 'delete',
 				array(
 					'label' => $st_lang['categories_delete'],
-					'onclick' => 'window.location.replace("/categories/delete/id/'.$i_categoryPK.'");'
+					'onclick' => 'window.location.replace("/categories/delete/id/'.$i_categoryPK.'");',
+                    'class' => 'moxie'
 				)
 		);
 		return $form;
