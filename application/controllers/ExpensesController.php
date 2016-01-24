@@ -207,6 +207,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('month', $i_month);
 		$this->view->assign('form', $this->getAddForm());
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
+        $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 	}
 
 	/**
@@ -260,10 +261,15 @@ class ExpensesController extends Zend_Controller_Action
 		if (empty($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-		$expenseId = $this->expenses->addExpense($_SESSION['user_id'],$st_form['date'],$st_form['amount'],$st_form['category'],$st_form['note']);
-		if(!empty($_POST['taggles'])) {
-			$this->updateTags($_POST['taggles'], $expenseId);
-		}
+        try {
+            $expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form['date'], $st_form['amount'], $st_form['category'], $st_form['note']);
+            if (!empty($_POST['taggles'])) {
+                $this->updateTags($_POST['taggles'], $expenseId);
+            }
+        }
+        catch(Zend_Db_Statement_Exception $e) {
+            throw new Exception("Database error in ".__METHOD__);
+        }
 		$this->_helper->redirector('index','expenses');
 	}
 	
@@ -294,6 +300,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
+        $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 		$this->render('index');
 	}
 	
