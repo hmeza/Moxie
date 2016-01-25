@@ -40,7 +40,7 @@ function snapshot() {
 
 <h2 id="budget_title"><?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?></h2>
 <div id="budget_table" style="display: none;"categ>
-<table width=100%>
+<table width=100% style="max-width: 500px">
 <?php
 $f_initialBudget = 0;
 foreach ($this->categories as $key => $value) {
