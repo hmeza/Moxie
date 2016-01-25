@@ -31,7 +31,7 @@ class UsersController extends Zend_Controller_Action {
 		$form->addElement('password', 'password_check', array('label' => 'Repeat password'));
 		$form->addElement('text', 'email', array('label' => 'Email', 'value' => $st_user[0]['email']));
 
-		$st_langs = array('es' => 'Español', 'en' => 'English');
+		$st_langs = array('es' => 'Español', 'ca' => 'Catalan', 'en' => 'English');
 		$multiOptions = new Zend_Form_Element_Select('language', $st_langs);
 		$multiOptions->setLabel('Language');
 		$multiOptions->addMultiOptions($st_langs);
