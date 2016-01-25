@@ -430,6 +430,11 @@ span.selectOption:hover {
     div.moxienext {
         display:none;
     }
+
+    input[type="submit"] {
+        padding: 0px;
+        height: 34px;
+    }
 }
 
 @media screen and (min-width: 481px) and (max-width: 749px) {
