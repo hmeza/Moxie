@@ -74,6 +74,8 @@ $st_lang = array(
 	'finances_period' => 'Months',
 	'finances_revenue' => 'Interests',
 	'finances_total' => 'Total',
+    // Tags
+    'tags_title' => 'Tags',
 	// User, login, etc.
 	'users'		=>	'User menu',
 	'users_title'	=>	'Settings',

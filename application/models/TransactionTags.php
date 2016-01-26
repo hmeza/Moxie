@@ -44,4 +44,18 @@ class TransactionTags extends Zend_Db_Table_Abstract {
 	public function removeTagsFromTransaction($transactionId) {
 		$this->delete("id_transaction = ".$transactionId);
 	}
+
+    /**
+     * Removes relations between transactions and tags by tag id.
+     * @param $tagId
+     * @return int
+     * @throws Zend_Db_Select_Exception
+     */
+    public function removeTagsByTagId($tagId, $userId) {
+        $where = $this->select()
+            ->where('id_tag = ?', $tagId)
+            ->where('user_owner = ?', $userId)
+            ->getPart(\Zend_Db_Table_Select::WHERE);
+        return $this->delete($where);
+    }
 }

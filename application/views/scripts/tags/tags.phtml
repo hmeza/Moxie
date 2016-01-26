@@ -1,0 +1,30 @@
+<script type="text/javascript">
+var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
+
+var taggle = new Taggle('tags', {
+    tags: tagList,
+    duplicateTagClass: 'bounce'
+});
+var taggleContainer = taggle.getContainer();
+var taggleInput = taggle.getInput();
+$(taggleInput).autocomplete({
+    source: usedTagList,
+    appendTo: taggleContainer,
+    position: { at: "left", of: taggleContainer },
+    select: function(event, data) {
+        event.preventDefault();
+        //Add the tag if user clicks
+        if (event.which === 1) {
+            taggle.add(data.item.value);
+        }
+    }
+});
+</script>
+
+<h2 id="tags_title"><?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?></h2>
+<div id="tags_table" style="display: none;">
+    <form action="/tags/update">
+        <div id="tags"></div>
+    </form>
+</div>
+<br><br>
