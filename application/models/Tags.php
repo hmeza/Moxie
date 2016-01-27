@@ -105,9 +105,10 @@ class Tags extends Zend_Db_Table_Abstract {
         try {
             $where = $this->select()
                 ->where('name = ?', $tag)
+                ->where('user_owner = ?', $userId) // user check
                 ->getPart(\Zend_Db_Table_Select::WHERE);
             $tag = $this->fetchRow($where);
-            $this->transactionTags->removeTagsByTagId($tag->id, $userId);
+            $this->transactionTags->removeTagsByTagId($tag->id);
             $tag->delete();
         }
         catch(Exception $e) {

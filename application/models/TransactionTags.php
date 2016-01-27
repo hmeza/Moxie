@@ -51,10 +51,9 @@ class TransactionTags extends Zend_Db_Table_Abstract {
      * @return int
      * @throws Zend_Db_Select_Exception
      */
-    public function removeTagsByTagId($tagId, $userId) {
+    public function removeTagsByTagId($tagId) {
         $where = $this->select()
             ->where('id_tag = ?', $tagId)
-            ->where('user_owner = ?', $userId)
             ->getPart(\Zend_Db_Table_Select::WHERE);
         return $this->delete($where);
     }
