@@ -20,6 +20,9 @@ $(document).ready(function() {
 	$("#budget_title").click(function (event) {
 		$("#budget_table").slideToggle();
 	});
+    $("#tags_title").click(function (event) {
+        $("#tags_table").slideToggle();
+    });
 });
 </script>
 
@@ -51,9 +54,10 @@ echo $this->form->language;
 <?php
 echo $this->partial('categories/categories.phtml',
 		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display));
-?>
 
-<?php
 echo $this->partial('categories/budget.phtml',
 		array('categories'=>$this->categories));
+
+echo $this->partial('tags/tags.phtml',
+        array('tag_list' => $this->tag_list));
 ?>

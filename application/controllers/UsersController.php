@@ -9,12 +9,16 @@ class UsersController extends Zend_Controller_Action {
 
 	/** @var Budgets */
 	private $budgets;
+
+    /** @var Tags */
+    private $tags;
 	
 	public function init() {
 		parent::init();
 		$this->usersModel = new loginModel();
 		$this->categories = new Categories();
 		$this->budgets = new Budgets();
+        $this->tags = new Tags();
 	}
 	
 	private function getForm($i_userPK) {
@@ -93,6 +97,7 @@ class UsersController extends Zend_Controller_Action {
 			);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
+        $this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('categories',$st_categories);
 	}
 	
