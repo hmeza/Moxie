@@ -76,6 +76,8 @@ $st_lang = array(
 	'finances_total' => 'Total',
     // Tags
     'tags_title' => 'Tags',
+	'tags_notice' => 'When pressing Update, removed tags will be deleted.',
+	'tags_update' => 'Update',
 	// User, login, etc.
 	'users'		=>	'User menu',
 	'users_title'	=>	'Settings',

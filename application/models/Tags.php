@@ -52,7 +52,7 @@ class Tags extends Zend_Db_Table_Abstract {
 		}
 		try {
 			$query = $this->select()->where('user_owner = ?', $userId);
-		
+
 			$rows = $this->fetchAll($query)->toArray();
 			$tags = array();
 			foreach($rows as $row) {
@@ -103,11 +103,10 @@ class Tags extends Zend_Db_Table_Abstract {
      */
     public function deleteTag($userId, $tag) {
         try {
-            $where = $this->select()
+            $query = $this->select()
                 ->where('name = ?', $tag)
-                ->where('user_owner = ?', $userId) // user check
-                ->getPart(\Zend_Db_Table_Select::WHERE);
-            $tag = $this->fetchRow($where);
+                ->where('user_owner = ?', $userId);
+            $tag = $this->fetchRow($query);
             $this->transactionTags->removeTagsByTagId($tag->id);
             $tag->delete();
         }

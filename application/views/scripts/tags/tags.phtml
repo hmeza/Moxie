@@ -11,9 +11,12 @@
 <h2 id="tags_title"><?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?></h2>
 <div id="tags_table" style="/*display: none;*/">
     <form action="/tags/multi_update">
-        Al pulsar Update se eliminarán los tags borrados.
+        <?php
+        global $st_lang;
+        echo $st_lang['tags_notice'];
+        ?>
         <div id="tags" class="tags" style="width: 100%"></div>
-        <input type="submit" value="Update">
+        <input type="submit" value="<?php echo $st_lang['tags_update']; ?>">
     </form>
 </div>
 <br><br>

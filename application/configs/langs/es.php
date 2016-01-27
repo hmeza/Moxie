@@ -76,6 +76,8 @@ $st_lang = array(
 	'finances_total' => 'Total',
     // Tags
     'tags_title' => 'Tags',
+	'tags_notice' => 'Al pulsar Actualizar se eliminarán los tags borrados.',
+	'tags_update' => 'Actualizar',
 	// User, login, etc.
 	'users'		=>	'Menú de usuario',
 	'users_title' => 'Configuración',
