@@ -52,6 +52,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			case 'moxie.dootic.com':
 				$section = "production";
 				break;
+			case 'integration.dootic.com':
+			case 'testing':
+				$section = "testing";
+				break;
 			case 'moxie.dev':
 			default:
 				$section = "development";

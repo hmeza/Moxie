@@ -2,7 +2,7 @@
 
 class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp() {
-		$_SERVER['SERVER_NAME'] = "moxie.dev";
+		$_SERVER['SERVER_NAME'] = "testing";
 		$_SERVER['REQUEST_URI'] = "test";
 		$this->bootstrap = new Zend_Application(
 			'development',
