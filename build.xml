@@ -12,9 +12,9 @@
     </target>
 
     <target name="phpunit">
-        <exec executable="vendor/bin/phpunit" failonerror="true">
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
             <arg value="-c"/>
-            <arg value="test/php/phpunit.xml"/>
+            <arg value="${basedir}/test/php/phpunit.xml"/>
         </exec>
     </target>
 
