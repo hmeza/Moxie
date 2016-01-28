@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="Moxie" default="build">
-    <target name="build" depends="jasmine"/>
+    <target name="build" depends="phpunit, jasmine"/>
 
     <!-- lint for js would be nice -->
 
     <target name="npm">
         <exec executable="npm" failonerror="true">
             <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="phpunit">
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg value="-c"/>
+            <arg value="test/php/phpunit.xml"/>
         </exec>
     </target>
 
