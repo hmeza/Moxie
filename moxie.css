@@ -127,6 +127,8 @@ form.budget {
 	cursor: hand;
 	cursor: pointer;
 	background:url("img/moxie-title.png") no-repeat;
+	width: 233px;
+	height: 65px;
 }
 
 .moxietitle:hover {
@@ -256,7 +258,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie_login_body {
 	width: 100%;
-	display:none;
 }
 
 .moxie_login_button {
@@ -738,6 +739,16 @@ body {
     .moxietitle:hover {
         background: #ffffff;
     }
+
+	.moxietitle_mobile_not_logged {
+		background:url("img/moxie-title.png") no-repeat;
+		width: 233px;
+		height: 65px;
+	}
+
+	.moxietitle_mobile_not_logged:hover {
+		background:url("img/moxie-title-hover.png") no-repeat;
+	}
 }
 
 .moxie-submenu {

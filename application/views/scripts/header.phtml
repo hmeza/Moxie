@@ -1,7 +1,7 @@
 <header>
 <table width=100%>
 <tr>
-<td valign="top" class="moxietitle" width="233" height="65" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
+<td valign="top" class="moxietitle <?php if(empty($_SESSION['user_id'])) echo 'moxietitle_mobile_not_logged'; ?>" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
 <td align="right" class="moxie_login_header">
 <?php
 global $st_lang;

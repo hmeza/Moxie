@@ -1,6 +1,6 @@
 <?php
 global $st_lang;
-if (!isset($_SESSION['user_id'])) {
+if (empty($_SESSION['user_id'])) {
     ?>
     <div align="center" class="moxie_login_body">
         <form name="login" id="login"

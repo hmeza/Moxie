@@ -51,6 +51,7 @@
         font-family: 'Lato', sans-serif;
         font-weight: bold;
         text-align:center;
+        font-size: 20px;
         color:rgba(20, 20, 20, 1);
     }
     /*Damos colocamos el triangulo negro a la pestaña del menú dónde nos encontramos actualmente*/
@@ -83,7 +84,7 @@
     .menu-toogle {
         display: block;
         position:absolute; /*Lo posicionamos absolutamente para poder darle una posición y poder moverlo según el menú esté abierto o cerrado*/
-        width: 45px;
+        width: 42px;
         line-height:1.1;
         text-align:center;
         top:6.5px; /*Le damos una posición top y left en donde queramos que se encuentre la hamburguesa del menú*/
@@ -96,7 +97,7 @@
     /*Añadimos la haburguesa y le damos unos estilos*/
     .menu-toogle::before {
         content:"☰";
-        font-size:42px;
+        font-size:39px;
         color:white;
     }
 
