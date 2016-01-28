@@ -7,7 +7,14 @@
 
     <target name="npm">
         <exec executable="npm" failonerror="true">
+            <arg value="config"/>
+            <arg value="set"/>
+            <arg value="cache"/>
+            <arg value="/tmp/.npm"/>
+        </exec>
+        <exec executable="npm" failonerror="true">
             <arg value="install"/>
+            <arg value="--save-dev"/>
         </exec>
     </target>
 
