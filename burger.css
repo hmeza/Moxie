@@ -1,3 +1,7 @@
+.menu-toogle {
+    display: none;
+}
+
 /* Mobile */
 @media screen and (max-device-width: 480px) {
 	.moxie_menu {
@@ -77,6 +81,7 @@
     }
     /*Estos son los estilos de la hamburguesa del menú que abre y cierra el mismo*/
     .menu-toogle {
+        display: block;
         position:absolute; /*Lo posicionamos absolutamente para poder darle una posición y poder moverlo según el menú esté abierto o cerrado*/
         width: 35px;
         line-height:1.1;
