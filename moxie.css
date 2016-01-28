@@ -728,6 +728,16 @@ body {
 		display:none;
 		width: 0px;
 	}
+
+    .moxietitle {
+        width: 0px;
+        cursor: default;
+        background: #ffffff;
+    }
+
+    .moxietitle:hover {
+        background: #ffffff;
+    }
 }
 
 .moxie-submenu {
