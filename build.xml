@@ -5,7 +5,7 @@
 
     <!-- lint for js would be nice -->
 
-    <target name="npm">
+<!--    <target name="npm">
         <exec executable="npm" failonerror="true">
             <arg value="config"/>
             <arg value="set"/>
@@ -14,9 +14,8 @@
         </exec>
         <exec executable="npm" failonerror="true">
             <arg value="install"/>
-            <arg value="--save-dev"/>
         </exec>
-    </target>
+    </target>-->
 
     <target name="composer">
         <exec executable="composer" failonerror="true">
@@ -31,7 +30,7 @@
         </exec>
     </target>
 
-    <target name="jasmine" depends="npm">
+    <target name="jasmine">
         <exec executable="grunt" failonerror="true"/>
     </target>
 </project>
