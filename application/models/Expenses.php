@@ -210,7 +210,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 			return $this->insert($st_data);
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.": ".$e->getMessage());
 		}
 	}
 
