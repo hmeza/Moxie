@@ -2,25 +2,34 @@ function markLine(id) {
 	window.location="/expenses/markline/id/"+id;
 }
 
-function filter() {
-	var chosen = document.getElementById('category_filter').selectedIndex;
-	var redirect = document.getElementById('category_filter').options[chosen].value;
-	var redirect_string = (redirect == "0") ? "" : "/category_filter/"+redirect;
-	window.location="/expenses/index/"+redirect_string+"/year/"+year+"/month/"+month;
+var filter = function() {
+        var chosen = document.getElementById('category_filter').selectedIndex;
+        var redirect = document.getElementById('category_filter').options[chosen].value;
+        var redirect_string = (redirect == "0") ? "" : "/category/"+redirect;
+        window.location="/expenses/index"+redirect_string+"/year/"+year+"/month/"+month;
 }
 
-function filter_tag() {
-	var chosen = document.getElementById('tag_filter').selectedIndex;
-	var redirect = document.getElementById('tag_filter').options[chosen].text;
-	window.location="/expenses/index/tag_filter/"+redirect+"/year/"+year+"/month/"+month;
+var filter_tag = function() {
+        var chosen = document.getElementById('tag_filter').selectedIndex;
+        var value = document.getElementById('tag_filter').options[chosen].value;
+        var redirect = document.getElementById('tag_filter').options[chosen].text;
+        var redirect_string = (value == "0") ? "" : "/tag/"+redirect;
+        window.location="/expenses/index"+redirect_string+"/year/"+year+"/month/"+month;
 }
 
 $(document).ready(function() {
     enableSelectBoxes();
-	new Taggle('tags', {
-		tags: tagList,
-		duplicateTagClass: 'bounce'
-	});
+        new Taggle('tags', {
+                tags: tagList,
+                duplicateTagClass: 'bounce'
+        });
+
+    // selecct category and tag, if any
+    $('#category_filter').val(category);
+    $('#tag_filter').val(tag);
+    // handle here select changes
+    $('#category_filter').change(filter);
+    $('#tag_filter').change(filter_tag);
 });
 
 function enableSelectBoxes() {
