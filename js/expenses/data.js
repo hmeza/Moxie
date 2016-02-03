@@ -5,7 +5,8 @@ function markLine(id) {
 function filter() {
 	var chosen = document.getElementById('category_filter').selectedIndex;
 	var redirect = document.getElementById('category_filter').options[chosen].value;
-	window.location="/expenses/index/category_filter/"+redirect+"/year/"+year+"/month/"+month;
+	var redirect_string = (redirect == "0") ? "" : "/category_filter/"+redirect;
+	window.location="/expenses/index/"+redirect_string+"/year/"+year+"/month/"+month;
 }
 
 function filter_tag() {

@@ -17,6 +17,21 @@ class Tags extends Zend_Db_Table_Abstract {
         $this->transactionTags = new TransactionTags();
 	}
 
+	public function findIdTagByName($userId, $name) {
+		if(empty($userId)) {
+                        throw new Exception("Empty user id");
+                }
+                if(empty($name)) {
+                        throw new Exception("Empty tag name");
+                }
+		$row = $this->fetchRow(
+			$this->select()
+				->where('user_owner = ?', $userId)
+				->where('name = ?', $name)
+		);
+		return empty($row) ? 0 : $row->id;
+	}
+
 	/**
 	 * Adds a new tag for $userId
 	 * @var int $userId

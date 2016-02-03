@@ -172,9 +172,9 @@ class ExpensesController extends Zend_Controller_Action
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
-		$i_category = $this->getRequest()->getParam('category_filter');
+		$i_category = $this->getRequest()->getParam('category');
 		$i_category = (isset($i_category)) ? $i_category : 0;
-		$s_tag = $this->getRequest()->getParam('tag_filter');
+		$s_tag = $this->getRequest()->getParam('tag');
 		$s_tag = (isset($s_tag) ? $s_tag : null);
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
@@ -188,6 +188,10 @@ class ExpensesController extends Zend_Controller_Action
 	        else {
 		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
 	        }
+
+		if(!empty($s_tag)) {
+			$i_tag = $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag);
+		}
         }
         catch(Exception $e) {
             throw new Exception("Error recovering expenses");
@@ -205,6 +209,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('list', $st_list);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
+		$this->view->assign('category', $i_category);
+		$this->view->assign('tag', $i_tag);
 		$this->view->assign('form', $this->getAddForm());
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
