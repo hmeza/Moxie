@@ -306,7 +306,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-        $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
+		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 		$this->render('index');
 	}
 	
