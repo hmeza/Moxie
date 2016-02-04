@@ -99,7 +99,7 @@ class ExpensesController extends Zend_Controller_Action
 		
 		$s_category = (!empty($category)) ? 'category = '.$category : '1=1';
 
-        $o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
+		$o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
 
 		foreach ($o_rows as $key => $value) {
 			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
