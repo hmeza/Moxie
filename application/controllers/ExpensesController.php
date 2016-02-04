@@ -104,8 +104,8 @@ class ExpensesController extends Zend_Controller_Action
 		foreach ($o_rows as $key => $value) {
 			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
 			$st_data[] = array(
-					date("M", $timestamp),
-					(float)$value['amount']
+				date("M", $timestamp),
+				(float)$value['amount']
 			);
 		}
 		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
