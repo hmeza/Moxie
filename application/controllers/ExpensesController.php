@@ -22,7 +22,6 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * This function generates the form to add expenses.
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	private function getAddForm() {
 		global $st_lang;
@@ -52,7 +51,6 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * This function generates the form to add expenses.
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 * @param	int $i_expensePK
 	 */
 	private function getEditForm($i_expensePK) {
@@ -259,30 +257,36 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * Adds an expense and shows expenses index again
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	public function addAction() {
+		ini_set("error_log", "/tmp/php_errors.log");
 		$st_form = $this->getRequest()->getPost();
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
-		if (empty($st_form['note'])) $st_form['note'] = "";
-		if (!isset($st_form['category'])) $st_form['category'] = 10;
+		$st_form['note'] = $this->getRequest()->getParam('note', "");
+		$st_form['category'] = $this->getRequest()->getParam('category', null);
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-	        try {
-            $expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form['date'], $st_form['amount'], $st_form['category'], $st_form['note']);
-            if (!empty($_POST['taggles'])) {
-                $this->updateTags($_POST['taggles'], $expenseId);
+		echo $st_form['category'];
+		if(empty($st_form['category'])) {
+			throw new Exception("Empty category not allowed for expenses");
+		}
+		if(empty($_SESSION['user_id'])) {
+			$this->redirect('/index');
+		}
+		try {
+			$expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form['date'], $st_form['amount'], $st_form['category'], $st_form['note']);
+			if (!empty($_POST['taggles'])) {
+				$this->updateTags($_POST['taggles'], $expenseId);
             }
-	        }
-        	catch(Zend_Db_Statement_Exception $e) {
+		}
+		catch(Zend_Db_Statement_Exception $e) {
 			throw new Exception("Database error in ".__METHOD__);
-        	}
+		}
 		$this->_helper->redirector('index','expenses');
 	}
 	
 	/**
 	 * Edits a given expense
 	 * @author	hmeza
-	 * @since	2011-02-08
 	 */
 	public function editAction() {
 		global $st_lang;
@@ -313,7 +317,6 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * Updates an expense
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
@@ -331,7 +334,6 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * Deletes a given expense
 	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	public function deleteAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');
@@ -347,7 +349,6 @@ class ExpensesController extends Zend_Controller_Action
 	/**
 	 * Marks an expense to appear or not in sums
 	 * @author	hmeza
-	 * @since	2011-02-03
 	 */
 	public function marklineAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');

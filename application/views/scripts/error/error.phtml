@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 	echo $st_lang['error_nouser'];
 }
 else {
-	echo '<p>An error occurred; please try again later.</p>
+	echo '<p>An error occurred:</p>
 	<pre style="bgcolor:blue">';
 	echo $this->message;
 	echo '</pre>';

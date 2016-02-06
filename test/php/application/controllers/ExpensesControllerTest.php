@@ -9,7 +9,6 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 			APPLICATION_PATH . '/configs/application.ini'
 		);
 		parent::setUp();
-		$this->fakeLogin();
 	}
 
 	/**
@@ -44,7 +43,46 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		);
 	}
 
-	public function testAddExpenseSendingAmountWithCommaAddsExpense() {
+	public function testAddExpenseWithoutCategoryThrowsError() {
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+		$this->fakeLogin();
+		$this->request->setMethod('POST')
+				->setPost(array(
+						'amount' => 12.01,
+						'date' => '12/01/2016',
+						'note' => 'test note without category',
+						'taggles' => array()
+				));
+		$this->dispatch('/expenses/add');
+		$this->assertController('error');
+		$this->assertAction('error');
+		$this->assertQueryContentContains('p', 'An error occurred:');
+		$this->assertQuery('pre');
+		$this->assertQueryContentContains('pre', 'Empty category not allowed for expenses');
+
+	}
+
+	public function testAddExpenseWithoutUserThrowsError() {
+		// arrange
+		$this->dispatch('/login/logout');
+		$this->resetRequest()
+				->resetResponse();
+		$this->request->setPost(array());
+
+		$this->request->setMethod('POST')
+				->setPost(array(
+						'amount' => 12.01,
+						'date' => '12/01/2016',
+						'note' => 'test note without category',
+						'category' => 10,
+						'taggles' => array()
+				));
+
+		// act
+		$this->dispatch('/expenses/add');
+
+		// assert
+		$this->assertRedirectTo('/index');
 
 	}
 
@@ -55,5 +93,10 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 				'password' => '123456'
 			));
 		$this->dispatch('/login/login');
+
+		$this->resetRequest()
+			->resetResponse();
+
+		$this->request->setPost(array());
 	}
 }
