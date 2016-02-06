@@ -23,6 +23,7 @@ class StatsController extends Zend_Controller_Action {
 	 */
 	public function indexAction() {
 		$incomeStatsByCategory = $this->categories->getCategoriesForView(Categories::BOTH);
+		$year = $this->getRequest()->getParam('year', date('Y'));
 		$data = array();
 		foreach ($incomeStatsByCategory as $key => $value) {
 			$data[$key]['index'] = $key;
@@ -41,8 +42,8 @@ class StatsController extends Zend_Controller_Action {
 		$expenses = array();
 		$incomes = array();
 		for($month = 1; $month <= 12; $month++) {
-			$expenses[$month] = $this->expenses->getExpenses($_SESSION['user_id'], $month, date('Y'));
-			$incomes[$month] = $this->incomes->getIncomes($_SESSION['user_id'],$month,date('Y'));
+			$expenses[$month] = $this->expenses->getExpenses($_SESSION['user_id'], $month, $year);
+			$incomes[$month] = $this->incomes->getIncomes($_SESSION['user_id'],$month, $year);
 		}
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
@@ -55,8 +56,9 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('budget_incomes', $st_incomes);
 		$this->view->assign('expenses', $expenses);
 		$this->view->assign('incomes', $incomes);
-		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], date('Y')));
+		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], $year));
 		$this->view->assign('data', $data);
+		$this->view->assign('year', $year);
 		$this->view->assign('per_item_data', $st_perItemData);
 	}
 }
