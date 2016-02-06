@@ -5,9 +5,6 @@ echo "<h2>".$st_lang['register']."</h2>";
 <br>
 <p style="color: #ff0000; padding: 10px; border: 10px;"><?php echo $this->message; ?></p>
 <?php
-// @todo move to controller
-include("application/3rdparty/simple-php-captcha/simple-php-captcha.php");
-$_SESSION['captcha'] = captcha();
 $this->form->setAction('/login/registeruser')->setMethod('post');
 ?>
 <form method="<?php echo $this->form->getMethod() ?>" action="<?php echo $this->form->getAction()?>">
