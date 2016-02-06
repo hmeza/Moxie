@@ -9,6 +9,7 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 			APPLICATION_PATH . '/configs/application.ini'
 		);
 		parent::setUp();
+		$this->fakeLogin();
 	}
 
 	/**
