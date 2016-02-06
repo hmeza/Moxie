@@ -7,19 +7,19 @@ global $st_lang;
     var deleteMessage = "<?php echo $st_lang['incomes_delete_message']; ?>";
 </script>
 
-<table>
-<tr>
-<td>
+<div class="moxie-container">
+<div class="moxie-left">
 <?php
 echo $this->partial('incomes/data_header.phtml',
 	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
 echo $this->partial('common/data.phtml',
 	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year, 'editSlug'  => '/incomes/edit/id/'));
 ?>
-</td>
-<td valign="top" width=50%>
+</div>
+<div class="moxie-right">
 <?php
 echo $this->partial('incomes/stats.phtml',
 					array('graphData' => $this->graphData, 'graphDataLabel' => $this->graphDataLabel, 'graphDataLabelYear' => $this->graphDataLabelYear));
 ?>
-</td></tr></table>
+</div>
+</div>
