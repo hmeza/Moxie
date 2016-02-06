@@ -38,7 +38,12 @@ function snapshot() {
 }
 </script>
 
-<h2 id="budget_title"><?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?></h2>
+<h2 id="budget_title">
+	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+		<i class="material-icons" style="background-color: ##0b77b7">+</i>
+	</button>
+	<?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?>
+</h2>
 <div id="budget_table" style="display: none;"categ>
 <table width=100% style="max-width: 500px">
 <?php
