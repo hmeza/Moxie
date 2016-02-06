@@ -5,17 +5,17 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$_SERVER['SERVER_NAME'] = "testing";
 		$_SERVER['REQUEST_URI'] = "test";
 		$this->bootstrap = new Zend_Application(
-			'development',
+			'testing',
 			APPLICATION_PATH . '/configs/application.ini'
 		);
 		parent::setUp();
+		$this->fakeLogin();
 	}
 
 	/**
 	 * @dataProvider addExpenseDataProvider
 	 */
 	public function testAddExpenseWithTags($amount, $date, $note, $category, $tags = array()) {
-		$this->fakeLogin();
 		$this->request->setMethod('POST')
 			->setPost(array(
 				'amount' => $amount,
