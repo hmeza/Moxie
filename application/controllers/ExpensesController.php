@@ -99,13 +99,13 @@ class ExpensesController extends Zend_Controller_Action
 		
 		$s_category = (!empty($category)) ? 'category = '.$category : '1=1';
 
-        $o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
+		$o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
 
 		foreach ($o_rows as $key => $value) {
 			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
 			$st_data[] = array(
-					date("M", $timestamp),
-					(float)$value['amount']
+				date("M", $timestamp),
+				(float)$value['amount']
 			);
 		}
 		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
@@ -172,22 +172,26 @@ class ExpensesController extends Zend_Controller_Action
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month');
 		$i_year = $this->getRequest()->getParam('year');
-		$i_category = $this->getRequest()->getParam('category_filter');
+		$i_category = $this->getRequest()->getParam('category');
 		$i_category = (isset($i_category)) ? $i_category : 0;
-		$s_tag = $this->getRequest()->getParam('tag_filter');
+		$s_tag = $this->getRequest()->getParam('tag');
 		$s_tag = (isset($s_tag) ? $s_tag : null);
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 
-        try {
-            $st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
+		try {
+			$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
 			if((empty($i_category) && empty($s_tag)) || !empty($i_category)) {
 				$st_list = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $i_category);
 			}
 	        else {
 		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
 	        }
+
+		if(!empty($s_tag)) {
+			$i_tag = $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag);
+		}
         }
         catch(Exception $e) {
             throw new Exception("Error recovering expenses");
@@ -205,6 +209,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('list', $st_list);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
+		$this->view->assign('category', $i_category);
+		$this->view->assign('tag', $i_tag);
 		$this->view->assign('form', $this->getAddForm());
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
@@ -261,15 +267,15 @@ class ExpensesController extends Zend_Controller_Action
 		if (empty($st_form['note'])) $st_form['note'] = "";
 		if (!isset($st_form['category'])) $st_form['category'] = 10;
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-        try {
+	        try {
             $expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form['date'], $st_form['amount'], $st_form['category'], $st_form['note']);
             if (!empty($_POST['taggles'])) {
                 $this->updateTags($_POST['taggles'], $expenseId);
             }
-        }
-        catch(Zend_Db_Statement_Exception $e) {
-            throw new Exception("Database error in ".__METHOD__);
-        }
+	        }
+        	catch(Zend_Db_Statement_Exception $e) {
+			throw new Exception("Database error in ".__METHOD__);
+        	}
 		$this->_helper->redirector('index','expenses');
 	}
 	
@@ -300,7 +306,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('form', $this->getEditForm($i_expensePK));
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-        $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
+		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 		$this->render('index');
 	}
 	

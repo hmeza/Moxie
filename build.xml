@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Moxie" default="build">
+    <target name="build" depends="phpunit, jasmine"/>
+
+    <!-- lint for js would be nice -->
+
+<!--    <target name="npm">
+        <exec executable="npm" failonerror="true">
+            <arg value="config"/>
+            <arg value="set"/>
+            <arg value="cache"/>
+            <arg value="/tmp/.npm"/>
+        </exec>
+        <exec executable="npm" failonerror="true">
+            <arg value="install"/>
+        </exec>
+    </target>-->
+
+    <target name="composer">
+        <exec executable="composer" failonerror="true">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="phpunit" depends="composer">
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+            <arg value="-c"/>
+            <arg value="${basedir}/test/php/phpunit.xml"/>
+        </exec>
+    </target>
+
+    <target name="jasmine">
+        <exec executable="grunt" failonerror="true"/>
+    </target>
+</project>

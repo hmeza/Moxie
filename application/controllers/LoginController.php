@@ -1,6 +1,7 @@
 <?php
 
-include ("application/models/loginModel.php");
+include("application/models/loginModel.php");
+include("application/3rdparty/simple-php-captcha/simple-php-captcha.php");
 
 class LoginController extends Zend_Controller_Action {
 	/**
@@ -77,6 +78,8 @@ class LoginController extends Zend_Controller_Action {
 	public function newuserAction() {
 		$this->view->assign('form', $this->getForm());
 		$this->view->assign('message', '&nbsp;');
+		// generate captcha
+		$_SESSION['captcha'] = captcha();
 	}
 	
 	/**

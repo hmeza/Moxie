@@ -1,25 +1,41 @@
 <?php
 global $st_lang;
+if (empty($_SESSION['user_id'])) {
+    ?>
+    <div align="center" class="moxie_login_body">
+        <form name="login" id="login"
+              action="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/login" method="POST">
+            <fieldset class="login co1ntact">
+                <legend>Login</legend>
+                <table class="moxie_login_body_table">
+                    <tr>
+                        <td><label for="username">Login</label></td>
+                        <td><input type="text" name="login" id="login" maxlenght=15></td>
+                    </tr>
+                    <tr>
+                        <td><label for="username">Password</label></td>
+                        <td><input type="password" name="password" id="password" maxlenght=15></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2 align="center"><input type="submit" value="Login" class="moxie_login_button"></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2 align="left">
+                            <div>
+                                <div><a href="/login/newuser"><?php echo $st_lang['new_user']; ?></a></div>
+                                <div><a href="/login/forgotpassword"><?php echo $st_lang['forgot_password']; ?></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+<?php
+}
 ?>
-<div align="center" class="moxie_login_body">
-<form name="login" id="login" action="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/login" method="POST">
-<fieldset class="login co1ntact">
-<legend>Login</legend>
-<table class="moxie_login_body_table">
-<tr><td><label for="username">Login</label></td><td><input type="text" name="login" id="login" maxlenght=15></td></tr>
-<tr><td><label for="username">Password</label></td><td><input type="password" name="password" id="password" maxlenght=15></td></tr>
-<tr><td colspan=2 align="center"><input type="submit" value="Login" class="moxie_login_button"></td></tr>
-<tr><td colspan=2 align="left">
-<div>
-<div><a href="/login/newuser"><?php echo $st_lang['new_user']; ?></a></div>
-<div><a href="/login/forgotpassword"><?php echo $st_lang['forgot_password']; ?></a></div>
-</div>
-</td></tr>
-</table>
-</fieldset>
-</form>
-</div>
-
+<br>
 <!-- Follow me on Twitter -->
 <!-- Last tweet -->
 <div align="center">

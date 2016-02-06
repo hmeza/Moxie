@@ -9,7 +9,7 @@ $exportUrl = $url."/to_excel/true";
 ?>
 <td colspan=2><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
 <td colspan=3 align=right>
-Filtros <select id="category_filter" onchange="filter();">
+Filtros <select id="category_filter">
 <option value="0">Categoria</option>
 <?php
 foreach ($this->form->getElement('category') as $key => $value) {
@@ -21,7 +21,7 @@ foreach ($this->form->getElement('category') as $key => $value) {
 }
 ?>
 </select>
-<select id="tag_filter" onchange="filter_tag();">
+<select id="tag_filter">
 <option value="0">Tag</option>
 <?php
 foreach ($this->used_tag_list as $key => $value) {

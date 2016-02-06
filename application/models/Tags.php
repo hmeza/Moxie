@@ -7,10 +7,29 @@ class Tags extends Zend_Db_Table_Abstract {
 	protected $_name = 'tags';
 	protected $_primary = 'id';
 
+    /* @var TransactionTags */
+    private $transactionTags;
+
 	public function __construct() {
 		global $db;
 		$this->database = $db;
 		$this->_db = Zend_Registry::get('db');
+        $this->transactionTags = new TransactionTags();
+	}
+
+	public function findIdTagByName($userId, $name) {
+		if(empty($userId)) {
+                        throw new Exception("Empty user id");
+                }
+                if(empty($name)) {
+                        throw new Exception("Empty tag name");
+                }
+		$row = $this->fetchRow(
+			$this->select()
+				->where('user_owner = ?', $userId)
+				->where('name = ?', $name)
+		);
+		return empty($row) ? 0 : $row->id;
 	}
 
 	/**
@@ -48,7 +67,7 @@ class Tags extends Zend_Db_Table_Abstract {
 		}
 		try {
 			$query = $this->select()->where('user_owner = ?', $userId);
-		
+
 			$rows = $this->fetchAll($query)->toArray();
 			$tags = array();
 			foreach($rows as $row) {
@@ -62,6 +81,11 @@ class Tags extends Zend_Db_Table_Abstract {
 		return $tags;
 	}
 
+    /**
+     * @param int $userId
+     * @return array
+     * @throws Exception
+     */
     public function getUsedTagsByUser($userId) {
         if(empty($userId)) {
             throw new Exception("Empty user id");
@@ -87,4 +111,23 @@ class Tags extends Zend_Db_Table_Abstract {
         }
         return $tags;
     }
+
+    /**
+     * @param int $userId
+     * @param string $tag
+     */
+    public function deleteTag($userId, $tag) {
+        try {
+            $query = $this->select()
+                ->where('name = ?', $tag)
+                ->where('user_owner = ?', $userId);
+            $tag = $this->fetchRow($query);
+            $this->transactionTags->removeTagsByTagId($tag->id);
+            $tag->delete();
+        }
+        catch(Exception $e) {
+            error_log(__METHOD__.": ".$e->getMessage());
+        }
+    }
+
 }

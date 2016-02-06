@@ -38,7 +38,7 @@ class IncomesController extends Zend_Controller_Action
 
 		$form->setAction('/incomes/add')->setMethod('post');
 		$form->setAttrib('id', 'login');
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => $st_lang['expenses_category'],
 			'multioptions' => $this->getCategories()		
