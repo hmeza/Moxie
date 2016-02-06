@@ -16,6 +16,7 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	 * @dataProvider addExpenseDataProvider
 	 */
 	public function testAddExpenseWithTags($amount, $date, $note, $category, $tags = array()) {
+		$this->fakeLogin();
 		$this->request->setMethod('POST')
 			->setPost(array(
 				'amount' => $amount,
