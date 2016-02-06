@@ -172,7 +172,7 @@ foreach ($this->data as $key => $value) {
 	<td align="right">'.number_format($value['sumtotal'],2).' &euro;</td>
 	<td align="right">'.number_format($value['sumyear'],2).' &euro;</td>
 	<td align="right">'.number_format($value['sumyear']/$i_currentMonth,2).' &euro;</td>
-	<td align="right">'.number_format($value['avgyear'],2).' &euro;</td>
+	<td align="right">'.abs(number_format($value['avgyear'],2)).' &euro;</td>
 	</tr>';
 }
 ?>
