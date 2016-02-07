@@ -24,8 +24,10 @@ foreach ($this->form->getElement('category') as $key => $value) {
 <select id="tag_filter">
 <option value="0">Tag</option>
 <?php
-foreach ($this->used_tag_list as $key => $value) {
-	echo '<option value="'.$key.'">'.$value.'</option>';
+if(!empty($this->used_tag_list)) {
+	foreach ($this->used_tag_list as $key => $value) {
+		echo '<option value="' . $key . '">' . $value . '</option>';
+	}
 }
 ?>
 </select>
