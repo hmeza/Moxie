@@ -24,10 +24,7 @@
     </target>
 
     <target name="phpunit" depends="composer">
-        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
-            <arg value="-c"/>
-            <arg value="${basedir}/test/php/phpunit.xml"/>
-        </exec>
+        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
     </target>
 
     <target name="jasmine">
