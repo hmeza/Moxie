@@ -61,22 +61,9 @@ class IncomesController extends Zend_Controller_Action
 		}
 		return $st_data;
 	}
-	
-	/**
-	 * Shows the expenses view
-	 */
-	public function indexAction() {
-		global $st_lang;
-		// list current year and navigate through years
-		$i_year = $this->getRequest()->getParam('year', date('Y'));
 
-		$st_data = array(array(
-			'id' => null,
-			'amount' => null,
-			'category' => null,
-			'note' => '',
-			'date' => date('Y-m-d H:i:s')
-		));
+	private function getViewData($i_year, $st_data) {
+		global $st_lang;
 
 		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
@@ -87,10 +74,26 @@ class IncomesController extends Zend_Controller_Action
 	}
 	
 	/**
+	 * Shows the expenses view
+	 */
+	public function indexAction() {
+		$st_data = array(array(
+			'id' => null,
+			'amount' => null,
+			'category' => null,
+			'note' => '',
+			'date' => date('Y-m-d H:i:s')
+		));
+
+		$this->getViewData($this->getRequest()->getParam('year', date('Y')), $st_data);
+	}
+	
+	/**
 	 * Adds an expense and shows expenses index again
 	 */
 	public function addAction() {
 		$o_income = $this->getRequest()->getPost();
+		unset($o_income['submit']);
 		$o_income['user_owner'] = $_SESSION['user_id'];
 		$o_income['in_sum'] = 1;
 		$this->incomes->insert($o_income);
@@ -101,21 +104,13 @@ class IncomesController extends Zend_Controller_Action
 	 * Edit an income
 	 */
 	public function editAction() {
-		global $st_lang;
 		$i_incomePK = $this->getRequest()->getParam('id');
 		$st_income = $this->incomes->find($i_incomePK);
         if(!isset($st_income[0]) || $st_income[0]['user_owner'] != $_SESSION['user_id']) {
             throw new Exception("Access error");
         }
-		
-		$i_year = $this->getRequest()->getParam('year', date('Y'));
 
-		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
-		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
-		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
-		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
-		$this->view->assign('year', $i_year);
-		$this->view->assign('form', $this->getForm($st_income));
+		$this->getViewData($this->getRequest()->getParam('year', date('Y')), $st_income);
 		$this->render('index');
 	}
 	
