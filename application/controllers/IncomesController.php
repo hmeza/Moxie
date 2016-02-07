@@ -12,8 +12,6 @@ class IncomesController extends Zend_Controller_Action
 
 	/**
 	 * This function generates the form to add incomes.
-	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	private function getAddForm() {
 		global $st_lang;
@@ -97,8 +95,6 @@ class IncomesController extends Zend_Controller_Action
 	
 	/**
 	 * Adds an expense and shows expenses index again
-	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	public function addAction() {
 		$o_income = $this->getRequest()->getPost();
@@ -116,8 +112,6 @@ class IncomesController extends Zend_Controller_Action
 	
 	/**
 	 * Edit an income
-	 * @author	hmeza
-	 * @since	2011-06-13
 	 */
 	public function editAction() {
 		global $st_lang;
@@ -140,8 +134,6 @@ class IncomesController extends Zend_Controller_Action
 	
 	/**
 	 * Update income
-	 * @author	hmeza
-	 * @since	2011-06-13
 	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
@@ -160,8 +152,6 @@ class IncomesController extends Zend_Controller_Action
 	
 	/**
 	 * Deletes a given income
-	 * @author	hmeza
-	 * @since	2011-01-30
 	 */
 	public function deleteAction() {
 		$i_incomePK = $this->getRequest()->getParam('id');
