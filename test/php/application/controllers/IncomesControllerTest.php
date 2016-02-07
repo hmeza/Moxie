@@ -12,6 +12,46 @@ class IncomesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$this->fakeLogin();
 	}
 
+	public function testIndexIncomes() {
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+
+		$this->fakeLogin();
+		$_SESSION['user_lang'] = 'es';
+		$this->dispatch('/incomes/');
+		$this->assertController('incomes');
+		$this->assertAction('index');
+
+		$this->assertQueryContentContains('dt', 'Importe');
+		$this->assertQueryContentContains('dt', 'Categoría');
+		$this->assertQueryContentContains('dt', 'Nota');
+	}
+
+	public function testEditIncomes() {
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+
+		$this->fakeLogin();
+		$this->dispatch('/incomes/');
+		$this->assertController('incomes');
+		$this->assertAction('index');
+
+		$this->assertQueryContentContains('dt', 'Importe');
+		$this->assertQueryContentContains('dt', 'Categoría');
+		$this->assertQueryContentContains('dt', 'Nota');
+	}
+
+	public function testEditIncomesThrowsErrorIfNoIncomeIsFound() {
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+
+		$this->fakeLogin();
+		$this->request->setMethod('GET');
+		$this->dispatch('/incomes/edit/id/0');
+		$this->assertController('error');
+		$this->assertAction('error');
+		$this->assertQueryContentContains('p', 'An error occurred:');
+		$this->assertQuery('pre');
+		$this->assertQueryContentContains('pre', 'Access error');
+	}
+
 	/**
 	 * @dataProvider addIncomeDataProvider
 	 */
