@@ -9,24 +9,7 @@ class IncomesController extends Zend_Controller_Action
 		parent::init();
 		$this->incomes = new Incomes();
 	}
-	
-	/**
-	 * Get categories and prepare them for view
-	 * @return array
-	 */
-	private function getCategories() {
-		$categories = new Categories();
-		$s_categories = $categories->getCategoriesByUser(Categories::INCOMES);
-		foreach($s_categories as $key => $value) {
-			$formCategories[$value['id1']] = $value['name2'];
-			if (!empty($value['name1'])) {
-				$formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-			}
-		}
-		asort($formCategories);
-		return $formCategories;
-	}
-	
+
 	/**
 	 * This function generates the form to add incomes.
 	 * @author	hmeza
@@ -35,13 +18,14 @@ class IncomesController extends Zend_Controller_Action
 	private function getAddForm() {
 		global $st_lang;
 		$form  = new Zend_Form();
+		$categories = new Categories();
 
 		$form->setAction('/incomes/add')->setMethod('post');
 		$form->setAttrib('id', 'login');
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00'));
 		$form->addElement('select', 'category', array(
 			'label' => $st_lang['expenses_category'],
-			'multioptions' => $this->getCategories()		
+			'multioptions' => $categories->getCategoriesForView(Categories::INCOMES)
 			)
 		);
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
@@ -62,9 +46,9 @@ class IncomesController extends Zend_Controller_Action
 		
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_income[0]['amount']));
 		
-		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::INCOMES));
+		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($this->getCategories());
+		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$form->addElement($multiOptions);
 		
