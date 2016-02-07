@@ -91,15 +91,9 @@ class IncomesController extends Zend_Controller_Action
 	 */
 	public function addAction() {
 		$o_income = $this->getRequest()->getPost();
-		$st_data = array(
-			'user_owner'	=>	$_SESSION['user_id'],
-			'amount'		=>	$o_income['amount'],
-			'category'		=>	$o_income['category'],
-			'note'			=>	$o_income['note'],
-			'date'			=>	$o_income['date'],
-			'in_sum'		=>	1
-		);
-		$this->incomes->insert($st_data);
+		$o_income['user_owner'] = $_SESSION['user_id'];
+		$o_income['in_sum'] = 1;
+		$this->incomes->insert($o_income);
 		$this->_helper->redirector('index','incomes');
 	}
 	
