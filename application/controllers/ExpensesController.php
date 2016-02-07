@@ -10,6 +10,8 @@ class ExpensesController extends Zend_Controller_Action
 	private $tags;
 	/** @var TransactionTags */
 	private $transactionTags;
+    /** @var int  */
+    private $currentCategory;
 
 	public function init() {
 		parent::init();
@@ -38,9 +40,15 @@ class ExpensesController extends Zend_Controller_Action
 
 		$st_categories = $categories->getCategoriesForView(Categories::EXPENSES);
 		asort($st_categories);
+        if(empty($st_expense['category'])) {
+            reset($st_categories);
+            $st_expense['category'] = current($st_categories);
+            $this->currentCategory = $st_expense['category'];
+        }
 
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
         $multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::EXPENSES));
+        $multiOptions->setName('category');
         $multiOptions->setLabel($st_lang['expenses_category']);
         $multiOptions->addMultiOptions($st_categories);
         $multiOptions->setValue(array($st_expense['category']));
@@ -169,12 +177,16 @@ class ExpensesController extends Zend_Controller_Action
         $st_expenses = array(
             'id' => null,
             'amount' => '0.00',
-            'category' => null,
+            'category' => 0,
             'note' => '',
             'date' => date('Y-m-d'),
             'in_sum' => 0,
             'user_owner' => $_SESSION['user_id']
         );
+        $form = $this->getForm($st_expenses);
+        if(empty($i_category)) {
+            $i_category = $this->currentCategory;
+        }
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
@@ -186,7 +198,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('month', $i_month);
 		$this->view->assign('category', $i_category);
 		$this->view->assign('tag', $i_tag);
-		$this->view->assign('form', $this->getForm($st_expenses));
+		$this->view->assign('form', $form);
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 	}
