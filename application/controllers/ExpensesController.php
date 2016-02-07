@@ -187,9 +187,7 @@ class ExpensesController extends Zend_Controller_Action
 		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
 	        }
 
-		if(!empty($s_tag)) {
-			$i_tag = $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag);
-		}
+			$i_tag = !empty($s_tag) ? $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag) : null;
         }
         catch(Exception $e) {
             throw new Exception("Error recovering expenses");
@@ -339,7 +337,7 @@ class ExpensesController extends Zend_Controller_Action
 		$i_expensePK = $this->getRequest()->getParam('id');
 		try {
 			$this->transactionTags->removeTagsFromTransaction($i_expensePK);
-			$this->expenses->delete('id = '.$i_expensePK.' AND user_owner = '.$_SESSION['user_id']);
+			$this->expenses->deleteByUser($_SESSION['user_id'], $i_expensePK);
 		} catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
 		}
