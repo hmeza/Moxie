@@ -8,3 +8,4 @@ application.ini
 node_modules/
 npm-debug.log
 bower_components/
+phpunit/

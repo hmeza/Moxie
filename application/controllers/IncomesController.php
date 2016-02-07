@@ -97,14 +97,11 @@ class IncomesController extends Zend_Controller_Action
 	
 	/**
 	 * Shows the expenses view
-	 * @author	hmeza
-	 * @since	2011-01-03
 	 */
 	public function indexAction() {
 		global $st_lang;
 		// list current year and navigate through years
-		$i_year = $this->getRequest()->getParam('year');
-		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
+		$i_year = $this->getRequest()->getParam('year', date('Y'));
 
 		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
