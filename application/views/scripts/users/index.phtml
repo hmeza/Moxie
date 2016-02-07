@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/material.css"/>
+<script type="text/javascript" src="/bower_components/material-design-lite/material.js"></script>
 <script type="text/javascript">
 <?php global $st_lang; ?>
 function sendForm() {
@@ -28,7 +30,12 @@ $(document).ready(function() {
 
 <h1><?php echo $st_lang['users_title']; ?></h1>
 
-<h2 id="users_my_account"><?php echo $st_lang['users_my_account']." ".$st_lang['press_here_display']; ?></h2>
+<h2 id="users_my_account">
+	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+		<i class="material-icons" style="background-color: ##0b77b7">+</i>
+	</button>
+	<?php echo $st_lang['users_my_account']." ".$st_lang['press_here_display']; ?>
+</h2>
 <div id="my_account" style="display: none;">
 <table width="100%" cellspacing="20">
 <tr>

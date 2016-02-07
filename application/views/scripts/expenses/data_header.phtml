@@ -77,7 +77,7 @@ foreach($this->form->getElement('category') as $key => $option) {
 <?php
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
-	echo '<input type="button" class="moxiedelete" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . $s_dateGet . '")\'/>';
+	echo '<input type="button" class="moxiedelete" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . '")\'/>';
 }
 echo '</form>';
 ?>

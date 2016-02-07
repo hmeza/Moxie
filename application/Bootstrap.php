@@ -25,17 +25,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 	
 	/**
-	 * 
 	 * Init translation array
 	 */
 	protected function _initTranslation() {
 		// Set translation
-		if (isset($_SESSION['user_lang'])) {
-			include 'application/configs/langs/'.$_SESSION['user_lang'].'.php';
-		}
-		else {
-			include 'application/configs/langs/es.php';
-		}
+		$s_lang = isset($_SESSION['user_lang']) ? $_SESSION['user_lang'] : 'es';
+		include 'application/configs/langs/'.$s_lang.'.php';
 		$GLOBALS['st_lang'] = $st_lang;
 	}
 	

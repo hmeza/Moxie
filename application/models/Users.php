@@ -1,9 +1,8 @@
 <?php
 /**
  * Login and users model.
- * @todo	rename to Users to use Zend MVC notation
  */
-class loginModel extends Zend_Db_Table_Abstract {
+class Users extends Zend_Db_Table_Abstract {
 	protected $_name = 'users';
 	protected $_primary = 'id';
 	

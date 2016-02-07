@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/material.css"/>
+<script type="text/javascript" src="/js/stats/stats.js"></script>
 <script type="text/javascript">
 <?php
 global $st_lang;
@@ -17,45 +19,18 @@ echo $s_budget;
 
 ?>
 var categories = [<?php echo implode(',', $s_categories);?>];
-function onmouseoverchange(month) {
-	for (category in categories) {
-		$("#budget"+category).html((budgets[month][categories[category]].toFixed(2))+" &euro;");
-	}
-}
-
-function onmouseoutchange() {
-	for (category in categories) {
-		$("#budget"+category).html((budgets[<?php echo date('m'); ?>][categories[category]].toFixed(2))+" &euro;");
-	}
-}
-
-$(document).ready(function() {
-    $("#show_stats").click(
-		function(event) {
-    		$("#box").slideToggle();
-		}
-	);
-    $("#show_budget").click(
-    		function(event) {
-        		$("#budget").slideToggle();
-    		}
-    	);
-	$("#caja").click(function(event) {
-	    $("#box").slideUp();
-	});
-	$("[name^='month']").mouseover(function() {
-		var monthId = $(this).attr('name').replace('month', '');
-		onmouseoverchange(monthId);
-	});
-	$("[name^='month']").mouseout(function() {
-		var monthId = $(this).attr('name').replace('month', '');
-		onmouseoutchange(monthId);
-	});
-});
-
+var budget_index = <?php echo date('m'); ?>;
 </script>
 
-<h2><span id="show_budget"><?php echo $st_lang['stats_budget_title']; ?></span></h2>
+<h2>
+	<span id="show_budget">
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+			<i class="material-icons" style="background-color: ##0b77b7">+</i>
+		</button>
+		<span><?php echo $st_lang['stats_budget_title']; ?></span>
+	</span>
+</h2>
+<br>
 <div id="budget">
 <table width=100%>
 	<!-- Form + expenses list -->
@@ -170,8 +145,16 @@ echo '<th align="right">'.number_format($balance,2).' &euro;</th>
 ?>
 </table>
 </div>
-<br></br>
-<h2><span id="show_stats"><?php echo $st_lang['stats_title']; ?></span></h2>
+<br><br>
+<h2>
+	<span id="show_stats">
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+			<i class="material-icons">+</i>
+		</button>
+		<?php echo $st_lang['stats_title']; ?>
+	</span>
+</h2>
+<br>
 <div id="box">
 <table width=100%>
 <tr>
@@ -189,7 +172,7 @@ foreach ($this->data as $key => $value) {
 	<td align="right">'.number_format($value['sumtotal'],2).' &euro;</td>
 	<td align="right">'.number_format($value['sumyear'],2).' &euro;</td>
 	<td align="right">'.number_format($value['sumyear']/$i_currentMonth,2).' &euro;</td>
-	<td align="right">'.number_format($value['avgyear'],2).' &euro;</td>
+	<td align="right">'.abs(number_format($value['avgyear'],2)).' &euro;</td>
 	</tr>';
 }
 ?>
