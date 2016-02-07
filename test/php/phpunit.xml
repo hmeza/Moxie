@@ -4,12 +4,14 @@
 	</testsuite>	
 	<filter>
 		<whitelist>
-			<directory suffix=".php">application</directory>
+			<directory suffix=".php">../../application</directory>
 			<exclude>
         		        <directory suffix=".phtml">application</directory>
-		                <directory>../application/models/DbTable/</directory>
-				<file>../application/controllers/ErrorController.php</file>
-				<file>../application/controllers/IndexController.php</file>
+		                <directory>../../application/models/DbTable/</directory>
+						<directory>../../application/3rdparty/</directory>
+						<directory>../../application/configs/</directory>
+						<file>../../application/controllers/ErrorController.php</file>
+						<file>../../application/controllers/IndexController.php</file>
 			</exclude>
 		</whitelist>
 	</filter>
