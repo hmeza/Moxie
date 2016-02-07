@@ -101,6 +101,38 @@ class IncomesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
 	public function testAddIncomeWithoutUserThrowsError() {
 		// arrange
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+		$this->fakeLogin();
+		$this->resetRequest()
+				->resetResponse();
+		$this->request->setPost(array());
+
+		$this->request->setMethod('POST')->setPost(array());
+
+		// act
+		$this->dispatch('/incomes/delete');
+
+		// assert
+		$this->assertRedirectTo('/incomes');
+	}
+
+	public function testDeleteWithoutIncomeIdDoesNotDeleteIncomeAndDoesNotThrowError() {
+		// arrange
+		$this->resetRequest()
+				->resetResponse();
+		$this->request->setPost(array());
+
+		$this->request->setMethod('POST')->setPost(array('id' => 1234));
+
+		// act
+		$this->dispatch('/incomes/delete');
+
+		// assert
+		$this->assertRedirectTo('/incomes');
+	}
+
+	public function testDeleteWithoutUserDoesNotDeleteIncomeAndDoesNotThrowError() {
+		// arrange
 		$this->dispatch('/login/logout');
 		$this->resetRequest()
 				->resetResponse();
@@ -108,17 +140,38 @@ class IncomesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
 		$this->request->setMethod('POST')
 				->setPost(array(
-						'amount' => 12.01,
-						'date' => '12/01/2016',
-						'note' => 'test note without category',
-						'category' => 10
+						'id' => 1234
 				));
 
 		// act
-		$this->dispatch('/incomes/add');
+		$this->dispatch('/incomes/delete');
 
 		// assert
-		$this->assertRedirectTo('/index');
+		$this->assertRedirectTo('/incomes');
+	}
+
+	public function testDelete() {
+		// arrange
+		$incomes = new Incomes();
+		$row = $incomes->fetchRow('SELECT id FROM transactions where user_owner = 14 AND amount > 0 ORDER BY id DESC LIMIT 1');
+		$incomePK = $row['id'];
+
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
+		$this->fakeLogin();
+		$this->resetRequest()
+				->resetResponse();
+		$this->request->setPost(array());
+
+		$this->request->setMethod('POST')
+				->setPost(array(
+						'id' => $incomePK
+				));
+
+		// act
+		$this->dispatch('/incomes/delete');
+
+		// assert
+		$this->assertRedirectTo('/incomes');
 	}
 
 	private function fakeLogin() {
