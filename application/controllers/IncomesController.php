@@ -12,52 +12,37 @@ class IncomesController extends Zend_Controller_Action
 
 	/**
 	 * This function generates the form to add incomes.
+	 * @param array $st_income
+	 * @return Zend_Form
 	 */
-	private function getAddForm() {
+	private function getForm($st_income = array()) {
 		global $st_lang;
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-		$form->setAction('/incomes/add')->setMethod('post');
+		$action = (isset($st_income['id']) ? '/incomes/update' : '/incomes/add');
+
+		// fix for datetime to date
+		$s_date = explode(" ", $st_income[0]['date']);
+		$st_income[0]['date'] = $s_date[0];
+
+		$form->setAction($action)->setMethod('post');
 		$form->setAttrib('id', 'login');
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00'));
-		$form->addElement('select', 'category', array(
-			'label' => $st_lang['expenses_category'],
-			'multioptions' => $categories->getCategoriesForView(Categories::INCOMES)
-			)
-		);
-		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
-		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => date('Y-m-d')));
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
-		return $form;
-	}
-	
-	private function getEditForm($st_income) {
-		global $st_lang;
-		$form  = new Zend_Form();
-		$categories = new Categories();
-		
-		$form->setAction('/incomes/update')->setMethod('post');
-		$form->setAttrib('id', 'login');		
-		$form->addElement('hidden', 'user_owner', array('value' => $st_income[0]['user_owner']));
 		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
-		
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_income[0]['amount']));
-		
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount']));
+
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$form->addElement($multiOptions);
-		
+
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note']));
-		
-		$s_date = explode(" ", $st_income[0]['date']);
-		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $s_date[0]));
+		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_income[0]['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 		return $form;
 	}
-	
+
 	/**
 	 * Retrieve the yearly incomes.
 	 * @return array
@@ -85,12 +70,20 @@ class IncomesController extends Zend_Controller_Action
 		// list current year and navigate through years
 		$i_year = $this->getRequest()->getParam('year', date('Y'));
 
+		$st_data = array(array(
+			'id' => null,
+			'amount' => null,
+			'category' => null,
+			'note' => '',
+			'date' => date('Y-m-d H:i:s')
+		));
+
 		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
 		$this->view->assign('year', $i_year);
-		$this->view->assign('form', $this->getAddForm());
+		$this->view->assign('form', $this->getForm($st_data));
 	}
 	
 	/**
@@ -128,7 +121,7 @@ class IncomesController extends Zend_Controller_Action
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
 		$this->view->assign('year', $i_year);
-		$this->view->assign('form', $this->getEditForm($st_income));
+		$this->view->assign('form', $this->getForm($st_income));
 		$this->render('index');
 	}
 	
