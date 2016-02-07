@@ -93,6 +93,12 @@ class IncomesController extends Zend_Controller_Action
 	 */
 	public function addAction() {
 		$o_income = $this->getRequest()->getPost();
+		if(empty($o_income['category'])) {
+			throw new Exception('Empty category not allowed for incomes');
+		}
+		if(empty($_SESSION['user_id'])) {
+			$this->redirect('/index');
+		}
 		unset($o_income['submit']);
 		$o_income['user_owner'] = $_SESSION['user_id'];
 		$o_income['in_sum'] = 1;
