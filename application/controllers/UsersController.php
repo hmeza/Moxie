@@ -1,7 +1,7 @@
 <?php
 
 class UsersController extends Zend_Controller_Action {
-	/** @var LoginModel */
+	/** @var Users */
 	private $usersModel;
 
 	/** @var Categories */
@@ -15,7 +15,7 @@ class UsersController extends Zend_Controller_Action {
 	
 	public function init() {
 		parent::init();
-		$this->usersModel = new loginModel();
+		$this->usersModel = new Users();
 		$this->categories = new Categories();
 		$this->budgets = new Budgets();
         $this->tags = new Tags();

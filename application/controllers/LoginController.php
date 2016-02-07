@@ -1,16 +1,15 @@
 <?php
 
-include("application/models/loginModel.php");
 include("application/3rdparty/simple-php-captcha/simple-php-captcha.php");
 
 class LoginController extends Zend_Controller_Action {
 	/**
-	 * @var loginModel
+	 * @var Users
 	 */
-	private $loginModel;
+	private $users;
 	
 	public function init() {
-		$this->loginModel = new LoginModel();		
+		$this->users = new Users();
 	}
 	
 	private function getForm() {
@@ -36,7 +35,7 @@ class LoginController extends Zend_Controller_Action {
 		$s_user = $st_form['login'];
 		$s_password = $st_form['password'];
 		if (!empty($s_user) && !empty($s_password)) {
-			$st_result = $this->loginModel->checkLogin($s_user, $s_password);
+			$st_result = $this->users->checkLogin($s_user, $s_password);
 			if ($st_result == 0) {
 				$this->view->assign('loginMessage', 'bad login');
 				$this->_helper->redirector('index','expenses');
@@ -105,7 +104,7 @@ class LoginController extends Zend_Controller_Action {
 					'password'	=> md5($st_form['password']),
 					'email'		=> $st_form['email']
 			);
-			$i_lastInsertId = $this->loginModel->insert($data);
+			$i_lastInsertId = $this->users->insert($data);
 
 			// create default categories
 			$o_categories = new Categories();
@@ -263,7 +262,7 @@ Password: '.$st_form['password'].'
 		if (!empty($s_login)) {
 			// retrieve user email from login if exists. If not, sleep 10 and return error
 			try {
-				$email = $this->loginModel->fetchRow($this->loginModel->select()
+				$email = $this->users->fetchRow($this->users->select()
 					->where('login = ?', $s_login));
 				if (empty($email)) {
 					sleep(10);
@@ -273,7 +272,7 @@ Password: '.$st_form['password'].'
 					$s_server = Zend_Registry::get('config')->moxie->settings->url;
 					$s_site = Zend_Registry::get('config')->moxie->app->name;
 					$email = $email['email'];
-					$key = $this->loginModel->generateKey($s_login);
+					$key = $this->users->generateKey($s_login);
 					$subject = $s_site.' - Restore password';
 					$body = 'Si recibes este email es o bien porque estás intentando restaurar tu contraseña. En tal caso,
 por favor pulsa el siguiente link:
@@ -313,7 +312,7 @@ the following link:
 	public function recoverpasswordAction() {
 		$s_key = $this->getRequest()->getParam('k');
 		if (!empty($s_key)) {
-			$st_result = $this->loginModel->checkKey($s_key);
+			$st_result = $this->users->checkKey($s_key);
 			$_SESSION['user_id'] = $st_result['id'];
 			$_SESSION['user_name'] = $st_result['login'];
 			$_SESSION['user_lang'] = $st_result['language'];
