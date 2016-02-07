@@ -162,7 +162,7 @@ class IncomesController extends Zend_Controller_Action
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
 		$i_incomePK = $st_params['id'];
-		$i_userOwner = $st_params['user_owner'];
+		$i_userOwner = $_SESSION['user_id'];
 		unset($st_params['submit']);
 		
 		try {
