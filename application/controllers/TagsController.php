@@ -32,7 +32,7 @@ class TagsController extends Zend_Controller_Action
             }
 
 		} catch (Exception $e) {
-    		error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
+    		error_log(__METHOD__.': '.$e->getMessage());
     	}
     	$this->_helper->redirector('index','users');
     }
