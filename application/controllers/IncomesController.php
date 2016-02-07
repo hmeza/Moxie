@@ -143,9 +143,8 @@ class IncomesController extends Zend_Controller_Action
             throw new Exception("Access error");
         }
 		
-		$i_year = $this->getRequest()->getParam('year');
-		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
-		
+		$i_year = $this->getRequest()->getParam('year', date('Y'));
+
 		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
@@ -170,7 +169,7 @@ class IncomesController extends Zend_Controller_Action
 			$this->incomes->update($st_params, 'id = '.$i_incomePK.' AND user_owner = '.$i_userOwner);
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.": ".$e->getMessage());
 		}
 		$this->_helper->redirector('index','incomes');
 	}
@@ -186,7 +185,7 @@ class IncomesController extends Zend_Controller_Action
 			$this->incomes->delete('id = '.$i_incomePK.' and user_owner = '.$_SESSION['user_id']);
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.": ".$e->getMessage());
 		}
 		$this->_helper->redirector('index','incomes');
 	}
