@@ -142,6 +142,9 @@ class IncomesController extends Zend_Controller_Action
 		global $st_lang;
 		$i_incomePK = $this->getRequest()->getParam('id');
 		$st_income = $this->incomes->find($i_incomePK);
+        if(!isset($st_income[0]) || $st_income[0]['user_owner'] != $_SESSION['user_id']) {
+            throw new Exception("Access error");
+        }
 		
 		$i_year = $this->getRequest()->getParam('year');
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
