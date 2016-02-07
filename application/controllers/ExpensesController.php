@@ -21,69 +21,38 @@ class ExpensesController extends Zend_Controller_Action
 	
 	/**
 	 * This function generates the form to add expenses.
-	 * @author	hmeza
+     * @param array $st_expense
+     * @return Zend_Form
 	 */
-	private function getAddForm() {
+	private function getForm($st_expense) {
 		global $st_lang;
-		
 		$form  = new Zend_Form();
 		$categories = new Categories();
-		
-		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.'/expenses/add')
-		     ->setMethod('post');
+
+        $slug = !empty($st_expense['id']) ? '/expenses/update' : '/expenses/add';
+
+        $form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
+            ->setMethod('post');
 		     
 		$form->setAttrib('id', 'login');
+
 		$st_categories = $categories->getCategoriesForView(Categories::EXPENSES);
 		asort($st_categories);
 
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => '0.00'));
-		$form->addElement('select', 'category', array(
-			'label' => $st_lang['expenses_category'],
-			'multioptions' => $st_categories
-			)
-		);
-		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note']));
-		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => date('Y-m-d')));
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
-		return $form;
-	}
-	
-	/**
-	 * This function generates the form to add expenses.
-	 * @author	hmeza
-	 * @param	int $i_expensePK
-	 */
-	private function getEditForm($i_expensePK) {
-		global $st_lang;
-		$form  = new Zend_Form();
-		$categories = new Categories();
-		
-		// retrieve data to fill the form
-		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
-		// little fix to pass only date and discarding hour
-		$s_date = explode(" ", $st_expense['date']);
-		$st_expense['date'] = $s_date[0];
-		
-		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.'/expenses/update')
-		     ->setMethod('post');
-		     
-		$form->setAttrib('id', 'login');
-
-		$form->addElement('hidden', 'checked', array('value' => $st_expense['in_sum']));
-		$form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
-		$form->addElement('hidden', 'id', array('value' => $i_expensePK));
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
-		// Add select
-		$multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::EXPENSES));
-		$multiOptions->setLabel($st_lang['expenses_category']);
-		$st_categories = $categories->getCategoriesForView(Categories::EXPENSES);
-		asort($st_categories);
-		$multiOptions->addMultiOptions($st_categories);
-		$multiOptions->setValue(array($st_expense['category']));
-		$form->addElement($multiOptions);
+        $multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::EXPENSES));
+        $multiOptions->setLabel($st_lang['expenses_category']);
+        $multiOptions->addMultiOptions($st_categories);
+        $multiOptions->setValue(array($st_expense['category']));
+        $form->addElement($multiOptions);
+
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
 		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
+
+        $form->addElement('hidden', 'checked', array('value' => $st_expense['in_sum']));
+        $form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
+        $form->addElement('hidden', 'id', array('value' => $st_expense['id']));
 		return $form;
 	}
 	
@@ -196,6 +165,16 @@ class ExpensesController extends Zend_Controller_Action
 		if($s_toExcel == true) {
 			$this->exportToExcel($st_list);
 		}
+
+        $st_expenses = array(
+            'id' => null,
+            'amount' => '0.00',
+            'category' => null,
+            'note' => '',
+            'date' => date('Y-m-d'),
+            'in_sum' => 0,
+            'user_owner' => $_SESSION['user_id']
+        );
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
@@ -207,7 +186,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('month', $i_month);
 		$this->view->assign('category', $i_category);
 		$this->view->assign('tag', $i_tag);
-		$this->view->assign('form', $this->getAddForm());
+		$this->view->assign('form', $this->getForm($st_expenses));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 	}
@@ -296,6 +275,16 @@ class ExpensesController extends Zend_Controller_Action
 		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 		
 		$st_data = $this->expenses->getExpensesForEdit($_SESSION['user_id'], $i_month, $i_year);
+
+        // retrieve data to fill the form
+        $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
+        if($st_expense['user_owner'] != $_SESSION['user_id']) {
+            throw new Exception("Access error");
+        }
+        // little fix to pass only date and discarding hour
+        $s_date = explode(" ", $st_expense['date']);
+        $st_expense['date'] = $s_date[0];
+        $form = $this->getForm($st_expense);
 		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
@@ -305,7 +294,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
-		$this->view->assign('form', $this->getEditForm($i_expensePK));
+		$this->view->assign('form', $form);
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
@@ -319,6 +308,12 @@ class ExpensesController extends Zend_Controller_Action
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
 		$i_expensePK = $st_params['id'];
+
+        // retrieve data to perform user check
+        $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
+        if($st_expense['user_owner'] != $_SESSION['user_id']) {
+            throw new Exception("Access error");
+        }
 
 		$this->transactionTags->removeTagsFromTransaction($i_expensePK);
 		if(!empty($_POST['taggles'])) {
