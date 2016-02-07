@@ -145,15 +145,11 @@ class ExpensesController extends Zend_Controller_Action
 		
 		// list current month by default
 		// allow navigate through months and years
-		$i_month = $this->getRequest()->getParam('month');
-		$i_year = $this->getRequest()->getParam('year');
-		$i_category = $this->getRequest()->getParam('category');
-		$i_category = (isset($i_category)) ? $i_category : 0;
-		$s_tag = $this->getRequest()->getParam('tag');
-		$s_tag = (isset($s_tag) ? $s_tag : null);
+		$i_month = $this->getRequest()->getParam('month', date('n'));
+		$i_year = $this->getRequest()->getParam('year', date('Y'));
+		$i_category = $this->getRequest()->getParam('category', 0);
+		$s_tag = $this->getRequest()->getParam('tag', null);
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
-		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
-		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
 
 		try {
 			$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
@@ -248,7 +244,6 @@ class ExpensesController extends Zend_Controller_Action
 	 * @author	hmeza
 	 */
 	public function addAction() {
-		ini_set("error_log", "/tmp/php_errors.log");
 		$st_form = $this->getRequest()->getPost();
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
 		$st_form['note'] = $this->getRequest()->getParam('note', "");
@@ -281,21 +276,15 @@ class ExpensesController extends Zend_Controller_Action
 		global $st_lang;
 		
 		$i_expensePK = $this->getRequest()->getParam('id');
-		$i_month = $this->getRequest()->getParam('month');
-		$i_year = $this->getRequest()->getParam('year');
-		$i_month = (isset($i_month)) ? $this->getRequest()->getParam('month') : date('n');
-		$i_year = (isset($i_year)) ? $this->getRequest()->getParam('year') : date('Y');
-		
-		$st_data = $this->expenses->getExpensesForEdit($_SESSION['user_id'], $i_month, $i_year);
+		$i_month = $this->getRequest()->getParam('month', date('n'));
+		$i_year = $this->getRequest()->getParam('year', date('Y'));
 
         // retrieve data to fill the form
         $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
         if($st_expense['user_owner'] != $_SESSION['user_id']) {
             throw new Exception("Access error");
         }
-        // little fix to pass only date and discarding hour
-        $s_date = explode(" ", $st_expense['date']);
-        $st_expense['date'] = $s_date[0];
+		$st_data = $this->expenses->getExpensesForEdit($_SESSION['user_id'], $i_month, $i_year);
         $form = $this->getForm($st_expense);
 		
 		$this->view->assign('expenses', $st_data);

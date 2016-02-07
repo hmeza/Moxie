@@ -173,7 +173,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 						'user_owner'	=>	'e.user_owner',
 						'amount'		=>	new Zend_Db_Expr('-e.amount'),
 						'note'			=>	'e.note',
-						'date'	=>	'e.date',
+						'date'	        =>	new Zend_Db_Expr('DATE(e.date)'),
 						'in_sum'		=>	'e.in_sum',
 						'category'		=>	'e.category'
 						))
