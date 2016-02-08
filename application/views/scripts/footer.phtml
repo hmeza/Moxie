@@ -1,17 +1,18 @@
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/es_LA/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-<div id="fb-root"></div>
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.5&appId=443316169208630";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
 <div id="bottom">
 <center>
-                        2013 - <a href="mailto:<?php echo Zend_Registry::get('config')->moxie->email; ?>">Moxie</a> -
-<div class="fb-like" data-href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true" data-font="arial"></div>
-<div class="g-plusone" data-size="medium" data-href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>"></div>
+2013 - <a href="mailto:<?php echo Zend_Registry::get('config')->moxie->email; ?>">Moxie</a> -
+<div class="fb-like" data-href="https://www.facebook.com/Moxie-111446182371815/" data-width="400" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+
+  <div class="g-plusone" data-size="medium" data-href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>"></div>
 <script type="text/javascript">
   window.___gcfg = {lang: 'es'};
 
