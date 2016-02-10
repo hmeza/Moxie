@@ -79,7 +79,7 @@ $st_lang = array(
 	'tags_notice' => 'When pressing Update, removed tags will be deleted.',
 	'tags_update' => 'Update',
 	// User, login, etc.
-	'users'		=>	'User menu',
+	'users'		=>	'Settings',
 	'users_title'	=>	'Settings',
 	'users_my_account'	=>	'My account',
 	'new_user'	=>	'New user',
