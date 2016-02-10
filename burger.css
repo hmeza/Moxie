@@ -33,7 +33,7 @@
         top:0;
         right:-220px; /*Ocultamos el menú en la parte izquierda para que no se vea a menos que pulsemos sobre la hamburguesa*/
         padding-top:47px;
-        background-color: rgba(190, 190, 190, 0.91);
+        background-color: rgba(190, 190, 190, 0.94);
         border-right:4px solid rgba(114, 126, 3, 1);
         transition:all .5s ease; /*Damos a la caja del menú una transición para que tenga un desplazamiento suave*/
     }
