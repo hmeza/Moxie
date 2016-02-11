@@ -87,6 +87,12 @@ $st_lang = array(
 	'registration_ok'	=>	'<h2>Registration successfully!</h2>
 Now you can log in with your login and password to start using Moxie.',
 	'logout'	=>	'Logout',
+	'login'     =>  'Login',
+	'password'  =>  'Password',
+	'repeat_password' => 'Repeat password',
+	'email'     => 'Email',
+	'language'  => 'Language',
+	'user_send' => 'Send',
 	// Other stuff
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Passwords do not match',

@@ -87,6 +87,12 @@ $st_lang = array(
 	'registration_ok'	=>	'<h2>Registre efectuat amb èxit!</h2>
 Ja pots entrar amb el teu usuari i password per començar a utilitzar Moxie.',
 	'logout'	=>	'Sortir',
+	'login'     =>  'Usuari',
+	'password'  =>  'Contrasenya',
+	'repeat_password' => 'Repeteix la contrasenya',
+	'email'     => 'Email',
+	'language'  => 'Idioma',
+	'user_send' => 'Enviar',
 	// Other stuff
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Els passwords no coincideixen',
