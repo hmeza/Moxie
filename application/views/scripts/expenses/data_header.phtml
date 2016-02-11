@@ -48,9 +48,9 @@ else {
 <?php
 echo $this->form->getElement('note');
 ?>
-<dt id="date-label"><label for="date" class="optional">Fecha</label></dt>
+<dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['expenses_date']; ?></label></dt>
 <dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
-<dt id="category-label"><label for="category" class="optional">Categoría</label></dt>
+<dt id="category-label"><label for="category" class="optional"><?php echo $st_lang['category']; ?></label></dt>
 <dd id="category-element">
 <div class='selectBox'>
     <span class='selected'></span>

@@ -29,7 +29,7 @@ echo $this->form->getElement('amount');
 echo $this->form->getElement('category');
 echo $this->form->getElement('note');
 ?>
-<dt id="date-label"><label for="date" class="optional">Fecha</label></dt>
+<dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['incomes_date']; ?></label></dt>
 <dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
 <?php
 echo $this->form->getElement('submit');
