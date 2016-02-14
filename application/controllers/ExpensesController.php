@@ -97,57 +97,7 @@ class ExpensesController extends Zend_Controller_Action
 		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
 		return $st_data;
 	}
-	
-	/**
-	 * Return the monthly expense for a year to the view.
-	 * @return string
-	 */
-	public function yearAction() {
-		$this->getResponse()->setHeader('Content-type', 'text/plain')
-							->setHeader('Cache-Control','no-cache');
-		$this->_helper->viewRenderer->setNoRender(true);
-		$this->_helper->layout()->disableLayout();
-		echo json_encode($this->getMonthExpensesData());
-		exit();
-	}
-	
-	/**
-	 * Return the month expense.
-	 * @return string
-	 */
-	public function monthAction() {
-		$this->getResponse()->setHeader('Content-type', 'text/plain')
-							->setHeader('Cache-Control','no-cache');
-		$this->_helper->viewRenderer->setNoRender(true);
-		$this->_helper->layout()->disableLayout();
-		
-		$db = Zend_Registry::get('db');
-		$i_month = $this->getRequest()->getParam('month');
-		$i_year = $this->getRequest()->getParam('year');
-		$s_select = $db->select()
-		->from(array('e'=>'expenses'),
-				array(
-						'sum(e.amount)' =>      'sum(e.amount)'
-				))
-				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
-						'id'            =>      'c.id',
-						'name'          =>      'c.name'
-				))
-				->where('e.user_owner = '.$_SESSION['user_id'])
-				->where('YEAR(e.date) = '.$i_year)
-				->where('MONTH(e.date) = '.$i_month)
-				->where('e.in_sum = 1')
-				->group('c.id')
-				->order(array('c.id'));
-		$st_data = $db->fetchAll($s_select);
-		$st_response = array();
-		foreach($st_data as $st_row) {
-			$st_response[] = array($st_row['name'], (float)$st_row['sum(e.amount)']);
-		}
-		echo json_encode($st_response);
-		exit();
-	}
-	
+
 	/**
 	 * Shows the expenses view.
 	 */
