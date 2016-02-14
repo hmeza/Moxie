@@ -40,6 +40,7 @@ $b_showTotalAmount = false;
 $s_currentExpenseDate = '';
 foreach ($this->list as $key=>$value) {
 	$checked = ($value['in_sum'] == '1') ? "checked":"";
+	$checked_style = ($value['in_sum'] == '0') ? "total_amount" : "";
 	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';
 	$expense_date = date('d-m-Y', strtotime($value['date']));
 	if($expense_date != $s_currentExpenseDate) {
@@ -49,11 +50,11 @@ foreach ($this->list as $key=>$value) {
 	
 	echo '
 <tr id="tr'.$value['id'].'">
-<td class="list moxie_edit"><a class="moxieedit" href="'.$this->editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
-<td class="list moxie_category"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
-<td class="list moxie_note">'.$value['note'].'</td>
-<td class="list moxie_date_inline">'.$expense_date.'</td>
-<td align="right" class="list moxie_amount"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
+<td class="list moxie_edit '.$checked_style.'"><a class="moxieedit" href="'.$this->editSlug.$value['id'].$s_dateGet.'"><div class="moxieicon moxieedit"></div></a></td>
+<td class="list moxie_category '.$checked_style.'"><div alt="'.$value['description'].'" title="'.$value['description'].'">'.$value['name'].'</div></td>
+<td class="list moxie_note '.$checked_style.'">'.$value['note'].'</td>
+<td class="list moxie_date_inline '.$checked_style.'">'.$expense_date.'</td>
+<td align="right" class="list moxie_amount '.$checked_style.'"><span id="val'.$value['id'].'">'.number_format($value['amount'],2).' &euro;</span></td>
 </tr>';
 
 	$f_totalAmount = $f_totalAmount + $value['amount'];

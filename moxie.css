@@ -112,6 +112,10 @@ table.list, td.list, th.list tr.list {
 	color: #777777;
 }
 
+td.total_amount {
+	color: #777777;
+}
+
 input.default {
 	color:#bbb;
 }
