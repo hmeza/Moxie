@@ -39,6 +39,8 @@ $st_lang = array(
 	'incomes_next_year' => 'Any següent',
 	'incomes_last_year' => 'Any anterior',
     'incomes_delete_message' => 'Esborrar aquest ingrés?',
+	// Transactions
+	'in_sum_message'    => 'Marcar/desmarcar per mostrar als totals ',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categories i pressupost',

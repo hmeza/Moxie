@@ -39,6 +39,8 @@ $st_lang = array(
 	'incomes_next_year' => 'Next year',
 	'incomes_last_year' => 'Last year',
     'incomes_delete_message' => 'Delete this income?',
+	// Transactions
+	'in_sum_message'    => 'Check/uncheck to show in totals ',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorias y presupuesto',

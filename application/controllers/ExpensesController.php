@@ -31,7 +31,16 @@ class ExpensesController extends Zend_Controller_Action
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-        $slug = !empty($st_expense['id']) ? '/expenses/update' : '/expenses/add';
+		if(empty($st_expense['id'])) {
+			$in_sum_type = "hidden";
+			$in_sum_value = 1;
+			$slug = '/expenses/add';
+		}
+		else {
+			$in_sum_type = "checkbox";
+			$in_sum_value = $st_expense['in_sum'];
+			$slug = '/expenses/update';
+		}
 
         $form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
             ->setMethod('post');
@@ -53,6 +62,8 @@ class ExpensesController extends Zend_Controller_Action
         $multiOptions->addMultiOptions($st_categories);
         $multiOptions->setValue(array($st_expense['category']));
         $form->addElement($multiOptions);
+
+		$form->addElement($in_sum_type, 'in_sum', array('value' => $in_sum_value));
 
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
 		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
