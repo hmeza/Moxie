@@ -3,13 +3,34 @@
 class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp() {
 		$_SERVER['SERVER_NAME'] = "testing";
-		$_SERVER['REQUEST_URI'] = "test";
+		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
 		$this->bootstrap = new Zend_Application(
 			'testing',
 			APPLICATION_PATH . '/configs/application.ini'
 		);
 		parent::setUp();
 		$this->fakeLogin();
+	}
+
+	public function testExpensesIndexShowsForm() {
+		$this->fakeLogin();
+		$this->request->setMethod('GET');
+
+		$this->dispatch('/expenses/index');
+
+		$this->assertController('expenses');
+		$this->assertAction('index');
+
+		$this->assertQueryContentContains('form', 'Importe');
+		$this->assertQueryContentContains('form', 'Nota');
+		$this->assertQueryContentContains('form', 'Fecha');
+		$this->assertQueryContentContains('form', 'Categoría');
+		$this->assertQueryContentContains('form', 'Tags');
+//		$this->assertQueryContentContains('input', 'Empty category not allowed for expenses');
+
+		// must see form
+		// must not see in_sum checkbox
+		// must not find id_expense
 	}
 
 	/**
@@ -45,7 +66,6 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	}
 
 	public function testAddExpenseWithoutCategoryThrowsError() {
-		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
 		$this->fakeLogin();
 		$this->request->setMethod('POST')
 				->setPost(array(
