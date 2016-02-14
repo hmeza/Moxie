@@ -71,7 +71,7 @@ class Tags extends Zend_Db_Table_Abstract {
 			$rows = $this->fetchAll($query)->toArray();
 			$tags = array();
 			foreach($rows as $row) {
-				$tags[$row['id']] = $row['name'];
+				$tags[$row['id']] = str_replace("'", "\'", $row['name']);
 			}
 		}
 		catch(Exception $e) {
@@ -102,7 +102,7 @@ class Tags extends Zend_Db_Table_Abstract {
             $rows = $this->fetchAll($query)->toArray();
             $tags = array();
             foreach($rows as $row) {
-                $tags[$row['id']] = $row['name'];
+                $tags[$row['id']] = str_replace("'", "\'", $row['name']);
             }
         }
         catch(Exception $e) {

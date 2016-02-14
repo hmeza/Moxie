@@ -51,7 +51,7 @@ class ExpensesController extends Zend_Controller_Action
 		asort($st_categories);
         if(empty($st_expense['category'])) {
             reset($st_categories);
-            $st_expense['category'] = current($st_categories);
+            $st_expense['category'] = key($st_categories);
             $this->currentCategory = $st_expense['category'];
         }
 
