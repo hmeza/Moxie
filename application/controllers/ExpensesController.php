@@ -165,8 +165,12 @@ class ExpensesController extends Zend_Controller_Action
 	 * @param array|array[] $st_data containing rows with columns date, amount, name and note.
 	 */
 	private function exportToExcel($st_data) {
-		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename='.date('Y-m-d').'.csv');
+		$this->getResponse()
+				->setHttpResponseCode(200)
+				->setHeader('Content-Type', 'text/csv; charset=utf-8')
+				->setHeader('Content-Disposition', 'attachment; filename='.date('Y-m-d').'.csv')
+				->setHeader('Pragma', 'no-cache')
+				->sendHeaders();
 
 		$output = fopen('php://output', 'w');
 
