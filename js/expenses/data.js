@@ -41,7 +41,7 @@ $(document).ready(function() {
 		}
 	});
 
-    // selecct category and tag, if any
+    // select category and tag, if any
     $('#category_filter').val(category);
     $('#tag_filter').val(tag);
     // handle here select changes

@@ -276,7 +276,7 @@ div.selectBox {
     clear:both;
     color:#888;
     height: 24px;
-	z-index: 0;
+	z-index: 1;
 }
 span.selected {
     width:126px;
