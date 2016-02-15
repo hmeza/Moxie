@@ -22,6 +22,7 @@ $(document).ready(function() {
 
 	var taggle = new Taggle('tags', {
 			tags: tagList,
+			placeholder: tagsPlaceholder,
 			duplicateTagClass: 'bounce'
 	});
 

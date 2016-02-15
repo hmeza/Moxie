@@ -80,6 +80,7 @@ $st_lang = array(
     'tags_title' => 'Tags',
 	'tags_notice' => 'When pressing Update, removed tags will be deleted.',
 	'tags_update' => 'Update',
+	'tags_placeholder' => 'Enter tags...',
 	// User, login, etc.
 	'users'		=>	'Settings',
 	'users_title'	=>	'Settings',

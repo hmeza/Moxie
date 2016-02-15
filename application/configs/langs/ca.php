@@ -80,6 +80,7 @@ $st_lang = array(
     'tags_title' => 'Tags',
 	'tags_notice' => 'En premer Actualitzar, s\'eliminaran els tags esborrats.',
 	'tags_update' => 'Actualitzar',
+	'tags_placeholder' => 'Introdueix tags...',
 	// User, login, etc.
 	'users'		=>	'Configuració',
 	'users_title'	=>	'Configuració',
