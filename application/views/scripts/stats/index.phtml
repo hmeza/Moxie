@@ -60,7 +60,7 @@ $balance = 0;
 for ($month = 1; $month <= 12; $month++) {
 	$income[$month] = 0;
 	$expense[$month] = 0;
-	echo '<th align="right"><a href="/expenses/index/month/'.$month.'/year/'.date('Y').'">'.date('M',mktime(1,1,1,$month,1,date('Y'))).'</a></th>';
+	echo '<th align="right"><a href="/expenses/index/month/'.$month.'/year/'.$this->year.'">'.date('M',mktime(1,1,1,$month,1,$this->year)).'</a></th>';
 }
 if (!empty($this->budget)) {
 	echo '<th align="right"><a href="/categories/index">'.$st_lang['budget'].'</a></th>';
@@ -127,7 +127,7 @@ foreach ($this->budget_expenses as $key => $category) {
 echo '<th align="left">'.$st_lang['stats_budget_expense'].'</th>';
 for ($month = 1; $month <= 12; $month++) {
 	echo '<th align="right">';
-	echo '<a href="/expenses/index/month/'.$month.'/year/'.date('Y').'">';
+	echo '<a href="/expenses/index/month/'.$month.'/year/'.$this->year.'">';
 	echo number_format($expense[$month],2);
 	echo ' &euro;</a></th>';
 }
