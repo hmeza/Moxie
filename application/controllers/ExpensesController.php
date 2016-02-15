@@ -193,7 +193,8 @@ class ExpensesController extends Zend_Controller_Action
 	private function updateTags($tags, $expenseId) {
 		$existingTags = $this->tags->getTagsByUser($_SESSION['user_id']);
 		foreach($tags as $tag) {
-			$tagId = array_search($tag, $existingTags);
+            $searchTag = str_replace("'", "\\'", $tag);
+			$tagId = array_search($searchTag, $existingTags);
 			if($tagId === FALSE) {
 				$tagId = $this->tags->addTag($_SESSION['user_id'], $tag);
 			}
