@@ -31,7 +31,7 @@ class TransactionTags extends Zend_Db_Table_Abstract {
 		$rows = $this->fetchAll($select)->toArray();
 		$tags = array();
 		foreach($rows as $row) {
-			$tags[] = $row['name'];
+			$tags[] = str_replace("'", "\'", $row['name']);
 		}
 		return $tags;
 	}
