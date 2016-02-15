@@ -773,9 +773,22 @@ body {
 
 .taggle_list .taggle {
 	background: #D0E8F4;
+	display: block;
 }
 
-.taggle_placeholder {
+.div_taggle_list {
+	width: 100%;
+	position:relative;
+	display: inline-block;
+}
+
+.dd_taggle_list {
 	position: relative;
-	top: 16px;
+	display:block;
+	height: auto;
+	min-height: 20px;
+}
+
+.taggle_input {
+	margin-top: 0px;
 }
