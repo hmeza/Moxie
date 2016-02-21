@@ -30,9 +30,7 @@ CompoundInterest.prototype = new Finances();
 
 CompoundInterest.prototype.calculateInterest = function(principal, rate, months) {
     var tempRate = this.roundToDecimal(1 + (rate/12/100), 4);
-    console.log(tempRate)
     var interestRate = this.roundToDecimal(Math.pow(tempRate, months), 4);
-    console.log(interestRate);
     this.interest = principal * interestRate;
     return this.interest;
 };
