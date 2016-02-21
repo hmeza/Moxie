@@ -1,4 +1,6 @@
-See it online at https://moxie.dootic.com
+See it online at [https://moxie.dootic.com](https://moxie.dootic.com)
+
+[![Build Status](http://integration.dootic.com:8080/job/moxie.dootic.com/badge/icon?style=plastic)](http://integration.dootic.com:8080/job/moxie.dootic.com/)
 
 ### Moxie
 
