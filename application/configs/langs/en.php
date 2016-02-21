@@ -71,8 +71,10 @@ $st_lang = array(
 	'stats_budget_expense' => 'TOTAL EXPENSE',
 	'stats_budget_total' => 'BALANCE (Income - expense)',
 	// Finances
+	'finances_title' => 'Deposit calculator',
+	'finances_name' => 'Name (optional)',
 	'finances_amount' => 'Amount to deposit',
-	'finances_interest' => 'Interest',
+	'finances_interest' => 'Interest (%)',
 	'finances_period' => 'Months',
 	'finances_revenue' => 'Interests',
 	'finances_total' => 'Total',

@@ -71,8 +71,10 @@ $st_lang = array(
 	'stats_budget_expense' => 'TOTAL GASTOS',
 	'stats_budget_total' => 'SALDO (Ingresos - gastos)',
 	// Finances
+	'finances_title' => 'Calculadora de depósitos',
+	'finances_name' => 'Nombre (opcional)',
 	'finances_amount' => 'Dinero a depositar',
-	'finances_interest' => 'Inter&eacute;s',
+	'finances_interest' => 'Inter&eacute;s (%)',
 	'finances_period' => 'Meses',
 	'finances_revenue' => 'Intereses',
 	'finances_total' => 'Total',

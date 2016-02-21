@@ -1,6 +1,9 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/finances/utils.js"></script>
 <script type="text/javascript">
+var current_id = 1;
+var form_template = "";
+
 var check = function() {
     if($('#amount').val() != ""
         && $('#rate').val() != ""
@@ -12,17 +15,38 @@ var check = function() {
     }
 }
 
+var addForm = function() {
+    var formId = "moxie_form_"+current_id;
+    $('#'+formId+" *").filter(":input").each(function(e) {
+        $(this).attr('disabled', 'disabled');
+    });
+    current_id++;
+    // disable old form inputs
+    $("<div id='moxie_form_"+current_id+"' style='float: left'>"+form_template+"<div>").insertBefore('#add_form');
+}
+
 $(document).ready(function() {
     $('#amount').change(check);
     $('#rate').change(check);
     $('#months').change(check);
+
+    $('#add_form').click(addForm);
+
+    form_template = $('.moxie_form').wrap('<p/>').parent().html();
 });
 
 </script>
-
-<h2>Calculadora de dep&oacute;sitos</h2>
-<form class="moxie_form">
 <?php global $st_lang; ?>
+<h2><?php echo $st_lang['finances_title']; ?></h2>
+<div id="container">
+<div>Compare</div>
+<div id="pepe" style="display: inline-block">
+<div id="moxie_form_1" style='float: left'>
+<form class="moxie_form">
+    <div>
+        <dt for="name"><?php echo $st_lang['finances_name']; ?></dt>
+        <dd><input id="name" type="text" placeholder=""></dd>
+    </div>
     <div>
     <dt for="amount"><?php echo $st_lang['finances_amount']; ?></dt>
     <dd><input id="amount" type="number" placeholder="0,00"></dd>
@@ -44,4 +68,8 @@ $(document).ready(function() {
     <dd><input id="total"></dd>
     </div>
 </form>
+</div>
+<div id="add_form" style='float: left'>Another form</div>
+</div>
+</div>
 <div height=20px>&nbsp;</div>
