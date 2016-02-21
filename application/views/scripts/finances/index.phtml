@@ -2,6 +2,7 @@
 <script type="text/javascript" src="/js/finances/utils.js"></script>
 <script type="text/javascript">
 var current_id = 1;
+var current_comparison = 1;
 var form_template = "";
 
 var check = function() {
@@ -15,14 +16,26 @@ var check = function() {
     }
 }
 
-var addForm = function() {
-    var formId = "moxie_form_"+current_id;
-    $('#'+formId+" *").filter(":input").each(function(e) {
+function disableCurrentForm() {
+    $('#moxie_form_'+current_id+" *").filter(":input").each(function(e) {
         $(this).attr('disabled', 'disabled');
     });
     current_id++;
-    // disable old form inputs
-    $("<div id='moxie_form_"+current_id+"' style='float: left'>"+form_template+"<div>").insertBefore('#add_form');
+}
+
+function getDepositForm() {
+    return "<div id='moxie_form_"+current_id+"' style='float: left'>"+form_template+"<div>";
+}
+
+var addForm = function() {
+    disableCurrentForm();
+    $(getDepositForm()).insertBefore('#add_form');
+}
+
+var compare = function() {
+    disableCurrentForm();
+    $("<div id='pepe'"+current_comparison+" style='display: inline-block'>"+getDepositForm()+"</div>").insertAfter('#compare');
+    current_comparison++;
 }
 
 $(document).ready(function() {
@@ -31,6 +44,7 @@ $(document).ready(function() {
     $('#months').change(check);
 
     $('#add_form').click(addForm);
+    $('#compare').click(compare);
 
     form_template = $('.moxie_form').wrap('<p/>').parent().html();
 });
@@ -39,7 +53,7 @@ $(document).ready(function() {
 <?php global $st_lang; ?>
 <h2><?php echo $st_lang['finances_title']; ?></h2>
 <div id="container">
-<div>Compare</div>
+<div id="compare">Compare</div>
 <div id="pepe" style="display: inline-block">
 <div id="moxie_form_1" style='float: left'>
 <form class="moxie_form">
