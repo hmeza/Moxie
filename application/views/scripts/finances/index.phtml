@@ -19,22 +19,31 @@ var check = function() {
 function disableCurrentForm() {
     $('#moxie_form_'+current_id+" *").filter(":input").each(function(e) {
         $(this).attr('disabled', 'disabled');
+        $(this).attr('id', $(this).attr('id')+current_id);
     });
     current_id++;
 }
 
 function getDepositForm() {
-    return "<div id='moxie_form_"+current_id+"' style='float: left'>"+form_template+"<div>";
+    return "<div id='moxie_form_"+current_id+"' style='float: left'>"+form_template+"</div>";
 }
 
 var addForm = function() {
     disableCurrentForm();
     $(getDepositForm()).insertBefore('#add_form');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
 }
 
 var compare = function() {
     disableCurrentForm();
-    $("<div id='pepe'"+current_comparison+" style='display: inline-block'>"+getDepositForm()+"</div>").insertAfter('#compare');
+    $('#add_form').remove();
+    $("<div id='pepe"+current_comparison+"' style='display: flex'>"+getDepositForm()+"<div id='add_form' style='float: left'>Another form</div></div>").insertAfter('#compare');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+    $('#add_form').click(addForm);
     current_comparison++;
 }
 
@@ -53,37 +62,37 @@ $(document).ready(function() {
 <?php global $st_lang; ?>
 <h2><?php echo $st_lang['finances_title']; ?></h2>
 <div id="container">
-<div id="compare">Compare</div>
-<div id="pepe" style="display: inline-block">
-<div id="moxie_form_1" style='float: left'>
-<form class="moxie_form">
-    <div>
-        <dt for="name"><?php echo $st_lang['finances_name']; ?></dt>
-        <dd><input id="name" type="text" placeholder=""></dd>
+    <div id="compare">Compare</div>
+    <div id="pepe" style="display: flex">
+        <div id="moxie_form_1" style='float: left'>
+            <form class="moxie_form">
+                <div>
+                    <dt for="name"><?php echo $st_lang['finances_name']; ?></dt>
+                    <dd><input id="name" type="text" placeholder=""></dd>
+                </div>
+                <div>
+                <dt for="amount"><?php echo $st_lang['finances_amount']; ?></dt>
+                <dd><input id="amount" type="number" placeholder="0,00"></dd>
+                </div>
+                <div>
+                <dt for="rate"><?php echo $st_lang['finances_interest']; ?></dt>
+                <dd><input id="rate" type="number" placeholder="0"></dd>
+                </div>
+                <div>
+                <dt for="months"><?php echo $st_lang['finances_period']; ?></dt>
+                <dd><input id="months" type="number" placeholder="12"></dd>
+                </div>
+                <div>
+                <dt for="interest"><?php echo $st_lang['finances_revenue']; ?></dt>
+                <dd><input id="interest"></dd>
+                </div>
+                <div>
+                <dt for="total"><?php echo $st_lang['finances_total']; ?></dt>
+                <dd><input id="total"></dd>
+                </div>
+            </form>
+        </div>
+        <div id="add_form" style='float: left'>Another form</div>
     </div>
-    <div>
-    <dt for="amount"><?php echo $st_lang['finances_amount']; ?></dt>
-    <dd><input id="amount" type="number" placeholder="0,00"></dd>
-    </div>
-    <div>
-    <dt for="rate"><?php echo $st_lang['finances_interest']; ?></dt>
-    <dd><input id="rate" type="number" placeholder="0"></dd>
-    </div>
-    <div>
-    <dt for="months"><?php echo $st_lang['finances_period']; ?></dt>
-    <dd><input id="months" type="number" placeholder="12"></dd>
-    </div>
-    <div>
-    <dt for="interest"><?php echo $st_lang['finances_revenue']; ?></dt>
-    <dd><input id="interest"></dd>
-    </div>
-    <div>
-    <dt for="total"><?php echo $st_lang['finances_total']; ?></dt>
-    <dd><input id="total"></dd>
-    </div>
-</form>
-</div>
-<div id="add_form" style='float: left'>Another form</div>
-</div>
 </div>
 <div height=20px>&nbsp;</div>
