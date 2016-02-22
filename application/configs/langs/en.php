@@ -73,6 +73,8 @@ $st_lang = array(
 	// Finances
 	'finances_title' => 'Deposit calculator',
 	'finances_name' => 'Name (optional)',
+    'finances_compare' => 'Compare',
+    'finances_add_row' => 'Add',
 	'finances_amount' => 'Amount to deposit',
 	'finances_interest' => 'Interest (%)',
 	'finances_period' => 'Months',

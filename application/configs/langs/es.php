@@ -73,6 +73,8 @@ $st_lang = array(
 	// Finances
 	'finances_title' => 'Calculadora de depósitos',
 	'finances_name' => 'Nombre (opcional)',
+    'finances_compare' => 'Comparar',
+    'finances_add_row' => 'Añadir',
 	'finances_amount' => 'Dinero a depositar',
 	'finances_interest' => 'Inter&eacute;s (%)',
 	'finances_period' => 'Meses',

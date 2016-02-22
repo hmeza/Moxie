@@ -1,9 +1,12 @@
+<?php global $st_lang; ?>
+<link rel="stylesheet" type="text/css" href="/material.css"/>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/finances/utils.js"></script>
 <script type="text/javascript">
 var current_id = 1;
 var current_comparison = 1;
 var form_template = "";
+var finance_add_txt = "<?php echo $st_lang['']; ?>";
 
 var check = function() {
     if($('#amount').val() != ""
@@ -39,7 +42,10 @@ var addForm = function() {
 var compare = function() {
     disableCurrentForm();
     $('#add_form').remove();
-    $("<div id='pepe"+current_comparison+"' style='display: flex'>"+getDepositForm()+"<div id='add_form' style='float: left'>Another form</div></div>").insertAfter('#compare');
+    $("<div id='pepe"+current_comparison+"' style='display: flex'>"+getDepositForm()+"<div id='add_form' style='float: left'>"
+    +"<button class='mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored'>"
+    +"<i class='material-icons' style='background-color: #0b77b7'>+</i>"
+    +"</button>"+finance_add_txt+"</div></div>").insertAfter('#compare');
     $('#amount').change(check);
     $('#rate').change(check);
     $('#months').change(check);
@@ -59,10 +65,14 @@ $(document).ready(function() {
 });
 
 </script>
-<?php global $st_lang; ?>
 <h2><?php echo $st_lang['finances_title']; ?></h2>
 <div id="container">
-    <div id="compare">Compare</div>
+    <div id="compare">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons" style="background-color: ##0b77b7">+</i>
+        </button>
+        <?php echo $st_lang['finances_compare']; ?>
+    </div>
     <div id="pepe" style="display: flex">
         <div id="moxie_form_1" style='float: left'>
             <form class="moxie_form">
@@ -92,7 +102,12 @@ $(document).ready(function() {
                 </div>
             </form>
         </div>
-        <div id="add_form" style='float: left'>Another form</div>
+        <div id="add_form" style='float: left'>
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                <i class="material-icons" style="background-color: #0b77b7">+</i>
+            </button>
+            <?php echo $st_lang['finances_add_row']; ?>
+        </div>
     </div>
 </div>
 <div height=20px>&nbsp;</div>

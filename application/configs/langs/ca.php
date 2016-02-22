@@ -72,6 +72,8 @@ $st_lang = array(
 	'stats_budget_total' => 'SALDO (Ingressos - Despeses)',
 	// Finances
 	'finances_title' => 'Calculadora de depòsits',
+    'finances_compare' => 'Comparar',
+    'finances_add_row' => 'Afegir',
 	'finances_name' => 'Nom (opcional)',
 	'finances_amount' => 'Diners a depositar',
 	'finances_interest' => 'Inter&egrave;s (%)',
