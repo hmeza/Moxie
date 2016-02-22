@@ -11,11 +11,11 @@ class FinancesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		parent::setUp();
 	}
 
-	public function testIndexIncomes() {
+	public function testIndexFinance() {
 		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
 
 		$_SESSION['user_lang'] = 'es';
-		$this->dispatch('/finances/');
+		$this->dispatch('/finances');
 		$this->assertController('finances');
 		$this->assertAction('index');
 
