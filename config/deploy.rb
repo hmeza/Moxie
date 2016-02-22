@@ -58,6 +58,7 @@ namespace :deploy do
     on roles(:all) do
         within release_path do
             execute "cd #{release_path} && npm install --no-dev"
+            execute "cd #{release_path} && bower install --allow-root"
         end
     end
   end

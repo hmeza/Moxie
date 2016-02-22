@@ -1,4 +1,6 @@
-See it online at https://moxie.dootic.com
+See it online at [https://moxie.dootic.com](https://moxie.dootic.com)
+
+[![Build Status](http://integration.dootic.com:8080/job/moxie.dootic.com/badge/icon?style=plastic)](http://integration.dootic.com:8080/job/moxie.dootic.com/)
 
 ### Moxie
 
@@ -15,13 +17,19 @@ Once installed, execute composer install from Moxie folder.
 After installation, copy application/configs/application.ini.example to application/configs/application.ini. Edit
 and set your database username and password that Moxie will use.
 
+### Dependencies
+
+#### installed with composer
+
+[Zend Framework](http://framework.zend.com/)
+
 [Phinx](https://phinx.org/)
 
 After that, install phinx. Once installed, edit phinx.yml to match your database and then execute vendor/bin/phinx to
 execute the migrations and update the database to the latest version.
 
-### Dependencies (installed with composer)
+[PHPUnit](https://phpunit.de/)
 
-[Zend Framework](http://framework.zend.com/)
+#### Installed using git submodules
 
 [Simple PHP captcha](https://github.com/claviska/simple-php-captcha)

@@ -82,6 +82,7 @@ $st_lang = array(
     'tags_title' => 'Tags',
 	'tags_notice' => 'Al pulsar Actualizar se eliminarán los tags borrados.',
 	'tags_update' => 'Actualizar',
+	'tags_placeholder' => 'Introduce tags...',
 	// User, login, etc.
 	'users'		=>	'Configuración',
 	'users_title' => 'Configuración',

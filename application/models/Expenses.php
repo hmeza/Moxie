@@ -65,7 +65,6 @@ class Expenses extends Zend_Db_Table_Abstract {
 	 * @param	string $s_tag
 	 */
 	public function getTaggedExpenses($user_id, $month, $year, $s_tag = null) {
-		$s_tag = (!empty($s_tag) ? "t.name = '".$s_tag."'" : "1=1");
 		$query = $this->database->select()
 				->from(array('e'=>$this->_name),array(
 						'id'	=>	'e.id',
@@ -85,10 +84,11 @@ class Expenses extends Zend_Db_Table_Abstract {
 				->where('YEAR(e.date) = '.$year)
 				->where('MONTH(e.date) = '.$month)
 				->where('e.user_owner = '.$user_id)
-				->where($s_tag)
 				->where('e.amount < 0')
 				->order('e.date asc');
-		error_log($query);
+        if(!empty($s_tag)) {
+            $query = $query->where('t.name = ?', $s_tag);
+        }
 		$stmt = $this->database->query($query);
 		$result = $stmt->fetchAll();
 		return $result;
