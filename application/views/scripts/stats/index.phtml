@@ -137,10 +137,13 @@ echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 echo '<th align="left">'.$st_lang['stats_budget_total'].'</th>';
 for ($month = 1; $month <= 12; $month++) {
-	echo '<th align="right">'.number_format(($income[$month]-$expense[$month]),2).' &euro;</th>';
+	$monthTotal = $income[$month]-$expense[$month];
+	$style = $monthTotal < 0 ? "color: #ff0000" : "";
+	echo '<th align="right"><span style="'.$style.'">'.number_format(($monthTotal),2).' &euro;</span></th>';
 	$balance += ($income[$month]-$expense[$month]);
 }
-echo '<th align="right">'.number_format($balance,2).' &euro;</th>
+$style = $balance < 0 ? "color: #ff0000" : "";
+echo '<th align="right"><span style="'.$style.'">'.number_format($balance,2).' &euro;</span></th>
 </tr>';
 ?>
 </table>
