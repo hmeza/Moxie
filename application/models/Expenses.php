@@ -302,7 +302,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 		    // set default values to avoid error on empty data chart
 		    $o_rows = array(
 			    array(
-				    'month' => date('M'),
+				    'month' => date('m'),
 				    'year' => date('Y'),
 				    'amount' => 0
 			    )

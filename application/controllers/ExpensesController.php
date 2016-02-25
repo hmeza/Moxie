@@ -88,13 +88,19 @@ class ExpensesController extends Zend_Controller_Action
 		$o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, $s_category);
 
 		foreach ($o_rows as $key => $value) {
-			$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
-			$st_data[] = array(
-				date("M", $timestamp),
-				(float)$value['amount']
-			);
+			try {
+				$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
+				$st_data[] = array(
+						date("M", $timestamp),
+						(float)$value['amount']
+				);
+			}
+			catch(Exception $e) {
+				error_log(__METHOD__.": ".$e->getMessage());
+				error_log(__METHOD__." data: ".$key." ".print_r($value,true));
+			}
 		}
-		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);				
+		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);
 		return $st_data;
 	}
 
@@ -103,7 +109,7 @@ class ExpensesController extends Zend_Controller_Action
 	 */
 	public function indexAction() {
 		global $st_lang;
-		
+
 		// list current month by default
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month', date('n'));
