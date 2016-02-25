@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     jasmine : {
       all: {
       // Your project's source files
-      src : ['js/jquery.js', 'js/common.js', 'js/finances/*.js'],
+      src : ['js/jquery.js', 'js/common.js', 'js/finance/*.js'],
       options: {
         // Jasmine spec files
         specs : 'test/js/spec/*Spec.js'

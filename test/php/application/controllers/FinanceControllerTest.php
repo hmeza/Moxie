@@ -1,6 +1,6 @@
 <?php
 
-class FinancesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
+class FinanceControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp() {
 		$_SERVER['SERVER_NAME'] = "testing";
 		$_SERVER['REQUEST_URI'] = "test";
@@ -15,8 +15,8 @@ class FinancesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
 
 		$_SESSION['user_lang'] = 'es';
-		$this->dispatch('/finances');
-		$this->assertController('finances');
+		$this->dispatch('/finance/');
+		$this->assertController('finance');
 		$this->assertAction('index');
 
 		$this->assertQueryContentContains('dt', 'Dinero a depositar');

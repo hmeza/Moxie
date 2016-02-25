@@ -1,7 +1,7 @@
 <?php global $st_lang; ?>
 <link rel="stylesheet" type="text/css" href="/material.css"/>
 <script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/finances/utils.js"></script>
+<script type="text/javascript" src="/js/finance/utils.js"></script>
 <script type="text/javascript">
 var current_id = 1;
 var current_comparison = 1;
@@ -12,10 +12,10 @@ var check = function() {
     if($('#amount').val() != ""
         && $('#rate').val() != ""
         && $('#months').val() != "") {
-        finances = new Finances();
-        finances.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
-        $('#interest').val(finances.interest);
-        $('#total').val(finances.getTotal());
+        finance = new Finance();
+        finance.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
+        $('#interest').val(finance.interest);
+        $('#total').val(finance.getTotal());
     }
 }
 
@@ -65,7 +65,7 @@ $(document).ready(function() {
 });
 
 </script>
-<h2><?php echo $st_lang['finances_title']; ?></h2>
+<h2><?php echo $st_lang['finance_title']; ?></h2>
 <div id="container">
     <div id="compare">
         <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
@@ -77,27 +77,27 @@ $(document).ready(function() {
         <div id="moxie_form_1" style='float: left'>
             <form class="moxie_form">
                 <div>
-                    <dt for="name"><?php echo $st_lang['finances_name']; ?></dt>
+                    <dt for="name"><?php echo $st_lang['finance_name']; ?></dt>
                     <dd><input id="name" type="text" placeholder=""></dd>
                 </div>
                 <div>
-                <dt for="amount"><?php echo $st_lang['finances_amount']; ?></dt>
+                <dt for="amount"><?php echo $st_lang['finance_amount']; ?></dt>
                 <dd><input id="amount" type="number" placeholder="0,00"></dd>
                 </div>
                 <div>
-                <dt for="rate"><?php echo $st_lang['finances_interest']; ?></dt>
+                <dt for="rate"><?php echo $st_lang['finance_interest']; ?></dt>
                 <dd><input id="rate" type="number" placeholder="0"></dd>
                 </div>
                 <div>
-                <dt for="months"><?php echo $st_lang['finances_period']; ?></dt>
+                <dt for="months"><?php echo $st_lang['finance_period']; ?></dt>
                 <dd><input id="months" type="number" placeholder="12"></dd>
                 </div>
                 <div>
-                <dt for="interest"><?php echo $st_lang['finances_revenue']; ?></dt>
+                <dt for="interest"><?php echo $st_lang['finance_revenue']; ?></dt>
                 <dd><input id="interest"></dd>
                 </div>
                 <div>
-                <dt for="total"><?php echo $st_lang['finances_total']; ?></dt>
+                <dt for="total"><?php echo $st_lang['finance_total']; ?></dt>
                 <dd><input id="total"></dd>
                 </div>
             </form>
