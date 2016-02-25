@@ -281,7 +281,7 @@ class Expenses extends Zend_Db_Table_Abstract {
      * @param string $s_category
      * @return mixed
      */
-    public function getMonthExpensesData($i_userId, $i_dateLimit, $s_category) {
+    public function getMonthExpensesData($i_userId, $i_dateLimit) {
         $s_query = $this->select()
             ->from($this->_name, array(
 		            'year' => new Zend_Db_Expr('YEAR('.$this->_name.'.date)'),
@@ -289,9 +289,8 @@ class Expenses extends Zend_Db_Table_Abstract {
 		            'amount' => new Zend_Db_Expr('-sum('.$this->_name.'.amount)'))
             )
             ->where('in_sum = 1')
-            ->where('user_owner = '.$i_userId)
+            ->where('user_owner = ?', $i_userId)
             ->where('date >= "'.$i_dateLimit.'"')
-            ->where($s_category)
             ->where('amount < 0')
             ->group(array(new Zend_Db_Expr('MONTH(date)'), new Zend_Db_Expr('YEAR(date)')))
             ->order(array(new Zend_Db_Expr('YEAR(date)'), new Zend_Db_Expr('MONTH(date)')));
