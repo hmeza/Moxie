@@ -25,8 +25,7 @@ class Expenses extends Zend_Db_Table_Abstract {
 	 * @param	int $year
 	 * @param	int $i_category
 	 */
-	public function getExpenses($user_id, $month, $year, $i_category = 0) {
-		$s_category = ($i_category != 0) ? "e.category = ".$i_category : "1=1";
+	public function getExpenses($user_id, $month = 0, $year = 0, $i_category = 0) {
 		$query = $this->select()
             ->setIntegrityCheck(false)
 		    ->from(array('e'=>$this->_name),array(
@@ -42,12 +41,18 @@ class Expenses extends Zend_Db_Table_Abstract {
 					'description'	=>	'c.description',
 					'category'	=> 'c.id'
 					))
-            ->where('YEAR(e.date) = '.$year)
-            ->where('MONTH(e.date) = '.$month)
             ->where('e.user_owner = '.$user_id)
-            ->where($s_category)
             ->where('e.amount < 0')
 			->order('e.date asc');
+        if(!empty($month)) {
+            $query = $query->where('MONTH(e.date) = ?', $month);
+        }
+        if(!empty($year)) {
+            $query = $query->where('YEAR(e.date) = ?', $year);
+        }
+        if(!empty($i_category)) {
+            $query = $query->where('e.category = ?', $i_category);
+        }
 		$result = $this->fetchAll($query)->toArray();
         return $result;
 	}
