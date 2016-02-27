@@ -62,10 +62,13 @@ class IncomesController extends Zend_Controller_Action
 		return $st_data;
 	}
 
-	private function getViewData($i_year, $st_data) {
+	private function getViewData($st_data) {
 		global $st_lang;
 
-		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year));
+		$i_year = $this->getRequest()->getParam('year', date('Y'));
+		$i_category = $this->getRequest()->getParam('category', 0);
+
+		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year, $i_category));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
@@ -85,7 +88,7 @@ class IncomesController extends Zend_Controller_Action
 			'date' => date('Y-m-d H:i:s')
 		));
 
-		$this->getViewData($this->getRequest()->getParam('year', date('Y')), $st_data);
+		$this->getViewData($st_data);
 	}
 	
 	/**
@@ -116,7 +119,7 @@ class IncomesController extends Zend_Controller_Action
             throw new Exception("Access error");
         }
 
-		$this->getViewData($this->getRequest()->getParam('year', date('Y')), $st_income);
+		$this->getViewData($st_income);
 		$this->render('index');
 	}
 	

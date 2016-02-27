@@ -22,9 +22,8 @@ class Incomes extends Zend_Db_Table_Abstract {
 	 */
 	public function getIncomes($user_id, $i_month = 0, $i_year = 0, $i_category = 0) {
 		$s_month = ($i_month == 0) ? '1=1' : 'MONTH(i.date) = '.$i_month;
-		if ($i_year==0) $i_year = date('Y');
-		$s_category = ($i_category != 0) ? "i.category = ".$i_category : "1=1";
-		$query = $this->_db->select()
+		$query = $this->select()
+			->setIntegrityCheck(false)
 		    ->from(array('i'=> $this->_name),array(
 					'id'	=>	'i.id',
 					'user_owner'	=>	'i.user_owner',
@@ -38,14 +37,18 @@ class Incomes extends Zend_Db_Table_Abstract {
             'description'	=>	'c.description',
             'category'	=> 'c.id'
             ))
-            ->where('YEAR(i.date) = '.$i_year)
             ->where($s_month)
             ->where('i.user_owner = '.$user_id)
-            ->where($s_category)
             ->where('amount >= 0')       // incomes only
             ->order('i.date asc');
-        $stmt = $this->_db->query($query);
-        $result = $stmt->fetchAll();
+
+		if(!empty($i_year)) {
+			$query = $query->where('YEAR(i.date) = ?', $i_year);
+		}
+		if(!empty($i_category)) {
+			$query = $query->where('category = ?', $i_category);
+		}
+        $result = $this->fetchAll($query);
         return $result;
 	}
 
