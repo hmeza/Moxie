@@ -20,8 +20,6 @@ class Expenses extends Zend_Db_Table_Abstract {
 	/**
 	 * Gets expenses from a given user, month and year.
 	 * If i_category is not set or is set to zero, all categories are retrieved.
-	 * @author	hmeza
-	 * @since	2011-01-03
 	 * @param	int $user_id
 	 * @param	int $month
 	 * @param	int $year
@@ -29,8 +27,9 @@ class Expenses extends Zend_Db_Table_Abstract {
 	 */
 	public function getExpenses($user_id, $month, $year, $i_category = 0) {
 		$s_category = ($i_category != 0) ? "e.category = ".$i_category : "1=1";
-		$query = $this->database->select()
-		->from(array('e'=>$this->_name),array(
+		$query = $this->select()
+            ->setIntegrityCheck(false)
+		    ->from(array('e'=>$this->_name),array(
 					'id'	=>	'e.id',
 					'user_owner'	=>	'e.user_owner',
 					'amount'		=>	new Zend_Db_Expr('-(e.amount)'),
@@ -38,27 +37,24 @@ class Expenses extends Zend_Db_Table_Abstract {
 					'date'	=>	'e.date',
 					'in_sum'		=>	'e.in_sum'
 					))
-					->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
+            ->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
 					'name'	=>	'c.name',
 					'description'	=>	'c.description',
 					'category'	=> 'c.id'
 					))
-					->where('YEAR(e.date) = '.$year)
-					->where('MONTH(e.date) = '.$month)
-					->where('e.user_owner = '.$user_id)
-					->where($s_category)
-                    ->where('e.amount < 0')
-					->order('e.date asc');
-					$stmt = $this->database->query($query);
-					$result = $stmt->fetchAll();
-					return $result;
+            ->where('YEAR(e.date) = '.$year)
+            ->where('MONTH(e.date) = '.$month)
+            ->where('e.user_owner = '.$user_id)
+            ->where($s_category)
+            ->where('e.amount < 0')
+			->order('e.date asc');
+		$result = $this->fetchAll($query)->toArray();
+        return $result;
 	}
 
 	/**
 	 * Gets expenses from a given user, month and year.
 	 * If i_category is not set or is set to zero, all categories are retrieved.
-	 * @author	hmeza
-	 * @since	2011-01-03
 	 * @param	int $user_id
 	 * @param	int $month
 	 * @param	int $year
