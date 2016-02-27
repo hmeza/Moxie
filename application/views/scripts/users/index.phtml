@@ -16,6 +16,9 @@ $(document).ready(function() {
     $("#tags_title").click(function (event) {
         $("#tags_table").slideToggle();
     });
+	$("#users_donate").click(function (event) {
+		$("#donate").slideToggle();
+	});
 
 	$("#myaccountform").submit(function(e){
 		var error_message = "<?php echo $st_lang['myaccount_password_error']?>";
@@ -61,3 +64,18 @@ echo $this->partial('categories/budget.phtml',
 echo $this->partial('tags/tags.phtml',
         array('tag_list' => $this->tag_list));
 ?>
+
+<h2 id="users_donate">
+	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+		<i class="material-icons" style="background-color: ##0b77b7">+</i>
+	</button>
+	<?php echo $st_lang['users_donate']." ".$st_lang['press_here_display']; ?>
+</h2>
+<div id="donate" style="display: none;">
+	<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		<input type="hidden" name="cmd" value="_s-xclick">
+		<input type="hidden" name="hosted_button_id" value="RVPQ896TDVARA">
+		<input style="height: auto;" type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal. La forma rápida y segura de pagar en Internet.">
+		<img alt="" border="0" src="https://www.paypalobjects.com/es_ES/i/scr/pixel.gif" width="1" height="1">
+	</form>
+</div>

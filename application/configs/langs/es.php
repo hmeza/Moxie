@@ -89,6 +89,7 @@ $st_lang = array(
 	'users'		=>	'Configuración',
 	'users_title' => 'Configuración',
 	'users_my_account'	=>	'Mi cuenta',
+	'users_donate' => 'Donar',
 	'new_user'	=>	'Nuevo usuario',
 	'register'	=>	'Formulario de registro',
 	'registration_ok'	=>	'<h2>Registro efectuado con éxito!</h2>
