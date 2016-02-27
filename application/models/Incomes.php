@@ -21,7 +21,6 @@ class Incomes extends Zend_Db_Table_Abstract {
 	 * @param int $i_category
 	 */
 	public function getIncomes($user_id, $i_month = 0, $i_year = 0, $i_category = 0) {
-		$s_month = ($i_month == 0) ? '1=1' : 'MONTH(i.date) = '.$i_month;
 		$query = $this->select()
 			->setIntegrityCheck(false)
 		    ->from(array('i'=> $this->_name),array(
@@ -33,15 +32,17 @@ class Incomes extends Zend_Db_Table_Abstract {
 					'in_sum'		=>	'i.in_sum'
 					))
             ->joinLeft(array('c'=>'categories'), 'c.id = i.category', array(
-            'name'	=>	'c.name',
-            'description'	=>	'c.description',
-            'category'	=> 'c.id'
-            ))
-            ->where($s_month)
+                'name'	=>	'c.name',
+                'description'	=>	'c.description',
+                'category'	=> 'c.id'
+                ))
             ->where('i.user_owner = '.$user_id)
             ->where('amount >= 0')       // incomes only
             ->order('i.date asc');
 
+        if(!empty($i_month)) {
+            $query = $query->where('MONTH(i.date) = ?', $i_month);
+        }
 		if(!empty($i_year)) {
 			$query = $query->where('YEAR(i.date) = ?', $i_year);
 		}
