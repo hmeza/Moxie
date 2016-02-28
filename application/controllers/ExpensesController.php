@@ -129,6 +129,8 @@ class ExpensesController extends Zend_Controller_Action
         }
         catch(Exception $e) {
 	        error_log($e->getMessage());
+            $st_data = array();
+            $st_list = array();
         }
 
 		if($s_toExcel == true) {
