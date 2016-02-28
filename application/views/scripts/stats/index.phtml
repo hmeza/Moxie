@@ -168,8 +168,8 @@ echo '<th align="right"><span style="'.$style.'">'.number_format($balance,2).' &
 <th align="right"><?= $st_lang['average_unit']; ?></th>
 </tr>
 <?php
+$i_currentMonth = date('m');
 foreach ($this->data as $key => $value) {
-	$i_currentMonth = date('m');
 	echo '<tr>
 	<td>'.$value['name'].'</td>
 	<td align="right">'.number_format($value['sumtotal'],2).' &euro;</td>
