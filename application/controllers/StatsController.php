@@ -8,7 +8,7 @@ class StatsController extends Zend_Controller_Action {
 	private $categories;
     /** @var Budgets */
 	private $budgets;
-		
+
 	public function init() {
 		parent::init();
 		$this->expenses = new Expenses();
@@ -42,8 +42,8 @@ class StatsController extends Zend_Controller_Action {
 		$expenses = array();
 		$incomes = array();
 		for($month = 1; $month <= 12; $month++) {
-			$expenses[$month] = $this->expenses->getExpenses($_SESSION['user_id'], $month, $year);
-			$incomes[$month] = $this->incomes->getIncomes($_SESSION['user_id'],$month, $year);
+			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES,$month, $year);
+			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES,$month, $year);
 		}
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);

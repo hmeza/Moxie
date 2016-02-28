@@ -3,7 +3,7 @@
 /**
  * Expenses model.
  */
-class Expenses extends Zend_Db_Table_Abstract {
+class Expenses extends Transactions {
 	/** @var int Number of frequent expenses to retrieve */
 	const MOST_FREQUENT_EXPENSES_LIMIT = 5;
 
@@ -15,46 +15,6 @@ class Expenses extends Zend_Db_Table_Abstract {
 		global $db;
 		$this->database = $db;
 		$this->_db = Zend_Registry::get('db');
-	}
-	
-	/**
-	 * Gets expenses from a given user, month and year.
-	 * If i_category is not set or is set to zero, all categories are retrieved.
-	 * @param	int $user_id
-	 * @param	int $month
-	 * @param	int $year
-	 * @param	int $i_category
-	 */
-	public function getExpenses($user_id, $month = 0, $year = 0, $i_category = 0) {
-		$query = $this->select()
-            ->setIntegrityCheck(false)
-		    ->from(array('e'=>$this->_name),array(
-					'id'	=>	'e.id',
-					'user_owner'	=>	'e.user_owner',
-					'amount'		=>	new Zend_Db_Expr('-(e.amount)'),
-					'note'			=>	'e.note',
-					'date'	=>	'e.date',
-					'in_sum'		=>	'e.in_sum'
-					))
-            ->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
-					'name'	=>	'c.name',
-					'description'	=>	'c.description',
-					'category'	=> 'c.id'
-					))
-            ->where('e.user_owner = '.$user_id)
-            ->where('e.amount < 0')
-			->order('e.date asc');
-        if(!empty($month)) {
-            $query = $query->where('MONTH(e.date) = ?', $month);
-        }
-        if(!empty($year)) {
-            $query = $query->where('YEAR(e.date) = ?', $year);
-        }
-        if(!empty($i_category)) {
-            $query = $query->where('e.category = ?', $i_category);
-        }
-		$result = $this->fetchAll($query)->toArray();
-        return $result;
 	}
 
 	/**

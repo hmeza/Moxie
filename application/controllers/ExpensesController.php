@@ -119,7 +119,7 @@ class ExpensesController extends Zend_Controller_Action
 		try {
 			$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
 			if((empty($this->currentCategory) && empty($s_tag)) || !empty($this->currentCategory)) {
-				$st_list = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $this->currentCategory);
+				$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $i_month, $i_year, $this->currentCategory);
 			}
 	        else {
 		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
@@ -273,7 +273,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
 		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-		$this->view->assign('list', $this->expenses->getExpenses($_SESSION['user_id'],$i_month,$i_year));
+		$this->view->assign('list', $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES,$i_month,$i_year));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('category', $i_category);
