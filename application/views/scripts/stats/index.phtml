@@ -116,7 +116,7 @@ foreach ($this->budget_expenses as $key => $category) {
 		else {
 			$s_color = '';
 		}
-		echo '<td align="right"'.$s_color.' name="month'.$month.'">'.number_format($current_expense,2).' &euro;</td>';
+		echo '<td align="right" name="month'.$month.'"><a '.$s_color.' href="/expenses/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'">'.number_format($current_expense,2).' &euro;</a></td>';
 	}
 	if (!empty($this->budget)) {
 		$i_budget = (!empty($this->budget[date('m')][$key])) ? $this->budget[date('m')][$key] : 0;
