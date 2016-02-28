@@ -117,7 +117,7 @@ class ExpensesController extends Zend_Controller_Action
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 
 		try {
-			$st_data = $this->expenses->getExpensesForIndex($_SESSION['user_id'], $i_month, $i_year);
+			$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year);
 			if((empty($this->currentCategory) && empty($s_tag)) || !empty($this->currentCategory)) {
 				$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $i_month, $i_year, $this->currentCategory);
 			}
@@ -253,7 +253,7 @@ class ExpensesController extends Zend_Controller_Action
         if($st_expense['user_owner'] != $_SESSION['user_id']) {
             throw new Exception("Access error");
         }
-		$st_data = $this->expenses->getExpensesForEdit($_SESSION['user_id'], $i_month, $i_year);
+		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year);
         $form = $this->getForm($st_expense);
 
 		if(empty($i_category)) {
