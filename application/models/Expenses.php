@@ -71,8 +71,9 @@ class Expenses extends Transactions {
 						))
 				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
 						'id'            =>      'c.id',
-						'name'          =>      'c.name'
+						'name'          =>      new Zend_Db_Expr('CONCAT(COALESCE(CONCAT(c0.name, " - "), ""), c.name)'),
 				))
+            ->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
 				->where('e.user_owner = '.$user_id)
 				->where('YEAR(e.date) = '.$i_year)
 				->where('MONTH(e.date) = '.$i_month)
