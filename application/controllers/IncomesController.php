@@ -4,6 +4,10 @@ class IncomesController extends Zend_Controller_Action
 {
     /** @var Incomes */
 	private $incomes;
+	/** @var boolean */
+	private $showTagsFilter = false;
+	/** @var boolean */
+	private $showCategoriesFilter = true;
 
 	public function init() {
 		parent::init();
@@ -74,6 +78,8 @@ class IncomesController extends Zend_Controller_Action
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('form', $this->getForm($st_data));
+		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
+		$this->view->assign('show_tags_filter', $this->showTagsFilter);
 	}
 	
 	/**

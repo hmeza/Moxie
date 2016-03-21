@@ -12,6 +12,10 @@ class ExpensesController extends Zend_Controller_Action
 	private $transactionTags;
     /** @var int  */
     private $currentCategory;
+	/** @var boolean */
+	private $showTagsFilter = true;
+	/** @var boolean */
+	private $showCategoriesFilter = true;
 
 	public function init() {
 		parent::init();
@@ -161,6 +165,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('form', $form);
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
+		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
+		$this->view->assign('show_tags_filter', $this->showTagsFilter);
 	}
 
 	/**
@@ -284,6 +290,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
+		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
+		$this->view->assign('show_tags_filter', $this->showTagsFilter);
 		$this->render('index');
 	}
 	
