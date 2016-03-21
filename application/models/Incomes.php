@@ -1,14 +1,6 @@
 <?php
 
 class Incomes extends Transactions {
-	
-	protected $_name = 'transactions';
-	protected $_primary = 'id';
-	
-	public function __construct() {
-		$this->_db = Zend_Registry::get('db');
-	}
-	
     /**
      * @param int $userId
      * @return mixed
@@ -33,4 +25,3 @@ class Incomes extends Transactions {
         return $o_rows;
     }
 }
-?>
