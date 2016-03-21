@@ -4,7 +4,7 @@ class IncomesController extends Zend_Controller_Action
 {
     /** @var Incomes */
 	private $incomes;
-	
+
 	public function init() {
 		parent::init();
 		$this->incomes = new Incomes();
@@ -68,7 +68,7 @@ class IncomesController extends Zend_Controller_Action
 		$i_year = $this->getRequest()->getParam('year', date('Y'));
 		$i_category = $this->getRequest()->getParam('category', 0);
 
-		$this->view->assign('list', $this->incomes->getIncomes($_SESSION['user_id'],0,$i_year, $i_category));
+		$this->view->assign('list', $this->incomes->get($_SESSION['user_id'],Categories::INCOMES,0,$i_year, $i_category));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
