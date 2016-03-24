@@ -6,6 +6,7 @@ var filter = function() {
 }
 
 $(document).ready(function() {
+    enableSelectBoxes();
     // selecct category and tag, if any
     $('#category_filter').val(category);
 //    $('#tag_filter').val(tag);
@@ -13,3 +14,10 @@ $(document).ready(function() {
     $('#category_filter').change(filter);
 //    $('#tag_filter').change(filter_tag);
 });
+
+function enableSelectBoxes() {
+    selectInstance = new Select({
+        el: document.querySelector('#category'),
+        className: 'select-theme-default'
+    });
+}
