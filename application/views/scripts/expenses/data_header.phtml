@@ -8,9 +8,6 @@ global $st_lang;
     var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
 	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
-<link rel="stylesheet" href="bower_components/tether-select/dist/css/select-theme-default.css" />
-<script type="text/javascript" src="bower_components/tether/dist/js/tether.js"></script>
-<script type="text/javascript" src="bower_components/tether-select/dist/js/select.js"></script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
 <?php global $st_lang; ?>
@@ -51,9 +48,28 @@ echo $this->form->getElement('note');
 ?>
 <dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['expenses_date']; ?></label></dt>
 <dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
+<dt id="category-label"><label for="category" class="optional"><?php echo $st_lang['category']; ?></label></dt>
+<dd id="category-element">
+<div class='selectBox'>
+    <span class='selected'></span>
+    <span class='selectArrow'>&#9660</span>
+    <div class="selectOptions" >
 <?php
-echo $this->form->getElement('category');
+$values = $this->form->getElement('category')->getValue();
+foreach($this->form->getElement('category') as $key => $option) {
+    $selectedSpanId = (!empty($values)) ? $values[0] : null;
+	if($key == "options") {
+		foreach($option as $key2 => $option2) {
+            $selectedSpan = ($selectedSpanId == $key2) ? " selectedSpan" : "";
+			echo "<span class='selectOption".$selectedSpan."' value='".$key2."'>".$option2."</span>";
+		}
+	}
+}
 ?>
+</div>
+</div>
+<input type="hidden" name="category" id="category" value="<?php echo $selectedSpanId; ?>"/>
+</dd>
 <dt for="form_tags">Tags</dt>
 <dd id="form_tags" class="dd_taggle_list">
 	<div id="tags" class="div_taggle_list"></div>
@@ -63,7 +79,7 @@ echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
 	echo '<input type="button" class="moxiedelete" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . '")\'/>';
 }
+echo '</form>';
 ?>
-</form>
 </div>
 </div>

@@ -21,7 +21,6 @@
   ],
   "dependencies": {
     "jquery-ui": "~1.11.4",
-    "taggle": "~1.6.2",
-    "tether-select": "^1.1.1"
+    "taggle": "~1.6.2"
   }
 }
