@@ -151,8 +151,9 @@ class IncomesController extends Zend_Controller_Action
 	 * Deletes a given income
 	 */
 	public function deleteAction() {
+		$i_incomePK = $this->getRequest()->getParam('id');
 		try {
-			$this->incomes->delete($this->getRequest()->getParam('id'), $_SESSION['user_id']);
+			$this->incomes->delete('id = '.$i_incomePK.' and user_owner = '.$_SESSION['user_id']);
 		}
 		catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
