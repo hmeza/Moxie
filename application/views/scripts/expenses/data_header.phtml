@@ -36,10 +36,10 @@ if (isset($i_expensePK)) {
 	$amount = $this->form->getValue('amount');
 }
 else {
-	$amount = '';
 ?>
 	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">
 <?php
+	$amount = '';
 }
 ?>
 <dt id="amount-label"><label for="amount" class="optional"><?php echo $st_lang['expenses_amount']; ?></label></dt>
