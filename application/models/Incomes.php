@@ -24,4 +24,20 @@ class Incomes extends Transactions {
 
         return $o_rows;
     }
+
+	/**
+	 * Delete row by id, with user_owner check.
+	 * @param int $id
+	 * @param int $user
+	 * @return int
+	 * @throws Zend_Db_Select_Exception
+	 */
+	public function delete($id, $user) {
+		$s_where = $this->select()
+				->from($this->_name)
+				->where('id = ?', $id)
+				->where('user_owner = ?', $user)
+				->getPart(Zend_Db_Select::SQL_WHERE);
+		return parent::delete(implode(" ", $s_where));
+	}
 }
