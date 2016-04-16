@@ -224,7 +224,6 @@ class ExpensesController extends Zend_Controller_Action
 		$st_form['note'] = $this->getRequest()->getParam('note', "");
 		$st_form['category'] = $this->getRequest()->getParam('category', null);
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-		echo $st_form['category'];
 		if(empty($st_form['category'])) {
 			throw new Exception("Empty category not allowed for expenses");
 		}
@@ -309,13 +308,14 @@ class ExpensesController extends Zend_Controller_Action
             throw new Exception("Access error");
         }
 
+		$originalExpenseDate = explode("-", $st_expense['date']);
 		$this->transactionTags->removeTagsFromTransaction($i_expensePK);
 		if(!empty($_POST['taggles'])) {
 			$this->updateTags($_POST['taggles'], $i_expensePK);
 		}
 
 		$this->expenses->updateExpense($i_expensePK, $st_params);
-		$this->_helper->redirector('index','expenses');
+		$this->_helper->redirector('index','expenses', '', array('month' => $originalExpenseDate[1], 'year' => $originalExpenseDate[0]));
 	}
 	
 	/**
