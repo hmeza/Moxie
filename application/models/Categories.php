@@ -80,16 +80,6 @@ class Categories extends Zend_Db_Table_Abstract {
 		return $stmt->fetchAll();
 	}
 	
-	public function getCategoriesByParent($parent_id) {
-		$query = $db->select()
-			->from('categories')
-			->where('parent = ?', $parent_id);
-			//->order('');
-		$stmt = $db->query($query);
-		$result = $stmt->fetchAll();
-		return $result;
-	}
-	
 	/**
 	 * @desc	Get 3 level categories tree, only with leaves
 	 * @author	hmeza
