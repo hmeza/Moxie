@@ -64,9 +64,11 @@ class Categories extends Zend_Db_Table_Abstract {
 			->from(array('c1'=>'categories'), array(
 				'id1'	=>	'distinct(c2.id)',
 				'parent1'	=>	'c1.id',
+				'grandparent' => 'c1.parent',
 				'name1'	=>	'c1.name',
 				'name2'	=>	'c2.name',
-				'type'	=>	'c2.type'
+				'type'	=>	'c2.type',
+				'parent' => 'c2.parent'
 			))
 			->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
 			->where('c1.user_owner = ?', $_SESSION['user_id'])
