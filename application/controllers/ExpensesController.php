@@ -60,7 +60,7 @@ class ExpensesController extends Zend_Controller_Action
         }
 
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
-        $multiOptions = new Zend_Form_Element_Select('category', $categories->getCategoriesForView(Categories::EXPENSES));
+        $multiOptions = new Zend_Form_Element_Select('category');
         $multiOptions->setName('category');
         $multiOptions->setLabel($st_lang['expenses_category']);
         $multiOptions->addMultiOptions($st_categories);

@@ -18,7 +18,10 @@ var filter_tag = function() {
 }
 
 $(document).ready(function() {
-    enableSelectBoxes();
+	$("#category").chosen({
+		disable_search_threshold: 10,
+		width: "100%"
+	});
 
 	var taggle = new Taggle('tags', {
 			tags: tagList,
@@ -49,33 +52,3 @@ $(document).ready(function() {
     $('#category_filter').change(filter);
     $('#tag_filter').change(filter_tag);
 });
-
-function enableSelectBoxes() {
-	$('div.selectBox').each(function () {
-		$(this).children('span.selected').html($(this).children('div.selectOptions').children('span.selectOption:first').html());
-		$(this).attr('value', $(this).children('div.selectOptions').children('span.selectOption:first').attr('value'));
-
-		$(this).children('span.selected,span.selectArrow').click(function () {
-			if ($(this).parent().children('div.selectOptions').css('display') == 'none') {
-				$(this).parent().children('div.selectOptions').css('display', 'block');
-			}
-			else {
-				$(this).parent().children('div.selectOptions').css('display', 'none');
-			}
-		});
-
-		$(this).find('span.selectOption').click(function () {
-			$(this).parent().css('display', 'none');
-			$(this).closest('div.selectBox').attr('value', $(this).attr('value'));
-			$(this).parent().siblings('span.selected').html($(this).html());
-			$('#category').val($(this).attr('value'));
-		});
-	});
-
-	if ($(".selectedSpan")[0]) {
-		spanText = $(".selectedSpan").text();
-		spanValue = $(".selectedSpan").attr('value');
-		$(".selected").text(spanText);
-		$('#category').val(spanValue);
-	}
-}

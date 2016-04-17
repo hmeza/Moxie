@@ -6,6 +6,11 @@ var filter = function() {
 }
 
 $(document).ready(function() {
+    $("#category").chosen({
+        disable_search_threshold: 10,
+        width: "100%"
+    });
+
     // selecct category and tag, if any
     $('#category_filter').val(category);
 //    $('#tag_filter').val(tag);

@@ -1,8 +1,5 @@
 <script type="text/javascript" src="/js/incomes/data.js"></script>
-<table width=100%>
-<!-- Form + expenses list --> 
-<tr>
-<td>
+<script type="text/javascript" src="/bower_components/chosen/chosen.jquery.js"></script>
 <?php
 global $st_lang;
 $editSlug = '/incomes/edit/id/';
@@ -12,9 +9,9 @@ $editSlug = '/incomes/edit/id/';
 <td align="center"><span class="moxie_header_date"><?php echo date("Y", strtotime("01-01-".$this->year)); ?></span></td>
 <td align="right"><a href="/incomes/index/year/<?php echo $this->year+1; ?>"><div class="moxieicon moxienext"></div> <span class="moxienext"><?php echo $st_lang['incomes_next_year']; ?></span></a></td>
 </table>
-</td>
-    <tr>
-        <td>
+
+<div id="form">
+	<div class="moxie_expenses_form_div" style="float: left">
 <?php
 $i_incomePK = $this->form->getValue('id');
 if (isset($i_incomePK)) {
@@ -26,12 +23,12 @@ else {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/add" method="post">';
 }
 echo $this->form->getElement('amount');
-echo $this->form->getElement('category');
 echo $this->form->getElement('note');
 ?>
 <dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['incomes_date']; ?></label></dt>
 <dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
 <?php
+echo $this->form->getElement('category');
 echo $this->form->getElement('submit');
 
 if(isset($i_incomePK)) {
@@ -39,8 +36,7 @@ if(isset($i_incomePK)) {
 <input type="button" class="moxiedelete" onclick='confirmDelete("<?php echo $i_incomePK; ?>")' value="<?php echo "Borrar"; ?>"/>
 <?php
 }
-echo '</form>';
-
 ?>
-</td>
-</table>
+	</form>
+	</div>
+</div>
