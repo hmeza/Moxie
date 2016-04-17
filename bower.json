@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "jquery-ui": "~1.11.4",
-    "taggle": "~1.6.2"
+    "taggle": "~1.6.2",
+    "chosen": "^1.5.1"
   }
 }
