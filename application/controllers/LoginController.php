@@ -135,6 +135,7 @@ Please click here to confirm your account: '.Zend_Registry::get('config')->moxie
   		    $result = mail($email, $subject, $body, $headers);
 		}
 		catch (Zend_Db_Statement_Exception $e) {
+			$_SESSION['captcha'] = captcha();
 			$this->view->assign('message', 'Duplicated username or email');
 			$this->view->assign('form', $this->getForm());
 			$this->render('newuser');
@@ -142,6 +143,7 @@ Please click here to confirm your account: '.Zend_Registry::get('config')->moxie
 		catch (Exception $e) {
 			error_log("Exception caught in ".__METHOD__." on line ".$e->getLine().": ".$e->getMessage());
 			error_log('MOXIE: Cannot populate user with demo categories');
+			$_SESSION['captcha'] = captcha();
 			$this->view->assign('message', $e->getMessage());
 			$this->view->assign('form', $this->getForm());
 			$this->render('newuser');
