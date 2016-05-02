@@ -195,4 +195,103 @@ class Categories extends Zend_Db_Table_Abstract {
 		}
 		return $st_preparedTree;
 	}
+
+	/**
+	 * @param $i_lastInsertId
+	 * @return boolean
+	 */
+	public function insertCategoriesForRegisteredUser($i_lastInsertId) {
+		// first insert root category
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'description' => 'root category'
+		);
+		// add default categories for the new user
+		$i_rootCategory = $this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Hogar',
+				'description' => 'Hogar',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Comida',
+				'description' => 'Comida',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Diversión',
+				'description' => 'Salidas, cenas fuera, ocio, etc.',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Tecnología',
+				'description' => 'Tecnología',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Regalos',
+				'description' => 'Navidad, reyes, aniversarios, san Valentín, etc.',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Ropa',
+				'description' => 'Ropa',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $i_rootCategory,
+				'name' => 'Varios',
+				'description' => 'Otros gastos',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+
+		$o_foodCategory = $this->fetchRow(
+				$this->select()->where('name = "Comida" AND user_owner = ' . $i_lastInsertId)
+		);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $o_foodCategory->id,
+				'name' => 'Casa',
+				'description' => 'Comida comprada para casa',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $o_foodCategory->id,
+				'name' => 'Fuera',
+				'description' => 'Comidas fuera de casa',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		$st_categoriesData = array(
+				'user_owner' => $i_lastInsertId,
+				'parent' => $o_foodCategory->id,
+				'name' => 'Café',
+				'description' => 'Cafés, bollería durante el día, desayuno en cafetería, etc.',
+				'type' => 3
+		);
+		$this->insert($st_categoriesData);
+		return true;
+	}
 }

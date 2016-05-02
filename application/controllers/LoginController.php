@@ -3,13 +3,14 @@
 include("application/3rdparty/simple-php-captcha/simple-php-captcha.php");
 
 class LoginController extends Zend_Controller_Action {
-	/**
-	 * @var Users
-	 */
+	/** @var Users */
 	private $users;
-	
+	/** @var Categories */
+	private $categories;
+
 	public function init() {
 		$this->users = new Users();
+		$this->categories = new Categories();
 	}
 	
 	private function getForm() {
@@ -102,105 +103,17 @@ class LoginController extends Zend_Controller_Action {
 			$data = array(
 					'login'		=> $st_form['login'],
 					'password'	=> md5($st_form['password']),
-					'email'		=> $st_form['email']
+					'email'		=> $st_form['email'],
+					'confirmed' => 0
 			);
 			$i_lastInsertId = $this->users->insert($data);
+			$this->categories->insertCategoriesForRegisteredUser($i_lastInsertId);
 
-			// create default categories
-			$o_categories = new Categories();
-			// first insert root category
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'description'	=>	'root category'
-			);
-			// add default categories for the new user
-			$i_rootCategory = $o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Hogar',
-				'description'	=>	'Hogar',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Comida',
-				'description'	=>	'Comida',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Diversión',
-				'description'	=>	'Salidas, cenas fuera, ocio, etc.',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Tecnología',
-				'description'	=>	'Tecnología',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Regalos',
-				'description'	=>	'Navidad, reyes, aniversarios, san Valentín, etc.',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Ropa',
-				'description'	=>	'Ropa',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$i_rootCategory,
-				'name'			=>	'Varios',
-				'description'	=>	'Otros gastos',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-
-			$o_foodCategory = $o_categories->fetchRow(
-					$o_categories->select()->where('name = "Comida" AND user_owner = '.$i_lastInsertId)
-				);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$o_foodCategory->id,
-				'name'			=>	'Casa',
-				'description'	=>	'Comida comprada para casa',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$o_foodCategory->id,
-				'name'			=>	'Fuera',
-				'description'	=>	'Comidas fuera de casa',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
-			$st_categoriesData = array(
-				'user_owner'	=>	$i_lastInsertId,
-				'parent'		=>	$o_foodCategory->id,
-				'name'			=>	'Café',
-				'description'	=>	'Cafés, bollería durante el día, desayuno en cafetería, etc.',
-				'type'			=>	3
-			);
-			$o_categories->insert($st_categoriesData);
 
 			// Email user with register data
+			$user = $this->users->find($i_lastInsertId)->toArray();
+			$hash = $this->users->getValidationKey($user[0]);
+
 			$s_server = Zend_Registry::get('config')->moxie->settings->url;
 			$s_site = Zend_Registry::get('config')->moxie->app->name;
 			$email = $st_form['email'];
@@ -211,13 +124,15 @@ Welcome to Moxie. You have registered with the following data:
 Login: '.$st_form['login'].'
 Password: '.$st_form['password'].'
 
+Please click here to confirm your account: '.Zend_Registry::get('config')->moxie->settings->url.'/login/confirm/login/'.$st_form['login'].'/hash/'.$hash.'
+
 '.$s_site.'
 '.$s_server.'
 ';
 			$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
 					'Reply-To: moxie@dootic.com' . "\r\n" .
 					'X-Mailer: PHP/' . phpversion() . "\r\n";
-  		$result = mail($email, $subject, $body, $headers);
+  		    $result = mail($email, $subject, $body, $headers);
 		}
 		catch (Zend_Db_Statement_Exception $e) {
 			$this->view->assign('message', 'Duplicated username or email');
@@ -232,9 +147,21 @@ Password: '.$st_form['password'].'
 			$this->render('newuser');
 		}
 	}
-	
-	private function validateKey($key, $email) {
-		
+
+	public function confirmAction() {
+		global $st_lang;
+		$user = $this->users->fetchRow('login  = "'.$this->getRequest()->getParam('login').'"');
+		$key = $this->getRequest()->getParam('hash');
+		if($this->users->validateKey($key, $user->toArray())) {
+			// redirect to home with message OK!!! Congrats!!!
+			$this->users->confirm($user['id']);
+			return $this->_forward("index", "Index", "module", array('message' => $st_lang['registration_confirmed']));
+		}
+		else {
+			$this->view->assign('message', 'Unrecognized user or incorrect hash');
+			$this->view->assign('form', $this->getForm());
+			$this->render('newuser');
+		}
 	}
 	
 	/**

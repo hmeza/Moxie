@@ -52,5 +52,25 @@ class Users extends Zend_Db_Table_Abstract {
 		));
 		return $s_key;
 	}
+
+	/**
+	 * @param array $user
+	 * @return string
+	 */
+	public function getValidationKey($user) {
+		return sha1($user['login'].$user['password'].$user['email'].$user['created_at']);
+	}
+
+	/**
+	 * @param string $key
+	 * @param array $user
+	 * @return bool
+	 */
+	public function validateKey($key, $user) {
+		return $key == $this->getValidationKey($user);
+	}
+
+	public function confirm($id) {
+		$this->update(array('confirmed' => 1), 'id = '.$id);
+	}
 }
-?>

@@ -94,6 +94,7 @@ $st_lang = array(
 	'register'	=>	'Formulari de registre',
 	'registration_ok'	=>	'<h2>Registre efectuat amb èxit!</h2>
 Ja pots entrar amb el teu usuari i password per començar a utilitzar Moxie.',
+	'registration_confirmed' => 'Usuari confirmat',
 	'logout'	=>	'Sortir',
 	'login'     =>  'Usuari',
 	'password'  =>  'Contrasenya',

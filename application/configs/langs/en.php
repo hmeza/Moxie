@@ -94,6 +94,7 @@ $st_lang = array(
 	'register'	=>	'Registration form',
 	'registration_ok'	=>	'<h2>Registration successfully!</h2>
 Now you can log in with your login and password to start using Moxie.',
+	'registration_confirmed' => 'User confirmed',
 	'logout'	=>	'Logout',
 	'login'     =>  'Login',
 	'password'  =>  'Password',
