@@ -5,11 +5,7 @@
 class Users extends Zend_Db_Table_Abstract {
 	protected $_name = 'users';
 	protected $_primary = 'id';
-	
-	public function __construct() {
-		$this->_db = Zend_Registry::get('db');
-	}
-	
+
 	public function checkLogin($s_user, $s_password) {
 		try {
 			$s_select = $this->_db->select()
@@ -17,6 +13,7 @@ class Users extends Zend_Db_Table_Abstract {
 						->where('login = "'.$s_user.'"')
 						->where('password = md5("'.$s_password.'")');
 			$o_rows = $this->_db->fetchAll($s_select);
+			error_log(print_r($o_rows[0],true));
 			return $o_rows[0];
 		}
 		catch (Exception $e) {
