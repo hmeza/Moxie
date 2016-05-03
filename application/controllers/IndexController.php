@@ -4,7 +4,7 @@ class IndexController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-        $message = $this->getRequest()->getParam('message');
-        $this->view->assign('message', $message);
+        $this->view->assign('message', $this->getRequest()->getParam('message'));
+        $this->view->assign('error', $this->getRequest()->getParam('error'));
     }
 }

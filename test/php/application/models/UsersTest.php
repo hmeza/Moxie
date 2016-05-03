@@ -14,6 +14,81 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$this->usersModel = new Users();
 	}
 
+	public function testCheckLoginReturnsNullIfLoginIncorrect() {
+		$dbTableSelectMock = $this->getMockBuilder('\Zend_Db_Table_Select')
+				->disableOriginalConstructor()
+				->getMock();
+		$dbSelectMock = $this->getMockBuilder('\Zend_Db_Select')
+				->disableOriginalConstructor()
+				->getMock();
+		$oRowsMock = null;
+
+		$dbSelectMock->expects($this->exactly(2))
+			->method('where')
+			->withConsecutive(array('login = "test_user"'), array('password = md5("12345")'))
+			->willReturnOnConsecutiveCalls($dbSelectMock, $oRowsMock);
+		$dbTableSelectMock->expects($this->once())
+			->method('from')
+			->with('users', array('id', 'login', 'language'))
+			->will($this->returnValue($dbSelectMock));
+		$this->usersModel = $this->getMockBuilder('Users')
+				->setMethods(array('select', 'fetchRow'))
+				->getMock();
+		$this->usersModel->expects($this->once())
+			->method('select')
+			->will($this->returnValue($dbTableSelectMock));
+		$this->usersModel->expects($this->once())
+				->method('fetchRow')
+				->will($this->returnValue($oRowsMock));
+
+		$this->assertNull($this->usersModel->checkLogin("test_user", "12345"));
+	}
+
+	public function testCheckLoginReturnsNullOnException() {
+		$this->usersModel = $this->getMockBuilder('Users')
+				->setMethods(array('select', 'fetchRow'))
+				->getMock();
+		$this->usersModel->expects($this->never())
+				->method('fetchRow');
+		$this->usersModel->expects($this->once())
+				->method('select')
+				->will($this->throwException(new \Exception("test")));
+
+		$this->assertNull($this->usersModel->checkLogin("test_user", "12345"));
+	}
+
+	public function testCheckLoginReturnsUserDataInArrayIfLoginSuccessful() {
+		$dbTableSelectMock = $this->getMockBuilder('\Zend_Db_Table_Select')
+				->disableOriginalConstructor()
+				->getMock();
+		$dbSelectMock = $this->getMockBuilder('\Zend_Db_Select')
+				->disableOriginalConstructor()
+				->getMock();
+		$oRowsMock = $this->getMock('\Zend_Db_Table_Row_Abstract');
+
+		$oRowsMock->expects($this->once())
+				->method('toArray');
+		$dbSelectMock->expects($this->exactly(2))
+				->method('where')
+				->withConsecutive(array('login = "test_user"'), array('password = md5("12345")'))
+				->willReturnOnConsecutiveCalls($dbSelectMock, $dbSelectMock);
+		$dbTableSelectMock->expects($this->once())
+				->method('from')
+				->with('users', array('id', 'login', 'language'))
+				->will($this->returnValue($dbSelectMock));
+		$this->usersModel = $this->getMockBuilder('Users')
+				->setMethods(array('select', 'fetchRow'))
+				->getMock();
+		$this->usersModel->expects($this->once())
+				->method('select')
+				->will($this->returnValue($dbTableSelectMock));
+		$this->usersModel->expects($this->once())
+				->method('fetchRow')
+				->will($this->returnValue($oRowsMock));
+
+		$this->assertNull($this->usersModel->checkLogin("test_user", "12345"));
+	}
+
 	public function testGetValidationKeyReturnsProperValidationKey() {
 		// arrange
 		$data = array(

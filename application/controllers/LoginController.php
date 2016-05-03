@@ -32,22 +32,20 @@ class LoginController extends Zend_Controller_Action {
 	 * @param	$password	string	password
 	 */
 	public function loginAction() {
+		global $st_lang;
 		$st_form = $this->getRequest()->getPost();
 		$s_user = $st_form['login'];
 		$s_password = $st_form['password'];
 		if (!empty($s_user) && !empty($s_password)) {
 			$st_result = $this->users->checkLogin($s_user, $s_password);
-			if ($st_result == 0) {
-				$this->view->assign('loginMessage', 'bad login');
-				$this->_helper->redirector('index','expenses');
+			if (empty($st_result)) {
+				return $this->_forward("index", "Index", "", array('error' => $st_lang['error_nouser']));
 			}
-			else {
-				$_SESSION['user_id'] = $st_result['id'];
-				$_SESSION['user_name'] = $st_result['login'];
-				$_SESSION['user_lang'] = $st_result['language'];
-				$this->view->assign('loginMessage', 'login OK');
-				$this->_helper->redirector('index','expenses');
-			}
+			$_SESSION['user_id'] = $st_result['id'];
+			$_SESSION['user_name'] = $st_result['login'];
+			$_SESSION['user_lang'] = $st_result['language'];
+			$this->view->assign('loginMessage', 'login OK');
+			$this->_helper->redirector('index','expenses');
 		}
 	}
 	

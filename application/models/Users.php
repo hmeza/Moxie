@@ -7,19 +7,21 @@ class Users extends Zend_Db_Table_Abstract {
 	protected $_primary = 'id';
 
 	public function checkLogin($s_user, $s_password) {
+		$result = null;
 		try {
-			$s_select = $this->_db->select()
+			$s_select = $this->select()
 						->from('users',array('id','login','language'))
 						->where('login = "'.$s_user.'"')
 						->where('password = md5("'.$s_password.'")');
-			$o_rows = $this->_db->fetchAll($s_select);
-			error_log(print_r($o_rows[0],true));
-			return $o_rows[0];
+			$o_rows = $this->fetchRow($s_select);
+			if(!empty($o_rows)) {
+				$result = $o_rows->toArray();
+			}
 		}
 		catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
-		return 0;
+		return $result;
 	}
 	
 	public function checkKey($s_key) {
