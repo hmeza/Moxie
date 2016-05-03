@@ -12,7 +12,6 @@ $st_lang = array(
 	'about'		=>	'Acerca de',
 	'benefits'	=>	'Ventajas',
 	'finance' => 'Finanzas',
-	'new_user'	=>	'Aún no te has registrado?',
 	'forgot_password'	=>	'Has olvidado tu contraseña?',
 	// Expenses
 	'expenses_amount'	=>	'Importe',
