@@ -68,32 +68,22 @@ class BudgetsController extends Zend_Controller_Action
 		$b_found = false;
 		header("Cache-Control: no-cache");
 		$st_budget = $this->budgets->getBudget($_SESSION['user_id']);
-		foreach ($st_budget as $key => $value) {
-			if ($key == $this->getRequest()->getParam('category')) $b_found = true;
-		}
-		if ($b_found) {
-			$cond = 'category = '.$this->getRequest()->getParam('category').' AND date_ended IS NULL';
-			$st_data = array('amount'=>$this->getRequest()->getParam('amount'));
-			try {
-				$result = $this->budgets->update($st_data,$cond);
+		try {
+			if (array_key_exists($this->getRequest()->getParam('category'), $st_budget)) {
+				$cond = 'category = ' . $this->getRequest()->getParam('category') . ' AND date_ended IS NULL';
+				$st_data = array('amount' => $this->getRequest()->getParam('amount'));
+				$this->budgets->update($st_data, $cond);
+			} else {
+				$st_data = array(
+						'user_owner' => $_SESSION['user_id'],
+						'category' => $this->getRequest()->getParam('category'),
+						'amount' => $this->getRequest()->getParam('amount'),
+						'date_created' => date('Y-m-d H:i:s'),
+				);
+				$this->budgets->insert($st_data);
 			}
-			catch(Exception $e) {
-				error_log(__METHOD__.": ".$e->getMessage());
-			}
-		}
-		else {
-			$st_data = array(
-				'user_owner'	=>	$_SESSION['user_id'],
-				'category'		=>	$this->getRequest()->getParam('category'),
-				'amount'		=>	$this->getRequest()->getParam('amount'),
-				'date_created'	=>	date('Y-m-d H:i:s'),
-			);
-			try {
-				$result = $this->budgets->insert($st_data);
-			}
-			catch (Exception $e) {
-				error_log(__METHOD__.": ".$e->getMessage());
-			}
+		} catch (Exception $e) {
+			error_log(__METHOD__ . ": " . $e->getMessage());
 		}
 	}
 	

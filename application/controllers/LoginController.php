@@ -107,30 +107,7 @@ class LoginController extends Zend_Controller_Action {
 			$i_lastInsertId = $this->users->insert($data);
 			$this->categories->insertCategoriesForRegisteredUser($i_lastInsertId);
 
-
-			// Email user with register data
-			$user = $this->users->find($i_lastInsertId)->toArray();
-			$hash = $this->users->getValidationKey($user[0]);
-
-			$s_server = Zend_Registry::get('config')->moxie->settings->url;
-			$s_site = Zend_Registry::get('config')->moxie->app->name;
-			$email = $st_form['email'];
-			$subject = $s_site.' - ¡Bienvenido/a!';
-			$body = 'Bienvenido/a a Moxie. Te has registrado con los siguientes datos:
-Welcome to Moxie. You have registered with the following data:
-
-Login: '.$st_form['login'].'
-Password: '.$st_form['password'].'
-
-Please click here to confirm your account: '.Zend_Registry::get('config')->moxie->settings->url.'/login/confirm/login/'.$st_form['login'].'/hash/'.$hash.'
-
-'.$s_site.'
-'.$s_server.'
-';
-			$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-					'Reply-To: moxie@dootic.com' . "\r\n" .
-					'X-Mailer: PHP/' . phpversion() . "\r\n";
-  		    $result = mail($email, $subject, $body, $headers);
+			$this->sendRegisterEmail($i_lastInsertId, $st_form);
 		}
 		catch (Zend_Db_Statement_Exception $e) {
 			$_SESSION['captcha'] = captcha();
@@ -249,6 +226,40 @@ the following link:
  		$this->view->assign('text', print_r($st_result,true));
 		$this->_helper->viewRenderer('login/forgotpassword', null, true);
 		$this->_helper->redirector('forgotpassword', 'login');
+	}
+
+	/**
+	 * Email user with register data.
+	 * @param $i_lastInsertId
+	 * @param $st_form
+	 * @throws Zend_Db_Table_Exception
+	 * @throws Zend_Exception
+	 */
+	protected function sendRegisterEmail($i_lastInsertId, $st_form) {
+		$user = $this->users->find($i_lastInsertId)->toArray();
+		$hash = $this->users->getValidationKey($user[0]);
+
+		$s_server = Zend_Registry::get('config')->moxie->settings->url;
+		$s_site = Zend_Registry::get('config')->moxie->app->name;
+		$email = $st_form['email'];
+		$subject = $s_site . ' - ¡Bienvenido/a!';
+		$body = 'Bienvenido/a a Moxie. Te has registrado con los siguientes datos:
+Welcome to Moxie. You have registered with the following data:
+
+Login: ' . $st_form['login'] . '
+Password: ' . $st_form['password'] . '
+
+Please click here to confirm your account: ' . Zend_Registry::get(
+						'config'
+				)->moxie->settings->url . '/login/confirm/login/' . $st_form['login'] . '/hash/' . $hash . '
+
+' . $s_site . '
+' . $s_server . '
+';
+		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+				'Reply-To: moxie@dootic.com' . "\r\n" .
+				'X-Mailer: PHP/' . phpversion() . "\r\n";
+		$result = mail($email, $subject, $body, $headers);
 	}
 }
 ?>
