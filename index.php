@@ -23,6 +23,7 @@ function __autoloader($s_originalClass) {
 	@include_once APPLICATION_PATH.'/models/'.$s_class.'.php';
 	@include_once APPLICATION_PATH.'/controllers/'.$s_class.'.php';
 	@include_once APPLICATION_PATH.'/views/'.$s_class.'.php';
+	@include_once APPLICATION_PATH.'/views/helpers/'.$s_class.'.php';
 }
 spl_autoload_register("__autoloader");
 

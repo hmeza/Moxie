@@ -13,6 +13,7 @@ $st_lang = array(
 	'benefits'	=>	'Avantatges',
 	'finance' => 'Finances',
 	'forgot_password'	=>	'Has oblidat la teva contrasenya?',
+	'back_to_top' => 'Tornar a dalt',
 	// Expenses
 	'expenses_amount'	=>	'Import',
 	'expenses_category'	=>	'Categoria',

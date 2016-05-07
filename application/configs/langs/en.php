@@ -13,6 +13,7 @@ $st_lang = array(
 	'benefits'	=>	'Benefits',
 	'finance' => 'Finance',
 	'forgot_password'	=>	'Forgot your password?',
+	'back_to_top' => 'Back to top',
 	// Expenses
 	'expenses_amount'	=>	'Amount',
 	'expenses_category'	=>	'Category',
