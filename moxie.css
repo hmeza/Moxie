@@ -462,6 +462,9 @@ body {
     position:fixed; /*Fijamos la hamburgues para que se desplace junto con el menú*/
 }
 
+h2 {
+	padding-left: 10px;
+}
 
 @media only screen and (min-width: 1060px) {
 	nav {
