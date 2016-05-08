@@ -41,11 +41,13 @@ if(!empty($_SESSION['user_id'])) {
 </header>
 <!-- web menu -->
 <?php
+        $tableStyle = (!isset($_SESSION['user_id'])) ? "style='display:block'" : "";
+
         $st_lang['users'] = $st_lang['users_title'];
         $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
 
         $s_webMenu = '
-        <table cellspacing=10 class="moxie_menu">
+        <table cellspacing=10 class="moxie_menu" '.$tableStyle.'>
         ';
         if (isset($_SESSION['user_id'])) {
                 $s_webMenu .= '
