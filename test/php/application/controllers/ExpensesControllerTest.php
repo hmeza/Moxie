@@ -55,13 +55,13 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function addExpenseDataProvider() {
 		return array(
 			// normal expense
-			array(10.23, '21/01/2016', 'test note', 1),
+			array(10.23, '2016/01/21', 'test note', 1),
 			// amount with comma
-			array("10,25", '21/01/2016', 'test note 2', 1),
+			array("10,25", '2016/01/21', 'test note 2', 1),
 			// note empty
-			array(10.62, '23/01/2016', '', 3),
+			array(10.62, '2016/01/23', '', 3),
 			// amount with tags
-			array(10.26, '22/01/2016', 'test note 3', 3, array('tag 1', 'tag 2'))
+			array(10.26, '2016/01/22', 'test note 3', 3, array('tag 1', 'tag 2'))
 		);
 	}
 
@@ -105,6 +105,32 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		// assert
 		$this->assertRedirectTo('/index');
 
+	}
+
+	public function testUpdateExpenseRedirectsToCurrentYearAndMonthView() {
+		// arrange
+		$date = date('Y-m-d');
+		$expensesModel = new Expenses();
+		$expenseId = $expensesModel->addExpense(14, $date, 15.00, 3, '');
+		$this->resetRequest()
+				->resetResponse();
+		$this->request->setPost(array());
+
+		$this->request->setMethod('POST')
+				->setPost(array(
+						'id' => $expenseId,
+						'amount' => 12.01,
+						'date' => $date,
+						'note' => 'test note without category',
+						'category' => 10,
+						'taggles' => array()
+				));
+
+		// act
+		$this->dispatch('/expenses/update');
+
+		// assert
+		$this->assertRedirectTo('/expenses/index/month/'.date('m').'/year/'.date('Y'));
 	}
 
 	private function fakeLogin() {

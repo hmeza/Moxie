@@ -315,7 +315,7 @@ class ExpensesController extends Zend_Controller_Action
 		}
 
 		$this->expenses->updateExpense($i_expensePK, $st_params);
-		$this->_helper->redirector('index','expenses', '', array('month' => $originalExpenseDate[1], 'year' => $originalExpenseDate[0]));
+		$this->getResponse()->setRedirect('/expenses/index/month/'.$originalExpenseDate[1].'/year/'.$originalExpenseDate[0]);
 	}
 	
 	/**
