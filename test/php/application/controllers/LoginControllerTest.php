@@ -11,6 +11,30 @@ class LoginControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		parent::setUp();
 	}
 
+	public function testRegisteruserActionReturnsErrorIfNoLoginParameter() {
+		$request = new Zend_Controller_Request_Http();
+		$request->setPost(array());
+
+		$view = $this->getMockBuilder('Zend_View')
+				->setMethods(array())
+				->getMock();
+		$view = new Zend_View();
+
+		/** @var LoginController $loginControllerMock */
+		$loginControllerMock = $this->getMockBuilder('LoginController')
+				->disableOriginalConstructor()
+				->setMethods(array('render'))
+				->getMock();
+		$loginControllerMock->expects($this->once())
+				->method('render');
+		$loginControllerMock->view = $view;
+		$loginControllerMock->setRequest($request);
+		$loginControllerMock->registeruserAction();
+
+		$this->assertEquals('Empty username', $loginControllerMock->view->message);
+	}
+
+
 	public function testLoginIncorrect() {
 		$this->request->setMethod('POST')
 			->setPost(array(
