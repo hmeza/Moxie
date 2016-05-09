@@ -23,7 +23,21 @@
         </exec>
     </target>
 
-    <target name="phpunit" depends="composer">
+    <target name="git_submodules_init">
+        <exec executable="git" failonerror="true">
+            <arg value="submodule"/>
+            <arg value="init"/>
+        </exec>
+    </target>
+
+    <target name="git_submodules_update" depends="git_submodules_init">
+        <exec executable="git" failonerror="true">
+            <arg value="submodule"/>
+            <arg value="update"/>
+        </exec>
+    </target>
+
+    <target name="phpunit" depends="composer, git_submodules_update">
         <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
     </target>
 
