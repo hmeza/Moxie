@@ -28,6 +28,7 @@ class IncomesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	}
 
 	public function testEditIncomes() {
+		$this->markTestSkipped();
 		$_SERVER['REQUEST_URI'] = 'http://moxie.dev/foo/bar';
 
 		$this->fakeLogin();
