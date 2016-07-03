@@ -27,7 +27,8 @@ echo $this->partial('expenses/data_header.phtml',
         'month'=>$this->month,
         'most_frequent_expenses' => $this->most_frequent_expenses,
         'tags' => $this->tags,
-        'used_tag_list' => $this->used_tag_list
+        'used_tag_list' => $this->used_tag_list,
+		'search_form' => $this->search_form
     ));
 echo $this->partial('common/data.phtml',
 	array(

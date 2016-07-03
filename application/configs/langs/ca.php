@@ -15,6 +15,7 @@ $st_lang = array(
 	'forgot_password'	=>	'Has oblidat la teva contrasenya?',
 	'back_to_top' => 'Tornar a dalt',
 	// Expenses
+	'expenses_header'     => 'Afegir despesa',
 	'expenses_amount'	=>	'Import',
 	'expenses_category'	=>	'Categoria',
 	'expenses_note'		=>	'Nota',
@@ -32,6 +33,7 @@ $st_lang = array(
 	'expenses_delete'   => 'Esborrar',
     'expenses_delete_message' => 'Esborrar aquesta despesa?',
 	// Incomes
+	'income_header'     => 'Afegir ingrés',
 	'incomes_stats'		=>	'Gràfica d\'ingressos',
 	'incomes_by_years'	=>	'Per anys',
 	'incomes_yearly'	=>	'Ingressos anuals',
@@ -39,6 +41,15 @@ $st_lang = array(
 	'incomes_next_year' => 'Any següent',
 	'incomes_last_year' => 'Any anterior',
     'incomes_delete_message' => 'Esborrar aquest ingrés?',
+	// Search
+	'search_header'     => 'Cerca',
+	'search_tag'        => 'Tag',
+	'search_note'       => 'Nota',
+	'search_amount_min' => 'Import mínim',
+	'search_amount_max' => 'Import màxim',
+	'search_date_min'   => 'Data inicial',
+	'search_date_max'   => 'Data final',
+	'search_send'       => 'Cercar',
 	// Transactions
 	'in_sum_message'    => 'Marcar/desmarcar per mostrar als totals ',
 	// Budgets

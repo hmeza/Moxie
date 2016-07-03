@@ -62,7 +62,7 @@ class Expenses extends Transactions {
 	 * @return array
 	 * @throws Zend_Exception
 	 */
-	public function getExpenses($user_id, $i_month, $i_year) {
+	public function getExpenses($user_id, $i_month, $i_year, $st_searchParams) {
 		$s_select = $this->select()
 				->setIntegrityCheck(false)
 				->from(array('e'=> $this->_name),
@@ -75,10 +75,34 @@ class Expenses extends Transactions {
 				))
             ->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
 				->where('e.user_owner = '.$user_id)
-				->where('YEAR(e.date) = '.$i_year)
-				->where('MONTH(e.date) = '.$i_month)
+//				->where('YEAR(e.date) = '.$i_year)
+//				->where('MONTH(e.date) = '.$i_month)
 				->where('e.in_sum = 1')
-                ->where('amount < 0')
+                ->where('amount < 0');
+
+		// new queries
+		if(!empty($st_searchParams['category_search'])) {
+			$s_select = $s_select->where('category = ?', $st_searchParams['category_search']);
+		}
+		if(!empty($st_searchParams['note'])) {
+			$st_searchParams['note'] = '%'.$st_searchParams['note'].'%';
+			$s_select = $s_select->where('e.note like "%?%"', $st_searchParams['note']);
+		}
+		// @todo add tag
+		if(!empty($st_searchParams['amount_min'])) {
+			$s_select = $s_select->where('ABS(e.amount) >= ?', $st_searchParams['amount_min']);
+		}
+		if(!empty($st_searchParams['amount_max'])) {
+			$s_select = $s_select->where('ABS(e.amount) <= ?', $st_searchParams['amount_max']);
+		}
+		if(!empty($st_searchParams['date_min'])) {
+			$s_select = $s_select->where('e.date >= ?', $st_searchParams['date_min']);
+		}
+		if(!empty($st_searchParams['date_max'])) {
+			$s_select = $s_select->where('e.date <= ?', $st_searchParams['date_max']);
+		}
+
+		$s_select = $s_select
 				->group('c.id')
 				->order(array('c.id'));
 		return $this->fetchAll($s_select);

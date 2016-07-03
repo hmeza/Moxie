@@ -15,6 +15,7 @@ $st_lang = array(
 	'forgot_password'	=>	'Forgot your password?',
 	'back_to_top' => 'Back to top',
 	// Expenses
+	'expenses_header'     => 'Add expense',
 	'expenses_amount'	=>	'Amount',
 	'expenses_category'	=>	'Category',
 	'expenses_note'		=>	'Note',
@@ -32,6 +33,7 @@ $st_lang = array(
 	'expenses_delete'   => 'Delete',
     'expenses_delete_message' => 'Delete this expense?',
 	// Incomes
+	'income_header'     => 'Add income',
 	'income_stats'		=>	'Income stats',
 	'income_by_years'	=>	'By years',
 	'incomes_yearly'	=>	'Yearly income',
@@ -39,6 +41,15 @@ $st_lang = array(
 	'incomes_next_year' => 'Next year',
 	'incomes_last_year' => 'Last year',
     'incomes_delete_message' => 'Delete this income?',
+	// Search
+	'search_header'     => 'Search',
+	'search_tag'        => 'Tag',
+	'search_note'       => 'Note',
+	'search_amount_min' => 'Minimum amount',
+	'search_amount_max' => 'Maximum amount',
+	'search_date_min'   => 'Start date',
+	'search_date_max'   => 'End date',
+	'search_send'       => 'Search',
 	// Transactions
 	'in_sum_message'    => 'Check/uncheck to show in totals ',
 	// Budgets

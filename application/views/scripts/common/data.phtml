@@ -7,46 +7,7 @@ if(strpos($url, 'index') === false) {
 }
 $exportUrl = $url."/to_excel/true";
 ?>
-<td colspan=2><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
-<td colspan=3 align=right>
-Filtros
-<?php
-if($this->show_categories_filter) {
-?>
-	<select id="category_filter">
-	<option value="0">Categoria</option>
-	<?php
-	foreach ($this->form->getElement('category') as $key => $value) {
-		if ($key == "options") {
-			foreach ($value as $key2 => $value2) {
-				echo '<option value="'.$key2.'">'.$value2.'</option>';
-			}
-		}
-	}
-	?>
-	</select>
-<?php
-}
-if($this->show_tags_filter) {
-?>
-	<select id="tag_filter">
-		<option value="0">Tag</option>
-		<?php
-		if (!empty($this->used_tag_list)) {
-			foreach ($this->used_tag_list as $key => $value) {
-				echo '<option value="' . str_replace("\\", "", $key) . '">' . str_replace(
-								"\\",
-								"",
-								$value
-						) . '</option>';
-			}
-		}
-		?>
-	</select>
-<?php
-}
-?>
-</td>
+<td colspan=5><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
 </tr>
 <?php
 $f_totalAmount = 0;

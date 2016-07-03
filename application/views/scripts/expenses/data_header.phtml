@@ -10,7 +10,6 @@ global $st_lang;
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 <table width=100%>
-<?php global $st_lang; ?>
 <td align="left"><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div><span class="moxieprevious"> <?php echo $st_lang['expenses_last_month']; ?></span></a></td>
 <td align="center"><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
 <td align="right"><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div><span class="moxienext"> <?php echo $st_lang['expenses_next_month']; ?></span></a></td>
@@ -18,8 +17,9 @@ global $st_lang;
 <br>
 
 <div id="form">
-<div class="moxie_expenses_form_div" style="float: left">
+<div class="moxie_expenses_form_div" style="float: left; width: 50%">
 <?php
+echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 if (isset($i_expensePK)) {
@@ -62,5 +62,10 @@ if(isset($i_expensePK)) {
 }
 ?>
 </form>
+</div>
+<div id="search_box" class="moxie_expenses_form_div" style="float: right; width: 50%">
+<?php
+echo $this->partial('common/filter.phtml', array('search_form' => $this->search_form));
+?>
 </div>
 </div>
