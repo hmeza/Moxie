@@ -13,7 +13,7 @@ global $st_lang;
 <div class="moxie-left">
 <?php
 echo $this->partial('incomes/data_header.phtml',
-	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year));
+	array('form'=>$this->form, 'list'=>$this->list,'year'=>$this->year, 'search_form' => $this->search_form));
 echo $this->partial('common/data.phtml',
 	array(
 			'form'=>$this->form,
@@ -21,7 +21,7 @@ echo $this->partial('common/data.phtml',
 			'year'=>$this->year,
 			'editSlug'  => '/incomes/edit/id/',
 			'show_categories_filter' => $this->show_categories_filter,
-			'show_tags_filter' => $this->show_tags_filter
+			'show_tags_filter' => $this->show_tags_filter,
 	)
 );
 ?>

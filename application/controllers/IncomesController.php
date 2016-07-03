@@ -1,13 +1,9 @@
 <?php
 /** Zend_Controller_Action */
-class IncomesController extends Zend_Controller_Action
+class IncomesController extends TransactionsController
 {
     /** @var Incomes */
 	private $incomes;
-	/** @var boolean */
-	private $showTagsFilter = false;
-	/** @var boolean */
-	private $showCategoriesFilter = true;
 
 	public function init() {
 		parent::init();
@@ -70,16 +66,20 @@ class IncomesController extends Zend_Controller_Action
 		global $st_lang;
 
 		$i_year = $this->getRequest()->getParam('year', date('Y'));
-		$i_category = $this->getRequest()->getParam('category', 0);
+		$st_params = $this->getRequest()->getParams();
+		// convert month+year to filters for search
+		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
+			$st_params['date_min'] = $i_year.'-01-01';
+			$st_params['date_max'] = date("Y-12-t", strtotime($i_year.'-01-01'));
+		}
 
-		$this->view->assign('list', $this->incomes->get($_SESSION['user_id'],Categories::INCOMES,0,$i_year, $i_category));
+		$this->view->assign('list', $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
 		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
 		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('form', $this->getForm($st_data));
-		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
-		$this->view->assign('show_tags_filter', $this->showTagsFilter);
+		$this->view->assign('search_form', $this->getSearchForm($this->getRequest(), Categories::INCOMES));
 	}
 	
 	/**
@@ -126,6 +126,7 @@ class IncomesController extends Zend_Controller_Action
         }
 
 		$this->getViewData($st_income);
+		$this->view->assign('search_form', $this->getSearchForm($this->getRequest(), Categories::INCOMES));
 		$this->render('index');
 	}
 	

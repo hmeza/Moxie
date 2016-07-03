@@ -11,8 +11,9 @@ $editSlug = '/incomes/edit/id/';
 </table>
 
 <div id="form">
-	<div class="moxie_expenses_form_div" style="float: left">
+	<div class="moxie_expenses_form_div" style="float: left; width: 50%">
 <?php
+echo '<h2>'.$st_lang['income_header'].'</h2>';
 $i_incomePK = $this->form->getValue('id');
 if (isset($i_incomePK)) {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
@@ -38,5 +39,10 @@ if(isset($i_incomePK)) {
 }
 ?>
 	</form>
+	</div>
+	<div id="search_box" class="moxie_expenses_form_div" style="float: right; width: 50%">
+		<?php
+		echo $this->partial('common/filter.phtml', array('search_form' => $this->search_form));
+		?>
 	</div>
 </div>

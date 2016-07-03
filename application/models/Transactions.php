@@ -20,7 +20,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 	 * @param int $i_year
 	 * @param int $i_category
 	 */
-	public function get($user_id, $type = Categories::EXPENSES, $i_month = 0, $i_year = 0, $i_category = 0, $st_searchParams) {
+	public function get($user_id, $type = Categories::EXPENSES, $st_searchParams) {
 		$query = $this->select()
 			->setIntegrityCheck(false)
 		    ->from(array('i'=> $this->_name),array(
@@ -74,25 +74,14 @@ class Transactions extends Zend_Db_Table_Abstract {
 			$query = $query->where('date <= ?', $st_searchParams['date_max']);
 		}
 
-		$query = $query->order('i.date asc');
-
         if($type == Categories::EXPENSES) {
             $query = $query->where('amount < 0');
         }
         else if($type == Categories::INCOMES) {
             $query = $query->where('amount >= 0');
         }
-//        if(!empty($i_month)) {
-//            $query = $query->where('MONTH(i.date) = ?', $i_month);
-//        }
-//		if(!empty($i_year)) {
-//			$query = $query->where('YEAR(i.date) = ?', $i_year);
-//		}
-//		if(!empty($i_category)) {
-//			$query = $query->where('category = ?', $i_category);
-//		}
+		$query = $query->order('i.date asc');
         $result = $this->fetchAll($query);
         return $result;
 	}
 }
-?>

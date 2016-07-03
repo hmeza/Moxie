@@ -1,6 +1,6 @@
 <?php
 /** Zend_Controller_Action */
-class ExpensesController extends Zend_Controller_Action
+class ExpensesController extends TransactionsController
 {
 	/** @var Expenses */
 	private $expenses;
@@ -8,16 +8,10 @@ class ExpensesController extends Zend_Controller_Action
 	private $budgets;
 	/** @var Tags */
 	private $tags;
-	/** @var Categories */
-	private $categories;
 	/** @var TransactionTags */
 	private $transactionTags;
     /** @var int  */
     private $currentCategory;
-	/** @var boolean */
-	private $showTagsFilter = true;
-	/** @var boolean */
-	private $showCategoriesFilter = true;
 
 	public function init() {
 		parent::init();
@@ -25,47 +19,8 @@ class ExpensesController extends Zend_Controller_Action
 		$this->budgets = new Budgets();
 		$this->tags = new Tags();
 		$this->transactionTags = new TransactionTags();
-		$this->categories = new Categories();
 	}
 
-	/**
-	 * @param Zend_Controller_Request_Abstract $request
-	 * @return Zend_Form
-	 * @throws Zend_Exception
-	 * @throws Zend_Form_Exception
-	 */
-	private function getSearchForm($request) {
-		global $st_lang;
-		$form  = new Zend_Form();
-		$slug = '/expenses/index';
-
-		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)->setMethod('post');
-
-		$st_categories = $this->categories->getCategoriesForView(Categories::EXPENSES);
-		$st_categories[0] = '---';
-		asort($st_categories);
-
-		$multiOptions = new Zend_Form_Element_Select('category');
-		$multiOptions->setName('category_search');
-		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($st_categories);
-		$multiOptions->setValue($request->getParam('category_search', ''));
-		$form->addElement($multiOptions);
-
-		// @todo autocomplete for tags
-		$form->addElement('text', 'tag', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag', '')));
-
-		$form->addElement('text', 'note', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', '')));
-
-		$form->addElement('text', 'amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0)));
-		$form->addElement('text', 'amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', '')));
-
-		$form->addElement('text', 'date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', date('Y-m-01'))));
-		$form->addElement('text', 'date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', date('Y-m-15'))));
-		$form->addElement('submit','submit', array('label' => $st_lang['search_send']));
-		return $form;
-	}
-	
 	/**
 	 * This function generates the form to add expenses.
      * @param array $st_expense
@@ -156,14 +111,22 @@ class ExpensesController extends Zend_Controller_Action
 		// allow navigate through months and years
 		$i_month = $this->getRequest()->getParam('month', date('n'));
 		$i_year = $this->getRequest()->getParam('year', date('Y'));
+		$st_params = $this->getRequest()->getParams();
+		// convert month+year to filters for search
+		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
+			$current_date = $i_year.'-'.$i_month.'-01';
+			$st_params['date_min'] = $current_date;
+			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
+		}
+
 		$this->currentCategory = $this->getRequest()->getParam('category', 0);
 		$s_tag = urldecode($this->getRequest()->getParam('tag', null));
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 
 		try {
-			$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year, $this->getRequest()->getParams());
+			$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
 			if((empty($this->currentCategory) && empty($s_tag)) || !empty($this->currentCategory)) {
-				$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $i_month, $i_year, $this->currentCategory, $this->getRequest()->getParams());
+				$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 			}
 	        else {
 		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
@@ -175,6 +138,7 @@ class ExpensesController extends Zend_Controller_Action
 	        error_log($e->getMessage());
             $st_data = array();
             $st_list = array();
+	        $i_tag = 0;
         }
 
 		if($s_toExcel == true) {
@@ -205,8 +169,6 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('form', $form);
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
-		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
-		$this->view->assign('show_tags_filter', $this->showTagsFilter);
 		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
 	}
 
@@ -293,6 +255,13 @@ class ExpensesController extends Zend_Controller_Action
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$i_month = $this->getRequest()->getParam('month', date('n'));
 		$i_year = $this->getRequest()->getParam('year', date('Y'));
+		$st_params = $this->getRequest()->getParams();
+		// convert month+year to filters for search
+		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
+			$current_date = $i_year.'-'.$i_month.'-01';
+			$st_params['date_min'] = $current_date;
+			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
+		}
 		$this->currentCategory = $this->getRequest()->getParam('category', 0);
 		$s_tag = $this->getRequest()->getParam('tag', null);
 
@@ -301,7 +270,7 @@ class ExpensesController extends Zend_Controller_Action
         if($st_expense['user_owner'] != $_SESSION['user_id']) {
             throw new Exception("Access error");
         }
-		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $i_month, $i_year);
+		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
         $form = $this->getForm($st_expense);
 
 		if(empty($i_category)) {
@@ -321,7 +290,7 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
 		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-		$this->view->assign('list', $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES,$i_month,$i_year));
+		$this->view->assign('list', $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
 		$this->view->assign('category', $i_category);
@@ -330,8 +299,6 @@ class ExpensesController extends Zend_Controller_Action
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
-		$this->view->assign('show_categories_filter', $this->showCategoriesFilter);
-		$this->view->assign('show_tags_filter', $this->showTagsFilter);
 		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
 		$this->render('index');
 	}

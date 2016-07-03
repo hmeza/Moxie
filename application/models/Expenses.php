@@ -62,7 +62,7 @@ class Expenses extends Transactions {
 	 * @return array
 	 * @throws Zend_Exception
 	 */
-	public function getExpenses($user_id, $i_month, $i_year, $st_searchParams) {
+	public function getExpenses($user_id, $st_searchParams) {
 		$s_select = $this->select()
 				->setIntegrityCheck(false)
 				->from(array('e'=> $this->_name),
@@ -75,8 +75,6 @@ class Expenses extends Transactions {
 				))
             ->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
 				->where('e.user_owner = '.$user_id)
-//				->where('YEAR(e.date) = '.$i_year)
-//				->where('MONTH(e.date) = '.$i_month)
 				->where('e.in_sum = 1')
                 ->where('amount < 0');
 
