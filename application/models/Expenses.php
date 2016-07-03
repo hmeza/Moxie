@@ -48,7 +48,12 @@ class Expenses extends Transactions {
 			$st_searchParams['note'] = '%'.$st_searchParams['note_search'].'%';
 			$s_select = $s_select->where('e.note like "%?%"', $st_searchParams['note_search']);
 		}
-		// @todo add tag
+		if(!empty($st_searchParams['tag_search'])) {
+			$s_tag = urldecode($st_searchParams['tag_search']);
+			$s_select = $s_select->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = e.id', array())
+					->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
+					->where('t.name = ?', $s_tag);
+		}
 		if(!empty($st_searchParams['amount_min'])) {
 			$s_select = $s_select->where('ABS(e.amount) >= ?', $st_searchParams['amount_min']);
 		}
