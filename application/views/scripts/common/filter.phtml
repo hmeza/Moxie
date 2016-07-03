@@ -1,5 +1,24 @@
+<link rel="stylesheet" type="text/css" href="/material.css"/>
+<script type="text/javascript" src="/bower_components/material-design-lite/material.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#search_button").click(function (event) {
+			$("#search_form").slideToggle();
+		});
+	});
+</script>
 <?php
 global $st_lang;
 ?>
-<h2><?php echo $st_lang['search_header']; ?></h2>
+<h2 id="search_title">
+	<span class="search_button" id="search_button">
+	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+		<i class="material-icons" style="background-color: ##0b77b7">+</i>
+	</button>
+	</span>
+	<?php echo $st_lang['search_header']; ?>
+</h2>
+<div id="search_form" class="search_button_mobile">
 <?php echo $this->search_form; ?>
+</div>
+<br><br>

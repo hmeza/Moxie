@@ -502,6 +502,10 @@ h2 {
 		float: right;
 		width: 50%
 	}
+
+	.search_button {
+		display: none;
+	}
 }
 
 /* Desktop */
@@ -579,6 +583,10 @@ h2 {
 		float: right;
 		width: 50%
 	}
+
+	.search_button {
+		display: none;
+	}
 }
 
 @media screen and (min-width: 481px) and (max-width: 749px) {
@@ -599,6 +607,10 @@ h2 {
 	.moxie_expenses_form_right {
 		float: right;
 		width: 50%
+	}
+
+	.search_button {
+		display: none;
 	}
 }
 
@@ -790,6 +802,10 @@ h2 {
 	.moxie_expenses_form_left {}
 
 	.moxie_expenses_form_right {}
+
+	.search_button_mobile {
+		display: none;
+	}
 }
 
 .moxie-submenu {
