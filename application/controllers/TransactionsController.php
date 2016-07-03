@@ -22,7 +22,8 @@ class TransactionsController extends Zend_Controller_Action
 
 		// mount default min and max date
 		if($category_type == Categories::EXPENSES) {
-			$current_min_date = $request->getParam('year', date('Y')).'-'.$request->getParam('month', date('m')).'-01';
+			$month = $num_padded = sprintf("%02d", $request->getParam('month', date('m')));
+			$current_min_date = $request->getParam('year', date('Y')).'-'.$month.'-01';
 			$current_max_date = date("Y-m-t", strtotime($current_min_date));
 			$slug = '/expenses/index';
 		}

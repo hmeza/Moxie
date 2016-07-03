@@ -53,24 +53,10 @@ class Transactions extends Zend_Db_Table_Abstract {
 							->where('t.name = ?', $s_tag);
 		}
 		if(!empty($st_searchParams['amount_min'])) {
-			if($type == Categories::EXPENSES) {
-				// invert
-				$st_searchParams['amount_min'] = -$st_searchParams['amount_min'];
-				$query = $query->where('amount <= ?', $st_searchParams['amount_min']);
-			}
-			else {
-				$query = $query->where('amount >= ?', $st_searchParams['amount_min']);
-			}
+			$query = $query->where('ABS(amount) <= ?', $st_searchParams['amount_min']);
 		}
 		if(!empty($st_searchParams['amount_max'])) {
-			if($type == Categories::EXPENSES) {
-				// invert
-				$st_searchParams['amount_max'] = -$st_searchParams['amount_max'];
-				$query = $query->where('amount >= ?', $st_searchParams['amount_max']);
-			}
-			else {
-				$query = $query->where('amount <= ?', $st_searchParams['amount_max']);
-			}
+			$query = $query->where('ABS(amount) >= ?', $st_searchParams['amount_max']);
 		}
 		if(!empty($st_searchParams['date_min'])) {
 			$query = $query->where('date >= ?', $st_searchParams['date_min']);
