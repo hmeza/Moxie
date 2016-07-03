@@ -164,8 +164,6 @@ class ExpensesController extends TransactionsController
 		$this->view->assign('list', $st_list);
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
-		$this->view->assign('category', $this->currentCategory);
-		$this->view->assign('tag', $i_tag);
 		$this->view->assign('form', $form);
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
         $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
@@ -273,10 +271,6 @@ class ExpensesController extends TransactionsController
 		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
         $form = $this->getForm($st_expense);
 
-		if(empty($i_category)) {
-			$i_category = $this->currentCategory;
-		}
-
 		try {
 			$i_tag = !empty($s_tag) ? $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag) : null;
 		}
@@ -293,8 +287,6 @@ class ExpensesController extends TransactionsController
 		$this->view->assign('list', $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params));
 		$this->view->assign('year', $i_year);
 		$this->view->assign('month', $i_month);
-		$this->view->assign('category', $i_category);
-		$this->view->assign('tag', $i_tag);
 		$this->view->assign('form', $form);
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));

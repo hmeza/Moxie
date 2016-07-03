@@ -54,11 +54,4 @@ $(document).ready(function() {
 			}
 		}
 	});
-
-    // select category and tag, if any
-    $('#category_filter').val(category);
-    $('#tag_filter').val(tag);
-    // handle here select changes
-    $('#category_filter').change(filter);
-    $('#tag_filter').change(filter_tag);
 });
