@@ -45,10 +45,11 @@ class TransactionsController extends Zend_Controller_Action
 		$multiOptions->setValue($request->getParam('category_search', ''));
 		$form->addElement($multiOptions);
 
-		// @todo autocomplete for tags
-		$form->addElement('text', 'tag', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag', '')));
+		if($category_type == Categories::EXPENSES) {
+			$form->addElement('text', 'tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag', '')));
+		}
 
-		$form->addElement('text', 'note', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', '')));
+		$form->addElement('text', 'note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', '')));
 
 		$form->addElement('text', 'amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0)));
 		$form->addElement('text', 'amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', '')));

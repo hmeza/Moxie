@@ -42,11 +42,16 @@ class Transactions extends Zend_Db_Table_Abstract {
 		if(!empty($st_searchParams['category_search'])) {
 			$query = $query->where('category = ?', $st_searchParams['category_search']);
 		}
-		if(!empty($st_searchParams['note'])) {
-			$st_searchParams['note'] = '%'.$st_searchParams['note'].'%';
-			$query = $query->where('note like ?', $st_searchParams['note']);
+		if(!empty($st_searchParams['note_search'])) {
+			$st_searchParams['note'] = '%'.$st_searchParams['note_search'].'%';
+			$query = $query->where('note like ?', $st_searchParams['note_search']);
 		}
-		// @todo add tag
+		if(!empty($st_searchParams['tag_search'])) {
+			$s_tag = urldecode($st_searchParams['tag_search']);
+			$query = $query->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = i.id', array())
+							->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
+							->where('t.name = ?', $s_tag);
+		}
 		if(!empty($st_searchParams['amount_min'])) {
 			if($type == Categories::EXPENSES) {
 				// invert

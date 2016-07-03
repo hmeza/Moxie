@@ -18,44 +18,6 @@ class Expenses extends Transactions {
 	}
 
 	/**
-	 * Gets expenses from a given user, month and year.
-	 * If i_category is not set or is set to zero, all categories are retrieved.
-	 * @param	int $user_id
-	 * @param	int $month
-	 * @param	int $year
-	 * @param	string $s_tag
-	 */
-	public function getTaggedExpenses($user_id, $month, $year, $s_tag = null) {
-		$query = $this->database->select()
-				->from(array('e'=>$this->_name),array(
-						'id'	=>	'e.id',
-						'user_owner'	=>	'e.user_owner',
-						'amount'		=>	new Zend_Db_Expr('-(e.amount)'),
-						'note'			=>	'e.note',
-						'date'	=>	'e.date',
-						'in_sum'		=>	'e.in_sum'
-				))
-				->joinLeft(array('c'=>'categories'), 'c.id = e.category', array(
-						'name'	=>	'c.name',
-						'description'	=>	'c.description',
-						'category'	=> 'c.id'
-				))
-				->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = e.id', array())
-				->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
-				->where('YEAR(e.date) = '.$year)
-				->where('MONTH(e.date) = '.$month)
-				->where('e.user_owner = '.$user_id)
-				->where('e.amount < 0')
-				->order('e.date asc');
-        if(!empty($s_tag)) {
-            $query = $query->where('t.name = ?', $s_tag);
-        }
-		$stmt = $this->database->query($query);
-		$result = $stmt->fetchAll();
-		return $result;
-	}
-
-	/**
 	 * @param int $user_id
 	 * @param int $i_month
 	 * @param int $i_year
@@ -82,9 +44,9 @@ class Expenses extends Transactions {
 		if(!empty($st_searchParams['category_search'])) {
 			$s_select = $s_select->where('category = ?', $st_searchParams['category_search']);
 		}
-		if(!empty($st_searchParams['note'])) {
-			$st_searchParams['note'] = '%'.$st_searchParams['note'].'%';
-			$s_select = $s_select->where('e.note like "%?%"', $st_searchParams['note']);
+		if(!empty($st_searchParams['note_search'])) {
+			$st_searchParams['note'] = '%'.$st_searchParams['note_search'].'%';
+			$s_select = $s_select->where('e.note like "%?%"', $st_searchParams['note_search']);
 		}
 		// @todo add tag
 		if(!empty($st_searchParams['amount_min'])) {

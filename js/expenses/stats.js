@@ -6,9 +6,9 @@ google.setOnLoadCallback(drawChart);
 
 var expensesPieFilter = function(chart, data) {
     var myFilter = data.getValue(chart.getSelection()[0].row, 0);
-    if($("#category_filter option").filter(":contains('"+myFilter+"')").length > 0) {
-        select_option = $("#category_filter option").filter(":contains('"+myFilter+"')").first().attr('value');;
-        $("#category_filter").find('option[value="'+select_option+'"]').attr('selected', true);
+    if($("#category_search option").filter(":contains('"+myFilter+"')").length > 0) {
+        select_option = $("#category_search option").filter(":contains('"+myFilter+"')").first().attr('value');;
+        $("#category_search").find('option[value="'+select_option+'"]').attr('selected', true);
         filter();
     }
 }

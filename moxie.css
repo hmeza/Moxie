@@ -492,6 +492,16 @@ h2 {
     div.moxienext {
         display:none;
     }
+
+	.moxie_expenses_form_left {
+		float: left;
+		width: 50%
+	}
+
+	.moxie_expenses_form_right {
+		float: right;
+		width: 50%
+	}
 }
 
 /* Desktop */
@@ -559,6 +569,16 @@ h2 {
         padding: 0px;
         height: 34px;
     }
+
+	.moxie_expenses_form_left {
+		float: left;
+		width: 50%
+	}
+
+	.moxie_expenses_form_right {
+		float: right;
+		width: 50%
+	}
 }
 
 @media screen and (min-width: 481px) and (max-width: 749px) {
@@ -569,6 +589,16 @@ h2 {
 	.moxie_date_inline {
 		display:none;
 		width: 0px;
+	}
+
+	.moxie_expenses_form_left {
+		float: left;
+		width: 50%
+	}
+
+	.moxie_expenses_form_right {
+		float: right;
+		width: 50%
 	}
 }
 
@@ -756,6 +786,10 @@ h2 {
 	.moxietitle_mobile_not_logged:hover {
 		background:url("img/moxie-title-hover.png") no-repeat;
 	}
+
+	.moxie_expenses_form_left {}
+
+	.moxie_expenses_form_right {}
 }
 
 .moxie-submenu {
@@ -794,4 +828,8 @@ h2 {
 
 .taggle_input {
 	margin-top: 0px;
+}
+
+.ui-autocomplete {
+	max-width: 160px;
 }

@@ -3,19 +3,11 @@ function markLine(id) {
 }
 
 var filter = function() {
-        var chosen = document.getElementById('category_filter').selectedIndex;
-        var redirect = document.getElementById('category_filter').options[chosen].value;
+        var chosen = document.getElementById('category_search').selectedIndex;
+        var redirect = document.getElementById('category_search').options[chosen].value;
         var redirect_string = (redirect == "0") ? "" : "/category/"+redirect;
         window.location="/expenses/index"+redirect_string+"/year/"+year+"/month/"+month;
-}
-
-var filter_tag = function() {
-        var chosen = document.getElementById('tag_filter').selectedIndex;
-        var value = document.getElementById('tag_filter').options[chosen].value;
-        var redirect = document.getElementById('tag_filter').options[chosen].text;
-        var redirect_string = (value == "0") ? "" : "/tag/"+redirect;
-        window.location="/expenses/index"+redirect_string+"/year/"+year+"/month/"+month;
-}
+};
 
 $(document).ready(function() {
 	// @todo check if search form exists and if there is a date field
@@ -54,4 +46,8 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$('#tag_search').autocomplete({
+		source: usedTagList
+	})
 });

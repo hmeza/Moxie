@@ -120,25 +120,16 @@ class ExpensesController extends TransactionsController
 		}
 
 		$this->currentCategory = $this->getRequest()->getParam('category', 0);
-		$s_tag = urldecode($this->getRequest()->getParam('tag', null));
 		$s_toExcel  = $this->getRequest()->getParam('to_excel');
 
 		try {
 			$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
-			if((empty($this->currentCategory) && empty($s_tag)) || !empty($this->currentCategory)) {
-				$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
-			}
-	        else {
-		        $st_list = $this->expenses->getTaggedExpenses($_SESSION['user_id'], $i_month, $i_year, $s_tag);
-	        }
-
-			$i_tag = !empty($s_tag) ? $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag) : null;
+			$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
         }
         catch(Exception $e) {
 	        error_log($e->getMessage());
             $st_data = array();
             $st_list = array();
-	        $i_tag = 0;
         }
 
 		if($s_toExcel == true) {
@@ -261,7 +252,6 @@ class ExpensesController extends TransactionsController
 			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
 		}
 		$this->currentCategory = $this->getRequest()->getParam('category', 0);
-		$s_tag = $this->getRequest()->getParam('tag', null);
 
         // retrieve data to fill the form
         $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
@@ -271,14 +261,6 @@ class ExpensesController extends TransactionsController
 		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
         $form = $this->getForm($st_expense);
 
-		try {
-			$i_tag = !empty($s_tag) ? $this->tags->findIdTagByName($_SESSION['user_id'], $s_tag) : null;
-		}
-		catch(Exception $e) {
-			error_log("error recovering tags");
-			$i_tag = 0;
-		}
-		
 		$this->view->assign('expenses', $st_data);
 		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));

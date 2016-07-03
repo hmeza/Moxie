@@ -126,7 +126,6 @@ class IncomesController extends TransactionsController
         }
 
 		$this->getViewData($st_income);
-		$this->view->assign('search_form', $this->getSearchForm($this->getRequest(), Categories::INCOMES));
 		$this->render('index');
 	}
 	
