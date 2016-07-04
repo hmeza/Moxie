@@ -42,7 +42,7 @@ $st_lang = array(
 	'incomes_last_year' => 'Año anterior',
     'incomes_delete_message' => '¿Borrar este ingreso?',
 	// Search
-	'search_header'     => 'Busqueda',
+	'search_header'     => 'Búsqueda',
 	'search_tag'        => 'Tag',
 	'search_note'       => 'Nota',
 	'search_amount_min' => 'Importe mínimo',
