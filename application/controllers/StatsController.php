@@ -41,9 +41,13 @@ class StatsController extends Zend_Controller_Action {
 		// Get all categories, expenses and incomes from current year
 		$expenses = array();
 		$incomes = array();
+		$st_params = $this->getRequest()->getParams();
 		for($month = 1; $month <= 12; $month++) {
-			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES,$month, $year);
-			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES,$month, $year);
+			$current_date = $year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT).'-01';
+			$st_params['date_min'] = $current_date;
+			$st_params['date_max'] = $st_params['date_max'] = date("Y-m-t", strtotime($current_date));
+			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES, $st_params);
+			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params);
 		}
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
