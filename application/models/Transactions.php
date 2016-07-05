@@ -43,8 +43,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 			$query = $query->where('category = ?', $st_searchParams['category_search']);
 		}
 		if(!empty($st_searchParams['note_search'])) {
-			$st_searchParams['note'] = '%'.$st_searchParams['note_search'].'%';
-			$query = $query->where('note like ?', $st_searchParams['note_search']);
+			$query = $query->where('note like ?', '%'.$st_searchParams['note_search'].'%');
 		}
 		if(!empty($st_searchParams['tag_search'])) {
 			$s_tag = urldecode($st_searchParams['tag_search']);

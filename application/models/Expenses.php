@@ -45,8 +45,7 @@ class Expenses extends Transactions {
 			$s_select = $s_select->where('category = ?', $st_searchParams['category_search']);
 		}
 		if(!empty($st_searchParams['note_search'])) {
-			$st_searchParams['note'] = '%'.$st_searchParams['note_search'].'%';
-			$s_select = $s_select->where('e.note like ?', $st_searchParams['note_search']);
+			$s_select = $s_select->where('e.note like ?', '%'.$st_searchParams['note_search'].'%');
 		}
 		if(!empty($st_searchParams['tag_search'])) {
 			$s_tag = urldecode($st_searchParams['tag_search']);
