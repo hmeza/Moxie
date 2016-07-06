@@ -615,6 +615,12 @@ h2 {
 }
 
 /* Mobile */
+@media screen and (max-width: 480px) {
+	.search_button_mobile {
+		display: none;
+	}
+}
+
 @media screen and (max-device-width: 480px) {
 	html {
 		font-size: 15px;
