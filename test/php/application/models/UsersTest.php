@@ -141,4 +141,25 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
 		$this->usersModel->confirm(54);
 	}
+
+	public function testDistinctKeysAreGenerated() {
+		$this->usersModel = new Users();
+		$a_key = $this->usersModel->generateKey("test_login");
+		$this->assertNotEquals($a_key, $this->usersModel->generateKey("test_login"));
+	}
+
+	/**
+	 * @expectedException Exception
+	 * @expectedExceptionMessage Invalid key
+	 */
+	public function testCheckKeyThrowsExceptionIfLoginDoesNotExistInLoginKeys() {
+		$this->usersModel = new Users();
+		$this->assertEquals("foo_bar", $this->usersModel->checkLogin("foo_bar", "asdfpoiu"));
+	}
+
+	public function testGeneratedKeyRetunsLogin() {
+		$this->usersModel = new Users();
+		$generatedKey = $this->usersModel->generateKey("test_login");
+		$this->assertEquals("test_login", $this->usersModel->checkLogin("test_login", $generatedKey));
+	}
 }
