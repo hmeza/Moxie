@@ -14,6 +14,10 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$this->usersModel = new Users();
 	}
 
+	public function tearDown() {
+		$this->usersModel->delete('login = test_login');
+	}
+
 	public function testCheckLoginReturnsNullIfLoginIncorrect() {
 		$dbTableSelectMock = $this->getMockBuilder('\Zend_Db_Table_Select')
 				->disableOriginalConstructor()
@@ -159,6 +163,7 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
 	public function testGeneratedKeyRetunsLogin() {
 		$this->usersModel = new Users();
+		$this->usersModel->insert(array('login' => 'test_login', 'confirmed' => 1, 'created_at' => date('Y-m-d H:i:s')));
 		$generatedKey = $this->usersModel->generateKey("test_login");
 		$this->assertEquals("test_login", $this->usersModel->checkKey($generatedKey));
 	}
