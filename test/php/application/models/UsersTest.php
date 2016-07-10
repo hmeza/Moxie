@@ -16,6 +16,7 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
 	public function tearDown() {
 		$this->usersModel->delete('login = "test_login"');
+		$this->usersModel->getAdapter()->query("DELETE FROM login_keys WHERE login = 'test_login'");
 	}
 
 	public function testCheckLoginReturnsNullIfLoginIncorrect() {
