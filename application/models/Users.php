@@ -31,7 +31,7 @@ class Users extends Zend_Db_Table_Abstract {
 			->where('generated_key = ?', $s_key)
 			->where('expiration_date > ?', date('Y-m-d'));
 		$st_data = $this->_db->fetchAll($s_select);
-		if(empty($st_data) || empty($st_data['login']))
+		if(empty($st_data) || empty($st_data[0]['login']))
 			throw new Exception("Invalid key");
 		$st_data = $st_data[0];
 		return $st_data;
