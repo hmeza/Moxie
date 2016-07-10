@@ -8,6 +8,39 @@ class Transactions extends Zend_Db_Table_Abstract {
 	public function __construct() {
 		$this->_db = Zend_Registry::get('db');
 	}
+
+	/**
+	 * @note use i as transactions table alias.
+	 * @param Zend_Db_Select $query
+	 * @param $st_searchParams
+	 * @return $query modified
+	 */
+	protected function query_filter($query, $st_searchParams) {
+		if(!empty($st_searchParams['category_search'])) {
+			$query = $query->where('i.category = ?', $st_searchParams['category_search']);
+		}
+		if(!empty($st_searchParams['note_search'])) {
+			$query = $query->where('i.note like ?', '%'.$st_searchParams['note_search'].'%');
+		}
+		if(!empty($st_searchParams['tag_search'])) {
+			$s_tag = urldecode($st_searchParams['tag_search']);
+			$query = $query->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = i.id', array())
+					->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
+					->where('t.name = ?', $s_tag);
+		}
+		if(!empty($st_searchParams['amount_min'])) {
+			$query = $query->where('ABS(i.amount) <= ?', $st_searchParams['amount_min']);
+		}
+		if(!empty($st_searchParams['amount_max'])) {
+			$query = $query->where('ABS(i.amount) >= ?', $st_searchParams['amount_max']);
+		}
+		if(!empty($st_searchParams['date_min'])) {
+			$query = $query->where('i.date >= ?', $st_searchParams['date_min']);
+		}
+		if(!empty($st_searchParams['date_max'])) {
+			$query = $query->where('i.date <= ?', $st_searchParams['date_max']);
+		}
+	}
 	
 	/**
 	 * 
@@ -16,9 +49,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 	 * If year is null, not set or equal to zero, current year is retrieved.
 	 * If category is null, not set or equal to zero, all categories are retrieved.
 	 * @param int $user_id
-	 * @param int $i_month
-	 * @param int $i_year
-	 * @param int $i_category
+	 * @param array $st_searchParams
 	 */
 	public function get($user_id, $type = Categories::EXPENSES, $st_searchParams) {
 		$query = $this->select()
@@ -38,31 +69,7 @@ class Transactions extends Zend_Db_Table_Abstract {
                 ))
             ->where('i.user_owner = '.$user_id);
 
-		// new queries
-		if(!empty($st_searchParams['category_search'])) {
-			$query = $query->where('category = ?', $st_searchParams['category_search']);
-		}
-		if(!empty($st_searchParams['note_search'])) {
-			$query = $query->where('note like ?', '%'.$st_searchParams['note_search'].'%');
-		}
-		if(!empty($st_searchParams['tag_search'])) {
-			$s_tag = urldecode($st_searchParams['tag_search']);
-			$query = $query->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = i.id', array())
-							->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
-							->where('t.name = ?', $s_tag);
-		}
-		if(!empty($st_searchParams['amount_min'])) {
-			$query = $query->where('ABS(amount) <= ?', $st_searchParams['amount_min']);
-		}
-		if(!empty($st_searchParams['amount_max'])) {
-			$query = $query->where('ABS(amount) >= ?', $st_searchParams['amount_max']);
-		}
-		if(!empty($st_searchParams['date_min'])) {
-			$query = $query->where('date >= ?', $st_searchParams['date_min']);
-		}
-		if(!empty($st_searchParams['date_max'])) {
-			$query = $query->where('date <= ?', $st_searchParams['date_max']);
-		}
+		$this->query_filter($query, $st_searchParams);
 
         if($type == Categories::EXPENSES) {
             $query = $query->where('amount < 0');

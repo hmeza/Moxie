@@ -8,63 +8,36 @@ class Expenses extends Transactions {
 	const MOST_FREQUENT_EXPENSES_LIMIT = 5;
 
 	private $database;
-	protected $_name = 'transactions';
-	protected $_primary = 'id';
-	
+
 	public function __construct() {
 		global $db;
 		$this->database = $db;
-		$this->_db = Zend_Registry::get('db');
+		parent::__construct();
 	}
 
 	/**
 	 * @param int $user_id
-	 * @param int $i_month
-	 * @param int $i_year
+	 * @param array $st_searchParams
 	 * @return array
 	 * @throws Zend_Exception
 	 */
 	public function getExpenses($user_id, $st_searchParams) {
 		$s_select = $this->select()
 				->setIntegrityCheck(false)
-				->from(array('e'=> $this->_name),
+				->from(array('i'=> $this->_name),
 						array(
-								'sum(e.amount)' =>     new Zend_Db_Expr('-sum(e.amount)')
+								'sum(e.amount)' =>     new Zend_Db_Expr('-sum(i.amount)')
 						))
-				->joinLeft(array('c'=>'categories'),'e.category = c.id', array(
+				->joinLeft(array('c'=>'categories'),'i.category = c.id', array(
 						'id'            =>      'c.id',
 						'name'          =>      new Zend_Db_Expr('CONCAT(COALESCE(CONCAT(c0.name, " - "), ""), c.name)'),
 				))
             ->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
-				->where('e.user_owner = '.$user_id)
-				->where('e.in_sum = 1')
+				->where('i.user_owner = '.$user_id)
+				->where('i.in_sum = 1')
                 ->where('amount < 0');
 
-		// new queries
-		if(!empty($st_searchParams['category_search'])) {
-			$s_select = $s_select->where('category = ?', $st_searchParams['category_search']);
-		}
-		if(!empty($st_searchParams['note_search'])) {
-			$s_select = $s_select->where('e.note like ?', '%'.$st_searchParams['note_search'].'%');
-		}
-		if(!empty($st_searchParams['tag_search'])) {
-			$s_tag = urldecode($st_searchParams['tag_search']);
-			$s_select = $s_select->joinInner(array('tt' => 'transaction_tags'), 'tt.id_transaction = e.id', array())
-					->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array())
-					->where('t.name = ?', $s_tag);
-		}
-		if(!empty($st_searchParams['amount_min'])) {
-			$s_select = $s_select->where('ABS(e.amount) >= ?', $st_searchParams['amount_min']);
-		}
-		if(!empty($st_searchParams['amount_max'])) {
-			$s_select = $s_select->where('ABS(e.amount) <= ?', $st_searchParams['amount_max']);
-		}
-		if(!empty($st_searchParams['date_min'])) {
-			$s_select = $s_select->where('e.date >= ?', $st_searchParams['date_min']);
-		}
-		if(!empty($st_searchParams['date_max'])) {
-			$s_select = $s_select->where('e.date <= ?', $st_searchParams['date_max']);
-		}
+		$this->query_filter($s_select, $st_searchParams);
 
 		$s_select = $s_select
 				->group('c.id')
