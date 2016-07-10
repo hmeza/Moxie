@@ -41,7 +41,20 @@
         <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
     </target>
 
-    <target name="jasmine">
+    <target name="npm">
+        <exec executable="npm">
+            <arg value="install"/>
+        </exec>
+    </target>
+
+    <target name="bower">
+        <exec executable="bower">
+            <arg value="install"/>
+            <arg value="--allow-root"/>
+        </exec>
+    </target>
+
+    <target name="jasmine" depends="npm, bower">
         <exec executable="grunt" failonerror="true"/>
     </target>
 </project>
