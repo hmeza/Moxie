@@ -166,6 +166,8 @@ class UsersTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$this->usersModel = new Users();
 		$this->usersModel->insert(array('login' => 'test_login', 'confirmed' => 1, 'created_at' => date('Y-m-d H:i:s')));
 		$generatedKey = $this->usersModel->generateKey("test_login");
-		$this->assertEquals("test_login", $this->usersModel->checkKey($generatedKey));
+		$loginData = $this->usersModel->checkKey($generatedKey);
+		$this->assertNotEmpty($loginData);
+		$this->assertEquals("test_login", $loginData['login']);
 	}
 }
