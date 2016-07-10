@@ -24,7 +24,15 @@
         </exec>
     </target>
 
-    <target name="phpunit" depends="composer, git_submodules_update">
+    <target name="phinx_migrate" depends="composer">
+        <exec executable="vendor/bin/phinx" failonerror="true">
+            <arg value="migrate"/>
+            <arg value="-e"/>
+            <arg value="testing"/>
+        </exec>
+    </target>
+
+    <target name="phpunit" depends="composer, git_submodules_update, phinx_migrate">
         <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
     </target>
 
