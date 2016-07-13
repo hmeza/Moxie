@@ -77,6 +77,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		}
 		Zend_Db_Table_Abstract::setDefaultAdapter($db);
 	}
+
+	protected function _initLog() {
+		$o_config = Zend_Registry::getInstance()->get('config');
+		ini_set('error_prepend_string', $o_config->error_prepend_string);
+	}
 	
 	/**
 	 * Start Moxie

@@ -16,6 +16,7 @@ moxie.db.password = "password"
 moxie.db.port = 3306
 moxie.db.database = "MOXIE"
 moxie.email = "moxie@dootic.com"
+log.error_prepend_string = "moxie - "
 
 [staging : production]
 moxie.app.name = "Moxie"
