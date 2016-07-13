@@ -7,7 +7,7 @@ if(strpos($url, 'index') === false) {
 }
 $exportUrl = $url."/to_excel/true";
 ?>
-<td colspan=5><a href="<?php echo $exportUrl; ?>" target="blank">Exportar</a></td>
+<td colspan=5><button class="moxiebutton" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
 </tr>
 <?php
 $f_totalAmount = 0;

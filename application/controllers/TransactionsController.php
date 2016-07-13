@@ -19,6 +19,7 @@ class TransactionsController extends Zend_Controller_Action
 	protected function getSearchForm($request, $category_type = Categories::EXPENSES) {
 		global $st_lang;
 		$form  = new Zend_Form();
+		$form->setName("search_form");
 
 		// mount default min and max date
 		if($category_type == Categories::EXPENSES) {
@@ -57,7 +58,8 @@ class TransactionsController extends Zend_Controller_Action
 
 		$form->addElement('text', 'date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date)));
 		$form->addElement('text', 'date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date)));
-		$form->addElement('submit','submit', array('label' => $st_lang['search_send']));
+		$form->addElement('hidden', 'to_excel', array('value' => 0));
+		$form->addElement('submit','search_submit', array('label' => $st_lang['search_send']));
 		return $form;
 	}
 }

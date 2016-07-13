@@ -139,13 +139,13 @@ form.budget {
 	background:url("img/moxie-title-hover.png") no-repeat;
 }
 
-div.moxiebutton {
-	border-radius: 10px;
-	background: #D0E8F4;
-	padding: 10px;
-	margin: 4px;
-	cursor: hand;
-	cursor: pointer;
+.moxiebutton {
+	font: 90% arial,sans-serif;
+	padding: 2px 5px;
+	color: #444;
+	border-radius: 4px;
+	border: 1px solid #aaa;
+	background: #fff;
 }
 
 div.moxieicon {

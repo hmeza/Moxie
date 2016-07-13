@@ -9,6 +9,11 @@ var filter = function() {
         window.location="/expenses/index"+redirect_string+"/year/"+year+"/month/"+month;
 };
 
+var export_to_excel = function(){
+	$('#search_form').find('[name=to_excel]').val(true);
+	$('#search_submit').click();
+};
+
 $(document).ready(function() {
 	// @todo check if search form exists and if there is a date field
 	$('#date_min').attr('type', 'date');
@@ -49,5 +54,7 @@ $(document).ready(function() {
 
 	$('#tag_search').autocomplete({
 		source: usedTagList
-	})
+	});
+
+	$("#export_to_excel_button").click(export_to_excel);
 });
