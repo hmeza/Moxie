@@ -22,27 +22,41 @@ class Expenses extends Transactions {
 	 * @throws Zend_Exception
 	 */
 	public function getExpenses($user_id, $st_searchParams) {
-		$s_select = $this->select()
-				->setIntegrityCheck(false)
-				->from(array('i'=> $this->_name),
-						array(
-								'sum(e.amount)' =>     new Zend_Db_Expr('-sum(i.amount)')
-						))
-				->joinLeft(array('c'=>'categories'),'i.category = c.id', array(
-						'id'            =>      'c.id',
-						'name'          =>      new Zend_Db_Expr('CONCAT(COALESCE(CONCAT(c0.name, " - "), ""), c.name)'),
-				))
-            ->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
-				->where('i.user_owner = '.$user_id)
-				->where('i.in_sum = 1')
-                ->where('amount < 0');
+		try {
+			$s_select = $this->select()
+					->setIntegrityCheck(false)
+					->from(
+							array('i' => $this->_name),
+							array(
+									'sum(e.amount)' => new Zend_Db_Expr('-sum(i.amount)')
+							)
+					)
+					->joinLeft(
+							array('c' => 'categories'),
+							'i.category = c.id',
+							array(
+									'id' => 'c.id',
+									'name' => new Zend_Db_Expr('CONCAT(COALESCE(CONCAT(c0.name, " - "), ""), c.name)'),
+							)
+					)
+					->joinLeft(array('c0' => 'categories'), 'c.parent = c0.id', array())
+					->where('i.user_owner = ' . $user_id)
+					->where('i.in_sum = 1')
+					->where('amount < 0');
 
-		$this->query_filter($s_select, $st_searchParams);
+			$this->query_filter($s_select, $st_searchParams);
 
-		$s_select = $s_select
-				->group('c.id')
-				->order(array('c.id'));
-		return $this->fetchAll($s_select);
+			$s_select = $s_select
+					->group('c.id')
+					->order(array('c.id'));
+
+			$st_list = $this->fetchAll($s_select);
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$st_list = array();
+		}
+		return $st_list;
 	}
 
 	/**

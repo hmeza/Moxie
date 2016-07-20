@@ -10,8 +10,6 @@ class ExpensesController extends TransactionsController
 	private $tags;
 	/** @var TransactionTags */
 	private $transactionTags;
-    /** @var int  */
-    private $currentCategory;
 
 	public function init() {
 		parent::init();
@@ -51,7 +49,6 @@ class ExpensesController extends TransactionsController
         if(empty($st_expense['category'])) {
             reset($st_categories);
             $st_expense['category'] = key($st_categories);
-            $this->currentCategory = $st_expense['category'];
         }
 
 		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
@@ -103,62 +100,29 @@ class ExpensesController extends TransactionsController
 
 	/**
 	 * Shows the expenses view.
+	 * Receives call from export to excel too.
 	 */
 	public function indexAction() {
-		global $st_lang;
+		$st_expense = array(
+				'id' => null,
+				'amount' => '0.00',
+				'category' => 0,
+				'note' => '',
+				'date' => date('Y-m-d'),
+				'in_sum' => 0,
+				'user_owner' => $_SESSION['user_id']
+		);
 
-		// list current month by default
-		// allow navigate through months and years
-		$i_month = $this->getRequest()->getParam('month', date('n'));
-		$i_year = $this->getRequest()->getParam('year', date('Y'));
-		$st_params = $this->getRequest()->getParams();
-		// convert month+year to filters for search
-		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
-			$current_date = $i_year.'-'.$i_month.'-01';
-			$st_params['date_min'] = $current_date;
-			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
-		}
+		$st_params = $this->getParameters();
 
-		$this->currentCategory = $this->getRequest()->getParam('category', 0);
-		$s_toExcel  = $this->getRequest()->getParam('to_excel');
+		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
+		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
-		try {
-			$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
-			$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
-        }
-        catch(Exception $e) {
-	        error_log($e->getMessage());
-            $st_data = array();
-            $st_list = array();
-        }
-
-		if($s_toExcel == true) {
+		if($this->getRequest()->getParam('to_excel') == true) {
 			$this->exportToExcel($st_list);
 		}
 
-        $st_expenses = array(
-            'id' => null,
-            'amount' => '0.00',
-            'category' => 0,
-            'note' => '',
-            'date' => date('Y-m-d'),
-            'in_sum' => 0,
-            'user_owner' => $_SESSION['user_id']
-        );
-        $form = $this->getForm($st_expenses);
-
-		$this->view->assign('expenses', $st_data);
-		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
-		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
-		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
-		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-		$this->view->assign('list', $st_list);
-		$this->view->assign('year', $i_year);
-		$this->view->assign('month', $i_month);
-		$this->view->assign('form', $form);
-		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-        $this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
-		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
+		$this->assignViewData($st_data, $st_list, $st_params, $st_expense);
 	}
 
 	/**
@@ -239,41 +203,20 @@ class ExpensesController extends TransactionsController
 	 * @author	hmeza
 	 */
 	public function editAction() {
-		global $st_lang;
-		
 		$i_expensePK = $this->getRequest()->getParam('id');
-		$i_month = $this->getRequest()->getParam('month', date('n'));
-		$i_year = $this->getRequest()->getParam('year', date('Y'));
-		$st_params = $this->getRequest()->getParams();
-		// convert month+year to filters for search
-		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
-			$current_date = $i_year.'-'.$i_month.'-01';
-			$st_params['date_min'] = $current_date;
-			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
+		// retrieve data to fill the form
+		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
+		if($st_expense['user_owner'] != $_SESSION['user_id']) {
+			throw new Exception("Access error");
 		}
-		$this->currentCategory = $this->getRequest()->getParam('category', 0);
 
-        // retrieve data to fill the form
-        $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
-        if($st_expense['user_owner'] != $_SESSION['user_id']) {
-            throw new Exception("Access error");
-        }
+		$st_params = $this->getParameters();
+
 		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
-        $form = $this->getForm($st_expense);
+		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
-		$this->view->assign('expenses', $st_data);
-		$this->view->assign('expenses_label', $st_lang['expenses_monthly']);
-		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
-		$this->view->assign('month_expenses_label', $st_lang['expenses_by_months']);
-		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-		$this->view->assign('list', $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params));
-		$this->view->assign('year', $i_year);
-		$this->view->assign('month', $i_month);
-		$this->view->assign('form', $form);
+		$this->assignViewData($st_data, $st_list, $st_params, $st_expense);
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
-		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
-		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
 		$this->render('index');
 	}
 	
@@ -324,5 +267,47 @@ class ExpensesController extends TransactionsController
 		$i_expensePK = $this->getRequest()->getParam('id');
 		$this->expenses->updateExpense($i_expensePK);
 		$this->_helper->redirector('index','expenses');
+	}
+
+	/**
+	 * Retrieves parameters from request.
+	 */
+	private function getParameters() {
+		$st_params = $this->getRequest()->getParams();
+		$st_params['month'] = $this->getRequest()->getParam('month', date('n'));
+		$st_params['year'] = $this->getRequest()->getParam('year', date('Y'));
+		$category = $this->getRequest()->getParam('category', null);
+		if(empty($st_params['category_search'])) {
+			$st_params['category_search'] = $category;
+		}
+
+		// convert month+year to filters for search
+		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
+			$current_date = $st_params['year'].'-'.$st_params['month'].'-01';
+			$st_params['date_min'] = $current_date;
+			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
+		}
+
+		return $st_params;
+	}
+
+	/**
+	 * @param $st_data
+	 * @param $st_list
+	 * @param $st_params
+	 * @param $st_expense
+	 * @throws Exception
+	 */
+	private function assignViewData($st_data, $st_list, $st_params, $st_expense) {
+		$this->view->assign('expenses', $st_data);
+		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
+		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
+		$this->view->assign('list', $st_list);
+		$this->view->assign('year', $st_params['year']);
+		$this->view->assign('month', $st_params['month']);
+		$this->view->assign('form', $this->getForm($st_expense));
+		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
+		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
+		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
 	}
 }

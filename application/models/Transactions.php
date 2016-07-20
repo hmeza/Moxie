@@ -50,35 +50,50 @@ class Transactions extends Zend_Db_Table_Abstract {
 	 * If category is null, not set or equal to zero, all categories are retrieved.
 	 * @param int $user_id
 	 * @param array $st_searchParams
+	 * @return array
 	 */
 	public function get($user_id, $type = Categories::EXPENSES, $st_searchParams) {
-		$query = $this->select()
-			->setIntegrityCheck(false)
-		    ->from(array('i'=> $this->_name),array(
-					'id'	=>	'i.id',
-					'user_owner'	=>	'i.user_owner',
-					'amount'		=>	new Zend_Db_Expr('ABS(i.amount)'),
-					'note'			=>	'i.note',
-					'date'			=>	'i.date',
-					'in_sum'		=>	'i.in_sum'
-					))
-            ->joinLeft(array('c'=>'categories'), 'c.id = i.category', array(
-                'name'	=>	'c.name',
-                'description'	=>	'c.description',
-                'category'	=> 'c.id'
-                ))
-            ->where('i.user_owner = '.$user_id);
+		try {
+			$query = $this->select()
+					->setIntegrityCheck(false)
+					->from(
+							array('i' => $this->_name),
+							array(
+									'id' => 'i.id',
+									'user_owner' => 'i.user_owner',
+									'amount' => new Zend_Db_Expr('ABS(i.amount)'),
+									'note' => 'i.note',
+									'date' => 'i.date',
+									'in_sum' => 'i.in_sum'
+							)
+					)
+					->joinLeft(
+							array('c' => 'categories'),
+							'c.id = i.category',
+							array(
+									'name' => 'c.name',
+									'description' => 'c.description',
+									'category' => 'c.id'
+							)
+					)
+					->where('i.user_owner = ' . $user_id);
 
-		$this->query_filter($query, $st_searchParams);
+			$this->query_filter($query, $st_searchParams);
 
-        if($type == Categories::EXPENSES) {
-            $query = $query->where('amount < 0');
-        }
-        else if($type == Categories::INCOMES) {
-            $query = $query->where('amount >= 0');
-        }
-		$query = $query->order('i.date asc');
-        $result = $this->fetchAll($query);
+			if ($type == Categories::EXPENSES) {
+				$query = $query->where('amount < 0');
+			} else {
+				if ($type == Categories::INCOMES) {
+					$query = $query->where('amount >= 0');
+				}
+			}
+			$query = $query->order('i.date asc');
+			$result = $this->fetchAll($query);
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$result = array();
+		}
         return $result;
 	}
 }
