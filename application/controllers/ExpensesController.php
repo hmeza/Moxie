@@ -8,15 +8,12 @@ class ExpensesController extends TransactionsController
 	private $budgets;
 	/** @var Tags */
 	private $tags;
-	/** @var TransactionTags */
-	private $transactionTags;
 
 	public function init() {
 		parent::init();
 		$this->expenses = new Expenses();
 		$this->budgets = new Budgets();
 		$this->tags = new Tags();
-		$this->transactionTags = new TransactionTags();
 	}
 
 	/**
@@ -251,10 +248,13 @@ class ExpensesController extends TransactionsController
 	public function deleteAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');
 		try {
+			$this->transactionTags->getAdapter()->beginTransaction();
 			$this->transactionTags->removeTagsFromTransaction($i_expensePK);
-			$this->expenses->deleteByUser($_SESSION['user_id'], $i_expensePK);
+			$this->expenses->delete($i_expensePK, $_SESSION['user_id']);
+			$this->transactionTags->getAdapter()->commit();
 		} catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
+			$this->transactionTags->getAdapter()->rollBack();
 		}
 		$this->_helper->redirector('index','expenses');
 	}

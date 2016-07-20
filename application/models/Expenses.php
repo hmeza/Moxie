@@ -239,12 +239,4 @@ class Expenses extends Transactions {
         $st_data = $this->database->fetchRow($s_select);
         return $st_data;
     }
-
-	public function deleteByUser($userId, $expenseId) {
-		$this->fetchRow(
-				$this->select()
-					->where('id = ?', $expenseId)
-					->where('user_owner = ?', $userId)
-			)->delete();
-	}
 }

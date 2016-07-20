@@ -96,4 +96,25 @@ class Transactions extends Zend_Db_Table_Abstract {
 		}
         return $result;
 	}
+
+	/**
+	 * Delete row by id, with user_owner check.
+	 * @param int $id
+	 * @param int $user
+	 * @return int
+	 * @throws Zend_Db_Select_Exception
+	 * @throws Exception
+	 */
+	public function delete($id, $user) {
+		$s_where = $this->select()
+				->from($this->_name)
+				->where('id = ?', $id)
+				->where('user_owner = ?', $user)
+				->getPart(Zend_Db_Select::SQL_WHERE);
+		$deleted = parent::delete(implode(" ", $s_where));
+		error_log("deleted rows: ".$deleted);
+		if($deleted == 0) {
+			throw new Exception("Error deleting transaction ".$id." for user ".$user);
+		}
+	}
 }

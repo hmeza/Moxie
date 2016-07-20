@@ -152,10 +152,14 @@ class IncomesController extends TransactionsController
 	 */
 	public function deleteAction() {
 		try {
+			$this->transactionTags->getAdapter()->beginTransaction();
+			$this->transactionTags->removeTagsFromTransaction($this->getRequest()->getParam('id'));
 			$this->incomes->delete($this->getRequest()->getParam('id'), $_SESSION['user_id']);
+			$this->transactionTags->getAdapter()->commit();
 		}
 		catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
+			$this->transactionTags->getAdapter()->rollBack();
 		}
 		$this->_helper->redirector('index','incomes');
 	}

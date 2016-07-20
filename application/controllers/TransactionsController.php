@@ -4,10 +4,13 @@ class TransactionsController extends Zend_Controller_Action
 {
 	/** @var Categories */
 	protected $categories;
+	/** @var TransactionTags */
+	protected $transactionTags;
 
 	public function init() {
 		parent::init();
 		$this->categories = new Categories();
+		$this->transactionTags = new TransactionTags();
 	}
 
 	/**
