@@ -82,7 +82,7 @@ class Expenses extends Transactions {
 			$stmt = $this->database->query($query);
 			$result = $stmt->fetch();
 		} catch (Exception $e) {
-			error_log($e->getMessage(),3,'/tmp/hmeza.log');
+			error_log($e->getMessage());
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}
 		return $result;

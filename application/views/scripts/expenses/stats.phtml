@@ -38,9 +38,9 @@ $s_jsonData = "[".implode(",", $st_jsonData)."]";
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
 	var pieData = <?php echo $s_jsonData; ?>;
-	var pieTitle = "<?php echo $st_lang['expenses_label']; ?>";
+	var pieTitle = "<?php echo $st_lang['expenses_monthly']; ?>";
 	var barChartData = <?php echo $this->month_expenses; ?>;
-	var barTitle = "<?php echo $st_lang['month_expenses_label']; ?>";
+	var barTitle = "<?php echo $st_lang['expenses_by_months']; ?>";
 </script>
 <script type="text/javascript" src="/js/expenses/stats.js"></script>
 <div id="expenses_month"></div>
