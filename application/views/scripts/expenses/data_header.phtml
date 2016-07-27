@@ -30,20 +30,13 @@ if (isset($i_expensePK)) {
 <?php
 	echo $this->form->getElement('user_owner');
 	echo $this->form->getElement('id');
-	$amount = $this->form->getValue('amount');
 }
 else {
 ?>
 	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">
 <?php
-	$amount = '';
 }
-?>
-<dt id="amount-label"><label for="amount" class="optional"><?php echo $st_lang['expenses_amount']; ?></label></dt>
-<dd>
-<input type="number" id="amount" name="amount" step="any" placeholder="0,00" value="<?php echo $amount; ?>">
-</dd>
-<?php
+echo $this->form->getElement('amount');
 echo $this->form->getElement('note');
 ?>
 <dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['expenses_date']; ?></label></dt>

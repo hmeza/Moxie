@@ -48,7 +48,8 @@ class ExpensesController extends TransactionsController
             $st_expense['category'] = key($st_categories);
         }
 
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $st_expense['amount']));
+		$f_expense = !empty($st_expense['amount']) && $st_expense['amount'] != '0.00' ? $st_expense['amount'] : '';
+		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00'));
         $multiOptions = new Zend_Form_Element_Select('category');
         $multiOptions->setName('category');
         $multiOptions->setLabel($st_lang['expenses_category']);
