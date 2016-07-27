@@ -84,6 +84,7 @@ class Expenses extends Transactions {
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			$result = null;
 		}
 		return $result;
 	}
@@ -120,33 +121,20 @@ class Expenses extends Transactions {
 	 * @since	2011-02-03
 	 * @param	int $i_expensePK
 	 * @param	array $st_params
-	 * @todo	correct this bullshit. updateExpense should do only one type of update
 	 */
-	public function updateExpense($i_expensePK, $st_params = null) {
+	public function updateExpense($st_params = null) {
+		error_log("params".print_r($st_params),true);
 		try {
-			if ($st_params == null) {
-				$query = $this->database->select()
-				->from($this->_name,"in_sum")
-				->where("id = ?", $i_expensePK);
-				$stmt = $this->database->query($query);
-				$result = $stmt->fetchAll();
-				$result = $result[0];
-                $up = ($result['in_sum'] == '1') ? 0 : 1;
+			$st_data = array(
+				'amount'	=>	-$st_params['amount'],
+				'category'	=>	$st_params['category'],
+				'note'		=>	$st_params['note'],
+				'date'	=>	$st_params['date'],
+				'in_sum' => $st_params['in_sum']
 
-				$where[] = "id = ".$i_expensePK;
-				$this->database->update($this->_name, array("in_sum"=>$up), $where);
-			}
-			else {
-				$st_data = array(
-					'amount'	=>	-$st_params['amount'],
-					'category'	=>	$st_params['category'],
-					'note'		=>	$st_params['note'],
-					'date'	=>	$st_params['date']
-					
-				);
-				$s_where = 'id = '.$st_params['id'];
-				$this->database->update($this->_name,$st_data,$s_where);
-			}
+			);
+			$s_where = 'id = '.$st_params['id'];
+			$this->database->update($this->_name,$st_data,$s_where);
 		} catch (Exception $e) {
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
 		}

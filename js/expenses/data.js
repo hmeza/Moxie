@@ -1,7 +1,3 @@
-function markLine(id) {
-	window.location="/expenses/markline/id/"+id;
-}
-
 var filter = function() {
         var chosen = document.getElementById('category_search').selectedIndex;
         var redirect = document.getElementById('category_search').options[chosen].value;

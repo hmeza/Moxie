@@ -22,20 +22,15 @@ global $st_lang;
 echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
+?>
+<form id="login" enctype="application/x-www-form-urlencoded" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" class="moxie_form">
+<?php
 if (isset($i_expensePK)) {
 ?>
-	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/update" method="post" class="moxie_form">
-	<input type="hidden" class="my-checkbox" id="<?php echo $i_expensePK; ?>" name="<?php echo $i_expensePK; ?>"/>
-	<div><?php echo $st_lang['in_sum_message']; ?><input type="checkbox" class="my-checkbox" id="in_sum" name="in_sum" onClick="markLine(<?php echo $i_expensePK; ?>);" <?php echo $checked; ?>/></div>
-<?php
-	echo $this->form->getElement('user_owner');
-	echo $this->form->getElement('id');
-}
-else {
-?>
-	<form id="login" enctype="application/x-www-form-urlencoded" action="/expenses/add" method="post" class="moxie_form">
+	<input type="hidden" id="id" name="id" value="<?php echo $i_expensePK; ?>"/>
 <?php
 }
+echo $this->form->getElement('id');
 echo $this->form->getElement('amount');
 echo $this->form->getElement('note');
 ?>
@@ -44,6 +39,7 @@ echo $this->form->getElement('note');
 <?php
 echo $this->form->getElement('category');
 ?>
+<div><input type="checkbox" class="my-checkbox" id="in_sum" name="in_sum" <?php echo $checked; ?>/> <?php echo $st_lang['in_sum_message']; ?></div>
 <dt for="form_tags">Tags</dt>
 <dd id="form_tags" class="dd_taggle_list">
 	<div id="tags" class="div_taggle_list"></div>

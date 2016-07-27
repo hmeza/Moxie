@@ -26,12 +26,11 @@ class ExpensesController extends TransactionsController
 		$form  = new Zend_Form();
 
 		if(empty($st_expense['id'])) {
-			$in_sum_type = "hidden";
 			$in_sum_value = 1;
 			$slug = '/expenses/add';
+
 		}
 		else {
-			$in_sum_type = "checkbox";
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 		}
@@ -57,15 +56,14 @@ class ExpensesController extends TransactionsController
         $multiOptions->setValue(array($st_expense['category']));
         $form->addElement($multiOptions);
 
-		$form->addElement($in_sum_type, 'in_sum', array('value' => $in_sum_value));
+		$form->addElement("checkbox", 'in_sum', array('value' => $in_sum_value));
 
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
 		$form->addElement('text', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
 
         $form->addElement('hidden', 'checked', array('value' => $st_expense['in_sum']));
-        $form->addElement('hidden', 'user_owner', array('value' => $st_expense['user_owner']));
-        $form->addElement('hidden', 'id', array('value' => $st_expense['id']));
+        $form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		return $form;
 	}
 	
@@ -107,7 +105,7 @@ class ExpensesController extends TransactionsController
 				'category' => 0,
 				'note' => '',
 				'date' => date('Y-m-d'),
-				'in_sum' => 0,
+				'in_sum' => 1,
 				'user_owner' => $_SESSION['user_id']
 		);
 
@@ -238,7 +236,7 @@ class ExpensesController extends TransactionsController
 			$this->updateTags($_POST['taggles'], $i_expensePK);
 		}
 
-		$this->expenses->updateExpense($i_expensePK, $st_params);
+		$this->expenses->updateExpense($st_params);
 		$this->getResponse()->setRedirect('/expenses/index/month/'.$originalExpenseDate[1].'/year/'.$originalExpenseDate[0]);
 	}
 	
@@ -257,16 +255,6 @@ class ExpensesController extends TransactionsController
 			error_log(__METHOD__.": ".$e->getMessage());
 			$this->transactionTags->getAdapter()->rollBack();
 		}
-		$this->_helper->redirector('index','expenses');
-	}
-
-	/**
-	 * Marks an expense to appear or not in sums
-	 * @author	hmeza
-	 */
-	public function marklineAction() {
-		$i_expensePK = $this->getRequest()->getParam('id');
-		$this->expenses->updateExpense($i_expensePK);
 		$this->_helper->redirector('index','expenses');
 	}
 
