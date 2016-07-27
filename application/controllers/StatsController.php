@@ -52,7 +52,6 @@ class StatsController extends Zend_Controller_Action {
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
 		$st_incomes = $this->categories->getCategoriesForView(Categories::INCOMES);
-		$st_perItemData = array();
 		asort($st_expenses);
 		asort($st_incomes);
 		
@@ -63,6 +62,5 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], $year));
 		$this->view->assign('data', $data);
 		$this->view->assign('year', $year);
-		$this->view->assign('per_item_data', $st_perItemData);
 	}
 }
