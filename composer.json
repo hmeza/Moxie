@@ -12,5 +12,13 @@
             "name": "hmeza",
             "email": "hugo.meza.macias@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "post-install-cmd": "@copy_extra_zend_files",
+        "post-update-cmd": "@copy_extra_zend_files",
+        "copy_extra_zend_files": [
+            "cp extra/Date.php vendor/zendframework/zendframework1/library/Zend/Form/Element/",
+            "cp extra/FormDate.php vendor/zendframework/zendframework1/library/Zend/View/Helper/"
+        ]
+    }
 }
