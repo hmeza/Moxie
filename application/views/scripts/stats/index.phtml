@@ -79,9 +79,7 @@ foreach ($this->budget_incomes as $key => $category) {
 		}
 		$income[$month] += $current_income;
 
-		$s_color = ($current_income > $this->budget[$month][$key]) ?
-				' style="color: #FF0000"' : ' style="color: #000000"';
-		echo '<td align="right"><a '.$s_color.' href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
+		echo '<td align="right"><a style="color: #000000" href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
 	}
 	if (!empty($this->budget)) echo '<td></td>';
 	echo '<tr>';

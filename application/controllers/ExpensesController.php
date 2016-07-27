@@ -189,7 +189,8 @@ class ExpensesController extends TransactionsController
             }
 		}
 		catch(Zend_Db_Statement_Exception $e) {
-			throw new Exception("Database error in ".__METHOD__);
+            error_log(__METHOD__.": ".$e->getMessage());
+			throw new Exception("Error adding expense");
 		}
 		$this->_helper->redirector('index','expenses');
 	}
