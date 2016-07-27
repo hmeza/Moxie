@@ -51,7 +51,7 @@ $st_lang = array(
 	'search_date_max'   => 'Fecha final',
 	'search_send'       => 'Buscar',
 	// Transactions
-	'in_sum_message'    => 'Marcar/desmarcar para mostrar en totales ',
+	'in_sum_message'    => 'Mostrar en "Total"',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorías y presupuesto',

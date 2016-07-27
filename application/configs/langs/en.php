@@ -51,7 +51,7 @@ $st_lang = array(
 	'search_date_max'   => 'End date',
 	'search_send'       => 'Search',
 	// Transactions
-	'in_sum_message'    => 'Check/uncheck to show in totals ',
+	'in_sum_message'    => 'Show in "Total"',
 	// Budgets
 	// Categories
 	'categories_and_budget'	=>	'Categorias y presupuesto',
