@@ -134,34 +134,10 @@ class Expenses extends Transactions {
 
 			);
 			$s_where = 'id = '.$st_params['id'];
-			$this->database->update($this->_name,$st_data,$s_where);
+			$this->update($st_data,$s_where);
 		} catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
 		}
-	}
-	
-	/**
-	 * Retrieve a list of item notes, number of times used, sum expent,
-	 * average of the spents, minimum amount and maximum amount.
-	 * @param int $i_userOwner
-	 * @return array
-	 */
-	public function getPerItemData($i_userOwner) {
-		//select note, count(id) as number, sum(amount), avg(amount), max(amount), min(amount)  from expenses where user_owner = 1 group by note order by number DESC;
-		try {
-			$query = $this->database->select()
-				->from(array('e' => $this->_name), array('note', 'count(id) as number', 'avg(amount)', 'max(amount)', 'min(amount)'))
-				->where('user_owner = ?', $i_userOwner)
-                ->where('amount < 0')
-				->group('note')
-				->order('number DESC')
-				->limit(10);
-			$rows = $this->database->fetchAll($query);
-		}
-		catch(Exception $e) {
-			error_log(__METHOD__.": ".$e->getMessage());
-		}
-		return $rows;
 	}
 
     /**
