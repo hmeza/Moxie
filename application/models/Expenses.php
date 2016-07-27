@@ -123,7 +123,7 @@ class Expenses extends Transactions {
 	 * @param	array $st_params
 	 */
 	public function updateExpense($st_params = null) {
-		error_log("params".print_r($st_params),true);
+		$st_params['in_sum'] = isset($st_params['in_sum']) ? 1:0;
 		try {
 			$st_data = array(
 				'amount'	=>	-$st_params['amount'],
@@ -136,7 +136,7 @@ class Expenses extends Transactions {
 			$s_where = 'id = '.$st_params['id'];
 			$this->database->update($this->_name,$st_data,$s_where);
 		} catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.": ".$e->getMessage());
 		}
 	}
 	
