@@ -11,10 +11,6 @@ var export_to_excel = function(){
 };
 
 $(document).ready(function() {
-	// @todo check if search form exists and if there is a date field
-	$('#date_min').attr('type', 'date');
-	$('#date_max').attr('type', 'date');
-
 	$("#category").chosen({
 		disable_search_threshold: 10,
 		width: "100%"
