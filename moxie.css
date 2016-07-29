@@ -710,6 +710,17 @@ h2 {
 		width: 100%;
 	}
 
+	select {
+		-webkit-background-size: 28px 28px;
+		border-radius: 5px;
+		border: 1px solid #aaa;
+		height: 36px;
+		width: 205px;
+		padding: 0px;
+		padding-left: 4px;
+		font: 90% roboto,sans-serif;
+	}
+
 	.moxie-left {
 		width: 100%;
 	}
