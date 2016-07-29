@@ -35,7 +35,6 @@ echo $this->form->getElement('amount');
 echo $this->form->getElement('note');
 echo $this->form->getElement('date');
 echo $this->form->getElement('category');
-echo $this->form->getElement('in_sum');
 ?>
 
 <dt for="form_tags">Tags</dt>
@@ -43,6 +42,7 @@ echo $this->form->getElement('in_sum');
 	<div id="tags" class="div_taggle_list"></div>
 </dd>
 <?php
+echo $this->form->getElement('in_sum');
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
 	echo '<input type="button" class="moxiedelete" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . '")\'/>';

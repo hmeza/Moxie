@@ -23,6 +23,7 @@ class TransactionsController extends Zend_Controller_Action
 		global $st_lang;
 		$form  = new Zend_Form();
 		$form->setName("search_form");
+		$form->setAttrib('class', 'moxie_form');
 
 		// mount default min and max date
 		if($category_type == Categories::EXPENSES) {
