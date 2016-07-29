@@ -56,13 +56,10 @@ class ExpensesController extends TransactionsController
         $multiOptions->setValue(array($st_expense['category']));
         $form->addElement($multiOptions);
 
-		$form->addElement("checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value));
-
+		$form->addElement("checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;'));
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
 		$form->addElement('date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
-
-        $form->addElement('hidden', 'checked', array('value' => $st_expense['in_sum']));
         $form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		return $form;
 	}
