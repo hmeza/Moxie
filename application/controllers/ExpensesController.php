@@ -173,8 +173,6 @@ class ExpensesController extends TransactionsController
 	public function addAction() {
 		$st_form = $this->getRequest()->getPost();
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
-		$st_form['note'] = $this->getRequest()->getParam('note', "");
-		$st_form['category'] = $this->getRequest()->getParam('category', null);
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
 		if(empty($st_form['category'])) {
 			throw new Exception("Empty category not allowed for expenses");
@@ -183,7 +181,7 @@ class ExpensesController extends TransactionsController
 			$this->redirect('/index');
 		}
 		try {
-			$expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form['date'], $st_form['amount'], $st_form['category'], $st_form['note']);
+			$expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form);
 			if (!empty($_POST['taggles'])) {
 				$this->updateTags($_POST['taggles'], $expenseId);
             }

@@ -93,19 +93,17 @@ class Expenses extends Transactions {
 	 * Inserts a new expense on DB
 	 * @author	hmeza
 	 * @param	int $user_id
-	 * @param	string $date
-	 * @param	float $amount
-	 * @param	int $category
-	 * @param	string $note
+	 * @param	array $st_data
 	 * @return int
 	 */
-	public function addExpense($user_id,$date,$amount,$category,$note) {
+	public function addExpense($user_id, $st_data) {
 		$st_data = array(
 			'user_owner'	=>	$user_id,
-			'amount'		=>	-$amount,
-			'category'		=>	$category,
-			'note'			=>	$note,
-			'date'	=>	$date
+			'amount'		=>	-$st_data['amount'],
+			'category'		=>	$st_data['category'],
+			'note'			=>	$st_data['note'],
+			'date'	        =>	$st_data['date'],
+			'in_sum'        => $st_data['in_sum']
 		);
 		try {
 			return $this->insert($st_data);
@@ -123,7 +121,6 @@ class Expenses extends Transactions {
 	 * @param	array $st_params
 	 */
 	public function updateExpense($st_params = null) {
-		$st_params['in_sum'] = isset($st_params['in_sum']) ? 1:0;
 		try {
 			$st_data = array(
 				'amount'	=>	-$st_params['amount'],

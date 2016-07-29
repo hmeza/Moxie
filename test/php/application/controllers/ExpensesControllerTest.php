@@ -45,6 +45,7 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 				'date' => $date,
 				'note' => $note,
 				'category' => $category,
+				'in_sum' => 1,
 				'taggles' => $tags
 			));
 		$this->dispatch('/expenses/add');
@@ -111,8 +112,15 @@ class ExpensesControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function testUpdateExpenseRedirectsToCurrentYearAndMonthView() {
 		// arrange
 		$date = date('Y-m-d');
+		$st_data = array(
+			'date' => $date,
+			'amount' => 15.00,
+			'category' => 3,
+			'note' => '',
+			'in_sum' => 1
+		);
 		$expensesModel = new Expenses();
-		$expenseId = $expensesModel->addExpense(14, $date, 15.00, 3, '');
+		$expenseId = $expensesModel->addExpense(14, $st_data);
 		$this->resetRequest()
 				->resetResponse();
 		$this->request->setPost(array());
