@@ -36,8 +36,6 @@ $st_lang = array(
 	'incomes_by_years'	=>	'Per anys',
 	'incomes_yearly'	=>	'Ingressos anuals',
 	'incomes_date'		=>	'Data',
-	'incomes_next_year' => 'Any següent',
-	'incomes_last_year' => 'Any anterior',
     'incomes_delete_message' => 'Esborrar aquest ingrés?',
 	// Search
 	'search_header'     => 'Cerca',
