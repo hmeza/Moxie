@@ -5,6 +5,10 @@ html {
 	padding:2px;
 	background:#ffffff;
 }
+h2 {
+	margin-top: 8px;
+	font-size: 18px;
+}
 form {
 	background:#fafafa;
 	padding:1em;
@@ -209,7 +213,7 @@ div.moxie_header_date {
 	height: 100%;
 	float: left;
 	font-family: Roboto, sans-serif;
-	font-size: 25px;
+	font-size: 23px;
 	font-weight: bold;
 	vertical-align: middle;
 	text-align: center;
