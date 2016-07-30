@@ -5,6 +5,8 @@ $last_year = ($this->month == 1) ? $this->year-1 : $this->year;
 $next_month = ($this->month == 12) ? 1 : $this->month+1;
 $next_year = ($this->month == 12) ? $this->year+1 : $this->year;
 $current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->year));
+$last_url = "/expenses/index/month/".$last_month."/year/".$last_year;
+$next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
 ?>
 <script type="text/javascript" language="text/javascript">
 	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
@@ -15,15 +17,7 @@ $current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->ye
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
 
-<div class="moxie_time_frame_selector">
-	<a href="/expenses/index/month/<?php echo $last_month; ?>/year/<?php echo $last_year; ?>">
-		<div class="moxieprevious"> < </div>
-	</a>
-	<div class="moxie_header_date"><span style="display: inline-block; line-height: normal;"><?php echo $current_month_and_year; ?></span></div>
-	<a href="/expenses/index/month/<?php echo $next_month; ?>/year/<?php echo $next_year; ?>">
-		<div class="moxienext"> > </div>
-	</a>
-</div>
+<?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
 
 <br>
 

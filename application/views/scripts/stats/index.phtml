@@ -38,19 +38,11 @@ var budget_index = <?php echo date('m'); ?>;
 	<td>
 		<?php
 		global $st_lang;
-		$slugPreviousYear = '/stats/index/year/'.($this->year-1);
-		$slugNextYear = '/stats/index/year/'.($this->year+1);
+		$last_url = '/stats/index/year/'.($this->year-1);
+		$next_url = '/stats/index/year/'.($this->year+1);
+		$current_month_and_year = $this->year;
+		$this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
 		?>
-
-		<div class="moxie_time_frame_selector" style="width: 97%;">
-			<a href="<?php echo $slugPreviousYear; ?>">
-				<div class="moxieprevious"> < </div>
-			</a>
-			<div class="moxie_header_date"><span style="display: inline-block; line-height: normal;"><?php echo $this->year; ?></span></div>
-			<a href="<?php echo $slugNextYear; ?>">
-				<div class="moxienext"> > </div>
-			</a>
-		</div>
 
 	</td>
 	</tr>

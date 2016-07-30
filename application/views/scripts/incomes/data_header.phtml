@@ -4,18 +4,11 @@
 global $st_lang;
 $editSlug = '/incomes/edit/id/';
 $current_month_and_year = date("Y", strtotime("01-01-".$this->year));
+$last_url = "/incomes/index/year/".($this->year-1);
+$next_url = "/incomes/index/year/".($this->year+1);
+$this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
 ?>
-<div class="moxie_time_frame_selector">
-	<a href="/incomes/index/year/<?php echo $this->year-1; ?>">
-		<div class="moxieprevious"> < </div>
-	</a>
-	<div class="moxie_header_date">
-		<span style="display: inline-block; line-height: normal;"><?php echo $current_month_and_year; ?></span>
-	</div>
-	<a href="/incomes/index/year/<?php echo $this->year+1; ?>">
-		<div class="moxienext"> > </div>
-	</a>
-</div>
+
 
 <div id="form">
 	<div class="moxie_expenses_form_div moxie_expenses_form_left">
