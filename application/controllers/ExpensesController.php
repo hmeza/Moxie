@@ -108,14 +108,13 @@ class ExpensesController extends TransactionsController
 
 		$st_params = $this->getParameters();
 
-		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
 		if($this->getRequest()->getParam('to_excel') == true) {
 			$this->exportToExcel($st_list);
 		}
 
-		$this->assignViewData($st_data, $st_list, $st_params, $st_expense);
+		$this->assignViewData($st_list, $st_params, $st_expense);
 	}
 
 	/**
@@ -204,10 +203,9 @@ class ExpensesController extends TransactionsController
 
 		$st_params = $this->getParameters();
 
-		$st_data = $this->expenses->getExpenses($_SESSION['user_id'], $st_params);
 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
-		$this->assignViewData($st_data, $st_list, $st_params, $st_expense);
+		$this->assignViewData($st_list, $st_params, $st_expense);
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
 		$this->render('index');
 	}
@@ -283,8 +281,8 @@ class ExpensesController extends TransactionsController
 	 * @param $st_expense
 	 * @throws Exception
 	 */
-	private function assignViewData($st_data, $st_list, $st_params, $st_expense) {
-		$this->view->assign('expenses', $st_data);
+	private function assignViewData($st_list, $st_params, $st_expense) {
+		$this->view->assign('expenses', $this->expenses->getExpenses($_SESSION['user_id'], $st_params));
 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
 		$this->view->assign('list', $st_list);
