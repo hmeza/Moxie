@@ -41,11 +41,17 @@ var budget_index = <?php echo date('m'); ?>;
 		$slugPreviousYear = '/stats/index/year/'.($this->year-1);
 		$slugNextYear = '/stats/index/year/'.($this->year+1);
 		?>
-		<table width="100%">
-			<td><a href="<?php echo $slugPreviousYear; ?>"><div class="moxieicon moxieprevious"></div> <span class="moxieprevious"><?php echo $st_lang['incomes_last_year']; ?></span></a></td>
-			<td align="center"><span class="moxie_header_date"><?php echo $this->year; ?></span></td>
-			<td align="right"><a href="<?php echo $slugNextYear; ?>"><div class="moxieicon moxienext"></div> <span class="moxienext"><?php echo $st_lang['incomes_next_year']; ?></span></a></td>
-		</table>
+
+		<div class="moxie_time_frame_selector" style="width: 97%;">
+			<a href="<?php echo $slugPreviousYear; ?>">
+				<div class="moxieprevious"> < </div>
+			</a>
+			<div class="moxie_header_date"><span style="display: inline-block; line-height: normal;"><?php echo $this->year; ?></span></div>
+			<a href="<?php echo $slugNextYear; ?>">
+				<div class="moxienext"> > </div>
+			</a>
+		</div>
+
 	</td>
 	</tr>
 </table>
