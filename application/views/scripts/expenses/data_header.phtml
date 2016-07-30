@@ -1,5 +1,10 @@
 <?php
 global $st_lang;
+$last_month = ($this->month == 1) ? 12 : $this->month-1;
+$last_year = ($this->month == 1) ? $this->year-1 : $this->year;
+$next_month = ($this->month == 12) ? 1 : $this->month+1;
+$next_year = ($this->month == 12) ? $this->year+1 : $this->year;
+$current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->year));
 ?>
 <script type="text/javascript" language="text/javascript">
 	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
@@ -9,11 +14,18 @@ global $st_lang;
 	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
 <script type="text/javascript" src="/js/expenses/data.js"></script>
-<table width=100%>
-<td align="left"><a href="/expenses/index/month/<?php if ($this->month == 1) echo 12; else echo $this->month-1;?>/year/<?php if ($this->month == 1) echo $this->year-1; else echo $this->year;?>"><div class="moxieicon moxieprevious"></div><span class="moxieprevious"> <?php echo $st_lang['expenses_last_month']; ?></span></a></td>
-<td align="center"><span class="moxie_header_date"><?php echo date("M Y", strtotime("01-".$this->month."-".$this->year)); ?></span></td>
-<td align="right"><a href="/expenses/index/month/<?php if ($this->month == 12) echo 1; else echo $this->month+1;?>/year/<?php if ($this->month == 12) echo $this->year+1; else echo $this->year;?>"><div class="moxieicon moxienext"></div><span class="moxienext"> <?php echo $st_lang['expenses_next_month']; ?></span></a></td>
-</table>
+
+<!-- borrar moxieprevious de incomes -->
+<div class="moxie_time_frame_selector">
+	<a href="/expenses/index/month/<?php echo $last_month; ?>/year/<?php echo $last_year; ?>">
+		<div class="moxieprevious"> < </div>
+	</a>
+	<div class="moxie_header_date"><span style="display: inline-block; line-height: normal;"><?php echo $current_month_and_year; ?></span></div>
+	<a href="/expenses/index/month/<?php echo $next_month; ?>/year/<?php echo $next_year; ?>">
+		<div class="moxienext"> > </div>
+	</a>
+</div>
+
 <br>
 
 <div id="form">

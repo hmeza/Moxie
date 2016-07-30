@@ -28,9 +28,7 @@ $st_lang = array(
 	'expenses_mark'		=>	'Mark:&nbsp;',
 	'expenses_all'		=>	'All',
 	'expenses_none'		=>	'None',
-	'expenses_next_month' => 'Next month',
-	'expenses_last_month' => 'Last month',
-	'expenses_delete'   => 'Delete',
+	'expenses_deca.plete'   => 'Delete',
     'expenses_delete_message' => 'Delete this expense?',
 	// Incomes
 	'income_header'     => 'Add income',

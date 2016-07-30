@@ -28,8 +28,6 @@ $st_lang = array(
 	'expenses_mark'		=>	'Marcar:&nbsp;',
 	'expenses_all'		=>	'Todos',
 	'expenses_none'		=>	'Ninguno',
-	'expenses_next_month' => 'Mes siguiente',
-	'expenses_last_month' => 'Mes anterior',
 	'expenses_delete'   => 'Borrar',
     'expenses_delete_message' => '¿Borrar este gasto?',
 	// Incomes

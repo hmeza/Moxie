@@ -176,25 +176,45 @@ div:hover.moxieicon {
 	cursor: hand;
 	cursor: pointer;
 }
-div.moxienext {
-	width: 21px;
-	height: 15px;
-	background:url("/img/next.png") no-repeat;
+.moxie_time_frame_selector {
+	width: 95%;
+	height: 50px;
+	vertical-align: middle;
+	text-align: center;
+	border: 1px solid #eee;
+	background:#fafafa;
+	margin-left: 10px;
+	margin-right: 10px;
 }
-div:hover.moxienext{
-	width: 21px;
-	height: 15px;
-	background:url("/img/next_hover.png") no-repeat;
+div.moxienext {
+	width: 10%;
+	height: 50px;
+	float: right;
+	font-size: 50px;
+	border-left: 1px solid #eee;
+	line-height: 50px;
 }
 div.moxieprevious {
-	width: 21px;
-	height: 15px;
-	background:url("/img/previous.png") no-repeat;
+	width: 10%;
+	height: 50px;
+	float: left;
+	font-size: 50px;
+	border-right: 1px solid #eee;
+	line-height: 50px;
 }
-div:hover.moxieprevious {
-	width: 21px;
-	height: 15px;
-	background:url("/img/previous_hover.png") no-repeat;
+div:hover.moxienext, div:hover.moxieprevious {
+	font-weight: bold;
+}
+div.moxie_header_date {
+	height: 100%;
+	float: left;
+	font-family: Roboto, sans-serif;
+	font-size: 25px;
+	font-weight: bold;
+	vertical-align: middle;
+	text-align: center;
+	width: 79%;
+	line-height: 50px;
 }
 div.moxieedit {
 	background:url("/img/edit.png") no-repeat;
@@ -203,8 +223,6 @@ div:hover.moxieedit {
 	background:url("/img/edit_hover.png") no-repeat;
 }
 input.moxiedelete, button.moxie {
-	/*background:url("/img/delete.png") no-repeat;
-	delete-hover.png*/
 	display:inline-block;
 	border-top: 5px;
     margin-top: 5px;
@@ -241,12 +259,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie-container {
 	padding-bottom: 50px;
-}
-
-.moxie_header_date {
-	font-family: Arial;
-	font-size: 25px;
-	font-weight: bold;
 }
 
 .my-checkbox {
@@ -506,14 +518,6 @@ h2 {
         width: 48%;
 	}
 
-    div.moxieprevious {
-        display:none;
-    }
-
-    div.moxienext {
-        display:none;
-    }
-
 	.moxie_expenses_form_left {
 		float: left;
 		width: 50%
@@ -581,14 +585,6 @@ h2 {
 	.moxie_amount {
 		width: 16%;
 	}
-
-    div.moxieprevious {
-        display:none;
-    }
-
-    div.moxienext {
-        display:none;
-    }
 
     input[type="submit"] {
         padding: 0px;
@@ -789,14 +785,6 @@ h2 {
 
     div.selectOptions {
         width: 200px;
-    }
-
-    span.moxieprevious {
-        display:none;
-    }
-
-    span.moxienext {
-        display:none;
     }
 
     input, button.moxie {

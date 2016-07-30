@@ -3,12 +3,19 @@
 <?php
 global $st_lang;
 $editSlug = '/incomes/edit/id/';
+$current_month_and_year = date("Y", strtotime("01-01-".$this->year));
 ?>
-<table width="100%">
-<td><a href="/incomes/index/year/<?php echo $this->year-1; ?>"><div class="moxieicon moxieprevious"></div> <span class="moxieprevious"><?php echo $st_lang['incomes_last_year']; ?></span></a></td>
-<td align="center"><span class="moxie_header_date"><?php echo date("Y", strtotime("01-01-".$this->year)); ?></span></td>
-<td align="right"><a href="/incomes/index/year/<?php echo $this->year+1; ?>"><div class="moxieicon moxienext"></div> <span class="moxienext"><?php echo $st_lang['incomes_next_year']; ?></span></a></td>
-</table>
+<div class="moxie_time_frame_selector">
+	<a href="/incomes/index/year/<?php echo $this->year-1; ?>">
+		<div class="moxieprevious"> < </div>
+	</a>
+	<div class="moxie_header_date">
+		<span style="display: inline-block; line-height: normal;"><?php echo $current_month_and_year; ?></span>
+	</div>
+	<a href="/incomes/index/year/<?php echo $this->year+1; ?>">
+		<div class="moxienext"> > </div>
+	</a>
+</div>
 
 <div id="form">
 	<div class="moxie_expenses_form_div moxie_expenses_form_left">
