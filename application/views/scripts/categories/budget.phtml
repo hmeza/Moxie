@@ -1,4 +1,5 @@
 <script type="text/javascript">
+	var message = "<?php echo "Guardado correctamente"; ?>";
 function getSum() {
 	var sum = 0;
 	$('[id^=amount]').each(function() {
@@ -33,7 +34,10 @@ function snapshot() {
 	$.ajax({url: '/budgets/snapshot',
 		type: 'GET',
 		data: '',
-		success: function(data) {}}
+		success: function(data) {
+			// show OK message
+			$('#message').html(message);
+		}}
 	);
 }
 </script>
@@ -45,7 +49,10 @@ function snapshot() {
 	<?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?>
 </h2>
 <div id="budget_table" style="display: none;"categ>
+	<table>
+		<td>
 <table width=100% style="max-width: 500px">
+
 <?php
 $f_initialBudget = 0;
 foreach ($this->categories as $key => $value) {
@@ -71,5 +78,18 @@ foreach ($this->categories as $key => $value) {
 <td colspan="2"><input type="button" value="Snapshot" onclick="snapshot();"></form></td>
 </tr>
 </table>
+		</td>
+		<td>
+			<div>Presupuestos</div>
+			<?php
+			foreach ($this->st_budgetsList as $key => $value) {
+				$id = $value['id'];
+				echo '
+				<div>'.$value['id'].' '.$value['date_created'].'</div>
+				';
+			}
+			?>
+		</td>
+	</table>
 </div>
 <br><br>

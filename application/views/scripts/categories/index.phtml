@@ -9,7 +9,7 @@ echo $this->partial('categories/categories.phtml',
 <td valign=top>
 <?php
 echo $this->partial('categories/budget.phtml',
-					array('categories'=>$this->categories));
+					array('categories'=>$this->categories, 'budgets' => $this->st_budgetsList));
 ?>
 </td>
 </tr>

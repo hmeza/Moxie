@@ -46,6 +46,7 @@ class BudgetsController extends Zend_Controller_Action
 	public function indexAction() {
 		$o_categories = new Categories();
 		$st_categories = $this->prepareCategoriesTree($o_categories->getCategoriesTree());
+		$st_budgetsList = array();
 		foreach($st_categories as $key => $value) {
 			// get budget for this category
 			$i_categoryPK = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
@@ -54,18 +55,22 @@ class BudgetsController extends Zend_Controller_Action
 							->where('category = '.$i_categoryPK)
 							->where('date_ended IS NULL')
 						);
+			$st_budgetsList = $this->budgets->fetchAll(
+					$this->budgets->select()
+							->where('date_ended IS NOT NULL')
+							->getPart(Zend_Db_Select::WHERE)
+			);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
 		$this->view->assign('categories',$st_categories);
+		$this->view->assign('budgets_list', $st_budgetsList);
 		$this->_forward('index', 'users');
 	}
 	
 	/**
 	 * Adds an amount to a category for the current budget.
-	 * @todo	Handle exception with proper message
 	 */
 	public function addAction() {
-		$b_found = false;
 		header("Cache-Control: no-cache");
 		$st_budget = $this->budgets->getBudget($_SESSION['user_id']);
 		try {
