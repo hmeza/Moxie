@@ -49,6 +49,8 @@ $st_lang = array(
 	// Transactions
 	'in_sum_message'    => 'Mostrar al "Total"',
 	// Budgets
+	'budgets_title'     => 'Pressupostos',
+	'budgets_save_successful' => 'Desat correctament',
 	// Categories
 	'categories_and_budget'	=>	'Categories i pressupost',
 	'categories_delete'		=>	'Esborrar',

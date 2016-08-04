@@ -98,21 +98,12 @@ class UsersController extends Zend_Controller_Action {
 							->where('category = '.$i_categoryPK)
 							->where('date_ended IS NULL')
 			);
-            error_log(print_r($st_budgetsList,true),3,'/tmp/error.log');
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
-        $st_budgetsListObjects = $this->budgets->fetchAll(
-            $this->budgets->select()
-                ->from("budgets", array('DISTINCT(date_created)'))
-                ->where('user_owner = ?', $_SESSION['user_id'])
-                ->where('date_ended IS NOT NULL')
-        );
-        foreach($st_budgetsListObjects as $target => $budget) {
-            $st_budgetsList[] = $budget->toArray();
-        }
+
         $this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('categories',$st_categories);
-        $this->view->assign('budgets_list', $st_budgetsList);
+        $this->view->assign('budgets_list', $this->budgets->getBudgetsDatesList());
 	}
 	
 	/**

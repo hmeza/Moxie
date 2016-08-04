@@ -59,7 +59,7 @@ echo $this->partial('categories/categories.phtml',
 		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display));
 
 echo $this->partial('categories/budget.phtml',
-		array('categories'=>$this->categories));
+		array('categories'=>$this->categories, 'budgets_list' => $this->budgets_list));
 
 echo $this->partial('tags/tags.phtml',
         array('tag_list' => $this->tag_list));

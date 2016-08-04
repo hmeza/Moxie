@@ -49,6 +49,8 @@ $st_lang = array(
 	// Transactions
 	'in_sum_message'    => 'Mostrar en "Total"',
 	// Budgets
+	'budgets_title'     => 'Presupuestos',
+	'budgets_save_successful' => 'Guardado correctamente',
 	// Categories
 	'categories_and_budget'	=>	'Categorías y presupuesto',
 	'categories_delete'		=>	'Borrar',

@@ -114,6 +114,39 @@ class Budgets extends Zend_Db_Table_Abstract {
 		}
 		return $st_yearBudget;
 	}
-}
 
-?>
+	/**
+	 *
+	 */
+	public function getBudgetsDatesList() {
+		$st_budgetsList = array();
+		$st_budgetsListObjects = $this->fetchAll(
+				$this->select()
+						->from("budgets", array('DISTINCT(date_created) as date_created'))
+						->where('user_owner = ?', $_SESSION['user_id'])
+						->where('date_ended IS NOT NULL')
+		);
+		foreach($st_budgetsListObjects as $target => $budget) {
+			$st_budgetsList[] = $budget->toArray();
+		}
+		return $st_budgetsList;
+	}
+
+	/**
+	 * @fixme Do not use date
+	 * @return bool|int
+	 */
+	public function delete($user, $date) {
+		try {
+			$select = $this->select()
+					->where('user_owner = ?', $user)
+					->where('date_created = ?', $date)
+					->getPart(Zend_Db_Select::WHERE);
+			return parent::delete(implode(" ",$select));
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			return false;
+		}
+	}
+}

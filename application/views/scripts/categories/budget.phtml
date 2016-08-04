@@ -1,13 +1,6 @@
 <script type="text/javascript">
-	var message = "<?php echo "Guardado correctamente"; ?>";
-function getSum() {
-	var sum = 0;
-	$('[id^=amount]').each(function() {
-		sum += parseFloat(this.value);
-	});
-	sum = Math.round(sum * 100) / 100;
-	document.getElementById('sum').innerHTML = '<b>' + sum + ' &euro;</b>';
-}
+	var message = "<?php global $st_lang; echo $st_lang['budgets_save_successful']; ?>";
+
 $(document).ready(function() {
 <?php
 $s_url = Zend_Registry::get('config')->moxie->settings->url;
@@ -29,24 +22,14 @@ foreach ($this->categories as $key => $value) {
 }
 ?>
 });
-
-function snapshot() {
-	$.ajax({url: '/budgets/snapshot',
-		type: 'GET',
-		data: '',
-		success: function(data) {
-			// show OK message
-			$('#message').html(message);
-		}}
-	);
-}
 </script>
+<script type="text/javascript" src="/js/budgets/data.js"></script>
 
 <h2 id="budget_title">
 	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 		<i class="material-icons" style="background-color: ##0b77b7">+</i>
 	</button>
-	<?php global $st_lang; echo $st_lang['budget']." ".$st_lang['press_here_display']; ?>
+	<?php echo $st_lang['budget']." ".$st_lang['press_here_display']; ?>
 </h2>
 <div id="budget_table" style="display: none;"categ>
 	<table>
@@ -75,17 +58,22 @@ foreach ($this->categories as $key => $value) {
 <td><span id="spinner" style="display:none"><img src="/img/spinner.gif"></span></td>
 </tr>
 <tr>
-<td colspan="2"><input type="button" value="Snapshot" onclick="snapshot();"></form></td>
+<td colspan="2">
+	<input type="button" value="Snapshot" onclick="snapshot();"></form>
+</td>
+	</tr>
+	<tr>
+	<td align="center">
+		<span id="message"></span>
+	</td>
 </tr>
 </table>
 		</td>
-		<td>
-			<div>Presupuestos</div>
+		<td valign="top">
+			<div><?php echo $st_lang['budgets_title']; ?></div>
 			<?php
-			foreach ($this->st_budgetsList as $key => $value) {
-				echo '
-				<div>'.$value['date_created'].'</div>
-				';
+			foreach ($this->budgets_list as $key => $value) {
+				echo '<div><a href="/budgets/delete/budget/'.urlencode($value['date_created']).'">'.$value['date_created'].'</a></div>';
 			}
 			?>
 		</td>

@@ -55,15 +55,9 @@ class BudgetsController extends Zend_Controller_Action
 							->where('category = '.$i_categoryPK)
 							->where('date_ended IS NULL')
 						);
-			$st_budgetsList = $this->budgets->fetchAll(
-					$this->budgets->select()
-							->where('date_ended IS NOT NULL')
-							->getPart(Zend_Db_Select::WHERE)
-			);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
 		$this->view->assign('categories',$st_categories);
-		$this->view->assign('budgets_list', $st_budgetsList);
 		$this->_forward('index', 'users');
 	}
 	
@@ -111,5 +105,11 @@ class BudgetsController extends Zend_Controller_Action
 		$this->render('index','categories');
 		return true;
 	}
+
+	public function deleteAction() {
+		// urldecode param
+		$budget = urldecode($this->getRequest()->getParam('budget'));
+		$this->budgets->delete($_SESSION['user_id'], $budget);
+		$this->_forward('index', 'users');
+	}
 }
-?>
