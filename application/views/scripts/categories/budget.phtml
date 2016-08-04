@@ -83,9 +83,8 @@ foreach ($this->categories as $key => $value) {
 			<div>Presupuestos</div>
 			<?php
 			foreach ($this->st_budgetsList as $key => $value) {
-				$id = $value['id'];
 				echo '
-				<div>'.$value['id'].' '.$value['date_created'].'</div>
+				<div>'.$value['date_created'].'</div>
 				';
 			}
 			?>
