@@ -1,27 +1,6 @@
 <script type="text/javascript">
 	var message = "<?php global $st_lang; echo $st_lang['budgets_save_successful']; ?>";
-
-$(document).ready(function() {
-<?php
-$s_url = Zend_Registry::get('config')->moxie->settings->url;
-foreach ($this->categories as $key => $value) {
-	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
-	echo '
-	$("#amount'.$id.'").change(function(){
-		category = $("#category'.$id.'").val();
-		amount = $("#amount'.$id.'").val();
-		$("#amount'.$id.'").load("'.$s_url.'/budgets/add/category/"+category+"/amount/"+amount);
-	})
-	.ajaxStart(function() {
-		$("#spinner").show();
-	})
-	.ajaxStop(function() {
-		$("#spinner").hide();
-	});
-	';
-}
-?>
-});
+	var moxie_url = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>";
 </script>
 <script type="text/javascript" src="/js/budgets/data.js"></script>
 
@@ -45,7 +24,7 @@ foreach ($this->categories as $key => $value) {
 	<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
 	<td align="right">
 	<input type="hidden" name="category'.$id.'" id="category'.$id.'" value="'.$id.'">
-	<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum()" value="'.$value['budget'].'" style="text-align: right;">
+	<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum('.$id.')" value="'.$value['budget'].'" style="text-align: right;">
 	</td>
 	<td width=15></td>
 	</tr>
