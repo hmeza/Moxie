@@ -46,15 +46,10 @@ class BudgetsController extends Zend_Controller_Action
 	public function indexAction() {
 		$o_categories = new Categories();
 		$st_categories = $this->prepareCategoriesTree($o_categories->getCategoriesTree());
-		$st_budgetsList = array();
 		foreach($st_categories as $key => $value) {
 			// get budget for this category
 			$i_categoryPK = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
-			$o_budget = $this->budgets->fetchRow(
-							$this->budgets->select()
-							->where('category = '.$i_categoryPK)
-							->where('date_ended IS NULL')
-						);
+			$o_budget = $this->budgets->getLastBudgetByCategoryId($i_categoryPK);
 			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
 		}
 		$this->view->assign('categories',$st_categories);

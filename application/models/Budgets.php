@@ -31,6 +31,21 @@ class Budgets extends Zend_Db_Table_Abstract {
 		}
 		return $st_budget;
 	}
+
+	public function getLastBudgetByCategoryId($i_categoryPK) {
+		try {
+			$o_budget = $this->fetchRow(
+					$this->select()
+							->where('category = ' . $i_categoryPK)
+							->where('date_ended IS NULL')
+			);
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$o_budget = null;
+		}
+		return $o_budget;
+	}
 	
 	/**
 	 * 
