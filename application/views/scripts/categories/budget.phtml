@@ -14,10 +14,14 @@
 	<table>
 		<td>
 <table width=100% style="max-width: 500px">
-
 <?php
 $f_initialBudget = 0;
+$header_set = false;
 foreach ($this->categories as $key => $value) {
+	if(!$header_set) {
+		echo '<th>'.$value['date_created'].'</th>';
+		$header_set = true;
+	}
 	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
 	echo '
 	<tr>

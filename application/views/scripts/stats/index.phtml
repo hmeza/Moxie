@@ -1,10 +1,11 @@
 <link rel="stylesheet" type="text/css" href="/material.css"/>
 <script type="text/javascript" src="/js/stats/stats.js"></script>
 <script type="text/javascript">
+	var budgets = [];
 <?php
 global $st_lang;
 
-$s_budget = "var budgets = new Array();\n";
+$s_budget = "";
 $s_categories = array();
 foreach ($this->budget as $key => $value) {
 	$s_budget .= "budgets[".$key."] = new Array();\n";
@@ -22,14 +23,9 @@ var categories = [<?php echo implode(',', $s_categories);?>];
 var budget_index = <?php echo date('m'); ?>;
 </script>
 
-<h2>
-	<span id="show_budget">
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons" style="background-color: ##0b77b7">+</i>
-		</button>
-		<span><?php echo $st_lang['stats_budget_title']; ?></span>
-	</span>
-</h2>
+<?php
+$this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_budget_title']);
+?>
 <br>
 <div id="budget">
 <table width=100%>
@@ -161,14 +157,11 @@ if (!empty($this->budget)) echo '<th></th>';
 </table>
 </div>
 <br><br>
-<h2>
-	<span id="show_stats">
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons">+</i>
-		</button>
-		<?php echo $st_lang['stats_title']; ?>
-	</span>
-</h2>
+<?php
+echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));
+
+$this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_title']);
+?>
 <br>
 <div id="box">
 <table width=100%>

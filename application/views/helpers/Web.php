@@ -19,4 +19,17 @@ class Moxie_View_Helper_Web extends Zend_View_Helper_Abstract {
 		</div>
 <?php
 	}
+
+	public function printExpandCollapseButton($title) {
+?>
+<h2>
+	<span id="show_budget">
+		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+			<i class="material-icons" style="background-color: ##0b77b7">+</i>
+		</button>
+		<span><?php echo $title; ?></span>
+</span>
+</h2>
+<?php
+	}
 }

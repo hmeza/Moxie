@@ -138,11 +138,11 @@ class Expenses extends Transactions {
 	}
 
     /**
-     * @param int $i_dateLimit
+     * @param string $s_dateLimit
      * @param string $s_category
      * @return mixed
      */
-    public function getMonthExpensesData($i_userId, $i_dateLimit) {
+    public function getMonthExpensesData($i_userId, $s_dateLimit, $i_category=null) {
         $s_query = $this->select()
             ->from($this->_name, array(
 		            'year' => new Zend_Db_Expr('YEAR('.$this->_name.'.date)'),
@@ -151,12 +151,16 @@ class Expenses extends Transactions {
             )
             ->where('in_sum = 1')
             ->where('user_owner = ?', $i_userId)
-            ->where('date >= "'.$i_dateLimit.'"')
+            ->where('date >= "'.$s_dateLimit.'"')
             ->where('amount < 0')
             ->group(array(new Zend_Db_Expr('MONTH(date)'), new Zend_Db_Expr('YEAR(date)')))
             ->order(array(new Zend_Db_Expr('YEAR(date)'), new Zend_Db_Expr('MONTH(date)')));
 
-        $o_rows = $this->database->fetchAll($s_query);
+	    if(isset($i_category)) {
+		    $s_query->where('category = ?', $i_category);
+	    }
+
+        $o_rows = $this->fetchAll($s_query);
 
 	    if(empty($o_rows)) {
 		    // set default values to avoid error on empty data chart
