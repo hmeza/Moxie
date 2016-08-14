@@ -1,0 +1,10 @@
+select {
+    -webkit-background-size: 28px 28px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    height: 25px;
+    width: 205px;
+    padding: 0px;
+    padding-left: 4px;
+    font: 90% roboto,sans-serif;
+}

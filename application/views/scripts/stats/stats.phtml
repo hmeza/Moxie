@@ -4,27 +4,10 @@ global $st_lang;
 // todo move string to languages
 $this->getHelper('Web')->printExpandCollapseButton("Trends");
 ?>
-
+<link rel="stylesheet" type="text/css" href="/css/trends.css"/>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-	var url = "http://moxie.dev";
-
-	var trendsRedirector = function(chart, data) {
-		var months = {Jan:1, Feb:2, Mar:3, Apr:4, May:5, Jun:6, Jul:7, Aug:8, Sep:9, Oct:10, Nov:11, Dec:12};
-		var targetMonthString = data.getValue(chart.getSelection()[0].row, 0);
-		var targetMonth = months[targetMonthString];
-
-		var objDate = new Date(),
-				locale = "en-us",
-				month = objDate.toLocaleString(locale, { month: "short" });
-		currentMonth = months[month];
-		targetYear = objDate.getFullYear();
-
-		if(currentMonth <= targetMonth) {
-			targetYear -= 1;
-		}
-		window.location.href = url+"/expenses/index/category/"+category+"/month/"+targetMonth+"/year/"+targetYear;
-	};
+	var moxie_url = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>";
 
 	var trends_array = [];
 	<?php
@@ -34,40 +17,23 @@ $this->getHelper('Web')->printExpandCollapseButton("Trends");
 			$default = $key;
 		$category_name = $value['name'];
 		?>
-		trends_array[<?php echo $key; ?>] = [
-			['Mes/año', '<?php echo $category_name;?>'],
+	trends_array[<?php echo $key; ?>] = [
+		['Mes/año', '<?php echo $category_name;?>'],
 		<?php
 		foreach($value['data'] as $data_key => $data_value) {
 			echo "['".$data_value['month']."/".$data_value['year']."', ".$data_value['amount']."],";
 		}
 		?>
-		];
+	];
 	<?php
 	}
 	?>
-
-	google.charts.load('current', {'packages':['corechart']});
-	google.charts.setOnLoadCallback(drawChart);
-	function drawChart() {
-		var category = $('select[name=trends_category]').val();
-		if(typeof(category) === 'undefined') {
-			category = <?php echo $default; ?>;
-		}
-		var data = google.visualization.arrayToDataTable(trends_array[category]);
-
-		var options = {
-			title: 'Trends',
-			hAxis: {title: 'Mes/año',  titleTextStyle: {color: '#333'}},
-			vAxis: {minValue: 0}
-		};
-
-		var chart = new google.visualization.AreaChart(document.getElementById('stats_trends'));
-		chart.draw(data, options);
-		addDoubleClickListener(chart, data, trendsRedirector);
-	}
+	var default_category = <?php echo $default; ?>
 </script>
+<script type="text/javascript" src="/js/stats/trends.js"></script>
 
 <div id="stats_trends"></div>
+<label for="trends_category"></label>
 <select id="trends_category" name="trends_category" onchange="drawChart();">
 	<?php
 	foreach($this->trends as $key => $value) {
