@@ -79,6 +79,7 @@ $st_lang = array(
 	'stats_budget_income' => 'TOTAL INCOME',
 	'stats_budget_expense' => 'TOTAL EXPENSE',
 	'stats_budget_total' => 'BALANCE (Income - expense)',
+	'stats_trends' => 'Trends',
 	// Finance
 	'finance_title' => 'Deposit calculator',
 	'finance_name' => 'Name (optional)',

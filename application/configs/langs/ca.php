@@ -79,6 +79,7 @@ $st_lang = array(
 	'stats_budget_income' => 'TOTAL INGRESSOS',
 	'stats_budget_expense' => 'TOTAL DESPESES',
 	'stats_budget_total' => 'SALDO (Ingressos - Despeses)',
+	'stats_trends' => 'Tendències',
 	// Finance
 	'finance_title' => 'Calculadora de depòsits',
 	'finance_name' => 'Nom (opcional)',
