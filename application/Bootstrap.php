@@ -65,7 +65,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		    'host'     => Zend_Registry::get('config')->moxie->db->host,
 		    'username' => Zend_Registry::get('config')->moxie->db->username,
 		    'password' => Zend_Registry::get('config')->moxie->db->password,
-		    'dbname'   => Zend_Registry::get('config')->moxie->db->database
+		    'dbname'   => Zend_Registry::get('config')->moxie->db->database,
+			'charset'  => Zend_Registry::get('config')->moxie->db->charset
 		));
 		$GLOBALS['db'] = $db;
 		

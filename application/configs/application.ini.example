@@ -15,6 +15,7 @@ moxie.db.username = "username"
 moxie.db.password = "password"
 moxie.db.port = 3306
 moxie.db.database = "MOXIE"
+moxie.db.charset = "latin1"
 moxie.email = "moxie@dootic.com"
 log.error_prepend_string = "moxie - "
 
