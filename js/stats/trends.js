@@ -18,7 +18,7 @@ function drawChart() {
     var data = google.visualization.arrayToDataTable(trends_array[category]);
 
     var options = {
-        title: 'Trends',
+        title: '',
         hAxis: {title: 'Mes/año',  titleTextStyle: {color: '#333'}},
         vAxis: {minValue: 0},
         legend: {position: 'top'}
