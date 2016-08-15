@@ -23,6 +23,13 @@ class Users extends Zend_Db_Table_Abstract {
 		}
 		return $result;
 	}
+
+	public function updateLastLogin($s_user) {
+		$s_where = $this->select()
+				->where('login = ?', $s_user)
+				->getPart(Zend_Db_Select::WHERE);
+		$this->update(array('last_login' => new Zend_Db_Expr('NOW()')), $s_where);
+	}
 	
 	public function checkKey($s_key) {
 		$s_select = $this->_db->select()

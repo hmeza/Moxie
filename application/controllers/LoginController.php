@@ -41,6 +41,7 @@ class LoginController extends Zend_Controller_Action {
 			if (empty($st_result)) {
 				return $this->_forward("index", "Index", "", array('error' => $st_lang['error_nouser']));
 			}
+			$this->users->updateLastLogin($s_user);
 			$_SESSION['user_id'] = $st_result['id'];
 			$_SESSION['user_name'] = $st_result['login'];
 			$_SESSION['user_lang'] = $st_result['language'];
