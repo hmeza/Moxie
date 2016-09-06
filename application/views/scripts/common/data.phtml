@@ -1,12 +1,5 @@
 <table class="list moxie moxie-data" style="width: 100%" id="mytable">
 <tr>
-<?php
-$url = $_SERVER['REQUEST_URI'];
-if(strpos($url, 'index') === false) {
-    $url .= '/index';
-}
-$exportUrl = $url."/to_excel/true";
-?>
 <td colspan=5><button class="moxiebutton" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
 </tr>
 <?php
