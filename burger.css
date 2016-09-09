@@ -96,7 +96,8 @@
     }
     /*Añadimos la haburguesa y le damos unos estilos*/
     .menu-toogle::before {
-        content:"☰";
+        /*content:"☰";*/
+        background-image: url('img/burger.png');
         font-size:39px;
         color:white;
     }
