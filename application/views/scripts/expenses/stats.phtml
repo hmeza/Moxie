@@ -11,7 +11,6 @@ $st_jsonData = array();
 $current = 0;
 $total = 0;
 $budget_total = 0;
-$i_rootPK = 0;
 foreach ($this->expenses as $key => $data) {
 	$amount = $data['sum(e.amount)'];
 	$current = $data['id'];
@@ -20,7 +19,9 @@ foreach ($this->expenses as $key => $data) {
 	$st_jsonData[] = "['".$category_name."', ".$amount."]";
 	$budget_amount = (isset($st_budget[$data['id']])) ? $st_budget[$data['id']] : 0;
 	$budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';
-	$s_out .= '<tr><td>'.$category_name.'</td><td align="right">'.number_format($amount,2).' &euro;</td>';
+	$s_out .= '<tr>'
+			.'<td><a href="/expenses/index/category/'.$data['id'].'/month/'.$this->month.'/year/'.$this->year.'">'.$category_name.'</a></td>'
+			.'<td align="right">'.number_format($amount,2).' &euro;</td>';
 	if(!empty($st_budget)) {
 		$s_out .= '<td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';
 		$budget_total = $budget_total + $budget_amount;
@@ -47,7 +48,6 @@ $s_jsonData = "[".implode(",", $st_jsonData)."]";
 <br><br>
 <?php
 echo $s_out;
-print_r($this->form_sent);
 ?>
 <br><br>
 <div id="expenses_all"></div>
