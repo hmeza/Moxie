@@ -80,30 +80,41 @@ class UsersController extends Zend_Controller_Action {
 	 * @param   string	$password
 	 */
 	public function indexAction() {
-        $st_budgetsList = array();
+		$st_budgetsList = array();
 		$this->view->assign('form', $this->getForm($_SESSION['user_id']));
 		// from categories
-		if(empty($this->view->categories_form)) {
+		if (empty($this->view->categories_form)) {
 			$this->view->assign('categories_form', $this->getCategoriesForm());
-			$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
+			$this->view->assign(
+					'categories_list',
+					$this->categories->mountCategoryTree(
+							$this->categories->getCategoriesByUser(3),
+							$_SESSION['user_id']
+					)
+			);
 			$this->view->assign('categories_display', 'display:none');
 		}
 
 		$st_categories = $this->categories->prepareCategoriesTree($this->categories->getCategoriesTree());
-		foreach($st_categories as $key => $value) {
-			// get budget for this category
-			$i_categoryPK = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
-			$o_budget = $this->budgets->fetchRow(
-					$this->budgets->select()
-							->where('category = '.$i_categoryPK)
-							->where('date_ended IS NULL')
-			);
-			$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
+		foreach ($st_categories as $key => $value) {
+			try {
+				// get budget for this category
+				$i_categoryPK = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
+				$o_budget = $this->budgets->fetchRow(
+						$this->budgets->select()
+								->where('category = ' . $i_categoryPK)
+								->where('date_ended IS NULL')
+				);
+				$st_categories[$key]['budget'] = (!empty($o_budget)) ? $o_budget->amount : 0;
+			}
+			catch(Exception $e) {
+				error_log("Catched error from budgets, category is $i_categoryPK and key is $key");
+			}
 		}
 
-        $this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-		$this->view->assign('categories',$st_categories);
-        $this->view->assign('budgets_list', $this->budgets->getBudgetsDatesList());
+		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
+		$this->view->assign('categories', $st_categories);
+		$this->view->assign('budgets_list', $this->budgets->getBudgetsDatesList());
 	}
 	
 	/**
