@@ -120,12 +120,13 @@ class CategoriesController extends Zend_Controller_Action
     	// delete category
 		$i_id = $this->getRequest()->getParam('id');
 		try {
+			// delete children categories
+			$this->categories->delete('parent = '.$i_id);
 			$this->categories->delete('id = '.$i_id);
 		}
-		catch (Expenses $e) {
+		catch (Exception $e) {
 			error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
 		}
 		$this->_helper->redirector('index','categories');
     }
 }
-?>
