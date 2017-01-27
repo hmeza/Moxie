@@ -35,6 +35,13 @@ class StatsController extends Zend_Controller_Action {
 			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES, $st_params);
 			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params);
 		}
+		// get expenses and incomes for all years
+		$min_year = 2014;
+		$st_yearly = array();
+		for($i = $min_year; $i <= date('Y'); $i++) {
+			$st_yearly[$i] = $this->expenses->getYearly($_SESSION['user_id'], $i);
+		}
+
 		// get categories and order strings
 		$st_expenses = $this->categories->getCategoriesForView(Categories::EXPENSES);
 		$st_incomes = $this->categories->getCategoriesForView(Categories::INCOMES);
@@ -47,6 +54,7 @@ class StatsController extends Zend_Controller_Action {
 		$this->view->assign('budget_incomes', $st_incomes);
 		$this->view->assign('expenses', $expenses);
 		$this->view->assign('incomes', $incomes);
+		$this->view->assign('yearly', $st_yearly);
 		$this->view->assign('budget', $this->budgets->getYearBudgets($_SESSION['user_id'], $year));
 		$this->view->assign('data', $data);
 		$this->view->assign('year', $year);

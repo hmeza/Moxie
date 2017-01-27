@@ -1,3 +1,58 @@
+<?php
+function print_yearly_loop($yearly, $categories, $init_year) {
+	$totals = array();
+	foreach($categories as $key => $cat) {
+		echo "<td style='text-align:left;'>".$cat."</td>";
+		for ($i = $init_year; $i <= date('Y'); $i++) {
+			if(!isset($totals[$i])) {
+				$totals[$i] = 0;
+			}
+			$found = false;
+			foreach($yearly[$i] as $data) {
+				if($data['category'] == $key) {
+					echo "<td>".$data['sum(amount)']." &euro;</td>";
+					$totals[$i] += $data['sum(amount)'];
+					$found = true;
+					break;
+				}
+			}
+			if(!$found) {
+				echo "<td>0.00 &euro;</td>";
+			}
+		}
+		echo "<tr>";
+	}
+	echo "<th style='text-align:left;'>TOTAL</th>";
+	for($i = $init_year; $i <= date('Y'); $i++) {
+		echo "<th>" . number_format($totals[$i], 2) . " &euro;</th>";
+	}
+	echo "</tr>";
+	return $totals;
+}
+
+function print_yearly($yearly, $categories) {
+	$keys = array_keys($yearly);
+	$init_year = $keys[0];
+	echo '<table class="table-stats">';
+	echo "<th style='width: 200px'></th>";
+	for($i = $init_year; $i <= date('Y'); $i++) {
+		echo "<th style='text-align:right;'	>".$i."</th>";
+	}
+	echo "</tr>";
+	print_yearly_loop($yearly, $categories, $init_year);
+	echo "</table>";
+}
+?>
+
+<style type="text/css">
+table.table-stats {
+	font-size: 11px;
+	width: 100%;
+}
+.table-stats td, th {
+	text-align: right;
+}
+</style>
 <link rel="stylesheet" type="text/css" href="/material.css"/>
 <script type="text/javascript" src="/js/stats/stats.js"></script>
 <script type="text/javascript">
@@ -45,7 +100,7 @@ $this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_budget_title'
 </table>
 <br><br>
 
-<table width=100% style="font-size: 11px;">
+<table class="table-stats">
 <th></th>
 <?php
 $income = array();
@@ -55,11 +110,11 @@ $table_headers = '';
 for ($month = 1; $month <= 12; $month++) {
 	$income[$month] = 0;
 	$expense[$month] = 0;
-	$table_headers .= '<th align="right"><a href="/expenses/index/month/'.$month.'/year/'.$this->year.'">'.date('M',mktime(1,1,1,$month,1,$this->year)).'</a></th>';
+	$table_headers .= '<th><a href="/expenses/index/month/'.$month.'/year/'.$this->year.'">'.date('M',mktime(1,1,1,$month,1,$this->year)).'</a></th>';
 }
 echo $table_headers;
 if (!empty($this->budget)) {
-	echo '<th align="right"><a href="/categories/index">'.$st_lang['budget'].'</a></th>';
+	echo '<th><a href="/categories/index">'.$st_lang['budget'].'</a></th>';
 	$i_colspan = 14;
 }
 else {
@@ -68,7 +123,7 @@ else {
 echo '<tr>';
 $incomes = '';
 foreach ($this->budget_incomes as $key => $category) {
-	$incomes .= '<td>'.$category.'</td>';
+	$incomes .= '<td style="text-align:left;">'.$category.'</td>';
 	for ($month = 1; $month <= 12; $month++) {
 		$current_income = 0;
 		foreach ($this->incomes[$month] as $income_key => $value) {
@@ -76,14 +131,14 @@ foreach ($this->budget_incomes as $key => $category) {
 		}
 		$income[$month] += $current_income;
 
-		$incomes .= '<td align="right"><a style="color: #000000" href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
+		$incomes .= '<td><a style="color: #000000" href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
 	}
 	if (!empty($this->budget)) $incomes .= '<td></td>';
 	$incomes .= '<tr>';
 }
 echo $incomes;
 
-echo '<th align="left">'.$st_lang['stats_budget_income'].'</th>';
+echo '<th style="text-align:left;">'.$st_lang['stats_budget_income'].'</th>';
 $incomes_totals = '';
 for ($month = 1; $month <= 12; $month++) {
 	$incomes_totals .= '<th align="right">'.number_format($income[$month],2).' &euro;</th>';
@@ -95,7 +150,7 @@ echo '<td colspan='.$i_colspan.'>&nbsp;</td><tr>';
 
 $expenses = '';
 foreach ($this->budget_expenses as $key => $category) {
-	$expenses .= '<td>'.$category.'</td>';
+	$expenses .= '<td style="text-align:left;">'.$category.'</td>';
 	for ($month = 1; $month <= 12; $month++) {
 		$current_expense = 0;
 		foreach ($this->expenses[$month] as $expense_key => $value) {
@@ -119,16 +174,16 @@ foreach ($this->budget_expenses as $key => $category) {
 		else {
 			$s_color = '';
 		}
-		$expenses .= '<td align="right" name="month'.$month.'"><a '.$s_color.' href="/expenses/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'">'.number_format($current_expense,2).' &euro;</a></td>';
+		$expenses .= '<td name="month'.$month.'"><a '.$s_color.' href="/expenses/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'">'.number_format($current_expense,2).' &euro;</a></td>';
 	}
 	if (!empty($this->budget)) {
 		$i_budget = (!empty($this->budget[date('m')][$key])) ? $this->budget[date('m')][$key] : 0;
-		$expenses .= '<td align="right" style="color: #00FF00" id="budget'.$key.'">'.number_format($i_budget,2).' &euro;</td>';
+		$expenses .= '<td style="color: #00FF00" id="budget'.$key.'">'.number_format($i_budget,2).' &euro;</td>';
 	}
 	$expenses .= '<tr>';
 }
 echo $expenses;
-echo '<th align="left">'.$st_lang['stats_budget_expense'].'</th>';
+echo '<th style="text-align:left;">'.$st_lang['stats_budget_expense'].'</th>';
 $totals = '';
 $balance_output = '';
 for ($month = 1; $month <= 12; $month++) {
@@ -149,13 +204,18 @@ if (!empty($this->budget)) echo '<th></th>';
 <tr>
 <td colspan='.$i_colspan.'>&nbsp;</td><tr>
 
-<th align="left"><?php echo $st_lang['stats_budget_total']; ?></th>
+<th style="text-align:left;"><?php echo $st_lang['stats_budget_total']; ?></th>
 <?php echo $balance_output; ?>
 
 <th align="right"><span style="'.$style.'"><?php echo number_format($balance,2); ?> &euro;</span></th>
 </tr>
 </table>
 </div>
+<br><br>
+<?php
+$this->getHelper('Web')->printExpandCollapseButton("Anual");
+print_yearly($this->yearly, $this->budget_incomes + $this->budget_expenses);
+?>
 <br><br>
 <?php
 echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));

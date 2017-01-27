@@ -117,4 +117,15 @@ class Transactions extends Zend_Db_Table_Abstract {
 			throw new Exception("Error deleting transaction ".$id." for user ".$user);
 		}
 	}
+
+	public function getYearly($user, $year) {
+		$select = $this->select()
+			->setIntegrityCheck(false)
+			->from(array('t' => 'transactions'), array('category', 'sum(amount)'))
+			->joinInner(array('c' => 'categories'), 't.category = c.id', array())
+			->where('t.user_owner = ?', $user)
+			->where('year(date) = ?', $year)
+			->group(array('year(date)', 'category'));
+		return $this->fetchAll($select)->toArray();
+	}
 }
