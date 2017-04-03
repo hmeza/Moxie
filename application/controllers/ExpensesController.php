@@ -35,6 +35,12 @@ class ExpensesController extends TransactionsController
 
 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
+		if (isset($st_params['o'])) {
+			$st_params['o'] = ($st_params['o'][0] == '-')
+					? substr($st_params['o'], 1, strlen($st_params['o'])-1)
+					: "-".$st_params['o'];
+		}
+
 		if($this->getRequest()->getParam('to_excel') == true) {
 			$this->exportToExcel($st_list);
 		}
@@ -84,6 +90,10 @@ class ExpensesController extends TransactionsController
 		$st_params = $this->getParameters();
 
 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
+
+		if (isset($st_params['o'])) {
+			$st_params['o'] = "-".$st_params['o'];
+		}
 
 		$this->assignViewData($st_list, $st_params, $st_expense);
 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
@@ -292,5 +302,9 @@ class ExpensesController extends TransactionsController
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
 		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
+		$this->view->assign('view', 'expenses');
+		if (isset($st_params['o'])) {
+			$this->view->assign('o', $st_params['o']);
+		}
 	}
 }

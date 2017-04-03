@@ -1,7 +1,27 @@
 <table class="list moxie moxie-data" style="width: 100%" id="mytable">
-<tr>
-<td colspan=5><button class="moxiebutton" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
-</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>Categoria</td>
+		<td>Nota</td>
+	<?php
+	if ($this->view) {
+		$target = '/'.$this->view.'/index';
+		if ($this->month) {
+			$target .= '/month/'.$this->month;
+		}
+		if ($this->year) {
+			$target .= '/year/'.$this->year;
+		}
+		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";
+		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";
+	?>
+		<td align="center"><a href="<?php echo $target . $date_filter; ?>">Fecha</a></td>
+		<td align="right"><a href="<?php echo $target . $amount_filter; ?>">Importe</a></td>
+	<?php } else { ?>
+		<td align="center">Fecha</td>
+		<td align="right">Importe</td>
+	<?php } ?>
+	</tr>
 <?php
 $f_totalAmount = 0;
 $f_currentAmount = 0;
@@ -38,7 +58,8 @@ if($b_showTotalAmount) {
 
 ?>
 <tr>
-<td colspan=5 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
+<td colspan=2><button class="moxiebutton" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
+<td colspan=3 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
 </tr>
 </table>
 <?php $this->getHelper('Web')->printToTop(); ?>

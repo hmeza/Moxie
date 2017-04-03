@@ -87,7 +87,25 @@ class Transactions extends Zend_Db_Table_Abstract {
 					$query = $query->where('amount >= 0');
 				}
 			}
-			$query = $query->order('i.date asc');
+
+			if (isset($st_searchParams['o'])) {
+				$filter = $st_searchParams['o'];
+				$order = 'desc';
+				if($filter[0] == '-') {
+					$order = 'asc';
+					$filter = substr($filter, 1, strlen($filter) - 1);
+				}
+				if ($filter == 'date') {
+					$filter = 'i.date';
+				}
+				if($filter == 'amount') {
+					$filter = 'i.amount';
+				}
+				$query = $query->order($filter.' '.$order);
+			}
+			else {
+				$query = $query->order('i.date desc');
+			}
 			$result = $this->fetchAll($query);
 		}
 		catch(Exception $e) {
