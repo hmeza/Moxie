@@ -1,8 +1,11 @@
+<?php
+global $st_lang;
+?>
 <table class="list moxie moxie-data" style="width: 100%" id="mytable">
 	<tr>
 		<td>&nbsp;</td>
-		<td>Categoria</td>
-		<td>Nota</td>
+		<td><?php echo $st_lang['expenses_category']; ?></td>
+		<td><?php echo $st_lang['expenses_note']; ?></td>
 	<?php
 	if ($this->view) {
 		$target = '/'.$this->view.'/index';
@@ -15,11 +18,11 @@
 		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";
 		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";
 	?>
-		<td align="center"><a href="<?php echo $target . $date_filter; ?>">Fecha</a></td>
-		<td align="right"><a href="<?php echo $target . $amount_filter; ?>">Importe</a></td>
+		<td align="center"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></td>
+		<td align="right"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></td>
 	<?php } else { ?>
-		<td align="center">Fecha</td>
-		<td align="right">Importe</td>
+		<td align="center"><?php echo $st_lang['expenses_date']; ?></td>
+		<td align="right"><?php echo $st_lang['expenses_amount']; ?></td>
 	<?php } ?>
 	</tr>
 <?php
