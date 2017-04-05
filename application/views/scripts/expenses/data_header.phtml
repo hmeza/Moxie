@@ -48,6 +48,7 @@ echo $this->form->getElement('category');
 </dd>
 <?php
 echo $this->form->getElement('in_sum');
+echo $this->form->getElement('favourite');
 echo $this->form->getElement('submit');
 if(isset($i_expensePK)) {
 	echo '<input type="button" class="moxiedelete" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . '")\'/>';

@@ -146,4 +146,21 @@ class Transactions extends Zend_Db_Table_Abstract {
 			->group(array('year(date)', 'category'));
 		return $this->fetchAll($select)->toArray();
 	}
+
+	public function getFavorites($user) {
+		$select = $this->select()
+				->setIntegrityCheck(false)
+				->from(array('f' => 'favourites'), array())
+				->joinInner(array('t' => 'transactions'), 'f.id_transaction = t.id', array('t.id', 't.amount', 't.note', 't.category'))
+				->where('t.user_owner = ?', $user);
+		error_log($select);
+		$results = $this->fetchAll($select)->toArray();
+		$tagsModel = new Tags();
+		foreach ($results as $key => $result) {
+			// use $result['id'] to retrieve tags
+			$tags = $tagsModel->getTagsForTransaction($result['id']);
+			$results[$key]['tags'] = $tags;
+		}
+		return $results;
+	}
 }

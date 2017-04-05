@@ -44,15 +44,55 @@ class Tags extends Zend_Db_Table_Abstract {
 	/**
 	 * Gets categories for a given user.
 	 * i_typeFilter stands for the type of category to retrieve. 
-	 * @param int $i_typeFilter
+	 * @param int $userId
+	 * @return array
+	 * @throws Exception
 	 */
 	public function getTagsByUser($userId) {
 		if(empty($userId)) {
 			throw new Exception("Empty user id");
 		}
-		try {
-			$query = $this->select()->where('user_owner = ?', $userId);
+		$query = $this->select()->where('user_owner = ?', $userId);
+		return$this->getTagsFromQuery($query);
+	}
 
+	/**
+	 * @param int $transactionId
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTagsForTransaction($transactionId) {
+		if(empty($transactionId)) {
+			throw new Exception("Empty user id");
+		}
+		$query = $this->select()
+				->from(array('t' => $this->_name), array())
+				->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id')
+				->where('tt.id_transaction = ?', $transactionId);
+		return$this->getTagsFromQuery($query);
+	}
+
+    /**
+     * @param int $userId
+     * @return array
+     * @throws Exception
+     */
+    public function getUsedTagsByUser($userId) {
+        if(empty($userId)) {
+            throw new Exception("Empty user id");
+        }
+	    $query = $this->select()
+			    ->setIntegrityCheck(false)
+			    ->from(array('t' => 'tags'), array('t.id as id', 't.name as name'))
+			    ->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id', array())
+			    ->where('user_owner = ?', $userId)
+			    ->group('t.id')
+			    ->order('t.name DESC');
+		return $this->getTagsFromQuery($query);
+    }
+
+	private function getTagsFromQuery($query) {
+		try {
 			$rows = $this->fetchAll($query)->toArray();
 			$tags = array();
 			foreach($rows as $row) {
@@ -65,37 +105,6 @@ class Tags extends Zend_Db_Table_Abstract {
 		}
 		return $tags;
 	}
-
-    /**
-     * @param int $userId
-     * @return array
-     * @throws Exception
-     */
-    public function getUsedTagsByUser($userId) {
-        if(empty($userId)) {
-            throw new Exception("Empty user id");
-        }
-        try {
-            $query = $this->select()
-                ->setIntegrityCheck(false)
-                ->from(array('t' => 'tags'), array('t.id as id', 't.name as name'))
-                ->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id', array())
-                ->where('user_owner = ?', $userId)
-                ->group('t.id')
-                ->order('t.name DESC');
-
-            $rows = $this->fetchAll($query)->toArray();
-            $tags = array();
-            foreach($rows as $row) {
-                $tags[$row['id']] = str_replace("'", "\'", $row['name']);
-            }
-        }
-        catch(Exception $e) {
-            error_log(__METHOD__.": ".$e->getMessage());
-            $tags = array();
-        }
-        return $tags;
-    }
 
     /**
      * @param int $userId

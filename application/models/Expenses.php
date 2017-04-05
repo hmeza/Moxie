@@ -96,17 +96,22 @@ class Expenses extends Transactions {
 	 * @param	array $st_data
 	 * @return int
 	 */
-	public function addExpense($user_id, $st_data) {
+	public function addExpense($user_id, $st_params) {
 		$st_data = array(
 			'user_owner'	=>	$user_id,
-			'amount'		=>	-$st_data['amount'],
-			'category'		=>	$st_data['category'],
-			'note'			=>	$st_data['note'],
-			'date'	        =>	$st_data['date'],
-			'in_sum'        => $st_data['in_sum']
+			'amount'		=>	-$st_params['amount'],
+			'category'		=>	$st_params['category'],
+			'note'			=>	$st_params['note'],
+			'date'	        =>	$st_params['date'],
+			'in_sum'        => $st_params['in_sum']
 		);
 		try {
-			return $this->insert($st_data);
+			$result = $this->insert($st_data);
+			if($st_params['favourite'] == 1) {
+				$fav = new Favourites();
+				$fav->insert(array('id_transaction' => $result));
+			}
+			return $result;
 		}
 		catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
@@ -132,6 +137,13 @@ class Expenses extends Transactions {
 			);
 			$s_where = 'id = '.$st_params['id'];
 			$this->update($st_data,$s_where);
+
+			$fav = new Favourites();
+			// highly unefficient
+			$fav->delete("id_transaction = ".$st_params['id']);
+			if($st_params['favourite'] == 1) {
+				$fav->insert(array('id_transaction' => $st_params['id']));
+			}
 		} catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
 		}

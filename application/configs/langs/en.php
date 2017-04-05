@@ -48,6 +48,7 @@ $st_lang = array(
 	'search_send'       => 'Search',
 	// Transactions
 	'in_sum_message'    => 'Show in "Total"',
+	'favourite_message'  => 'Favourites',
 	// Budgets
 	'budgets_title'     => 'Budgets',
 	'budgets_save_successful' => 'Saved successfully',
