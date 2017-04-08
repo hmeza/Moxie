@@ -64,10 +64,12 @@ class Expenses extends Transactions {
 	 * @author	hmeza
 	 * @since	2011-02-08
 	 * @param	int $i_expensePK
+	 * @return  array
 	 */
 	public function getExpenseByPK($i_expensePK) {
 		try {
-			$query = $this->database->select()
+			$query = $this->select()
+				->setIntegrityCheck(false)
 				->from(array('e'=> $this->_name),array(
 						'id'			=>	'e.id',
 						'user_owner'	=>	'e.user_owner',
@@ -77,10 +79,14 @@ class Expenses extends Transactions {
 						'in_sum'		=>	'e.in_sum',
 						'category'		=>	'e.category'
 						))
-				->where('id = '.$i_expensePK)
-                ->where('amount < 0');
+				->joinLeft(array('f' => 'favourites'), 'e.id = f.id_transaction', array('favourite' => new \Zend_Db_Expr('COALESCE( f.id, 0 )')))
+				->where('e.id = '.$i_expensePK)
+                ->where('e.amount < 0');
 			$stmt = $this->database->query($query);
 			$result = $stmt->fetch();
+			if($result['favourite']) {
+				$result['favourite'] = 1;
+			}
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
@@ -93,7 +99,7 @@ class Expenses extends Transactions {
 	 * Inserts a new expense on DB
 	 * @author	hmeza
 	 * @param	int $user_id
-	 * @param	array $st_data
+	 * @param	array $st_params
 	 * @return int
 	 */
 	public function addExpense($user_id, $st_params) {
@@ -122,7 +128,7 @@ class Expenses extends Transactions {
 	 * Updates an expense by setting in_sum to 0 or 1
 	 * @author	hmeza
 	 * @since	2011-02-03
-	 * @param	int $i_expensePK
+	 * @param	array $st_params
 	 * @param	array $st_params
 	 */
 	public function updateExpense($st_params = null) {

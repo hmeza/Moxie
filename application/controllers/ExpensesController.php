@@ -28,7 +28,8 @@ class ExpensesController extends TransactionsController
 				'note' => '',
 				'date' => date('Y-m-d'),
 				'in_sum' => 1,
-				'user_owner' => $_SESSION['user_id']
+				'user_owner' => $_SESSION['user_id'],
+				'favourite' => 0
 		);
 
 		$st_params = $this->getParameters();
@@ -183,7 +184,7 @@ class ExpensesController extends TransactionsController
 		$form->addElement($multiOptions);
 
 		$form->addElement("checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;'));
-		$form->addElement("checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => false, 'style' => 'width: 20px;'));
+		$form->addElement("checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;'));
 		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
 		$form->addElement('date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
