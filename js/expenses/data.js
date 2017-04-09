@@ -11,12 +11,17 @@ var export_to_excel = function(){
 };
 
 var use_favourite_as_expense = function() {
-	console.log("Changed");
 	var id = $('#favourites').find(":selected").val();
 	for (var i=0; i < favourite_data.length; i++) {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
 			$('#amount').val(-favourite_data[i]["amount"]);
+			//$('#category[value="'+favourite_data[i]["category"]+'"]').val(favourite_data[i]["category"]);
+			$('#category[value="'+favourite_data[i]["category"]+'"]').attr('selected', true);
+			$('#category').chosen({
+				disable_search_threshold: 10,
+				width: "100%"
+			});
 			$('#tags').empty();
 			var taggle = new Taggle('tags', {
 				tags: favourite_data[i]["tags"],
