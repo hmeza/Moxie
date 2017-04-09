@@ -28,7 +28,7 @@ echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 ?>
-	<?php if(isset($this->favourites_json) && !empty($this->favourites_json)) { ?>
+	<?php if(isset($this->favourites_json) && $this->favourites_json != "[]") { ?>
 	<div id="favourites_container">
 		<span id="favourites_button">
 		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
