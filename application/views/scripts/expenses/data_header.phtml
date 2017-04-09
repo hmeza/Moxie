@@ -28,6 +28,7 @@ echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 ?>
+	<?php if(isset($this->favourites_json)) { ?>
 	<div id="favourites_container">
 		<span id="favourites_button">
 		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
@@ -36,16 +37,15 @@ $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 		Favoritos
 		</span>
 		<span id="favourites_list" style="display: none">
-		<?php if(isset($this->favourites_json)) { ?>
 			<script type="text/javascript">
 				favourite_data = <?php echo $this->favourites_json; ?>;
 			</script>
 			<form>
 				<select id="favourites" name="favourites"><option value=""></option></select>
 			</form>
-		<?php } ?>
 		</span>
 	</div>
+	<?php } ?>
 	<form id="login" enctype="application/x-www-form-urlencoded" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" class="moxie_form">
 	<?php
 	if (isset($i_expensePK)) {
