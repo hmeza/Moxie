@@ -16,7 +16,7 @@ var use_favourite_as_expense = function() {
 	for (var i=0; i < favourite_data.length; i++) {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
-			$('#amount').val(favourite_data[i]["amount"]);
+			$('#amount').val(-favourite_data[i]["amount"]);
 			$('#tags').empty();
 			var taggle = new Taggle('tags', {
 				tags: favourite_data[i]["tags"],
@@ -91,4 +91,7 @@ $(document).ready(function() {
 
 	load_favourites_data();
 	$('#favourites').change(use_favourite_as_expense);
+	$("#favourites_button").click(function (event) {
+		$("#favourites_list").slideToggle();
+	});
 });
