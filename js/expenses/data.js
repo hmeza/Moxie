@@ -10,6 +10,16 @@ var export_to_excel = function(){
 	$('#search_submit').click();
 };
 
+var use_favourite_as_expense = function() {
+	console.log("Changed");
+};
+
+var load_favourites_data = function() {
+	for (var i=0; i < favourite_data.length; i++) {
+		$('#favourites').append('<option value="'+favourite_data[i]["id"]+'">'+favourite_data[i]["note"]+'</option>');
+	}
+};
+
 $(document).ready(function() {
 	$("#category").chosen({
 		disable_search_threshold: 10,
@@ -49,4 +59,7 @@ $(document).ready(function() {
 	});
 
 	$("#export_to_excel_button").click(export_to_excel);
+
+	load_favourites_data();
+	$('#favourites').change(use_favourite_as_expense);
 });

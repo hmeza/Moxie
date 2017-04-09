@@ -287,10 +287,9 @@ class ExpensesController extends TransactionsController
 	}
 
 	/**
-	 * @param $st_data
-	 * @param $st_list
-	 * @param $st_params
-	 * @param $st_expense
+	 * @param array $st_list
+	 * @param array $st_params
+	 * @param array $st_expense
 	 * @throws Exception
 	 */
 	private function assignViewData($st_list, $st_params, $st_expense) {
@@ -308,6 +307,6 @@ class ExpensesController extends TransactionsController
 		if (isset($st_params['o'])) {
 			$this->view->assign('o', $st_params['o']);
 		}
-		$this->view->assign('favorites', $this->expenses->getFavorites($_SESSION['user_id']));
+		$this->view->assign('favourites_json', json_encode($this->expenses->getFavourites($_SESSION['user_id'])));
 	}
 }

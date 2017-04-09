@@ -26,7 +26,9 @@ echo $this->partial('expenses/data_header.phtml',
         'most_frequent_expenses' => $this->most_frequent_expenses,
         'tags' => $this->tags,
         'used_tag_list' => $this->used_tag_list,
-		'search_form' => $this->search_form
+		'search_form' => $this->search_form,
+		'favourites' => $this->favourites,
+		'favourites_json' => $this->favourites_json
     ));
 echo $this->partial('common/data.phtml',
 	array(
