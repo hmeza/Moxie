@@ -12,6 +12,35 @@ var export_to_excel = function(){
 
 var use_favourite_as_expense = function() {
 	console.log("Changed");
+	var id = $('#favourites').find(":selected").val();
+	for (var i=0; i < favourite_data.length; i++) {
+		if (id == favourite_data[i]["id"]) {
+			$('#note').val(favourite_data[i]["note"]);
+			$('#amount').val(favourite_data[i]["amount"]);
+			$('#tags').empty();
+			var taggle = new Taggle('tags', {
+				tags: favourite_data[i]["tags"],
+				placeholder: tagsPlaceholder,
+				duplicateTagClass: 'bounce'
+			});
+
+			var container = taggle.getContainer();
+			var input = taggle.getInput();
+
+			$(input).autocomplete({
+				source: usedTagList,
+				appendTo: container,
+				position: { at: "left bottom", of: container },
+				select: function(event, data) {
+					event.preventDefault();
+					//Add the tag if user clicks
+					if (event.which === 1) {
+						taggle.add(data.item.value);
+					}
+				}
+			});
+		}
+	}
 };
 
 var load_favourites_data = function() {

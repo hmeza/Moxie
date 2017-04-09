@@ -67,8 +67,8 @@ class Tags extends Zend_Db_Table_Abstract {
 		}
 		$query = $this->select()
 				->setIntegrityCheck(false)
-				->from(array('t' => $this->_name), array())
-				->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id')
+				->from(array('t' => $this->_name), array('id' => 't.id', 'name' => 't.name'))
+				->joinInner(array('tt' => 'transaction_tags'), 'tt.id_tag = t.id', array())
 				->where('tt.id_transaction = ?', $transactionId);
 		return $this->getTagsFromQuery($query);
 	}

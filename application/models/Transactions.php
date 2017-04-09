@@ -157,7 +157,10 @@ class Transactions extends Zend_Db_Table_Abstract {
 		$tagsModel = new Tags();
 		foreach ($results as $key => $result) {
 			// use $result['id'] to retrieve tags
-			$tags = $tagsModel->getTagsForTransaction($result['id']);
+			$tags = array();
+			foreach($tagsModel->getTagsForTransaction($result['id']) as $t) {
+				$tags[] = $t;
+			}
 			$results[$key]['tags'] = $tags;
 		}
 		return $results;
