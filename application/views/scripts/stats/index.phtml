@@ -105,6 +105,7 @@ $this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_budget_title'
 <?php
 $income = array();
 $expense = array();
+$incomes_as_budget = array();
 $balance = 0;
 $table_headers = '';
 for ($month = 1; $month <= 12; $month++) {
@@ -127,13 +128,18 @@ foreach ($this->budget_incomes as $key => $category) {
 	for ($month = 1; $month <= 12; $month++) {
 		$current_income = 0;
 		foreach ($this->incomes[$month] as $income_key => $value) {
-			if ($value['category'] == $key) $current_income += $value['amount'];
+			if ($value['category'] == $key) {
+				$current_income += $value['amount'];
+				$incomes_as_budget[$key] += $value['amount'];
+			}
 		}
 		$income[$month] += $current_income;
 
 		$incomes .= '<td><a style="color: #000000" href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
 	}
-	if (!empty($this->budget)) $incomes .= '<td></td>';
+	if (!empty($this->budget)) {
+		$incomes .= '<td>'.number_format($incomes_as_budget[$key],2).' &euro;</td>';
+	}
 	$incomes .= '<tr>';
 }
 echo $incomes;
