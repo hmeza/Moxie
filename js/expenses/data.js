@@ -16,34 +16,12 @@ var use_favourite_as_expense = function() {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
 			$('#amount').val(-favourite_data[i]["amount"]);
-			//$('#category[value="'+favourite_data[i]["category"]+'"]').val(favourite_data[i]["category"]);
-			$('#category[value="'+favourite_data[i]["category"]+'"]').attr('selected', true);
-			$('#category').chosen({
-				disable_search_threshold: 10,
-				width: "100%"
-			});
-			$('#tags').empty();
-			var taggle = new Taggle('tags', {
-				tags: favourite_data[i]["tags"],
-				placeholder: tagsPlaceholder,
-				duplicateTagClass: 'bounce'
-			});
-
-			var container = taggle.getContainer();
-			var input = taggle.getInput();
-
-			$(input).autocomplete({
-				source: usedTagList,
-				appendTo: container,
-				position: { at: "left bottom", of: container },
-				select: function(event, data) {
-					event.preventDefault();
-					//Add the tag if user clicks
-					if (event.which === 1) {
-						taggle.add(data.item.value);
-					}
-				}
-			});
+			var c = $('#category');
+			c.find('option[selected="selected"]').attr('selected', false);
+			c.find('option[value="'+ favourite_data[i]["category"] +'"]').attr('selected', 'selected');
+			
+			c.trigger('chosen:updated');
+			break;
 		}
 	}
 };
