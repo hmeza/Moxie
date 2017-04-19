@@ -1,0 +1,77 @@
+<?php global $st_lang; ?>
+<link rel="stylesheet" type="text/css" href="/material.css"/>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/finance/utils.js"></script>
+<script type="text/javascript">
+var expenses_list = [
+    {
+        'user': 'hmeza',
+        'expenses': [
+            {'note': 'Cacahuetes', 'amount': 12.99, 'date': '2017-04-15'},
+            {'note': 'Cervezas', 'amount': 5.65, 'date': '2017-04-17'}
+        ]
+    },
+    {
+        'user': 'cristi',
+        'expenses': [
+            {'note': 'Entradas para no se que museo', 'amount': 15.00, 'date': '2017-04-15'},
+            {'note': 'Pipas', 'amount': 4.25, 'date': '2017-04-18'}
+        ]
+    }
+];
+
+
+$(document).ready(function() {
+    var number_of_users = expenses_list.length;
+    var pre = 0;
+    var post = number_of_users - 1;
+    table_ref = $('#shared_expenses_table');
+    new_row = '<tr><th>Date</th><th>Note</th>';
+    for (var i=0; i<number_of_users; i++) {
+        new_row += '<th>'+expenses_list[i]['user']+'</th>';
+    }
+    new_row += '</tr>';
+    table_ref.append(new_row);
+    for (var i=0; i<number_of_users; i++) {
+        for (var j=0; j<expenses_list[i]['expenses'].length; j++) {
+            expense = expenses_list[i]['expenses'][j];
+            new_row = '<tr>';
+
+            new_row += '<td>'+expense['date']+'</td><td>'+expense['note']+'</td>';
+            for(var k=0; k<pre; k++) {
+                new_row += '<td></td>';
+            }
+            new_row += '<td align="right">'+expense['amount']+' &euro;</td>';
+            for(var k=0; k<post; k++) {
+                new_row += '<td></td>';
+            }
+            new_row += '</tr>';
+            table_ref.append(new_row);
+        }
+        pre++;
+        post--;
+    }
+});
+</script>
+
+<h2>Titulo</h2>
+<div id="shared_container_new">
+    <div id="compare">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons" style="background-color: ##0b77b7">+</i>
+        </button>
+        <?php echo $st_lang['finance_compare']; ?>
+    </div>
+    <table id="shared_expenses_table" width="100%">
+
+    </table>
+    <div id="pepe" style="display: flex">
+        <div id="moxie_form_1" style='float: left'>
+            <form class="moxie_form" action="shared-expenses/create" method="POST">
+                Name <input type="text" name="name">
+                <input type="submit" value="Enviar">
+            </form>
+        </div>
+    </div>
+</div>
+<div height=20px>&nbsp;</div>
