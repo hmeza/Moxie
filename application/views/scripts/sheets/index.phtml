@@ -1,0 +1,24 @@
+<div class="moxie-container">
+<div>
+My sheets
+<select id="sheet_id" name="sheet_id" onchange="redirect()">
+<?php
+// for data in sheet_list
+if (empty($this->sheet_list)) {
+	?>
+	No tienes sheets.
+	<?php
+}
+else {
+	echo "Selecciona una sheets.";
+	foreach ($this->sheet_list as $s) {
+		echo "<option value='".$s['id']."'></option>";
+	}
+}
+?>
+</select>
+</div>
+<div>
+</b><a href="/sheets/create">Crear nueva sheets</a>
+</div>
+</div>
