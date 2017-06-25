@@ -1,7 +1,14 @@
+<head>
+<script type="text/javascript" language="text/javascript">
+function redirect() {
+	var unique_id = $('#sheet_id').find(":selected").val();
+	window.location.replace("/sheets/view/id/" + unique_id);
+}
+</script>
+</head>
+
 <div class="moxie-container">
 <div>
-My sheets
-<select id="sheet_id" name="sheet_id" onchange="redirect()">
 <?php
 // for data in sheet_list
 if (empty($this->sheet_list)) {
@@ -10,9 +17,12 @@ if (empty($this->sheet_list)) {
 	<?php
 }
 else {
+	echo "My sheets
+<select id='sheet_id' name='sheet_id' onchange='redirect()'>
+";
 	echo "Selecciona una sheets.";
 	foreach ($this->sheet_list as $s) {
-		echo "<option value='".$s['id']."'></option>";
+		echo "<option value='".$s['unique_id']."'>".$s->name."</option>";
 	}
 }
 ?>

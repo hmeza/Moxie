@@ -38,7 +38,7 @@ class SharedExpensesSheets extends AbstractMigration
     	
     	$this->table('shared_expenses_sheet_users')
     	->addColumn('id_sheet', 'integer')
-    	->addColumn('id_user', 'integer', array('default' => null))
+    	->addColumn('id_user', 'integer', array('default' => null, 'null' => true))
     	->addColumn('email', 'string', array('default' => ''))
     	->addTimestamps()
     	->addForeignKey('id_sheet', 'shared_expenses_sheets', 'id')

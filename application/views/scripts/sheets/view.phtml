@@ -1,0 +1,60 @@
+<div class="moxie-container">
+<div>
+<?php
+if (isset($this->sheet)) {
+?>
+	Identificador único de esta página de gastos compartidos.<br><br>
+	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a><br>
+	<table width=100%>
+	<tr>
+	<th>Fecha</th>
+	<th>Nota</th>
+	<?php
+	foreach($this->sheet['distinct_users_list'] as $user) {
+		echo "<th>".$user['user_owner']."</th>";
+	}
+	?>
+	</tr>
+	<?php
+	foreach($this->sheet['expenses'] as $e) {
+		// distinct_users_list will mark column for each row
+		echo "<tr>";
+		echo "<td align='center'>".explode(" ", $e['date'])[0]."</td>";
+		echo "<td align='right'>".$e['note']."</td>";
+		foreach($this->sheet['distinct_users_list'] as $du) {
+			error_log($du);
+			error_log(print_r($e,true));
+			if ($e['id_sheet_user'] == $du) {
+				echo "<td align='right'>".$e['amount']." &euro;</td>";
+			}
+			else {
+				echo "<td></td>";
+			}
+		}
+		echo "</tr>";
+	}
+	?>
+	</table>
+	
+<?php
+} else if (isset($this->errors)) {
+	foreach($this->errors as $e) {
+?>
+<span><?php echo $e; ?></span>
+<?php
+	}
+} else {
+?>
+<form action="/sheets/create" method="POST">
+
+<label for="name">Nombre</label>
+<input type="text" id="name" name="name">
+
+<input type="submit" value="Crear">
+
+</form>
+<?php
+}
+?>
+</div>
+</div>

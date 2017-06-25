@@ -12,14 +12,20 @@ class SheetsController extends Zend_Controller_Action
 	 * Show sheets page and all my sheets.
 	 */
 	public function indexAction() {
-		$this->view->assign('sheet_list', array()); 
+		$sheets = $this->sheetModel->get_by_user_match($_SESSION['user_id']);
+		$this->view->assign('sheet_list', $sheets); 
 	}
 	
 	/**
 	 * List a single sheet.
 	 */
 	public function viewAction() {
-		$this->view->assign('sheet', array());
+		$sheet = $this->sheetModel->get_by_unique_id(
+				$this->getRequest()->getParam('id', null)
+		);
+		error_log($this->getRequest()->getParam('id'));
+		error_log(print_r($sheet,true));
+		$this->view->assign('sheet', $sheet);
 	}
 
 	public function createAction() {
@@ -33,16 +39,15 @@ class SheetsController extends Zend_Controller_Action
 						'name' => $_POST['name'],
 						'unique_id' => uniqid()
 				);
-				error_log(print_r($data,true));
 				$id = $this->sheetModel->insert($data);
 				$sheet = $this->sheetModel->find($id)->current();
-				error_log("new sheet unique id ".$sheet->unique_id);
 				$this->view->assign('sheet', $sheet);
 			}
 			catch(Exception $e) {
 				$errors = array($e->getMessage());
 				$this->view->assign('errors', $errors);
 			}
+			$this->_helper->redirector('view','sheets');
 		}
 		// else render GET page
 	}
