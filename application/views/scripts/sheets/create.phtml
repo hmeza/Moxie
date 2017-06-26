@@ -1,0 +1,33 @@
+<div class="moxie-container">
+<div>
+<?php
+if (isset($this->sheet)) {
+?>
+	Identificador único de esta página de gastos compartidos.<br>
+	<a href="/sheets/<?php echo $this->sheet->unique_id; ?>">Mi página de los cojones</a>
+	
+	Y aqui imprimimos en una tabla las mierdas de cada unico.
+	
+	
+<?php
+} else if (isset($this->errors)) {
+	foreach($this->errors as $e) {
+?>
+<span><?php echo $e; ?></span>
+<?php
+	}
+} else {
+?>
+<form action="/sheets/create" method="POST">
+
+<label for="name">Nombre</label>
+<input type="text" id="name" name="name">
+
+<input type="submit" value="Crear">
+
+</form>
+<?php
+}
+?>
+</div>
+</div>
