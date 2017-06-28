@@ -79,4 +79,12 @@ class Users extends Zend_Db_Table_Abstract {
 	public function confirm($id) {
 		$this->update(array('confirmed' => 1), 'id = '.$id);
 	}
+	
+	public function findUserByLogin($username) {
+		return $this->_db->fetchRow("select * from users where login = '".$username."'");
+	}
+	
+	public function findUserByEmail($email) {
+		return $this->_db->fetchRow("select * from users where email = '".$username."'");
+	}
 }

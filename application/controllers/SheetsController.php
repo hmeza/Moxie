@@ -36,18 +36,24 @@ class SheetsController extends Zend_Controller_Action
 				}
 				$data = array(
 						'user_owner' => $_SESSION['user_id'],
-						'name' => $_POST['name'],
+						'name' => $this->getRequest()->getParam('name', ''),
 						'unique_id' => uniqid()
 				);
 				$id = $this->sheetModel->insert($data);
 				$sheet = $this->sheetModel->find($id)->current();
+				// add creator as first user
+				$sheetUser = new SharedExpensesSheetUsers();
+				$sheetUser->insert(array(
+						'id_sheet' => $id,
+						'id_user' => $_SESSION['user_id']
+				));
 				$this->view->assign('sheet', $sheet);
 			}
 			catch(Exception $e) {
 				$errors = array($e->getMessage());
 				$this->view->assign('errors', $errors);
 			}
-			$this->_helper->redirector('view','sheets');
+			$this->redirect('/sheets/view/id/'.$sheet['unique_id']);
 		}
 		// else render GET page
 	}
@@ -58,15 +64,28 @@ class SheetsController extends Zend_Controller_Action
 		}
 		catch(Exception $e) {
 			// return 404
+			$this->view->assign('errors', array('Sheet not found'));
+			//$this->render('index', 'expenses');
+			$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
 		}
 		try {
-			$sheed->addEntry(user_owner, amount, note, date);
+			$sharedExpenseModel = new SharedExpenses();
+			$data = array(
+					'id_sheet' => $sheet['id'],
+					'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
+					'amount' => $this->getRequest()->getParam('amount'),
+					'note' => $this->getRequest()->getParam('note', ''),
+					'date' => $this->getRequest()->getParam('date'),
+			);
+			$sharedExpenseModel->insert($data);
 		}
-		catch(EXception $e) {
+		catch(Exception $e) {
 			// return 500 / error message
+			error_log($e->getMessage());
+			$this->view->assign('errors', array('Unable to store shared expense'));
+			$this->render('view', 'sheets');
 		}
-		// @todo redirect to sheet
-		$this->_helper->redirector('index','shared_expenses');
+		$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
 	}
 	
 	public function closeAction() {
@@ -80,10 +99,51 @@ class SheetsController extends Zend_Controller_Action
 		$this->_helper->redirector('index','shared_expenses');
 	}
 	
-	private function getSheet() {
-		if (empty($_POST['sheet_id'])) {
-			// throw
+	public function adduserAction() {
+		try {
+			$unique_id = $this->getRequest()->getParam('id_sheet');
+			$sheetUser = new SharedExpensesSheetUsers();
+			$userModel = new Users();
+			$sheet = $this->sheetModel->get_by_unique_id($unique_id);
+			if(empty($sheet)) {
+				throw new Exception("Sheet with id ".$unique_id." not found");
+			}
+			$data = array(
+					'id_sheet' => $sheet['id'],
+			);
+			$op = $this->getRequest()->getParam('user_type');
+			$user = $this->getRequest()->getParam('user');
+			if ($op == "email") {
+				$u = $userModel->findUserByEmail($user);
+				if (isset($u)) {
+					$data['id_user'] = $u['id'];
+				}
+				else {
+					$data['id_user'] = null;
+				}
+				$data['email'] = $user;
+			}
+			else {
+				$u = $userModel->findUserByLogin($user);
+				error_log(print_r($u, true));
+				if(empty($u)) {
+					throw new Exception("User not found");
+				}
+				$data['id_user'] = $u['id'];
+				$data['email'] = $u['email'];
+			}
+			// @todo control duplicates
+			$sheetUser->insert($data);
 		}
-		$sheet = SharedExpensesSheet::find($_POST['sheet_id']);
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$this->view->assign("errors", array($e->getMessage()));
+		}
+		$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
+	}
+	
+	private function getSheet() {
+		$id_sheet = $this->getRequest()->getParam('id_sheet', null);
+		return $this->sheetModel->get_by_unique_id($id_sheet);
 	}
 }
