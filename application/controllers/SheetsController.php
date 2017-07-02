@@ -108,32 +108,39 @@ class SheetsController extends Zend_Controller_Action
 			if(empty($sheet)) {
 				throw new Exception("Sheet with id ".$unique_id." not found");
 			}
-			$data = array(
-					'id_sheet' => $sheet['id'],
-			);
-			$op = $this->getRequest()->getParam('user_type');
 			$user = $this->getRequest()->getParam('user');
-			if ($op == "email") {
-				$u = $userModel->findUserByEmail($user);
-				if (isset($u)) {
-					$data['id_user'] = $u['id'];
-				}
-				else {
-					$data['id_user'] = null;
-				}
-				$data['email'] = $user;
-			}
-			else {
+			$user_id = null;
+			$email = null;
+			try {
 				$u = $userModel->findUserByLogin($user);
-				error_log(print_r($u, true));
+				error_log(print_r($u,true));
 				if(empty($u)) {
-					throw new Exception("User not found");
+					error_log("user not found by login");
+					$u = $userModel->findUserByEmail($user);
+					error_log(print_r($u,true));
+					if(empty($u)) {
+						error_log("user not found by email");
+						// @todo: check $user is a valid email. If not, raise
+						error_log("settings user as email ".$user);
+						$email = $user;
+					}
 				}
-				$data['id_user'] = $u['id'];
-				$data['email'] = $u['email'];
+				if (!empty($u)) {
+					error_log("\$u is set, ".print_r($u,true));
+					$user_id = $u['id'];
+					$email = $u['email'];
+				}				
+				$data = array(
+					'id_sheet' => $sheet['id'],
+					'id_user' => $user_id,
+					'email' => $email
+				);
+				// @todo control duplicates
+				$sheetUser->insert($data);
 			}
-			// @todo control duplicates
-			$sheetUser->insert($data);
+			catch(Exception $e) {
+				error_log("exception caught when adding user to sheet: ".$e->getMessage());
+			}
 		}
 		catch(Exception $e) {
 			error_log($e->getMessage());

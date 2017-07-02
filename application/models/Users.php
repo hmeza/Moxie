@@ -58,7 +58,7 @@ class Users extends Zend_Db_Table_Abstract {
 		));
 		return $s_key;
 	}
-
+ 
 	/**
 	 * @param array $user
 	 * @return string
@@ -85,6 +85,6 @@ class Users extends Zend_Db_Table_Abstract {
 	}
 	
 	public function findUserByEmail($email) {
-		return $this->_db->fetchRow("select * from users where email = '".$username."'");
+		return $this->_db->fetchRow("select * from users where email = '".$email."'");
 	}
 }

@@ -14,12 +14,13 @@ if (isset($this->sheet)) {
 ?>
 	Identificador único de esta página de gastos compartidos:&nbsp;
 	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a><br>
-	
 	<div>
 	Añadir usuario:
 	<form action="/sheets/add_user" method="POST">
-	<input type="radio" id="user_type" name="user_type" value="email" checked="checked"> Por correo de usuario<br>
-	<input type="radio" id="user_type" name="user_type" value="username"> Por id de usuario<br>
+	<p>
+	Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
+	Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
+	</p>
 	Nombre <input type="text" id="user" name="user"><br>
 	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
 	<input type="submit" value="Agregar">
