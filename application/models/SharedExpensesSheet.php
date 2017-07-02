@@ -48,7 +48,7 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 		$row['users'] = $this->getUsersForSheet($row['unique_id']);
 		foreach($row['users'] as $u) {
 			if(!in_array($u['id_user_sheet'], $row['distinct_users_list'])) {
-				$row['distinct_users_list'][] = $u;
+				$row['distinct_users_list'][] = $u['id_user_sheet'];
 				$row['distinct_users']++;
 			}
 		}
