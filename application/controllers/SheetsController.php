@@ -20,12 +20,15 @@ class SheetsController extends Zend_Controller_Action
 	 * List a single sheet.
 	 */
 	public function viewAction() {
-		$sheet = $this->sheetModel->get_by_unique_id(
-				$this->getRequest()->getParam('id', null)
-		);
-		error_log($this->getRequest()->getParam('id'));
-		error_log(print_r($sheet,true));
+		$categories = new Categories();
+		$id = $this->getRequest()->getParam('id', null);
+		$sheet = $this->sheetModel->get_by_unique_id($id);
 		$this->view->assign('sheet', $sheet);
+		if ($this->getRequest()->getParam('errors', null)) {
+			$this->view->assign('errors', $this->getRequest()->getParam('errors'));
+		}
+		$this->view->assign('categories', $categories->getCategoriesForView(Categories::EXPENSES));
+		//$this->view->assign('sheet_form', $this->getForm($sheet['users'], $id));
 	}
 
 	public function createAction() {
@@ -91,12 +94,87 @@ class SheetsController extends Zend_Controller_Action
 	public function closeAction() {
 		try {
 			$sheet = $this->getSheet();
+			$this->sheetModel->update(array('closed_at' => date('Y-m-d H:i:s')), 'unique_id = "'.$sheet['unique_id'].'"');
+			// @todo: set message for view "Sheet closed"
+			// @todo: send email to all users in the sheet - sheet closed w/user that closed it.
+			$this->view->assign('messages', array('Closed successfully'));
 		}
 		catch(Exception $e) {
 			// return error 404
+			// @todo: set error message
+			$this->view->assign('errors', array($e->getMessage()));
 		}
-		// set message for view "Sheet closed"
-		$this->_helper->redirector('index','shared_expenses');
+		$sheet = $this->sheetModel->get_by_unique_id($sheet['unique_id']);
+		$this->view->assign('sheet', $sheet);
+		$this->renderScript('sheets/view.phtml');
+	}
+	
+	/**
+	 * Copy Moxies to user.
+	 */
+	public function copyAction() {
+		$cat_id = $this->getRequest()->getParam('id_category');
+		$sheet_id = $this->getRequest()->getParam('id_sheet');
+		// @todo validate user
+		if(empty($_SESSION['user_id'])) {
+			// @todo set error message
+			error_log("error in session + category");
+			$this->redirect('/sheets/view/id/'.$sheet_id);
+		}
+		// validate that category belongs to user
+		$catModel = new Categories();
+		try {
+			$cat = $catModel->fetchRow("id = ".$cat_id)->toArray();
+			if(empty($cat)) {
+				throw new Exception("Category does not exists");
+			}
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			throw new Exception("Category does not exists");
+		}
+		error_log(print_r($cat),true);
+ 		if ($cat['user_owner'] != $_SESSION['user_id']) {
+			error_log("category does not belong to user ".$_SESSION['user_id']);
+			throw new Exception("Category does not belong to user");
+		}
+		error_log("about to copy");
+		// @todo copy only moxies for current user
+		
+		$sheet = $this->getSheet();
+		
+		// find sheet_user_id for this sheet and for this user
+		$id_sheet_user = null;
+		foreach($sheet['users'] as $u) {
+			if($u['id_user'] == $_SESSION['user_id']) {
+				$id_sheet_user = $u['id_sheet_user'];
+				break;
+			}
+		}
+		error_log("user is ".$id_sheet_user);
+		if(is_null($id_sheet_user)) {
+			throw new Exception("Id sheet user not found");
+		}
+		$sharedExpenses = new SharedExpenses();
+		$expenses = new Expenses();
+		foreach($sheet['expenses'] as $e) {
+			if($e['id_sheet_user'] == $id_sheet_user) {
+				// add expense with category received
+				$expenses->insert(array(
+						'user_owner' => $_SESSION['user_id'],
+						'amount' => -$e['amount'],
+						'category' => $cat['id'],
+						'note' => $e['note'],
+						'date' => $e['date'],
+				));
+				error_log("added expense, date ".$e['date']);
+				// update closed
+				$sharedExpenses->update(array('copied' => 1), 'id = '.$e['id']);
+				error_log("shared expense closed");
+			}
+		}
+		$this->redirect('/expenses');
+		
 	}
 	
 	public function adduserAction() {
@@ -152,5 +230,48 @@ class SheetsController extends Zend_Controller_Action
 	private function getSheet() {
 		$id_sheet = $this->getRequest()->getParam('id_sheet', null);
 		return $this->sheetModel->get_by_unique_id($id_sheet);
+	}
+	
+	/**
+	 * This function generates the form to add expenses.
+	 * @param array $st_expense
+	 * @return Zend_Form
+	 */
+	private function getForm($st_users, $id_sheet) {
+		global $st_lang;
+		$form  = new Zend_Form();
+		
+		// 		if(empty($st_expense['id'])) {
+		// 			$in_sum_value = 1;
+		// 			$slug = '/expenses/add';
+		
+		// 		}
+		// 		else {
+		// 			$in_sum_value = $st_expense['in_sum'];
+		// 			$slug = '/expenses/update';
+		// 		}
+		
+		// $form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)->setMethod('post');
+		
+		// $form->setAttrib('id', 'login');
+		
+		// mount users list
+		$users = array();
+		foreach($st_users as $u) {
+			$users[$u['id_sheet_user']] = $u['login'];
+		}
+		$form->addElement('text', 'amount', array('label' => "Importe", 'value' => 0, 'placeholder' => '0,00'));
+		$multiOptions = new Zend_Form_Element_Select('user');
+		$multiOptions->setName('id_sheet_user');
+		$multiOptions->setLabel("Usuario");
+		$multiOptions->addMultiOptions($st_users);
+		//$multiOptions->setValue(array($st_expense['category']));
+		$form->addElement($multiOptions);
+		
+		$form->addElement('text', 'note', array('label' => "Nota", 'value' => ''));
+		$form->addElement('date', 'date', array('label' => "Fecha", 'value' => date('Y-m-d')));
+		$form->addElement('submit','submit', array('label' => "Agregar"));
+		$form->addElement('hidden', 'id_sheet', array('label' => null, 'value' => $id_sheet));
+		return $form;
 	}
 }

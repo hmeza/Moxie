@@ -19,6 +19,7 @@ if (empty($this->sheet_list)) {
 else {
 	echo "My sheets
 <select id='sheet_id' name='sheet_id' onchange='redirect()'>
+<option>-</option>
 ";
 	echo "Selecciona una sheets.";
 	foreach ($this->sheet_list as $s) {

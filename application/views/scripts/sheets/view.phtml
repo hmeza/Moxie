@@ -1,5 +1,30 @@
+<script src="/bower_components/clipboard/dist/clipboard.min.js"></script>
+<script src="/js/sheets/data.js"></script>
+<style type="text/css">
+.foki:hover {
+    background: #ffffff;
+}
+.foki {
+    background: #ffffff;
+    padding: 0px 30px;
+    border-radius: 3px;
+    margin-right: 10px;
+    color: #000 !important;
+    position: relative;
+    display: inline-block;
+    width: 150px;
+</style>
 <div class="moxie-container">
 <div>
+<div id="messages">
+<?php
+if(!empty($this->messages)) {
+	foreach($this->messages as $e) {
+		echo "<div>".$e."</div>";
+	}
+}
+?>
+</div>
 <div id="errors">
 <?php
 if(!empty($this->errors)) {
@@ -14,6 +39,11 @@ if (isset($this->sheet)) {
 ?>
 	Identificador único de esta página de gastos compartidos:&nbsp;
 	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a><br>
+	<button class="foki btn">Copiar al portapapeles</button>
+	
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
 	<div>
 	Añadir usuario:
 	<form action="/sheets/add_user" method="POST">
@@ -27,34 +57,53 @@ if (isset($this->sheet)) {
 	</form>
 	</div>
 	
-	<div>
+	<div style="max-width: 500px">
 	Añadir gasto:
 	<form action="/sheets/add" method="POST">
 	Usuario
 	<select id="id_sheet_user" name="id_sheet_user">
 	<?php
 	foreach($this->sheet['users'] as $user) {
-		error_log(print_r($user,true));
 		$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
-		echo '<option value="'.$user['id_user_sheet'].'">'.$displayName.'</option>';
+		echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
 	}
 	?>
 	</select><br>
+	<label for="amount">Importe</label>
+	<input type="text" id="amount" name="amount" placeholder='0.00'>
 	<label for="note">Nota</label>
 	<input type="text" id="note" name="note">
-	<label for="amount">Gasto</label>
-	<input type="text" id="amount" name="amount">
 	<label for="date">Fecha</label>
 	<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
 	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
 	<input type="submit" value="Agregar">
 	</form>
+	<?php //echo $this->sheet_form; ?>
 	</div>
 	
 	<div>
-	<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="GET">
+	<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
+	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
 	<input type="submit" value="Cerrar hoja">
 	</form>
+	<?php
+	}
+	else {
+	?>
+	<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
+	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+	<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
+	<select name="id_category" id="id_category">
+	<?php
+	foreach($this->categories as $k => $c) {
+		echo "<option value='".$k."'>".$c."</option>";
+	}
+	?>
+	</select>
+	</form>
+	<?php
+	}
+	?>
 	</div>
 	
 	<table class="list moxie moxie-data" style="width: 100%">
@@ -65,7 +114,6 @@ if (isset($this->sheet)) {
 	<?php
 	foreach($this->sheet['users'] as $k => $user) {
 		$name = empty($user['login']) ? $user['email'] : $user['login'];
-		error_log("name : ".$name);
 		echo "<th align='right'>".$name."</th>";
 		$this->sheet['users'][$k]['total'] = 0;  // add column total for user
 	}
@@ -79,13 +127,13 @@ if (isset($this->sheet)) {
 		echo "<tr><td>&nbsp;</td>";
 		echo "<td align='center'>".explode(" ", $e['date'])[0]."</td>";
 		echo "<td align='left'>".$e['note']."</td>";
-		foreach($this->sheet['distinct_users_list'] as $k => $du) {
-			if ($e['id_sheet_user'] == $du) {
+		foreach($this->sheet['users'] as $k => $du) {
+			if ($e['id_sheet_user'] == $du['id_sheet_user']) {
 				echo "<td align='right'>".$e['amount']." &euro;</td>";
 				$this->sheet['users'][$k]['total'] += $e['amount'];
 			}
 			else {
-				echo "<td></td>";
+				echo "<td align='right'>0.00 &euro;</td>";
 			}
 		}
 		echo "</tr>";
@@ -109,8 +157,8 @@ if (isset($this->sheet)) {
 	<th></th>
 	<?php
 	foreach($this->sheet['users'] as $user) {
-		$current = $average - $user['total'];
-		if($current > 0) {
+		$current = -($average - $user['total']);
+		if($current <= 0) {
 			// debes pasta
 			$color = '#ff0000';
 		}

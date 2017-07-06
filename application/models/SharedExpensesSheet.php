@@ -47,8 +47,8 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 		$row['distinct_users_list'] = $distinct_users_list;
 		$row['users'] = $this->getUsersForSheet($row['unique_id']);
 		foreach($row['users'] as $u) {
-			if(!in_array($u['id_user_sheet'], $row['distinct_users_list'])) {
-				$row['distinct_users_list'][] = $u['id_user_sheet'];
+			if(!in_array($u['id_sheet_user'], $row['distinct_users_list'])) {
+				$row['distinct_users_list'][] = $u['id_sheet_user'];
 				$row['distinct_users']++;
 			}
 		}
@@ -61,7 +61,7 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 			->setIntegrityCheck(false)
 			->from(array('ses' => 'shared_expenses_sheets'), array())
-			->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_user_sheet'))
+			->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
 			->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
 			->where('ses.unique_id = ?', $sheet_id);
 		return $this->fetchAll($select)->toArray();
