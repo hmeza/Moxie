@@ -12,8 +12,8 @@ $st_urls = array(
     'incomes' => '/incomes',
     'expenses' => '/expenses',
     'stats' => '/stats',
+	'sheets' => '/sheets',
     'finance' => '/finance',
-    'users' => '/users'
 );
 $settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
 
@@ -54,11 +54,11 @@ if(!empty($_SESSION['user_id'])) {
                 <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/users">'.$_SESSION['user_name'].'</a></td>';
 
                 foreach($st_urls as $key => $value) {
-                        $s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'><a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'.$st_lang[$key].'</a></td>';
+                        $s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'>'
+    						.'<a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'
+        					.$st_lang[$key].'</a></td>';
                 }
-                $s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a></td>
-                ';
-                $s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/sheets">Sheets</a></td>';
+                $s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a></td>';
         }
         else {
                 $s_webMenu .= '

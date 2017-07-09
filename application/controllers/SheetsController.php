@@ -240,21 +240,6 @@ class SheetsController extends Zend_Controller_Action
 	private function getForm($st_users, $id_sheet) {
 		global $st_lang;
 		$form  = new Zend_Form();
-		
-		// 		if(empty($st_expense['id'])) {
-		// 			$in_sum_value = 1;
-		// 			$slug = '/expenses/add';
-		
-		// 		}
-		// 		else {
-		// 			$in_sum_value = $st_expense['in_sum'];
-		// 			$slug = '/expenses/update';
-		// 		}
-		
-		// $form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)->setMethod('post');
-		
-		// $form->setAttrib('id', 'login');
-		
 		// mount users list
 		$users = array();
 		foreach($st_users as $u) {
@@ -265,7 +250,6 @@ class SheetsController extends Zend_Controller_Action
 		$multiOptions->setName('id_sheet_user');
 		$multiOptions->setLabel("Usuario");
 		$multiOptions->addMultiOptions($st_users);
-		//$multiOptions->setValue(array($st_expense['category']));
 		$form->addElement($multiOptions);
 		
 		$form->addElement('text', 'note', array('label' => "Nota", 'value' => ''));

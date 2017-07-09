@@ -97,6 +97,7 @@ $st_lang = array(
 	'tags_update' => 'Actualizar',
 	'tags_placeholder' => 'Introduce tags...',
 	// Shared expenses
+	'sheets' => 'Gastos compartidos',
 	'sheets_no_sheets' => 'No tienes hojas de gastos compartidos.',
 	'sheets_select_sheet' => 'Selecciona una hoja',
 	'sheets_my_sheets' => 'Mis hojas compartidas',
