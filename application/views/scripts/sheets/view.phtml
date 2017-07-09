@@ -29,13 +29,18 @@ echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->shee
 <?php
 if (isset($this->sheet)) {
 ?>
-	<div class="moxie_expenses_form_div">
-	Identificador único de esta página de gastos compartidos:&nbsp;
-	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
-	<img class="btn"
-	style="width: 24px; height: 24px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
-	alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
-	title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+	<div class="moxie_expenses_form_div" style="padding: 10px">
+	<h1>
+		<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
+		<span>
+		<img class="btn"
+		style="width: 24px; height: 24px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
+		alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+		title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+		</span>
+		
+		
+	</h1>
 	</div>
 	
 	<?php
@@ -43,28 +48,35 @@ if (isset($this->sheet)) {
 	?>
 	<div id="forms">
 		<div class="moxie_expenses_form_div moxie_expenses_form_left">
-			<div id="add_user_container">
+			<div id="add_user_container" style="padding: 10px">
 	 			<span id="add_user_button">
 				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 					<i class="material-icons" style="background-color: #0b77b7">+</i>
 				</button>
-				<h2>Añadir usuario:</h2>
+				<span style="font-size: 18px; font-weight: bold;">Añadir usuario:</span>
 				</span>
 				<span id="add_user_form" style="display: none">
-				<form action="/sheets/add_user" method="POST">
-				<p>
-				Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
-				Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
-				</p>
-				Nombre <input type="text" id="user" name="user"><br>
-				<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-				<input type="submit" value="Agregar">
-				</form>
+					<form action="/sheets/add_user" method="POST">
+					<p>
+					Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
+					Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
+					</p>
+					Nombre <input type="text" id="user" name="user"><br>
+					<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+					<input type="submit" value="Agregar">
+					</form>
 				</span>
 			</div>
 			
-			<div style="max-width: 500px">
-			<h2>Añadir gasto:</h2>
+			<div style="max-width: 500px; padding: 10px;">
+			<span id="add_user_button">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons" style="background-color: #0b77b7">+</i>
+				</button>
+				<span style="font-size: 18px; font-weight: bold;">Añadir gasto:</span>
+			</span>
+			
+			
 			<form action="/sheets/add" method="POST">
 			Usuario
 			<select id="id_sheet_user" name="id_sheet_user">
