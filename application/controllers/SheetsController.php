@@ -212,6 +212,7 @@ class SheetsController extends Zend_Controller_Action
 			$user = $this->getRequest()->getParam('user');
 			$user_id = null;
 			$email = null;
+			$registered = true;
 			try {
 				$u = $userModel->findUserByLogin($user);
 				error_log(print_r($u,true));
@@ -224,6 +225,7 @@ class SheetsController extends Zend_Controller_Action
 						// @todo: check $user is a valid email. If not, raise
 						error_log("settings user as email ".$user);
 						$email = $user;
+						$registered = false;
 					}
 				}
 				if (!empty($u)) {
@@ -238,6 +240,7 @@ class SheetsController extends Zend_Controller_Action
 				);
 				// @todo control duplicates
 				$sheetUser->insert($data);
+				$this->sendUserAdded($unique_id, $email, $registered);
 			}
 			catch(Exception $e) {
 				error_log("exception caught when adding user to sheet: ".$e->getMessage());
@@ -247,7 +250,7 @@ class SheetsController extends Zend_Controller_Action
 			error_log($e->getMessage());
 			$this->view->assign("errors", array($e->getMessage()));
 		}
-		$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
+		$this->redirect('/sheets/view/id/'.$unique_id);
 	}
 	
 	private function getSheet() {
@@ -321,21 +324,23 @@ class SheetsController extends Zend_Controller_Action
 	 * @throws Zend_Db_Table_Exception
 	 * @throws Zend_Exception
 	 */
-	private function sendUserAdded($url, $userEmail, $registered=false) {
+	private function sendUserAdded($sheetId, $userEmail, $registered=false) {
 		global $st_lang;
 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
 		$s_site = Zend_Registry::get('config')->moxie->app->name;
-		$email = $st_form['email'];
 		$subject = $s_site . ' - '.$st_lang['sheets_email_subject'];
+		$url = $s_server . '/sheets/view/id/'.$sheetId;
 		$body = $st_lang['sheets_email_body_1'].'
-		
-<a href="'.$url.'">'.$url.'</a>
 
-'.$st_lang['sheets_email_body_2'];
+'.$url.'
+
+'.$st_lang['sheets_email_body_2'].'
+
+'.$st_lang['emails_footer'];
 		
 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
 				'Reply-To: moxie@dootic.com' . "\r\n" .
 				'X-Mailer: PHP/' . phpversion() . "\r\n";
-		$result = mail($email, $subject, $body, $headers);
+		$result = mail($userEmail, $subject, $body, $headers);
 	}
 }

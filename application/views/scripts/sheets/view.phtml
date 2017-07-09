@@ -239,7 +239,8 @@ if (isset($this->sheet)) {
 	<?php
 	$js = array();
 	foreach($this->sheet['users'] as $user) {
-		$js[] ='["'.$user['name'].'", '.$user['total'].']';
+		$name = empty($user['login']) ? $user['email'] : $user['login'];
+		$js[] ='["'.$name.'", '.$user['total'].']';
 	}
 	$pieData = '['.implode(', ', $js).']';
 	?>

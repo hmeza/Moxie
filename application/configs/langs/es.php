@@ -137,6 +137,7 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'language'  => 'Idioma',
 	'user_send' => 'Enviar',
 	// Other stuff
+	'emails_footer' => "Cordialmente\n\nEl equipo de Moxie",
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
 	'error_nouser' => 'No estás identificado. Por favor <a href="/">accede</a> o <a href="/login/newuser">registrate</a> como usuario.',

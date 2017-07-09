@@ -19,9 +19,13 @@ class SharedExpenses extends Zend_Db_Table_Abstract {
 			->where('se.id = ?', $sharedExpenseId);
 		error_log($select);
 		try {
-			$row = $this->fetchRow($select)->toArray();
+			$row = $this->fetchRow($select);
+			if($row) {
+				$row = $row->toArray();
+			}
 		}
 		catch(Exception $e) {
+			error_log($e->getMessage());
 			return false;
 		}
 		return $row;

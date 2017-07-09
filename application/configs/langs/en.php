@@ -137,6 +137,7 @@ Now you can log in with your login and password to start using Moxie.',
 	'language'  => 'Language',
 	'user_send' => 'Send',
 	// Other stuff
+		'emails_footer' => "Best regards\n\nMoxie team",
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Passwords do not match',
 	'error_nouser' => 'You are not logged in. Please <a href="/">log in</a> or <a href="login/newuser">register</a> a new user.',
