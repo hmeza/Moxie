@@ -26,7 +26,12 @@ class SheetsController extends Zend_Controller_Action
 		if ($this->getRequest()->getParam('errors', null)) {
 			$this->view->assign('errors', $this->getRequest()->getParam('errors'));
 		}
-		$this->view->assign('categories', $categories->getCategoriesForView(Categories::EXPENSES));
+		try {
+			$this->view->assign('categories', $categories->getCategoriesForView(Categories::EXPENSES));
+		}
+		catch(Exception $e) {
+			$this->view->assign('categories', array());
+		}
 		$this->set_sheet_list_to_view();
 		//$this->view->assign('sheet_form', $this->getForm($sheet['users'], $id));
 	}
