@@ -301,4 +301,29 @@ class SheetsController extends Zend_Controller_Action
 		$form->setAttrib("name", "sheet_id_redirector_form");
 		return $form;
 	}
+	
+	/**
+	 * Email user with register data.
+	 * @param $i_lastInsertId
+	 * @param $st_form
+	 * @throws Zend_Db_Table_Exception
+	 * @throws Zend_Exception
+	 */
+	private function sendUserAdded($url, $userEmail, $registered=false) {
+		global $st_lang;
+		$s_server = Zend_Registry::get('config')->moxie->settings->url;
+		$s_site = Zend_Registry::get('config')->moxie->app->name;
+		$email = $st_form['email'];
+		$subject = $s_site . ' - '.$st_lang['sheets_email_subject'];
+		$body = $st_lang['sheets_email_body_1'].'
+		
+<a href="'.$url.'">'.$url.'</a>
+
+'.$st_lang['sheets_email_body_2'];
+		
+		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+				'Reply-To: moxie@dootic.com' . "\r\n" .
+				'X-Mailer: PHP/' . phpversion() . "\r\n";
+		$result = mail($email, $subject, $body, $headers);
+	}
 }

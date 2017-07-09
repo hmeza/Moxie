@@ -96,6 +96,29 @@ $st_lang = array(
 	'tags_notice' => 'En premer Actualitzar, s\'eliminaran els tags esborrats.',
 	'tags_update' => 'Actualitzar',
 	'tags_placeholder' => 'Introdueix tags...',
+		// Shared expenses
+		'sheets' => 'Despeses compartides',
+		'sheets_no_sheets' => 'No tens fulls de despeses compartides.',
+		'sheets_select_sheet' => 'Selecciona un full',
+		'sheets_my_sheets' => 'Els meus fulls compartits',
+		'sheets_create_new' => 'Crear nou full',
+		'sheets_close' => 'Tancar full',
+		'sheets_copy_to_my_account' => 'Copiar a les meves despeses',
+		'sheets_using_category' => 'utilitzant la categoria&nbsp;',
+		'sheets_create' => 'Crear',
+		'sheets_name' => 'Nom',
+		'sheets_add' => 'Afegir',
+		'sheets_add_expense' => 'Afegir despesa:',
+		'sheets_add_user' => 'Afegir usuari:',
+		'sheets_add_user_message' => 'Introdueix l\'adreça de correu de la persona amb la que comparteixes despeses.&nbsp;'
+		.'Si introdueixes un nom d\'usuari existent, vincularem aquest full al seu compte.',
+		'sheets_copy_to_clipboard' => 'Copiar al porta-retalls',
+		'sheets_email_subject' => 'Nou full de despeses compartides',
+		'sheets_email_body_1' => 'Han compartit un full de despeses amb tu:',
+		'sheets_email_body_2' => 'Si tienes cuenta en Moxie, podrás ver esta hoja en tus hojas de gastos'
+		.' compartidos. En caso de que no tengas usuario, podrás registrarte y esta hoja quedará vinculada'
+		.' a tu cuenta automáticamente.',
+		'sheets_distribution' => 'Distribució',
 	// User, login, etc.
 	'users'		=>	'Configuració',
 	'users_title'	=>	'Configuració',

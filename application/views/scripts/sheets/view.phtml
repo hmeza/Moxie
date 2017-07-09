@@ -47,7 +47,7 @@ if (isset($this->sheet)) {
 			?>
 			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="Cerrar hoja">
+			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>">
 			</form>
 			<?php
 			}
@@ -55,7 +55,7 @@ if (isset($this->sheet)) {
 			?>
 			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
+			<button onclick="submit()"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <?php echo $st_lang['sheets_using_category']; ?>
 			<select name="id_category" id="id_category">
 			<?php
 			foreach($this->categories as $k => $c) {
@@ -82,17 +82,16 @@ if (isset($this->sheet)) {
 				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 					<i class="material-icons" style="background-color: #0b77b7">+</i>
 				</button>
-				<span style="font-size: 18px; font-weight: bold;">Añadir usuario:</span>
+				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_user']; ?></span>
 				</span>
 				<span id="add_user_form" style="display: none">
 					<form action="/sheets/add_user" method="POST">
 					<p>
-					Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
-					Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
+					<?php echo $st_lang['sheets_add_user_message']; ?>
 					</p>
-					Nombre <input type="text" id="user" name="user"><br>
+					<?php echo $st_lang['sheets_name']; ?> <input type="text" id="user" name="user"><br>
 					<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-					<input type="submit" value="Agregar">
+					<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
 					</form>
 				</span>
 			</div>
@@ -102,12 +101,12 @@ if (isset($this->sheet)) {
 				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 					<i class="material-icons" style="background-color: #0b77b7">+</i>
 				</button>
-				<span style="font-size: 18px; font-weight: bold;">Añadir gasto:</span>
+				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_expense']; ?></span>
 			</span>
 			
 			
 			<form action="/sheets/add" method="POST" id="add_expense_form">
-			Usuario
+			<?php echo $st_lang['login']; ?>
 			<select id="id_sheet_user" name="id_sheet_user">
 			<?php
 			foreach($this->sheet['users'] as $user) {
@@ -116,14 +115,14 @@ if (isset($this->sheet)) {
 			}
 			?>
 			</select><br>
-			<label for="amount">Importe</label>
+			<label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
 			<input type="text" id="amount" name="amount" placeholder='0.00'>
-			<label for="note">Nota</label>
+			<label for="note"><?php echo $st_lang['expenses_note']; ?></label>
 			<input type="text" id="note" name="note">
-			<label for="date">Fecha</label>
+			<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
 			<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="Agregar">
+			<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
 			</form>
 			<?php //echo $this->sheet_form; ?>
 			</div>
@@ -131,7 +130,7 @@ if (isset($this->sheet)) {
 		</div>
 	
 		<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
-			<h2>Reparto</h2>
+			<h2><?php echo $st_lang['sheets_distribution']; ?></h2>
 		</div>
 	</div>
 	<?php
