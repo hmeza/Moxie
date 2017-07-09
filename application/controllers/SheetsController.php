@@ -302,7 +302,7 @@ class SheetsController extends Zend_Controller_Action
 		global $st_lang;
 		$form  = new Zend_Form();
 		
-		$sheet_list = array();
+		$sheet_list = array('-' => '---');
 		foreach($sheets as $s) {
 			$sheet_list[$s['unique_id']] = $s['name'];
 		}
