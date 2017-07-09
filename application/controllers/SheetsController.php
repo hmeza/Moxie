@@ -91,6 +91,26 @@ class SheetsController extends Zend_Controller_Action
 		$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
 	}
 	
+	public function deleteAction() {
+		try {
+			$seid = $this->getRequest()->getParam('id');
+			// validate that current user appears in the sheet of this shared expense
+			$seModel = new SharedExpenses();
+			$seModel->find($seid);
+			$row = $seModel->getSheetByExpensIdAndUserId($seid, $_SESSION['user_id']);
+			if(empty($row)) {
+				throw new Exception("Shared expense does not appear in a sheet from current user");
+			}
+			$id_sheet = $row['unique_id'];
+			$seModel->delete('id = '.$seid);
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$this->redirect('/sheets');
+		}
+		$this->redirect('/sheets/view/id/'.$id_sheet);
+	}
+	
 	public function closeAction() {
 		try {
 			$sheet = $this->getSheet();
@@ -104,9 +124,7 @@ class SheetsController extends Zend_Controller_Action
 			// @todo: set error message
 			$this->view->assign('errors', array($e->getMessage()));
 		}
-		$sheet = $this->sheetModel->get_by_unique_id($sheet['unique_id']);
-		$this->view->assign('sheet', $sheet);
-		$this->renderScript('sheets/view.phtml');
+		$this->redirect('/sheets/view/id/'.$sheet['unique_id']);
 	}
 	
 	/**

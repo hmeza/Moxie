@@ -883,3 +883,12 @@ h2 {
 .sheets_select_sheet {
 	max-width: 250px;
 }
+
+.sheets_form {
+	background:#ffffff;
+	padding: 5px;
+	border: 0px solid #eee;
+	margin: 1px;
+	font: 16px roboto sans-serif;
+	width: 98%;
+}

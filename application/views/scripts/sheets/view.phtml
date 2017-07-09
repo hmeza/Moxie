@@ -31,15 +31,44 @@ if (isset($this->sheet)) {
 ?>
 	<div class="moxie_expenses_form_div" style="padding: 10px">
 	<h1>
+		<div style="width: 100%;">
+		<div style="width: 300px; display: inline">
 		<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
 		<span>
 		<img class="btn"
-		style="width: 24px; height: 24px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
+		style="width: 28px; height: 28px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
 		alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
 		title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
 		</span>
-		
-		
+		</div>
+		<div style="float: right; display: inline;">
+			<?php
+			if (empty($this->sheet['closed_at'])) {
+			?>
+			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="submit" value="Cerrar hoja">
+			</form>
+			<?php
+			}
+			else {
+			?>
+			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
+			<select name="id_category" id="id_category">
+			<?php
+			foreach($this->categories as $k => $c) {
+				echo "<option value='".$k."'>".$c."</option>";
+			}
+			?>
+			</select>
+			</form>
+			<?php
+			}
+			?>
+		</div>
+		</div>
 	</h1>
 	</div>
 	
@@ -69,7 +98,7 @@ if (isset($this->sheet)) {
 			</div>
 			
 			<div style="max-width: 500px; padding: 10px;">
-			<span id="add_user_button">
+			<span id="add_expense_button">
 				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
 					<i class="material-icons" style="background-color: #0b77b7">+</i>
 				</button>
@@ -77,7 +106,7 @@ if (isset($this->sheet)) {
 			</span>
 			
 			
-			<form action="/sheets/add" method="POST">
+			<form action="/sheets/add" method="POST" id="add_expense_form">
 			Usuario
 			<select id="id_sheet_user" name="id_sheet_user">
 			<?php
@@ -99,41 +128,25 @@ if (isset($this->sheet)) {
 			<?php //echo $this->sheet_form; ?>
 			</div>
 		
-			<div>
-			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
-			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="Cerrar hoja">
-			</form>
-			<?php
-			}
-			else {
-			?>
-			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
-			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
-			<select name="id_category" id="id_category">
-			<?php
-			foreach($this->categories as $k => $c) {
-				echo "<option value='".$k."'>".$c."</option>";
-			}
-			?>
-			</select>
-			</form>
-			<?php
-			}
-			?>
-			</div>
-		
 		</div>
 	
 		<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
-			Reparto
+			<h2>Reparto</h2>
 		</div>
 	</div>
+	<?php
+	}
+	?>
 	
 	<table class="list moxie moxie-data" style="width: 100%">
 	<tr>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
 	<th style="width: 5%"></th>
+	<?php
+	}
+	?>
 	<th style="20%">Fecha</th>
 	<th align="left">Nota</th>
 	<?php
@@ -149,7 +162,13 @@ if (isset($this->sheet)) {
 	foreach($this->sheet['expenses'] as $e) {
 		$total += $e['amount'];
 		// distinct_users_list will mark column for each row
-		echo "<tr><td>&nbsp;</td>";
+		echo "<tr>";
+		if (empty($this->sheet['closed_at'])) {
+			echo "<td><a href='/sheets/delete/id/".$e['id']."'><img src='/img/delete.png'></a></td>";
+		}
+		else {
+			echo "";
+		}
 		echo "<td align='center'>".explode(" ", $e['date'])[0]."</td>";
 		echo "<td align='left'>".$e['note']."</td>";
 		foreach($this->sheet['users'] as $k => $du) {
@@ -167,17 +186,29 @@ if (isset($this->sheet)) {
 	?>
 	
 	<tr>
-	<th></th>
-	<th></th>
-	<th><?php echo number_format($total, 2); ?> &euro;</th>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
+	<th style="border-top: 1px solid #c5c5c5"></th>
+	<?php
+	}
+	?>
+	<th style="border-top: 1px solid #c5c5c5">TOTAL</th>
+	<th style="border-top: 1px solid #c5c5c5"><?php echo number_format($total, 2); ?> &euro;</th>
 	<?php
 	foreach($this->sheet['users'] as $user) {
-		echo "<th align='right'>".number_format($user['total'], 2)." &euro;</th>";
+		echo "<th align='right' style='border-top: 1px solid #c5c5c5'>".number_format($user['total'], 2)." &euro;</th>";
 	}
 	?>
 	</tr>
 	<tr>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
 	<th></th>
+	<?php
+	}
+	?>
 	<th></th>
 	<th></th>
 	<?php
