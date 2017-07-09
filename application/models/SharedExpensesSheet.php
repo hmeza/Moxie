@@ -17,12 +17,13 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 	
 	public function get_by_user_match($user_id) {
 		$select = $this->select()
-			->from(array($this->_name => 's'), array('*'))
-			->joinInner(array('shared_expenses_sheet_users' => 'su'), 'su.sheet_id = s.id')
-			->where('n.user_owner = ?', $user_id)
+			->from(array('s' => $this->_name), array('*'))
+			->setIntegrityCheck(false)
+			->joinLeft(array('su' => 'shared_expenses_sheet_users'), 'su.id_sheet = s.id', array())
+			->where('s.user_owner = ?', $user_id)
 			->orWhere('su.id_user = ?', $user_id)
 			->order('s.id desc');
-		return $this->fetchAll();
+		return $this->fetchAll($select);
 	}
 	
 	public function get_by_unique_id($id) {

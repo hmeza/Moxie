@@ -283,9 +283,16 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	private function set_sheet_list_to_view() {
-		$sheets = $this->sheetModel->get_by_user_match($_SESSION['user_id']);
-		$this->view->assign('sheet_list', $sheets);
-		$this->view->assign('sheet_list_form', $this->getSheetSelector($sheets));
+		try {
+			$sheets = $this->sheetModel->get_by_user_match($_SESSION['user_id']);
+			$this->view->assign('sheet_list', $sheets);
+			$this->view->assign('sheet_list_form', $this->getSheetSelector($sheets));
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+			$this->view->assign('sheet_list', array());
+			$this->view->assign('sheet_list_form', new Zend_Form());
+		}
 	}
 	
 	private function getSheetSelector($sheets) {
