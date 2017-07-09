@@ -129,8 +129,10 @@ if (isset($this->sheet)) {
 		
 		</div>
 	
-		<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
-			<h2><?php echo $st_lang['sheets_distribution']; ?></h2>
+		<div id="distribution_box" class="moxie_expenses_form_div moxie_expenses_form_right moxie-right">
+			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			<script type="text/javascript" src="/js/sheets/stats.js"></script>
+			<div id="expenses_month"></div>
 		</div>
 	</div>
 	<?php
@@ -146,8 +148,8 @@ if (isset($this->sheet)) {
 	<?php
 	}
 	?>
-	<th style="20%">Fecha</th>
-	<th align="left">Nota</th>
+	<th style="20%"><?php echo $st_lang['expenses_date']; ?></th>
+	<th align="left"><?php echo $st_lang['expenses_note']; ?></th>
 	<?php
 	foreach($this->sheet['users'] as $k => $user) {
 		$name = empty($user['login']) ? $user['email'] : $user['login'];
@@ -232,3 +234,15 @@ if (isset($this->sheet)) {
 ?>
 </div>
 </div>
+
+<script type="text/javascript">
+	<?php
+	$js = array();
+	foreach($this->sheet['users'] as $user) {
+		$js[] ='["'.$user['name'].'", '.$user['total'].']';
+	}
+	$pieData = '['.implode(', ', $js).']';
+	?>
+	var pieData = <?php echo $pieData; ?>;
+	var pieTitle = '<?php echo $st_lang['sheets_distribution']; ?>';
+</script>
