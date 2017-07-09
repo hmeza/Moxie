@@ -879,3 +879,7 @@ h2 {
 .ui-autocomplete {
 	max-width: 160px;
 }
+
+.sheets_select_sheet {
+	max-width: 250px;
+}

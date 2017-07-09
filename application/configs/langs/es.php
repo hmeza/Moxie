@@ -96,6 +96,12 @@ $st_lang = array(
 	'tags_notice' => 'Al pulsar Actualizar se eliminarán los tags borrados.',
 	'tags_update' => 'Actualizar',
 	'tags_placeholder' => 'Introduce tags...',
+	// Shared expenses
+	'sheets_no_sheets' => 'No tienes hojas de gastos compartidos.',
+	'sheets_select_sheet' => 'Selecciona una hoja',
+	'sheets_my_sheets' => 'Mis hojas compartidas',
+	'sheets_create' => 'Crear nueva hoja',
+		'sheets_copy_to_clipboard' => 'Copiar al portapapeles',
 	// User, login, etc.
 	'users'		=>	'Configuración',
 	'users_title' => 'Configuración',

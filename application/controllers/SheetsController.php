@@ -12,8 +12,7 @@ class SheetsController extends Zend_Controller_Action
 	 * Show sheets page and all my sheets.
 	 */
 	public function indexAction() {
-		$sheets = $this->sheetModel->get_by_user_match($_SESSION['user_id']);
-		$this->view->assign('sheet_list', $sheets); 
+		$this->set_sheet_list_to_view();
 	}
 	
 	/**
@@ -28,6 +27,7 @@ class SheetsController extends Zend_Controller_Action
 			$this->view->assign('errors', $this->getRequest()->getParam('errors'));
 		}
 		$this->view->assign('categories', $categories->getCategoriesForView(Categories::EXPENSES));
+		$this->set_sheet_list_to_view();
 		//$this->view->assign('sheet_form', $this->getForm($sheet['users'], $id));
 	}
 
@@ -272,6 +272,31 @@ class SheetsController extends Zend_Controller_Action
 		$form->addElement('date', 'date', array('label' => "Fecha", 'value' => date('Y-m-d')));
 		$form->addElement('submit','submit', array('label' => "Agregar"));
 		$form->addElement('hidden', 'id_sheet', array('label' => null, 'value' => $id_sheet));
+		return $form;
+	}
+	
+	private function set_sheet_list_to_view() {
+		$sheets = $this->sheetModel->get_by_user_match($_SESSION['user_id']);
+		$this->view->assign('sheet_list', $sheets);
+		$this->view->assign('sheet_list_form', $this->getSheetSelector($sheets));
+	}
+	
+	private function getSheetSelector($sheets) {
+		global $st_lang;
+		$form  = new Zend_Form();
+		
+		$sheet_list = array();
+		foreach($sheets as $s) {
+			$sheet_list[$s['unique_id']] = $s['name'];
+		}
+		$multiOptions = new Zend_Form_Element_Select('sheet_id_redirector');
+		$multiOptions->setName('sheet_id_redirector');
+		$multiOptions->setLabel($st_lang['sheets_select_sheet']);
+		$multiOptions->addMultiOptions($sheet_list);
+		$multiOptions->setAttrib('onchange', 'redirect()');
+		$form->addElement($multiOptions);
+		$form->setAttrib("id", "sheet_id_redirector_form");
+		$form->setAttrib("name", "sheet_id_redirector_form");
 		return $form;
 	}
 }

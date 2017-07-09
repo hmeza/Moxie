@@ -1,35 +1,20 @@
 <head>
-<script type="text/javascript" language="text/javascript">
-function redirect() {
-	var unique_id = $('#sheet_id').find(":selected").val();
-	window.location.replace("/sheets/view/id/" + unique_id);
-}
-</script>
+<script src="/js/sheets/data.js"></script>
 </head>
 
 <div class="moxie-container">
-<div>
+<div class="sheets_select_sheet">
 <?php
-// for data in sheet_list
-if (empty($this->sheet_list)) {
-	?>
-	No tienes sheets.
-	<?php
-}
-else {
-	echo "My sheets
-<select id='sheet_id' name='sheet_id' onchange='redirect()'>
-<option>-</option>
-";
-	echo "Selecciona una sheets.";
-	foreach ($this->sheet_list as $s) {
-		echo "<option value='".$s['unique_id']."'>".$s->name."</option>";
-	}
-}
+global $st_lang;
+echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
 ?>
-</select>
 </div>
-<div>
-</b><a href="/sheets/create">Crear nueva sheets</a>
+<div class="moxie_expenses_form_div" id="sheet_create_button">
+<input type="submit" onclick="$('#sheet_create').toggle(); $('#sheet_create_button').toggle();" value="<?php echo $st_lang['sheets_create']; ?>">
 </div>
+
+<?php
+echo $this->partial('sheets/create.phtml');
+?>
+
 </div>

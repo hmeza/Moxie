@@ -1,0 +1,10 @@
+<?php
+global $st_lang;
+// for data in sheet_list
+if (empty($this->sheet_list)) {
+	echo $st_lang['sheets_no_sheets'];
+}
+else {
+	echo $this->sheet_list_form;
+}
+?>

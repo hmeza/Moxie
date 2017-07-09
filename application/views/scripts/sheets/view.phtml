@@ -1,23 +1,10 @@
 <script src="/bower_components/clipboard/dist/clipboard.min.js"></script>
 <script src="/js/sheets/data.js"></script>
-<style type="text/css">
-.foki:hover {
-    background: #ffffff;
-}
-.foki {
-    background: #ffffff;
-    padding: 0px 30px;
-    border-radius: 3px;
-    margin-right: 10px;
-    color: #000 !important;
-    position: relative;
-    display: inline-block;
-    width: 150px;
-</style>
 <div class="moxie-container">
 <div>
 <div id="messages">
 <?php
+global $st_lang;
 if(!empty($this->messages)) {
 	foreach($this->messages as $e) {
 		echo "<div>".$e."</div>";
@@ -34,82 +21,108 @@ if(!empty($this->errors)) {
 }
 ?>
 </div>
+<div class="sheets_select_sheet">
+<?php
+echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
+?>
+</div>
 <?php
 if (isset($this->sheet)) {
 ?>
+	<div class="moxie_expenses_form_div">
 	Identificador único de esta página de gastos compartidos:&nbsp;
-	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a><br>
-	<button class="foki btn">Copiar al portapapeles</button>
+	<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
+	<img class="btn"
+	style="width: 24px; height: 24px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
+	alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+	title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+	</div>
 	
 	<?php
 	if (empty($this->sheet['closed_at'])) {
 	?>
-	<div>
-	Añadir usuario:
-	<form action="/sheets/add_user" method="POST">
-	<p>
-	Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
-	Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
-	</p>
-	Nombre <input type="text" id="user" name="user"><br>
-	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-	<input type="submit" value="Agregar">
-	</form>
-	</div>
+	<div id="forms">
+		<div class="moxie_expenses_form_div moxie_expenses_form_left">
+			<div id="add_user_container">
+	 			<span id="add_user_button">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons" style="background-color: #0b77b7">+</i>
+				</button>
+				<h2>Añadir usuario:</h2>
+				</span>
+				<span id="add_user_form" style="display: none">
+				<form action="/sheets/add_user" method="POST">
+				<p>
+				Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;
+				Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.<br>
+				</p>
+				Nombre <input type="text" id="user" name="user"><br>
+				<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+				<input type="submit" value="Agregar">
+				</form>
+				</span>
+			</div>
+			
+			<div style="max-width: 500px">
+			<h2>Añadir gasto:</h2>
+			<form action="/sheets/add" method="POST">
+			Usuario
+			<select id="id_sheet_user" name="id_sheet_user">
+			<?php
+			foreach($this->sheet['users'] as $user) {
+				$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
+				echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
+			}
+			?>
+			</select><br>
+			<label for="amount">Importe</label>
+			<input type="text" id="amount" name="amount" placeholder='0.00'>
+			<label for="note">Nota</label>
+			<input type="text" id="note" name="note">
+			<label for="date">Fecha</label>
+			<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="submit" value="Agregar">
+			</form>
+			<?php //echo $this->sheet_form; ?>
+			</div>
+		
+			<div>
+			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="submit" value="Cerrar hoja">
+			</form>
+			<?php
+			}
+			else {
+			?>
+			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
+			<select name="id_category" id="id_category">
+			<?php
+			foreach($this->categories as $k => $c) {
+				echo "<option value='".$k."'>".$c."</option>";
+			}
+			?>
+			</select>
+			</form>
+			<?php
+			}
+			?>
+			</div>
+		
+		</div>
 	
-	<div style="max-width: 500px">
-	Añadir gasto:
-	<form action="/sheets/add" method="POST">
-	Usuario
-	<select id="id_sheet_user" name="id_sheet_user">
-	<?php
-	foreach($this->sheet['users'] as $user) {
-		$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
-		echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
-	}
-	?>
-	</select><br>
-	<label for="amount">Importe</label>
-	<input type="text" id="amount" name="amount" placeholder='0.00'>
-	<label for="note">Nota</label>
-	<input type="text" id="note" name="note">
-	<label for="date">Fecha</label>
-	<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
-	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-	<input type="submit" value="Agregar">
-	</form>
-	<?php //echo $this->sheet_form; ?>
-	</div>
-	
-	<div>
-	<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
-	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-	<input type="submit" value="Cerrar hoja">
-	</form>
-	<?php
-	}
-	else {
-	?>
-	<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST">
-	<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-	<button onclick="submit()">Copiar a mis gastos</button> usando la categoría&nbsp;
-	<select name="id_category" id="id_category">
-	<?php
-	foreach($this->categories as $k => $c) {
-		echo "<option value='".$k."'>".$c."</option>";
-	}
-	?>
-	</select>
-	</form>
-	<?php
-	}
-	?>
+		<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
+			Reparto
+		</div>
 	</div>
 	
 	<table class="list moxie moxie-data" style="width: 100%">
 	<tr>
-	<th></th>
-	<th>Fecha</th>
+	<th style="width: 5%"></th>
+	<th style="20%">Fecha</th>
 	<th align="left">Nota</th>
 	<?php
 	foreach($this->sheet['users'] as $k => $user) {
@@ -138,7 +151,7 @@ if (isset($this->sheet)) {
 		}
 		echo "</tr>";
 	}
-	$average = $total / $this->sheet['distinct_users'];
+	$average = ($this->sheet['distinct_users'] > 0) ? $total / $this->sheet['distinct_users'] : 0;
 	?>
 	
 	<tr>
@@ -172,24 +185,6 @@ if (isset($this->sheet)) {
 	</tr>
 	
 	</table>
-	
-<?php
-} else if (isset($this->errors)) {
-	foreach($this->errors as $e) {
-?>
-<span><?php echo $e; ?></span>
-<?php
-	}
-} else {
-?>
-<form action="/sheets/create" method="POST">
-
-<label for="name">Nombre</label>
-<input type="text" id="name" name="name">
-
-<input type="submit" value="Crear">
-
-</form>
 <?php
 }
 ?>
