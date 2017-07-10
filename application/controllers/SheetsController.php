@@ -240,7 +240,7 @@ class SheetsController extends Zend_Controller_Action
 				);
 				// @todo control duplicates
 				$sheetUser->insert($data);
-				$this->sendUserAdded($unique_id, $email, $registered);
+				$this->sendUserAdded($unique_id, $email, $sheet['name'], $registered);
 			}
 			catch(Exception $e) {
 				error_log("exception caught when adding user to sheet: ".$e->getMessage());
@@ -324,7 +324,7 @@ class SheetsController extends Zend_Controller_Action
 	 * @throws Zend_Db_Table_Exception
 	 * @throws Zend_Exception
 	 */
-	private function sendUserAdded($sheetId, $userEmail, $registered=false) {
+	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
 		global $st_lang;
 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
 		$s_site = Zend_Registry::get('config')->moxie->app->name;
@@ -332,6 +332,7 @@ class SheetsController extends Zend_Controller_Action
 		$url = $s_server . '/sheets/view/id/'.$sheetId;
 		$body = $st_lang['sheets_email_body_1'].'
 
+'.$sheetName.'
 '.$url.'
 
 '.$st_lang['sheets_email_body_2'].'
