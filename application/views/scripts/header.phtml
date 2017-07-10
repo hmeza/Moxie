@@ -11,12 +11,12 @@ $st_urls = array(
 		'finance' => '/finance',
 );
 
-if (!isset($_SESSION['user_id'])) {
+if (empty($_SESSION['user_id'])) {
 ?>
 <header>
 <table width=100%>
 <tr>
-<td valign="top" class="moxietitle <?php if(empty($_SESSION['user_id'])) echo 'moxietitle_mobile_not_logged'; ?>" onclick="window.location='<?php echo $settingsUrl; ?>'"></td>
+<td valign="top" class="moxietitle moxietitle_mobile_not_logged" onclick="window.location='<?php echo $settingsUrl; ?>'"></td>
 <td align="right" class="moxie_login_header">
 </td>
 </tr>
