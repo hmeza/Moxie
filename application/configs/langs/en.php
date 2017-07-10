@@ -96,6 +96,29 @@ $st_lang = array(
 	'tags_notice' => 'When pressing Update, removed tags will be deleted.',
 	'tags_update' => 'Update',
 	'tags_placeholder' => 'Enter tags...',
+		// Shared expenses
+		'sheets' => 'Shared expenses',
+		'sheets_no_sheets' => 'You do not have shared expenses sheets.',
+		'sheets_select_sheet' => 'Select a sheet',
+		'sheets_my_sheets' => 'My shared sheets',
+		'sheets_create_new' => 'Create new sheet',
+		'sheets_close' => 'Close sheet',
+		'sheets_copy_to_my_account' => 'Copy to my expenses',
+		'sheets_using_category' => 'using category&nbsp;',
+		'sheets_create' => 'Create',
+		'sheets_name' => 'Name',
+		'sheets_add' => 'Add',
+		'sheets_add_expense' => 'Add expense:',
+		'sheets_add_user' => 'Add user:',
+		'sheets_add_user_message' => 'Enter address of person with whom you are sharing expenses.&nbsp;'
+		.'If you enter an existing username, the sheet will be added to the user account.',
+		'sheets_copy_to_clipboard' => 'Copy to clipboard',
+		'sheets_email_subject' => 'New shared expenses sheet',
+		'sheets_email_body_1' => 'Someone shared an expenses sheet with you:',
+		'sheets_email_body_2' => 'If you have a Moxie account, you will see this sheet in your shared expenses sheets.'
+		.'If you do not have an account, you can register and this sheet will be linked to your account'
+		.' automatically.',
+		'sheets_distribution' => 'Distribution',
 	// User, login, etc.
 	'users'		=>	'Settings',
 	'users_title'	=>	'Settings',
@@ -114,6 +137,7 @@ Now you can log in with your login and password to start using Moxie.',
 	'language'  => 'Language',
 	'user_send' => 'Send',
 	// Other stuff
+		'emails_footer' => "Best regards\n\nMoxie team",
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Passwords do not match',
 	'error_nouser' => 'You are not logged in. Please <a href="/">log in</a> or <a href="login/newuser">register</a> a new user.',

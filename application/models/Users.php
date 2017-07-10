@@ -58,7 +58,7 @@ class Users extends Zend_Db_Table_Abstract {
 		));
 		return $s_key;
 	}
-
+ 
 	/**
 	 * @param array $user
 	 * @return string
@@ -78,5 +78,28 @@ class Users extends Zend_Db_Table_Abstract {
 
 	public function confirm($id) {
 		$this->update(array('confirmed' => 1), 'id = '.$id);
+		
+		// find shared expenses sheets and copy it to new account id
+		try {
+			$userModel = new Users();
+			$user = $userModel->fetchRow('id = '.$id)->toArray();
+			$sharedExpensesSheetsUsersModel = new SharedExpensesSheetUsers();
+			$sasu = $sharedExpensesSheetsUsersModel
+				->fetchAll("email = '".$user['email']."' and id_user is NULL")->toArray();
+			foreach($sasu as $s) {
+				$sharedExpensesSheetsUsersModel->update(array('id_user' => $id), 'id = '.$s['id']);
+			}
+		}
+		catch(Exception $e) {
+			error_log($e->getMessage());
+		}
+	}
+	
+	public function findUserByLogin($username) {
+		return $this->_db->fetchRow("select * from users where login = '".$username."'");
+	}
+	
+	public function findUserByEmail($email) {
+		return $this->_db->fetchRow("select * from users where email = '".$email."'");
 	}
 }

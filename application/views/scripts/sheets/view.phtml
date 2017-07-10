@@ -1,0 +1,249 @@
+<script src="/bower_components/clipboard/dist/clipboard.min.js"></script>
+<script src="/js/sheets/data.js"></script>
+<div class="moxie-container">
+<div>
+<div id="messages">
+<?php
+global $st_lang;
+if(!empty($this->messages)) {
+	foreach($this->messages as $e) {
+		echo "<div>".$e."</div>";
+	}
+}
+?>
+</div>
+<div id="errors">
+<?php
+if(!empty($this->errors)) {
+	foreach($this->errors as $e) {
+		echo "<div>".$e."</div>";
+	}
+}
+?>
+</div>
+<div class="sheets_select_sheet">
+<?php
+echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
+?>
+</div>
+<?php
+if (isset($this->sheet)) {
+?>
+	<div class="moxie_expenses_form_div" style="padding: 10px">
+	<h1>
+		<div style="width: 100%;">
+		<div style="width: 300px; display: inline">
+		<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
+		<span>
+		<img class="btn"
+		style="width: 28px; height: 28px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
+		alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+		title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+		</span>
+		</div>
+		<div style="float: right; display: inline;">
+			<?php
+			if (empty($this->sheet['closed_at'])) {
+			?>
+			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>">
+			</form>
+			<?php
+			}
+			else {
+			?>
+			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<button onclick="submit()"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <?php echo $st_lang['sheets_using_category']; ?>
+			<select name="id_category" id="id_category">
+			<?php
+			foreach($this->categories as $k => $c) {
+				echo "<option value='".$k."'>".$c."</option>";
+			}
+			?>
+			</select>
+			</form>
+			<?php
+			}
+			?>
+		</div>
+		</div>
+	</h1>
+	</div>
+	
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
+	<div id="forms">
+		<div class="moxie_expenses_form_div moxie_expenses_form_left">
+			<div id="add_user_container" style="padding: 10px">
+	 			<span id="add_user_button">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons" style="background-color: #0b77b7">+</i>
+				</button>
+				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_user']; ?></span>
+				</span>
+				<span id="add_user_form" style="display: none">
+					<form action="/sheets/add_user" method="POST">
+					<p>
+					<?php echo $st_lang['sheets_add_user_message']; ?>
+					</p>
+					<?php echo $st_lang['sheets_name']; ?> <input type="text" id="user" name="user"><br>
+					<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+					<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+					</form>
+				</span>
+			</div>
+			
+			<div style="max-width: 500px; padding: 10px;">
+			<span id="add_expense_button">
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+					<i class="material-icons" style="background-color: #0b77b7">+</i>
+				</button>
+				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_expense']; ?></span>
+			</span>
+			
+			
+			<form action="/sheets/add" method="POST" id="add_expense_form">
+			<?php echo $st_lang['login']; ?>
+			<select id="id_sheet_user" name="id_sheet_user">
+			<?php
+			foreach($this->sheet['users'] as $user) {
+				$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
+				echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
+			}
+			?>
+			</select><br>
+			<label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
+			<input type="text" id="amount" name="amount" placeholder='0.00'>
+			<label for="note"><?php echo $st_lang['expenses_note']; ?></label>
+			<input type="text" id="note" name="note">
+			<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
+			<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
+			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+			</form>
+			<?php //echo $this->sheet_form; ?>
+			</div>
+		
+		</div>
+	
+		<div id="distribution_box" class="moxie_expenses_form_div moxie_expenses_form_right moxie-right">
+			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			<script type="text/javascript" src="/js/sheets/stats.js"></script>
+			<div id="expenses_month"></div>
+		</div>
+	</div>
+	<?php
+	}
+	?>
+	
+	<table class="list moxie moxie-data" style="width: 100%">
+	<tr>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
+	<th style="width: 5%"></th>
+	<?php
+	}
+	?>
+	<th style="20%"><?php echo $st_lang['expenses_date']; ?></th>
+	<th align="left"><?php echo $st_lang['expenses_note']; ?></th>
+	<?php
+	foreach($this->sheet['users'] as $k => $user) {
+		$name = empty($user['login']) ? $user['email'] : $user['login'];
+		echo "<th align='right'>".$name."</th>";
+		$this->sheet['users'][$k]['total'] = 0;  // add column total for user
+	}
+	?>
+	</tr>
+	<?php
+	$total = 0;
+	foreach($this->sheet['expenses'] as $e) {
+		$total += $e['amount'];
+		// distinct_users_list will mark column for each row
+		echo "<tr>";
+		if (empty($this->sheet['closed_at'])) {
+			echo "<td><a href='/sheets/delete/id/".$e['id']."'><img src='/img/delete.png'></a></td>";
+		}
+		else {
+			echo "";
+		}
+		echo "<td align='center'>".explode(" ", $e['date'])[0]."</td>";
+		echo "<td align='left'>".$e['note']."</td>";
+		foreach($this->sheet['users'] as $k => $du) {
+			if ($e['id_sheet_user'] == $du['id_sheet_user']) {
+				echo "<td align='right'>".$e['amount']." &euro;</td>";
+				$this->sheet['users'][$k]['total'] += $e['amount'];
+			}
+			else {
+				echo "<td align='right'>0.00 &euro;</td>";
+			}
+		}
+		echo "</tr>";
+	}
+	$average = ($this->sheet['distinct_users'] > 0) ? $total / $this->sheet['distinct_users'] : 0;
+	?>
+	
+	<tr>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
+	<th style="border-top: 1px solid #c5c5c5"></th>
+	<?php
+	}
+	?>
+	<th style="border-top: 1px solid #c5c5c5">TOTAL</th>
+	<th style="border-top: 1px solid #c5c5c5"><?php echo number_format($total, 2); ?> &euro;</th>
+	<?php
+	foreach($this->sheet['users'] as $user) {
+		echo "<th align='right' style='border-top: 1px solid #c5c5c5'>".number_format($user['total'], 2)." &euro;</th>";
+	}
+	?>
+	</tr>
+	<tr>
+	<?php
+	if (empty($this->sheet['closed_at'])) {
+	?>
+	<th></th>
+	<?php
+	}
+	?>
+	<th></th>
+	<th></th>
+	<?php
+	foreach($this->sheet['users'] as $user) {
+		$current = -($average - $user['total']);
+		if($current <= 0) {
+			// debes pasta
+			$color = '#ff0000';
+		}
+		else {
+			// has pagado de mas
+			$color = '#00ff00';
+		}
+		echo "<th align='right' style='color: ".$color."'>".number_format($current, 2)." &euro;</th>";
+	}
+	?>	
+	</tr>
+	
+	</table>
+<?php
+}
+?>
+</div>
+</div>
+
+<script type="text/javascript">
+	<?php
+	$js = array();
+	foreach($this->sheet['users'] as $user) {
+		$name = empty($user['login']) ? $user['email'] : $user['login'];
+		$js[] ='["'.$name.'", '.$user['total'].']';
+	}
+	$pieData = '['.implode(', ', $js).']';
+	?>
+	var pieData = <?php echo $pieData; ?>;
+	var pieTitle = '<?php echo $st_lang['sheets_distribution']; ?>';
+</script>

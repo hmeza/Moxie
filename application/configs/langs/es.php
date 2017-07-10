@@ -96,6 +96,29 @@ $st_lang = array(
 	'tags_notice' => 'Al pulsar Actualizar se eliminarán los tags borrados.',
 	'tags_update' => 'Actualizar',
 	'tags_placeholder' => 'Introduce tags...',
+	// Shared expenses
+	'sheets' => 'Gastos compartidos',
+	'sheets_no_sheets' => 'No tienes hojas de gastos compartidos.',
+	'sheets_select_sheet' => 'Selecciona una hoja',
+	'sheets_my_sheets' => 'Mis hojas compartidas',
+	'sheets_create_new' => 'Crear nueva hoja',
+		'sheets_close' => 'Cerrar hoja',
+		'sheets_copy_to_my_account' => 'Copiar a mis gastos',
+		'sheets_using_category' => 'usando la categoría&nbsp;',
+		'sheets_create' => 'Crear',
+		'sheets_name' => 'Nombre',
+		'sheets_add' => 'Agregar',
+		'sheets_add_expense' => 'Añadir gasto:',
+		'sheets_add_user' => 'Añadir usuario:',
+		'sheets_add_user_message' => 'Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;'
+					.'Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.',
+		'sheets_copy_to_clipboard' => 'Copiar al portapapeles',
+		'sheets_email_subject' => 'Nueva hoja de gastos compartidos',
+		'sheets_email_body_1' => 'Han compartido una hoja de gastos contigo:',
+		'sheets_email_body_2' => 'Si tienes cuenta en Moxie, podrás ver esta hoja en tus hojas de gastos'
+		.' compartidos. En caso de que no tengas usuario, podrás registrarte y esta hoja quedará vinculada'
+		.' a tu cuenta automáticamente.',
+		'sheets_distribution' => 'Reparto',
 	// User, login, etc.
 	'users'		=>	'Configuración',
 	'users_title' => 'Configuración',
@@ -114,6 +137,7 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'language'  => 'Idioma',
 	'user_send' => 'Enviar',
 	// Other stuff
+	'emails_footer' => "Cordialmente\n\nEl equipo de Moxie",
 	'press_here_display' => '',
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
 	'error_nouser' => 'No estás identificado. Por favor <a href="/">accede</a> o <a href="/login/newuser">registrate</a> como usuario.',

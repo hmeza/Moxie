@@ -19,7 +19,8 @@ $f_initialBudget = 0;
 $header_set = false;
 foreach ($this->categories as $key => $value) {
 	if(!$header_set) {
-		echo '<th>'.$value['date_created'].'</th>';
+		$date_created = isset($value['date_created']) ? $value['date_created'] : date('d-m-Y');
+		echo '<th>'.$date_created.'</th>';
 		$header_set = true;
 	}
 	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];

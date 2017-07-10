@@ -1,0 +1,20 @@
+<head>
+<script src="/js/sheets/data.js"></script>
+</head>
+
+<div class="moxie-container">
+<div class="sheets_select_sheet">
+<?php
+global $st_lang;
+echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
+?>
+</div>
+<div class="moxie_expenses_form_div" id="sheet_create_button">
+<input type="submit" onclick="$('#sheet_create').toggle(); $('#sheet_create_button').toggle();" value="<?php echo $st_lang['sheets_create_new']; ?>">
+</div>
+
+<?php
+echo $this->partial('sheets/create.phtml');
+?>
+
+</div>
