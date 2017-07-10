@@ -1,74 +1,69 @@
+<?php
+global $st_lang;
+$settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
+
+$url = $_SERVER['REQUEST_URI'];
+$st_urls = array(
+		'incomes' => '/incomes',
+		'expenses' => '/expenses',
+		'stats' => '/stats',
+		'sheets' => '/sheets',
+		'finance' => '/finance',
+);
+
+if (!isset($_SESSION['user_id'])) {
+?>
 <header>
 <table width=100%>
 <tr>
-<td valign="top" class="moxietitle <?php if(empty($_SESSION['user_id'])) echo 'moxietitle_mobile_not_logged'; ?>" onclick="window.location='<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>'"></td>
+<td valign="top" class="moxietitle <?php if(empty($_SESSION['user_id'])) echo 'moxietitle_mobile_not_logged'; ?>" onclick="window.location='<?php echo $settingsUrl; ?>'"></td>
 <td align="right" class="moxie_login_header">
-<?php
-global $st_lang;
-
-$url = $_SERVER['REQUEST_URI'];
-$st_url = explode("/", $url);
-$st_urls = array(
-    'incomes' => '/incomes',
-    'expenses' => '/expenses',
-    'stats' => '/stats',
-	'sheets' => '/sheets',
-    'finance' => '/finance',
-);
-$settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
-
-if(!empty($_SESSION['user_id'])) {
-    ?>
-    <input type="checkbox" class="checkbox" id="menu-toogle"/>
-    <label for="menu-toogle" class="menu-toogle"></label>
-    <nav class="nav">
-        <ul>
-        <?php
-        echo '<li class="nav__item">'.$_SESSION['user_name'].'</li>';
-        foreach($st_urls as $key => $value) {
-            echo '<li class="nav__item"><a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
-        }
-        ?>
-        <li class="nav__item"><a href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/logout"><?php echo $st_lang['logout']; ?></a></li>
-        </ul>
-    </nav>
-    <?php
-}
-?>
 </td>
 </tr>
 </table>
 </header>
-<!-- web menu -->
 <?php
-        $tableStyle = (!isset($_SESSION['user_id'])) ? "style='display:block'" : "";
-
-        $st_lang['users'] = $st_lang['users_title'];
-        $style = 'style="display: inline-block; padding: 5px; border-radius: 5px; background-color: #D0E8F4; color: white; border 5px solid white;"';
-
-        $s_webMenu = '
-        <table cellspacing=10 class="moxie_menu" '.$tableStyle.'>
-        ';
-        if (isset($_SESSION['user_id'])) {
-                $s_webMenu .= '
-                <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/users">'.$_SESSION['user_name'].'</a></td>';
-
-                foreach($st_urls as $key => $value) {
-                        $s_webMenu .= '<td'.(($st_url[1] == $key) ? ' '.$style : '').'>'
-    						.'<a href="'.Zend_Registry::get('config')->moxie->settings->url.$st_urls[$key].'">'
-        					.$st_lang[$key].'</a></td>';
-                }
-                $s_webMenu .= '<td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/login/logout">'.$st_lang['logout'].'</a></td>';
-        }
-        else {
-                $s_webMenu .= '
-                <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/">'.$st_lang['index'].'</a></td>
-                <td><a href="/finance/index">'.$st_lang['finance'].'</a></td>
-                <td><a href="'.Zend_Registry::get('config')->moxie->settings->url.'/texts/about">'.$st_lang['about'].'</a></td>
-                ';
-        }
-        $s_webMenu .= '
-        </table>
-        ';
-	echo $s_webMenu;
+}
 ?>
+<!-- web menu -->
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<div class="container">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav nav-pills">
+<?php
+$st_lang['users'] = $st_lang['users_title'];
+$s_webMenu = '';
+if (isset($_SESSION['user_id'])) {
+	$s_webMenu .= '
+	<li role="presentation"><a href="'.$settingsUrl.'/users">'.$_SESSION['user_name'].'</a></li>';
+
+	foreach($st_urls as $key => $value) {
+		$class = (strpos($url, $value) !== false) ? 'class="active"' : '';
+		$s_webMenu .= '<li role="presentation" '.$class.'>'
+		.'<a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
+	}
+	$s_webMenu .= '<li role="presentation"><a href="'.$settingsUrl.'/login/logout">'.$st_lang['logout'].'</a></li>';
+}
+else {
+	$s_webMenu .= '
+	<li role="presentation"><a href="'.$settingsUrl.'/">'.$st_lang['index'].'</a></li>
+	<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>
+	<li role="presentation"><a href="'.$settingsUrl.'/texts/about">'.$st_lang['about'].'</a></li>
+	';
+}
+echo $s_webMenu;
+?>
+			</ul>
+		</div>
+	</div>
+</nav>
