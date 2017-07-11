@@ -175,19 +175,30 @@ class ExpensesController extends TransactionsController
 		}
 
 		$f_expense = !empty($st_expense['amount']) && $st_expense['amount'] != '0.00' ? $st_expense['amount'] : '';
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00'));
+		$form->addElement(
+				'text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control')
+		);
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setName('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($st_categories);
 		$multiOptions->setValue(array($st_expense['category']));
+		$multiOptions->setAttrib('class', 'form-control');
 		$form->addElement($multiOptions);
 
-		$form->addElement("checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;'));
-		$form->addElement("checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;'));
-		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note']));
-		$form->addElement('date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date']));
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send']));
+		$form->addElement(
+				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
+				);
+		$form->addElement(
+				"checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
+				);
+		$form->addElement(
+				'text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control')
+				);
+		$form->addElement(
+				'date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control')
+				);
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send'], 'class' => 'btn btn-info'));
 		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		return $form;
 	}

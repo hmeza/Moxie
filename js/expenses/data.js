@@ -33,15 +33,7 @@ var load_favourites_data = function() {
 };
 
 $(document).ready(function() {
-	$("#category").chosen({
-		disable_search_threshold: 10,
-		width: "100%"
-	});
-
-	$("#category_search").chosen({
-		disable_search_threshold: 10,
-		width: "100%"
-	});
+    //$('#mytable').DataTable();
 
 
 	var taggle = new Taggle('tags', {

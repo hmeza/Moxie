@@ -15,14 +15,14 @@ $next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
     var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
 	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
-<script type="text/javascript" src="/js/expenses/data.js"></script>
+<script type="text/javascript" src="/js/expenses/data.js?v=3"></script>
 
 <?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
 
 <br>
 
 <div id="form">
-<div class="moxie_expenses_form_div moxie_expenses_form_left">
+<div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
 <?php
 echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
