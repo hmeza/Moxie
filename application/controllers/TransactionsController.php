@@ -49,21 +49,22 @@ class TransactionsController extends Zend_Controller_Action
 		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($st_categories);
 		$multiOptions->setValue($request->getParam('category_search', ''));
+		$multiOptions->setAttrib('class', 'form-control');
 		$form->addElement($multiOptions);
 
 		if($category_type == Categories::EXPENSES) {
-			$form->addElement('text', 'tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', '')));
+			$form->addElement('text', 'tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', ''), 'class' => 'form-control'));
 		}
 
-		$form->addElement('text', 'note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', '')));
+		$form->addElement('text', 'note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', ''), 'class' => 'form-control'));
 
-		$form->addElement('text', 'amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0)));
-		$form->addElement('text', 'amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', '')));
+		$form->addElement('text', 'amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
+		$form->addElement('text', 'amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
 
-		$form->addElement('date', 'date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date)));
-		$form->addElement('date', 'date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date)));
+		$form->addElement('date', 'date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date), 'class' => 'form-control'));
+		$form->addElement('date', 'date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date), 'class' => 'form-control'));
 		$form->addElement('hidden', 'to_excel', array('value' => 0));
-		$form->addElement('submit','search_submit', array('label' => $st_lang['search_send']));
+		$form->addElement('submit','search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info'));
 		return $form;
 	}
 }

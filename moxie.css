@@ -180,35 +180,6 @@ div:hover.moxieicon {
 	cursor: hand;
 	cursor: pointer;
 }
-.moxie_time_frame_selector {
-	width: 95%;
-	height: 50px;
-	vertical-align: middle;
-	text-align: center;
-	border: 1px solid #eee;
-	background:#fafafa;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-div.moxienext {
-	width: 10%;
-	height: 50px;
-	float: right;
-	font-size: 50px;
-	border-left: 1px solid #eee;
-	line-height: 50px;
-}
-div.moxieprevious {
-	width: 10%;
-	height: 50px;
-	float: left;
-	font-size: 50px;
-	border-right: 1px solid #eee;
-	line-height: 50px;
-}
-div:hover.moxienext, div:hover.moxieprevious {
-	font-weight: bold;
-}
 div.moxie_header_date {
 	height: 100%;
 	float: left;
@@ -267,12 +238,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .my-checkbox {
 	width: 1em;
-}
-
-.moxie_form {
-	padding: 14px;
-	border: 1px solid #eee;
-	margin: 10px;
 }
 
 .moxie_expenses_form_div {

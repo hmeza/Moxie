@@ -1,7 +1,8 @@
 <?php
 global $st_lang;
 ?>
-<table class="list moxie moxie-data" style="width: 100%" id="mytable">
+<table class="table table-striped table-bordered" id="mytable" width="100%">
+<thead>
 	<tr>
 		<td class="list moxie_edit">&nbsp;</td>
 		<td class="list moxie_category"><?php echo $st_lang['expenses_category']; ?></td>
@@ -18,13 +19,14 @@ global $st_lang;
 		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";
 		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";
 	?>
-		<td align="center" class="list moxie_date_inline"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></td>
-		<td align="right" class="list moxie_amount"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></td>
+		<td align="center" class="list moxie_date_inline sorting"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></td>
+		<td align="right" class="list moxie_amount sorting"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></td>
 	<?php } else { ?>
-		<td align="center" class="list moxie_date_inline "><?php echo $st_lang['expenses_date']; ?></td>
-		<td align="right" class="list moxie_amount"><?php echo $st_lang['expenses_amount']; ?></td>
+		<td align="center" class="list moxie_date_inline sorting"><?php echo $st_lang['expenses_date']; ?></td>
+		<td align="right" class="list moxie_amount sorting"><?php echo $st_lang['expenses_amount']; ?></td>
 	<?php } ?>
 	</tr>
+	</thead>
 <?php
 $f_totalAmount = 0;
 $f_currentAmount = 0;
