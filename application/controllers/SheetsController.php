@@ -67,6 +67,13 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	public function addAction() {
+		$id_sheet = $this->getRequest()->getParam('id_sheet');
+		// validations: logged user
+		if (empty($_SESSION['user_id'])) {
+			// return 403
+			$this->view->assign('errors', array('User not logged in'));
+			$this->redirect('/sheets/view/id/'.$id_sheet);
+		}
 		try  {
 			$sheet = $this->getSheet();
 		}
@@ -74,7 +81,7 @@ class SheetsController extends Zend_Controller_Action
 			// return 404
 			$this->view->assign('errors', array('Sheet not found'));
 			//$this->render('index', 'expenses');
-			$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
+			$this->redirect('/sheets/view/id/'.$id_sheet);
 		}
 		try {
 			$sharedExpenseModel = new SharedExpenses();
@@ -93,7 +100,7 @@ class SheetsController extends Zend_Controller_Action
 			$this->view->assign('errors', array('Unable to store shared expense'));
 			$this->render('view', 'sheets');
 		}
-		$this->redirect('/sheets/view/id/'.$this->getRequest()->getParam('id_sheet'));
+		$this->redirect('/sheets/view/id/'.$id_sheet);
 	}
 	
 	public function deleteAction() {
