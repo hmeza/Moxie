@@ -10,10 +10,10 @@ h2 {
 	font-size: 18px;
 }
 form {
-	background:#fafafa;
-	padding:1em;
+/*	background:#fafafa;*/
+	padding:3px;
 	border:1px solid #eee;
-	margin:1em;
+	margin:1px;
 }
 fieldset div {
 	margin:0.3em 0;

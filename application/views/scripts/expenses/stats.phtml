@@ -3,7 +3,8 @@
 global $st_lang;
 $st_budget = $this->budget;
 
-$s_out = '<table class="moxie-stats">
+$s_out = '
+<table class="table table-striped" id="mytable" width="100%">
 <tr><td></td><td align="right">'.$st_lang['expenses_expended'].'</td>';
 if (!empty($st_budget)) $s_out .= '<td align="right">'.$st_lang['expenses_budget'].'</td></tr>';
 
