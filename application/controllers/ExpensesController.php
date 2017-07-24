@@ -198,7 +198,7 @@ class ExpensesController extends TransactionsController
 		$form->addElement(
 				'date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control')
 				);
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send'], 'class' => 'btn btn-info'));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_send'], 'class' => 'btn btn-info pull-right'));
 		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		return $form;
 	}
