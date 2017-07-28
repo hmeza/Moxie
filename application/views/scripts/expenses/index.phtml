@@ -28,34 +28,36 @@ echo $this->partial('expenses/data_header.phtml',
         'used_tag_list' => $this->used_tag_list,
 		'search_form' => $this->search_form,
 		'favourites' => $this->favourites,
-		'favourites_json' => $this->favourites_json
-    ));
-echo $this->partial('common/data.phtml',
-	array(
-        'form'=>$this->form,
-        'list'=>$this->list,
-        'year'=>$this->year,
-        'month'=>$this->month,
-        'editSlug'  => '/expenses/edit/id/',
-        'tag_list' => $this->tag_list,
-        'used_tag_list' => $this->used_tag_list,
-		'show_categories_filter' => $this->show_categories_filter,
-		'show_tags_filter' => $this->show_tags_filter,
-		'view' => $this->view,
-		'o' => $this->o
+		'favourites_json' => $this->favourites_json,
+			'budget'=>$this->budget,
+			'expenses'=>$this->expenses,
+			'year'=>$this->year,
+			'month'=>$this->month,
+			'month_expenses' => $this->month_expenses,
     ));
 ?>
 </div>
 <div class="moxie-right">
+<?php
+echo $this->partial('common/data.phtml',
+		array(
+				'form'=>$this->form,
+				'list'=>$this->list,
+				'year'=>$this->year,
+				'month'=>$this->month,
+				'editSlug'  => '/expenses/edit/id/',
+				'tag_list' => $this->tag_list,
+				'used_tag_list' => $this->used_tag_list,
+				'show_categories_filter' => $this->show_categories_filter,
+				'show_tags_filter' => $this->show_tags_filter,
+				'view' => $this->view,
+				'o' => $this->o
+		));
+?>
 <a id="stats"></a>
 <?php
 echo $this->partial('expenses/stats.phtml',
 					array(
-						'budget'=>$this->budget,
-						'expenses'=>$this->expenses,
-						'year'=>$this->year,
-						'month'=>$this->month,
-						'month_expenses' => $this->month_expenses,
 					));
 ?>
 </div>
