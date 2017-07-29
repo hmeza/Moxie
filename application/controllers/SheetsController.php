@@ -67,48 +67,56 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	public function addAction() {
+		global $st_lang;
 		$id_sheet = $this->getRequest()->getParam('id');
 		// validations: logged user
 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
 			// return 403
 			$this->_request->setPost(array(
 					'id' => $id_sheet,
-					'errors' => array('User not logged in')
+					'errors' => array($st_lang['error_nouser'])
 			));
 			return $this->_forward("view", "sheets");
 		}
-		else {
-			try  {
-				$sheet = $this->getSheet();
-			}
-			catch(Exception $e) {
-				// return 404
-				$this->view->assign('errors', array('Sheet not found'));
-				//$this->render('index', 'expenses');
-				$this->redirect('/sheets/view/id/'.$id_sheet);
-			}
-			try {
-				$sharedExpenseModel = new SharedExpenses();
-				$data = array(
-						'id_sheet' => $sheet['id'],
-						'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
-						'amount' => $this->getRequest()->getParam('amount'),
-						'note' => $this->getRequest()->getParam('note', ''),
-						'date' => $this->getRequest()->getParam('date'),
-				);
-				$sharedExpenseModel->insert($data);
-			}
-			catch(Exception $e) {
-				// return 500 / error message
-				error_log($e->getMessage());
-				$this->view->assign('errors', array('Unable to store shared expense'));
-				$this->render('view', 'sheets');
-			}
+		try  {
+			$sheet = $this->getSheet();
+		}
+		catch(Exception $e) {
+			// return 404
+			$this->view->assign('errors', array('Sheet not found'));
+			//$this->render('index', 'expenses');
 			$this->redirect('/sheets/view/id/'.$id_sheet);
 		}
+		try {
+			$sharedExpenseModel = new SharedExpenses();
+			$data = array(
+					'id_sheet' => $sheet['id'],
+					'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
+					'amount' => $this->getRequest()->getParam('amount'),
+					'note' => $this->getRequest()->getParam('note', ''),
+					'date' => $this->getRequest()->getParam('date'),
+			);
+			$sharedExpenseModel->insert($data);
+		}
+		catch(Exception $e) {
+			// return 500 / error message
+			error_log($e->getMessage());
+			$this->view->assign('errors', array('Unable to store shared expense'));
+			$this->render('view', 'sheets');
+		}
+		$this->redirect('/sheets/view/id/'.$id_sheet);
 	}
 	
 	public function deleteAction() {
+		// validations: logged user
+		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
+			// return 403
+			$this->_request->setPost(array(
+					'id' => $id_sheet,
+					'errors' => array($st_lang['error_nouser'])
+			));
+			return $this->_forward("view", "sheets");
+		}
 		try {
 			$seid = $this->getRequest()->getParam('id');
 			// validate that current user appears in the sheet of this shared expense
@@ -129,6 +137,17 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	public function closeAction() {
+		global $st_lang;
+		$id_sheet = $this->getRequest()->getParam('id_sheet', null);
+		// validations: logged user
+		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
+			// return 403
+			$this->_request->setPost(array(
+					'id' => $id_sheet,
+					'errors' => array($st_lang['error_nouser'])
+			));
+			return $this->_forward("view", "sheets");
+		}
 		try {
 			$sheet = $this->getSheet();
 			$this->sheetModel->update(array('closed_at' => date('Y-m-d H:i:s')), 'unique_id = "'.$sheet['unique_id'].'"');
