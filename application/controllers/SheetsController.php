@@ -233,12 +233,12 @@ class SheetsController extends Zend_Controller_Action
 	
 	public function adduserAction() {
 		try {
-			$unique_id = $this->getRequest()->getParam('id_sheet');
+			$id_sheet= $this->getRequest()->getParam('id_sheet');
 			$sheetUser = new SharedExpensesSheetUsers();
 			$userModel = new Users();
-			$sheet = $this->sheetModel->get_by_unique_id($unique_id);
+			$sheet = $this->sheetModel->get_by_unique_id($id_sheet);
 			if(empty($sheet)) {
-				throw new Exception("Sheet with id ".$unique_id." not found");
+				throw new Exception("Sheet with id ".$id_sheet." not found");
 			}
 			$user = $this->getRequest()->getParam('user');
 			$user_id = null;
@@ -253,7 +253,10 @@ class SheetsController extends Zend_Controller_Action
 					error_log(print_r($u,true));
 					if(empty($u)) {
 						error_log("user not found by email");
-						// @todo: check $user is a valid email. If not, raise
+						$validator = new Zend_Validate_EmailAddress();
+						if (!$validator->isValid($email)) {
+							throw new Exception("Invalid email address");
+						}
 						error_log("settings user as email ".$user);
 						$email = $user;
 						$registered = false;
@@ -271,17 +274,22 @@ class SheetsController extends Zend_Controller_Action
 				);
 				// @todo control duplicates
 				$sheetUser->insert($data);
-				$this->sendUserAdded($unique_id, $email, $sheet['name'], $registered);
+				$this->sendUserAdded($id_sheet, $email, $sheet['name'], $registered);
 			}
 			catch(Exception $e) {
 				error_log("exception caught when adding user to sheet: ".$e->getMessage());
+				$this->_request->setPost(array(
+						'id' => $id_sheet,
+						'errors' => array($e->getMessage())
+				));
+				return $this->_forward("view", "sheets");
 			}
 		}
 		catch(Exception $e) {
 			error_log($e->getMessage());
 			$this->view->assign("errors", array($e->getMessage()));
 		}
-		$this->redirect('/sheets/view/id/'.$unique_id);
+		$this->redirect('/sheets/view/id/'.$id_sheet);
 	}
 	
 	private function getSheet() {
