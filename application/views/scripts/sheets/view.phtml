@@ -16,7 +16,7 @@ if(!empty($this->messages)) {
 <?php
 if(!empty($this->errors)) {
 	foreach($this->errors as $e) {
-		echo "<div>".$e."</div>";
+		echo "<div class='errors'>".$e."</div>";
 	}
 }
 ?>
@@ -121,7 +121,7 @@ if (isset($this->sheet)) {
 			<input type="text" id="note" name="note">
 			<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
 			<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
-			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+			<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>">
 			<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
 			</form>
 			<?php //echo $this->sheet_form; ?>
@@ -154,7 +154,8 @@ if (isset($this->sheet)) {
 	foreach($this->sheet['users'] as $k => $user) {
 		$name = empty($user['login']) ? $user['email'] : $user['login'];
 		echo "<th align='right'>".$name."</th>";
-		$this->sheet['users'][$k]['total'] = 0;  // add column total for user
+		error_log(print_r($this->sheet['users'][$k],true));
+//		$this->sheet['users'][$k]['total'] = 0;  // add column total for user
 	}
 	?>
 	</tr>
@@ -238,9 +239,11 @@ if (isset($this->sheet)) {
 <script type="text/javascript">
 	<?php
 	$js = array();
-	foreach($this->sheet['users'] as $user) {
-		$name = empty($user['login']) ? $user['email'] : $user['login'];
-		$js[] ='["'.$name.'", '.$user['total'].']';
+	if(is_array($this->sheet['users'])) {
+		foreach($this->sheet['users'] as $user) {
+			$name = empty($user['login']) ? $user['email'] : $user['login'];
+			$js[] ='["'.$name.'", '.$user['total'].']';
+		}
 	}
 	$pieData = '['.implode(', ', $js).']';
 	?>

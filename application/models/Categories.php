@@ -53,6 +53,9 @@ class Categories extends Zend_Db_Table_Abstract {
 	 * @param int $i_typeFilter
 	 */
 	public function getCategoriesByUser($i_typeFilter) {
+		if(empty($_SESSION) || empty($_SESSION['user_id'])) {
+			throw new Exception("No user id found in session");
+		}
 		//select distinct(c2.id),c1.parent,c1.name, c2.name
 		//from categories c1 left join categories c2 on c2.parent = c1.id
 		//where c2.id is not null

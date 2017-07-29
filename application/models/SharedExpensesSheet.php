@@ -48,7 +48,8 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 		$row['distinct_users'] = $distinct_users;
 		$row['distinct_users_list'] = $distinct_users_list;
 		$row['users'] = $this->getUsersForSheet($row['unique_id']);
-		foreach($row['users'] as $u) {
+		// add users that do not have any expense but exist in the sheet
+		foreach($row['users'] as $key => $u) {
 			if(!in_array($u['id_sheet_user'], $row['distinct_users_list'])) {
 				$row['distinct_users_list'][] = $u['id_sheet_user'];
 				$row['distinct_users']++;
@@ -58,14 +59,19 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 	}
 	
 	private function getUsersForSheet($sheet_id) {
-		$nameCoalesce = new Zend_Db_Expr('COALESCE(u.login, sesu.email) as login');
-		$emailCoalesce = new Zend_Db_Expr('COALESCE(u.email, sesu.email) as email');
-		$select = $this->select()
-			->setIntegrityCheck(false)
-			->from(array('ses' => 'shared_expenses_sheets'), array())
-			->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
-			->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
-			->where('ses.unique_id = ?', $sheet_id);
-		return $this->fetchAll($select)->toArray();
+		try {
+			$nameCoalesce = new Zend_Db_Expr('COALESCE(u.login, sesu.email) as login');
+			$emailCoalesce = new Zend_Db_Expr('COALESCE(u.email, sesu.email) as email');
+			$select = $this->select()
+				->setIntegrityCheck(false)
+				->from(array('ses' => 'shared_expenses_sheets'), array(new Zend_Db_Expr ('0 as total')))
+				->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
+				->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
+				->where('ses.unique_id = ?', $sheet_id);
+			return $this->fetchAll($select)->toArray();
+		}
+		catch(Exception $e) {
+			return array();
+		}
 	}
 }
