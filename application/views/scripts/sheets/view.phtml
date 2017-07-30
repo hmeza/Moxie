@@ -47,7 +47,7 @@ if (isset($this->sheet)) {
 			?>
 			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>">
+			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
 			</form>
 			<?php
 			}
@@ -55,7 +55,7 @@ if (isset($this->sheet)) {
 			?>
 			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<button onclick="submit()"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <?php echo $st_lang['sheets_using_category']; ?>
+			<button onclick="submit()" class="btn btn-primary"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <?php echo $st_lang['sheets_using_category']; ?>
 			<select name="id_category" id="id_category">
 			<?php
 			foreach($this->categories as $k => $c) {
@@ -77,55 +77,41 @@ if (isset($this->sheet)) {
 	?>
 	<div id="forms">
 		<div class="moxie_expenses_form_div moxie_expenses_form_left">
-			<div id="add_user_container" style="padding: 10px">
-	 			<span id="add_user_button">
-				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-					<i class="material-icons" style="background-color: #0b77b7">+</i>
-				</button>
-				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_user']; ?></span>
-				</span>
-				<span id="add_user_form" style="display: none">
-					<form action="/sheets/add_user" method="POST">
-					<p>
-					<?php echo $st_lang['sheets_add_user_message']; ?>
-					</p>
-					<?php echo $st_lang['sheets_name']; ?> <input type="text" id="user" name="user"><br>
-					<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-					<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
-					</form>
-				</span>
+		<button data-toggle="collapse" data-target="#sheets_add_user"" class="btn btn-info"><?php echo $st_lang['sheets_add_user']; ?></button>
+		<button data-toggle="collapse" data-target="#sheets_add_expense" class="btn btn-info"><?php echo $st_lang['sheets_add_expense']; ?></button>
+			<div id="sheets_add_user" style="padding: 10px;" class="collapse">
+				<form action="/sheets/add_user" method="POST">
+				<p>
+				<?php echo $st_lang['sheets_add_user_message']; ?>
+				</p>
+				<?php echo $st_lang['sheets_name']; ?> <input type="text" id="user" name="user"><br>
+				<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+				<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+				</form>
 			</div>
 			
-			<div style="max-width: 500px; padding: 10px;">
-			<span id="add_expense_button">
-				<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-					<i class="material-icons" style="background-color: #0b77b7">+</i>
-				</button>
-				<span style="font-size: 18px; font-weight: bold;"><?php echo $st_lang['sheets_add_expense']; ?></span>
-			</span>
-			
-			
-			<form action="/sheets/add" method="POST" id="add_expense_form">
-			<?php echo $st_lang['login']; ?>
-			<select id="id_sheet_user" name="id_sheet_user">
-			<?php
-			foreach($this->sheet['users'] as $user) {
-				$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
-				echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
-			}
-			?>
-			</select><br>
-			<label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
-			<input type="text" id="amount" name="amount" placeholder='0.00'>
-			<label for="note"><?php echo $st_lang['expenses_note']; ?></label>
-			<input type="text" id="note" name="note">
-			<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
-			<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
-			<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
-			</form>
+			<div id="sheets_add_expense" style="max-width: 500px; padding: 10px;">			
+				<form action="/sheets/add" method="POST" id="add_expense_form">
+				<?php echo $st_lang['login']; ?>
+				<select id="id_sheet_user" name="id_sheet_user">
+				<?php
+				foreach($this->sheet['users'] as $user) {
+					$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
+					echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
+				}
+				?>
+				</select><br>
+				<label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
+				<input type="text" id="amount" name="amount" placeholder='0.00'>
+				<label for="note"><?php echo $st_lang['expenses_note']; ?></label>
+				<input type="text" id="note" name="note">
+				<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
+				<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
+				<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>">
+				<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+				</form>
+			</div>
 			<?php //echo $this->sheet_form; ?>
-			</div>
 		
 		</div>
 	
@@ -139,7 +125,7 @@ if (isset($this->sheet)) {
 	}
 	?>
 	
-	<table class="list moxie moxie-data" style="width: 100%">
+	<table class="table table-striped table-bordered" id="mytable" width="100%">
 	<tr>
 	<?php
 	if (empty($this->sheet['closed_at'])) {

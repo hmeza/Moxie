@@ -108,8 +108,8 @@ $st_lang = array(
 		'sheets_create' => 'Crear',
 		'sheets_name' => 'Nom',
 		'sheets_add' => 'Afegir',
-		'sheets_add_expense' => 'Afegir despesa:',
-		'sheets_add_user' => 'Afegir usuari:',
+		'sheets_add_expense' => 'Afegir despesa',
+		'sheets_add_user' => 'Afegir usuari',
 		'sheets_add_user_message' => 'Introdueix l\'adreça de correu de la persona amb la que comparteixes despeses.&nbsp;'
 		.'Si introdueixes un nom d\'usuari existent, vincularem aquest full al seu compte.',
 		'sheets_copy_to_clipboard' => 'Copiar al porta-retalls',
