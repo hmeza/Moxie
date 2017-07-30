@@ -108,8 +108,8 @@ $st_lang = array(
 		'sheets_create' => 'Crear',
 		'sheets_name' => 'Nombre',
 		'sheets_add' => 'Agregar',
-		'sheets_add_expense' => 'Añadir gasto:',
-		'sheets_add_user' => 'Añadir usuario:',
+		'sheets_add_expense' => 'Añadir gasto',
+		'sheets_add_user' => 'Añadir usuario',
 		'sheets_add_user_message' => 'Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;'
 					.'Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.',
 		'sheets_copy_to_clipboard' => 'Copiar al portapapeles',

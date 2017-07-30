@@ -108,8 +108,8 @@ $st_lang = array(
 		'sheets_create' => 'Create',
 		'sheets_name' => 'Name',
 		'sheets_add' => 'Add',
-		'sheets_add_expense' => 'Add expense:',
-		'sheets_add_user' => 'Add user:',
+		'sheets_add_expense' => 'Add expense',
+		'sheets_add_user' => 'Add user',
 		'sheets_add_user_message' => 'Enter address of person with whom you are sharing expenses.&nbsp;'
 		.'If you enter an existing username, the sheet will be added to the user account.',
 		'sheets_copy_to_clipboard' => 'Copy to clipboard',
