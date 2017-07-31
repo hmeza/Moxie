@@ -22,24 +22,20 @@ $next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
 <div id="form">
 <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
 <?php
-echo '<h2>'.$st_lang['expenses_header'].'</h2>';
 $i_expensePK = $this->form->getValue('id');
 $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 ?>
 	<?php if(isset($this->favourites_json) && $this->favourites_json != "[]") { ?>
 	<div id="favourites_container">
-		<span id="favourites_button">
-		<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-			<i class="material-icons" style="background-color: #0b77b7">+</i>
-		</button>
-		Favoritos
-		</span>
-		<span id="favourites_list" style="display: none">
+		<button data-toggle="collapse" data-target="#favourites_list" class="btn btn-info">Favoritos</button>
+		<span id="favourites_list" class="collapse">
 			<script type="text/javascript">
 				favourite_data = <?php echo $this->favourites_json; ?>;
 			</script>
-			<form>
-				<select id="favourites" name="favourites"><option value=""></option></select>
+			<form class="form-group">
+				<select id="favourites" name="favourites" class="form-control">
+					<option value=""></option>
+				</select>
 			</form>
 		</span>
 	</div>

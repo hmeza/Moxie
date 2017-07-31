@@ -1,8 +1,4 @@
 <!-- Graphic -->
-<?php
-global $st_lang;
-$this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_trends']);
-?>
 <link rel="stylesheet" type="text/css" href="/css/trends.css"/>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -31,13 +27,14 @@ $this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_trends']);
 </script>
 <script type="text/javascript" src="/js/stats/trends.js"></script>
 
+<div id="stats_trends_container">
 <div id="stats_trends"></div>
 <label for="trends_category"></label>
-<select id="trends_category" name="trends_category" onchange="drawChart();">
+<select id="trends_category" name="trends_category" onchange="drawChart();" class="form-control">
 	<?php
 	foreach($this->trends as $key => $value) {
 		echo '<option value="'.$key.'">'.$value['name'].'</option>';
 	}
 	?>
 </select>
-<br><br>
+</div>
