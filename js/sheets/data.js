@@ -16,16 +16,6 @@ $(document).ready(function() {
 		$("#add_expense_form").slideToggle();
 	});
 	
-	$("#sheet_id_redirector").chosen({
-		disable_search_threshold: 10,
-		width: "100%"
-	});
-	
-	$("#id_sheet_user").chosen({
-		disable_search_threshold: 10,
-		width: "100%"
-	});
-	
 	$('#sheet_id_redirector').on('change', function(e, params) {
 		unique_id = e.target.value;
 		window.location.replace("/sheets/view/id/" + unique_id);
