@@ -1,11 +1,11 @@
 <div class="moxie-container" id="sheet_create" style="display:none">
-	<div class="moxie_expenses_form_div">
+	<div class="form-group moxie_expenses_form_div">
 		<form action="/sheets/create" method="POST">
 		
 		<label for="name"><?php global $st_lang; echo $st_lang['sheets_name']; ?></label>
-		<input type="text" id="name" name="name">
+		<input type="text" id="name" name="name" class="form-control">
 		
-		<input type="submit" value="<?php echo $st_lang['sheets_create']; ?>">
+		<input type="submit" value="<?php echo $st_lang['sheets_create']; ?>" class="form-control btn btn-info">
 		
 		</form>
 	</div>

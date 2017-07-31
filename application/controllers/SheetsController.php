@@ -353,6 +353,7 @@ class SheetsController extends Zend_Controller_Action
 		$multiOptions->setLabel($st_lang['sheets_select_sheet']);
 		$multiOptions->addMultiOptions($sheet_list);
 		$multiOptions->setAttrib('onchange', 'redirect()');
+		$multiOptions->setAttrib('class', 'form-control');
 		$form->addElement($multiOptions);
 		$form->setAttrib("id", "sheet_id_redirector_form");
 		$form->setAttrib("name", "sheet_id_redirector_form");

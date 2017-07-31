@@ -1,5 +1,5 @@
 <script src="/bower_components/clipboard/dist/clipboard.min.js"></script>
-<script src="/js/sheets/data.js"></script>
+<script src="/js/sheets/data.js?v=2"></script>
 <div class="moxie-container">
 <div>
 <div id="messages">
@@ -21,15 +21,12 @@ if(!empty($this->errors)) {
 }
 ?>
 </div>
-<div class="sheets_select_sheet">
 <?php
 echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
-?>
-</div>
-<?php
+
 if (isset($this->sheet)) {
 ?>
-	<div class="moxie_expenses_form_div" style="padding: 10px">
+	<div class="moxie_expenses_form_div">
 	<h1>
 		<div style="width: 100%;">
 		<div style="width: 300px; display: inline">
@@ -45,7 +42,7 @@ if (isset($this->sheet)) {
 			<?php
 			if (empty($this->sheet['closed_at'])) {
 			?>
-			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
+			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
 			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
 			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
 			</form>
@@ -78,22 +75,23 @@ if (isset($this->sheet)) {
 	<div id="forms">
 		<div class="moxie_expenses_form_div moxie_expenses_form_left">
 		<button data-toggle="collapse" data-target="#sheets_add_user"" class="btn btn-info"><?php echo $st_lang['sheets_add_user']; ?></button>
-		<button data-toggle="collapse" data-target="#sheets_add_expense" class="btn btn-info"><?php echo $st_lang['sheets_add_expense']; ?></button>
-			<div id="sheets_add_user" style="padding: 10px;" class="collapse">
-				<form action="/sheets/add_user" method="POST">
+		<!--<button data-toggle="collapse" data-target="#sheets_add_expense" class="btn btn-info"><?php echo $st_lang['sheets_add_expense']; ?></button>-->
+			<div id="sheets_add_user" class="collapse">
+				<form action="/sheets/add_user" method="POST" class="form-group">
 				<p>
 				<?php echo $st_lang['sheets_add_user_message']; ?>
 				</p>
-				<?php echo $st_lang['sheets_name']; ?> <input type="text" id="user" name="user"><br>
+				<label for="user"><?php echo $st_lang['sheets_name']; ?></label>
+				<input type="text" id="user" name="user" class="form-control"><br>
 				<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-				<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+				<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>" class="btn btn-primary">
 				</form>
 			</div>
 			
-			<div id="sheets_add_expense" style="max-width: 500px; padding: 10px;">			
-				<form action="/sheets/add" method="POST" id="add_expense_form">
+			<div id="sheets_add_expense" class="form-group">			
+				<form action="/sheets/add" method="POST" id="add_expense_form" class="form-group">
 				<?php echo $st_lang['login']; ?>
-				<select id="id_sheet_user" name="id_sheet_user">
+				<select id="id_sheet_user" name="id_sheet_user" class="form-control">
 				<?php
 				foreach($this->sheet['users'] as $user) {
 					$displayName = (isset($user['login']) ? $user['login'] : $user['email']);
@@ -102,13 +100,13 @@ if (isset($this->sheet)) {
 				?>
 				</select><br>
 				<label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
-				<input type="text" id="amount" name="amount" placeholder='0.00'>
+				<input type="text" id="amount" name="amount" placeholder='0.00' class="form-control">
 				<label for="note"><?php echo $st_lang['expenses_note']; ?></label>
-				<input type="text" id="note" name="note">
+				<input type="text" id="note" name="note" class="form-control">
 				<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
-				<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>">
-				<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>">
-				<input type="submit" value="<?php echo $st_lang['sheets_add']; ?>">
+				<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>" class="form-control">
+				<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>" class="form-control">
+				<input type="submit" value="<?php echo $st_lang['sheets_add_expense']; ?>" class="form-control btn btn-primary">
 				</form>
 			</div>
 			<?php //echo $this->sheet_form; ?>
@@ -140,8 +138,6 @@ if (isset($this->sheet)) {
 	foreach($this->sheet['users'] as $k => $user) {
 		$name = empty($user['login']) ? $user['email'] : $user['login'];
 		echo "<th align='right'>".$name."</th>";
-		error_log(print_r($this->sheet['users'][$k],true));
-//		$this->sheet['users'][$k]['total'] = 0;  // add column total for user
 	}
 	?>
 	</tr>
