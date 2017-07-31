@@ -33,14 +33,17 @@ function print_yearly_loop($yearly, $categories, $init_year) {
 function print_yearly($yearly, $categories) {
 	$keys = array_keys($yearly);
 	$init_year = $keys[0];
-	echo '<table class="table-stats">';
-	echo "<th style='width: 200px'></th>";
+	?>
+	<div id="stats_table_yearly" class="collapse">
+	<table class="table table-striped table-bordered table-stats">
+	<th style='width: 200px'></th>
+	<?php
 	for($i = $init_year; $i <= date('Y'); $i++) {
 		echo "<th style='text-align:right;'	>".$i."</th>";
 	}
 	echo "</tr>";
 	print_yearly_loop($yearly, $categories, $init_year);
-	echo "</table>";
+	echo "</table></div>";
 }
 ?>
 
@@ -78,10 +81,10 @@ var categories = [<?php echo implode(',', $s_categories);?>];
 var budget_index = <?php echo date('m'); ?>;
 </script>
 
-<?php
-$this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_budget_title']);
-?>
-<br>
+<button data-toggle="collapse" data-target="#budget" class="btn btn-info"><?php echo $st_lang['stats_budget_title']; ?></button>
+<button data-toggle="collapse" data-target="#stats_table_yearly" class="btn btn-info">Anual</button>
+<button data-toggle="collapse" data-target="#stats_trends_container" class="btn btn-info"><?php echo $st_lang['stats_trends']; ?></button>
+<button data-toggle="collapse" data-target="#box" class="btn btn-info"><?php echo $st_lang['stats_title']; ?></button>
 <div id="budget">
 <table width=100%>
 	<!-- Form + expenses list -->
@@ -98,9 +101,8 @@ $this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_budget_title'
 	</td>
 	</tr>
 </table>
-<br><br>
 
-<table class="table-stats">
+<table class="table table-striped table-bordered table-stats">
 <th></th>
 <?php
 $income = array();
@@ -217,20 +219,14 @@ if (!empty($this->budget)) echo '<th></th>';
 </tr>
 </table>
 </div>
-<br><br>
-<?php
-$this->getHelper('Web')->printExpandCollapseButton("Anual");
-print_yearly($this->yearly, $this->budget_incomes + $this->budget_expenses);
-?>
-<br><br>
-<?php
-echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));
 
-$this->getHelper('Web')->printExpandCollapseButton($st_lang['stats_title']);
+<?php
+print_yearly($this->yearly, $this->budget_incomes + $this->budget_expenses);
+
+echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));
 ?>
-<br>
 <div id="box">
-<table width=100%>
+<table width=100% class="table table-striped table-bordered table-stats">
 <tr>
 <th align="left"><?= $st_lang['category']; ?></th>
 <th align="right"><?= $st_lang['total']; ?></th>

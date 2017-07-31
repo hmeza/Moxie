@@ -66,7 +66,4 @@ $(document).ready(function() {
 
 	load_favourites_data();
 	$('#favourites').change(use_favourite_as_expense);
-	$("#favourites_button").click(function (event) {
-		$("#favourites_list").slideToggle();
-	});
 });
