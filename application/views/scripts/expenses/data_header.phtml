@@ -15,7 +15,7 @@ $next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
     var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
 	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
-<script type="text/javascript" src="/js/expenses/data.js?v=3"></script>
+<script type="text/javascript" src="/js/expenses/data.js?v=4"></script>
 
 <?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
 
@@ -52,13 +52,7 @@ $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 	echo $this->form->getElement('note');
 	echo $this->form->getElement('date');
 	echo $this->form->getElement('category');
-	?>
-
-	<dt for="form_tags">Tags</dt>
-	<dd id="form_tags" class="dd_taggle_list">
-		<div id="tags" class="div_taggle_list"></div>
-	</dd>
-	<?php
+	echo $this->form->getElement('tags');
 	echo $this->form->getElement('in_sum');
 	echo $this->form->getElement('favourite');
 	echo $this->form->getElement('submit');

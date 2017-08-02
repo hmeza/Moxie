@@ -36,7 +36,7 @@ $(document).ready(function() {
     //$('#mytable').DataTable();
 
 
-	var taggle = new Taggle('tags', {
+/*	var taggle = new Taggle('tags', {
 			tags: tagList,
 			placeholder: tagsPlaceholder,
 			duplicateTagClass: 'bounce'
@@ -56,10 +56,16 @@ $(document).ready(function() {
 				taggle.add(data.item.value);
 			}
 		}
-	});
+	});*/
 
-	$('#tag_search').autocomplete({
+/*	$('#tag_search').autocomplete({
 		source: usedTagList
+	});*/
+	$("#login").submit(function(e) {
+	     var self = this;
+	     var items_array = $("#tags").tagsinput('items');
+	     $("#tags").val(items_array);
+	     return true;
 	});
 
 	$("#export_to_excel_button").click(export_to_excel);
