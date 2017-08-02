@@ -20,39 +20,41 @@ class IncomesController extends TransactionsController
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-		if (isset($st_income['id'])) {
-			$id = $st_income['id'];
+		if (isset($st_income[0]['id'])) {
+			$id = $st_income[0]['id'];
 			$action = '/incomes/update';
-
-			$form->addElement('button', 'delete', array(
-					'label' => 'Borrar',
-					'class' => 'btn btn-error pull-right',
-					'onclick' => 'confirmDelete("'.$id.'")'
-			));
 		}
 		else {
 			$action = '/incomes/add';
 		}
+		error_log("action ".$action);
 
 		// fix for datetime to date
 		$s_date = explode(" ", $st_income[0]['date']);
 		$st_income[0]['date'] = $s_date[0];
-
-		$form->setAction($action)->setMethod('post');
-		$form->setAttrib('id', 'login');
-		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
-		$form->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'));
 
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$multiOptions->setAttrib('class', 'form-control');
-		$form->addElement($multiOptions);
-
-		$form->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'));
-		$form->addElement('date', 'date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'));
-		$form->addElement('submit','submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
+		
+		$form->setAction($action)
+			->setMethod('post')
+			->setAttrib('id', 'login')
+			->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'))
+			->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'))
+			->addElement('date', 'date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'))
+			->addElement($multiOptions)
+			->addElement('submit','submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
+		if (isset($st_income[0]['id'])) {
+			$form->addElement('button', 'delete', array(
+					'label' => 'Borrar',
+					'class' => 'btn btn-error pull-right',
+					'onclick' => 'confirmDelete("'.$id.'")'
+			));
+			$form->addElement('hidden', 'id', array('value' => $id));
+		}
 		return $form;
 	}
 

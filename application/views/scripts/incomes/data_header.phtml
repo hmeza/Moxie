@@ -9,29 +9,11 @@ $next_url = "/incomes/index/year/".($this->year+1);
 $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
 ?>
 
-
 <div id="form">
 	<div class="moxie_expenses_form_div moxie_expenses_form_left">
-<?php
-//echo '<h2>'.$st_lang['income_header'].'</h2>';
-$i_incomePK = $this->form->getValue('id');
-if (isset($i_incomePK)) {
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
-	echo $this->form->getElement('id');
-}
-else {
-	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/add" method="post">';
-}
-echo $this->form->getElement('amount');
-echo $this->form->getElement('note');
-echo $this->form->getElement('date');
-echo $this->form->getElement('category');
-echo $this->form->getElement('delete');
-echo $this->form->getElement('submit');
-
-
-?>
-	</form>
+		<?php
+		echo $this->form;
+		?>
 	</div>
 	<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
 		<?php
