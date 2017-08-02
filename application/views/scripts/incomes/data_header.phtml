@@ -1,5 +1,5 @@
 <script type="text/javascript" src="/js/incomes/data.js"></script>
-<script type="text/javascript" src="/bower_components/chosen/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="/bower_components/chosen/chosen.jquery.js"></script>-->
 <?php
 global $st_lang;
 $editSlug = '/incomes/edit/id/';
@@ -13,11 +13,10 @@ $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $curr
 <div id="form">
 	<div class="moxie_expenses_form_div moxie_expenses_form_left">
 <?php
-echo '<h2>'.$st_lang['income_header'].'</h2>';
+//echo '<h2>'.$st_lang['income_header'].'</h2>';
 $i_incomePK = $this->form->getValue('id');
 if (isset($i_incomePK)) {
 	echo '<form id="login" enctype="application/x-www-form-urlencoded" action="/incomes/update" method="post">';
-	echo $this->form->getElement('user_owner');
 	echo $this->form->getElement('id');
 }
 else {
@@ -25,18 +24,12 @@ else {
 }
 echo $this->form->getElement('amount');
 echo $this->form->getElement('note');
-?>
-<dt id="date-label"><label for="date" class="optional"><?php echo $st_lang['incomes_date']; ?></label></dt>
-<dd><input type="date" id="date" name="date" value="<?php echo $this->form->getValue('date'); ?>"></dd>
-<?php
+echo $this->form->getElement('date');
 echo $this->form->getElement('category');
+echo $this->form->getElement('delete');
 echo $this->form->getElement('submit');
 
-if(isset($i_incomePK)) {
-?>
-<input type="button" class="btn btn-error" onclick='confirmDelete("<?php echo $i_incomePK; ?>")' value="<?php echo "Borrar"; ?>"/>
-<?php
-}
+
 ?>
 	</form>
 	</div>
