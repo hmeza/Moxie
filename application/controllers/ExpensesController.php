@@ -103,7 +103,6 @@ class ExpensesController extends TransactionsController
 	
 	/**
 	 * Updates an expense
-	 * @author	hmeza
 	 */
 	public function updateAction() {
 		$st_params = $this->getRequest()->getPost();
@@ -117,8 +116,11 @@ class ExpensesController extends TransactionsController
 
 		$originalExpenseDate = explode("-", $st_expense['date']);
 		$this->transactionTags->removeTagsFromTransaction($i_expensePK);
-		if(!empty($_POST['taggles'])) {
-			$this->updateTags($_POST['taggles'], $i_expensePK);
+		if(!empty($st_params['tags'])) {
+			$this->updateTags(
+					explode(",", $st_params['tags']),
+					$i_expensePK
+			);
 		}
 
 		$this->expenses->updateExpense($st_params);
@@ -155,11 +157,17 @@ class ExpensesController extends TransactionsController
 		if(empty($st_expense['id'])) {
 			$in_sum_value = 1;
 			$slug = '/expenses/add';
-
+			$tag_value = '';
 		}
 		else {
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
+			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
+			error_log("tag list ".print_r($tag_list,true));
+			foreach($tag_list as $t) {
+				error_log($t);
+			}
+			$tag_value = implode(", ", $tag_list);
 		}
 
 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
@@ -200,6 +208,8 @@ class ExpensesController extends TransactionsController
 				);
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-info pull-right'));
 		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
+		
+		$form->addElement('text', 'tags', array('data-role' => 'tagsinput', 'value' => $tag_value));
 		return $form;
 	}
 
