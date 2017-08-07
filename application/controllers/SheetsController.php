@@ -294,6 +294,9 @@ class SheetsController extends Zend_Controller_Action
 	
 	private function getSheet() {
 		$id_sheet = $this->getRequest()->getParam('id_sheet', null);
+                if(empty($id_sheet)) {
+                        $id_sheet = $this->getRequest()->getParam('id_sheet', null);
+                }
 		return $this->sheetModel->get_by_unique_id($id_sheet);
 	}
 	
