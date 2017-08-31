@@ -163,7 +163,6 @@ class ExpensesController extends TransactionsController
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
-			error_log("tag list ".print_r($tag_list,true));
 			foreach($tag_list as $t) {
 				error_log($t);
 			}
@@ -186,30 +185,42 @@ class ExpensesController extends TransactionsController
 		$form->addElement(
 				'text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control')
 		);
-		$multiOptions = new Zend_Form_Element_Select('category');
-		$multiOptions->setName('category');
-		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($st_categories);
-		$multiOptions->setValue(array($st_expense['category']));
-		$multiOptions->setAttrib('class', 'form-control');
-		$form->addElement($multiOptions);
-
-		$form->addElement(
-				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
-				);
-		$form->addElement(
-				"checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
-				);
 		$form->addElement(
 				'text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control')
 				);
 		$form->addElement(
 				'date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control')
 				);
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
-		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
+		$multiOptions = new Zend_Form_Element_Select('category');
+		$multiOptions->setName('category');
+		$multiOptions->setLabel($st_lang['expenses_category']);
+		$multiOptions->addMultiOptions($st_categories);
+		$multiOptions->setValue(array($st_expense['category']));
+		$multiOptions->setAttrib('class', 'form-control');
+// 		$multiOptions->removeDecorator('DtDdWrapper');
+// 		$multiOptions->removeDecorator('HtmlTag');
 		
+		$form->addElement($multiOptions);
 		$form->addElement('text', 'tags', array('label' => 'Tags', 'data-role' => 'tagsinput', 'value' => $tag_value));
+		$form->addElement(
+				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
+				);
+		$form->addElement(
+				"checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
+				);
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
+		
+		if (isset($st_expense['id'])) {
+			$form->addElement('button', 'delete', array(
+					'label' => $st_lang['expenses_delete'],
+					'class' => 'btn btn-danger pull-right',
+					'onclick' => 'confirmDelete("'.$st_expense['id'].'")'
+			));
+			$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
+		}
+
+// 		$form->setElementDecorators(array('ViewHelper', 'LabelForWrapper'));
+		
 		return $form;
 	}
 

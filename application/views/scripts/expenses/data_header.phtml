@@ -39,28 +39,15 @@ $checked = ($this->form->getValue('in_sum') == "1") ? "checked": "";
 			</form>
 		</span>
 	</div>
-	<?php } ?>
-	<form id="login" enctype="application/x-www-form-urlencoded" action="<?php echo $this->form->getAction(); ?>" method="<?php echo $this->form->getMethod(); ?>" class="moxie_form">
-	<?php
-	if (isset($i_expensePK)) {
+	<?php } 
+	
+	echo $this->form;
+// 	foreach($this->form->getElements() as $e) {
+// 		$e->removeDecorator('DtDdWrapper');
+// 		$e->removeDecorator('HtmlTag');
+// 		echo $e;
+// 	}
 	?>
-		<input type="hidden" id="id" name="id" value="<?php echo $i_expensePK; ?>"/>
-	<?php
-	}
-	//echo $this->form->getElement('id');
-	echo $this->form->getElement('amount');
-	echo $this->form->getElement('note');
-	echo $this->form->getElement('date');
-	echo $this->form->getElement('category');
-	echo $this->form->getElement('tags');
-	echo $this->form->getElement('in_sum');
-	echo $this->form->getElement('favourite');
-	echo $this->form->getElement('submit');
-	if(isset($i_expensePK)) {
-		echo '<input type="button" class="btn btn-error" value="'.$st_lang['expenses_delete'].'" onclick=\'confirmDelete("' . $i_expensePK . '")\'/>';
-	}
-	?>
-	</form>
 </div>
 <div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
 <?php
