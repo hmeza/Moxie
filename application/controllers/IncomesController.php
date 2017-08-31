@@ -20,18 +20,27 @@ class IncomesController extends TransactionsController
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-		if (isset($st_income[0]['id'])) {
-			$id = $st_income[0]['id'];
+		if (isset($st_income['id'])) {
+			$id = $st_income['id'];
 			$action = '/incomes/update';
+
+			$form->addElement('button', 'delete', array(
+					'label' => 'Borrar',
+					'class' => 'btn btn-error pull-right',
+					'onclick' => 'confirmDelete("'.$id.'")'
+			));
 		}
 		else {
 			$action = '/incomes/add';
 		}
-		error_log("action ".$action);
 
 		// fix for datetime to date
 		$s_date = explode(" ", $st_income[0]['date']);
 		$st_income[0]['date'] = $s_date[0];
+
+		$form->setAction($action)->setMethod('post');
+		$form->setAttrib('id', 'login');
+		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
 
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);

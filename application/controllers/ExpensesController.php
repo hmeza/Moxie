@@ -219,7 +219,8 @@ class ExpensesController extends TransactionsController
 			$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		}
 
-// 		$form->setElementDecorators(array('ViewHelper', 'LabelForWrapper'));
+		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
+		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
 		
 		return $form;
 	}
