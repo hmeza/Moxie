@@ -92,7 +92,6 @@ class UsersController extends Zend_Controller_Action {
 							$_SESSION['user_id']
 					)
 			);
-			$this->view->assign('categories_display', 'display:none');
 		}
 
 		$st_categories = $this->categories->prepareCategoriesTree($this->categories->getCategoriesTree());

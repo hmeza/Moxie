@@ -8,13 +8,10 @@
 }
 </style>
 </head>
-<h2 id="tags_title">
-    <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <i class="material-icons" style="background-color: ##0b77b7">+</i>
-    </button>
-    <?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?>
-</h2>
-<div id="tags_table" style="display: none;">
+<div id="tags_table" class="accordion-body collapse">
+	<h2 id="tags_title">
+	    <?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?>
+	</h2>
     <form action="/tags/multi_update">
         <?php
         global $st_lang;

@@ -27,14 +27,14 @@
 </script>
 <script type="text/javascript" src="/js/stats/trends.js"></script>
 
-<div id="stats_trends_container">
-<div id="stats_trends"></div>
-<label for="trends_category"></label>
-<select id="trends_category" name="trends_category" onchange="drawChart();" class="form-control">
-	<?php
-	foreach($this->trends as $key => $value) {
-		echo '<option value="'.$key.'">'.$value['name'].'</option>';
-	}
-	?>
-</select>
+<div id="stats_trends_container" class="accordion-body collapse">
+	<div id="stats_trends"></div>
+	<label for="trends_category"></label>
+	<select id="trends_category" name="trends_category" onchange="drawChart();" class="form-control">
+		<?php
+		foreach($this->trends as $key => $value) {
+			echo '<option value="'.$key.'">'.$value['name'].'</option>';
+		}
+		?>
+	</select>
 </div>

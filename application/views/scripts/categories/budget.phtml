@@ -4,54 +4,48 @@
 </script>
 <script type="text/javascript" src="/js/budgets/data.js"></script>
 
-<h2 id="budget_title">
-	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-		<i class="material-icons" style="background-color: ##0b77b7">+</i>
-	</button>
-	<?php echo $st_lang['budget']." ".$st_lang['press_here_display']; ?>
-</h2>
-<div id="budget_table" style="display: none;"categ>
+<div id="budget_table" class="accordion-body collapse">
 	<table>
 		<td>
-<table width=100% style="max-width: 500px">
-<?php
-$f_initialBudget = 0;
-$header_set = false;
-foreach ($this->categories as $key => $value) {
-	if(!$header_set) {
-		$date_created = isset($value['date_created']) ? $value['date_created'] : date('d-m-Y');
-		echo '<th>'.$date_created.'</th>';
-		$header_set = true;
-	}
-	$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
-	echo '
-	<tr>
-	<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
-	<td align="right">
-	<input type="hidden" name="category'.$id.'" id="category'.$id.'" value="'.$id.'">
-	<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum('.$id.')" value="'.$value['budget'].'" style="text-align: right;">
-	</td>
-	<td width=15></td>
-	</tr>
-	';
-	$f_initialBudget += $value['budget'];
-}
-?>
-<tr>
-<td></td><td align="right"><span id="sum"><b><?= $f_initialBudget?> &euro;</b></span></td>
-<td><span id="spinner" style="display:none"><img src="/img/spinner.gif"></span></td>
-</tr>
-<tr>
-<td colspan="2">
-	<input type="button" value="Snapshot" onclick="snapshot();"></form>
-</td>
-	</tr>
-	<tr>
-	<td align="center">
-		<span id="message"></span>
-	</td>
-</tr>
-</table>
+			<table width=100% style="max-width: 500px">
+			<?php
+			$f_initialBudget = 0;
+			$header_set = false;
+			foreach ($this->categories as $key => $value) {
+				if(!$header_set) {
+					$date_created = isset($value['date_created']) ? $value['date_created'] : date('d-m-Y');
+					echo '<th>'.$date_created.'</th>';
+					$header_set = true;
+				}
+				$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
+				echo '
+				<tr>
+				<td>'.$value['name1'].' '.$value['name2'].' '.$value['name3'].'</td>
+				<td align="right">
+				<input type="hidden" name="category'.$id.'" id="category'.$id.'" value="'.$id.'">
+				<input type="text" id="amount'.$id.'" name="amount'.$id.'" onChange="getSum('.$id.')" value="'.$value['budget'].'" style="text-align: right;">
+				</td>
+				<td width=15></td>
+				</tr>
+				';
+				$f_initialBudget += $value['budget'];
+			}
+			?>
+			<tr>
+			<td></td><td align="right"><span id="sum"><b><?= $f_initialBudget?> &euro;</b></span></td>
+			<td><span id="spinner" style="display:none"><img src="/img/spinner.gif"></span></td>
+			</tr>
+			<tr>
+			<td colspan="2">
+				<input type="button" value="Snapshot" onclick="snapshot();"></form>
+			</td>
+				</tr>
+				<tr>
+				<td align="center">
+					<span id="message"></span>
+				</td>
+			</tr>
+			</table>
 		</td>
 
 		<td valign="top">
@@ -64,4 +58,3 @@ foreach ($this->categories as $key => $value) {
 		</td>
 	</table>
 </div>
-<br><br>

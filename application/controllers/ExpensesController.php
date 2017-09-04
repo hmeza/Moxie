@@ -172,7 +172,7 @@ class ExpensesController extends TransactionsController
 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
 				->setMethod('post');
 
-		$form->setAttrib('id', 'login');
+		$form->setAttrib('id', 'add_expense');
 
 		$st_categories = $this->categories->getCategoriesForView(Categories::EXPENSES);
 		asort($st_categories);
@@ -208,7 +208,6 @@ class ExpensesController extends TransactionsController
 		$form->addElement(
 				"checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
 				);
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
 		
 		if (isset($st_expense['id'])) {
 			$form->addElement('button', 'delete', array(
@@ -220,8 +219,7 @@ class ExpensesController extends TransactionsController
 		}
 
 		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
-		$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
-		
+
 		return $form;
 	}
 

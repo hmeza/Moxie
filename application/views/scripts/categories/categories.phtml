@@ -1,13 +1,7 @@
 <?php
 global $st_lang;
 ?>
-<h2 id="categories_title">
-	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-		<i class="material-icons" style="background-color: ##0b77b7">+</i>
-	</button>
-	<?php echo $st_lang['categories']." ".$st_lang['press_here_display']; ?>
-</h2>
-<div id="categories_table" style="<?php echo $this->categories_display; ?>">
+<div id="categories_table" class="accordion-body collapse">
 <?php
 echo $this->categories_form;
 ?>

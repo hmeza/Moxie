@@ -56,7 +56,6 @@ table.table-stats {
 	text-align: right;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="/material.css"/>
 <script type="text/javascript" src="/js/stats/stats.js"></script>
 <script type="text/javascript">
 	var budgets = [];
@@ -85,7 +84,7 @@ var budget_index = <?php echo date('m'); ?>;
 <button data-toggle="collapse" data-target="#stats_table_yearly" class="btn btn-info">Anual</button>
 <button data-toggle="collapse" data-target="#stats_trends_container" class="btn btn-info"><?php echo $st_lang['stats_trends']; ?></button>
 <button data-toggle="collapse" data-target="#box" class="btn btn-info"><?php echo $st_lang['stats_title']; ?></button>
-<div id="budget">
+<div id="budget" class="accordion-body">
 <table width=100%>
 	<!-- Form + expenses list -->
 	<tr>
@@ -225,7 +224,7 @@ print_yearly($this->yearly, $this->budget_incomes + $this->budget_expenses);
 
 echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));
 ?>
-<div id="box">
+<div id="box" class="accordion-body collapse">
 <table width=100% class="table table-striped table-bordered table-stats">
 <tr>
 <th align="left"><?= $st_lang['category']; ?></th>
