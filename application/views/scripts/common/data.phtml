@@ -1,8 +1,14 @@
 <?php
 global $st_lang;
+$current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->year));
 ?>
 <table class="table table-striped table-bordered table-condensed table-hover" id="mytable" width="100%">
 <thead>
+    <tr>
+        <td colspan="5">
+        <?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
+        </td>
+    </tr>
 	<tr>
 		<td class="list moxie_edit">&nbsp;</td>
 		<td class="list moxie_category"><?php echo $st_lang['expenses_category']; ?></td>

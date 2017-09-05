@@ -4,7 +4,6 @@ $last_month = ($this->month == 1) ? 12 : $this->month-1;
 $last_year = ($this->month == 1) ? $this->year-1 : $this->year;
 $next_month = ($this->month == 12) ? 1 : $this->month+1;
 $next_year = ($this->month == 12) ? $this->year+1 : $this->year;
-$current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->year));
 $last_url = "/expenses/index/month/".$last_month."/year/".$last_year;
 $next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
 ?>
@@ -16,8 +15,6 @@ $next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
 	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
 <script type="text/javascript" src="/js/expenses/data.js?v=4"></script>
-
-<?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
 
 <div id="form">
 <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">

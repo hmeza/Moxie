@@ -163,9 +163,9 @@ class ExpensesController extends TransactionsController
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
-			foreach($tag_list as $t) {
-				error_log($t);
-			}
+//			foreach($tag_list as $t) {
+//				error_log($t);
+//			}
 			$tag_value = implode(", ", $tag_list);
 		}
 
