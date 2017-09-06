@@ -12,7 +12,7 @@ $st_lang = array(
 	'about'		=>	'Acerca de',
 	'benefits'	=>	'Ventajas',
 	'finance' => 'Finanzas',
-	'forgot_password'	=>	'Has olvidado tu contraseña?',
+	'forgot_password'	=>	'¿Has olvidado tu contraseña?',
 	'back_to_top' => 'Volver arriba',
 	// Expenses
 	'expenses_header'     => 'Añadir gasto',

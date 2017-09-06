@@ -31,9 +31,7 @@ echo $this->partial('expenses/data_header.phtml',
         'favourites_json' => $this->favourites_json,
         'budget'=>$this->budget,
         'expenses'=>$this->expenses,
-        'year'=>$this->year,
-        'month'=>$this->month,
-        'month_expenses' => $this->month_expenses,
+        'month_expenses' => $this->month_expenses
     )
 );
 
@@ -49,7 +47,8 @@ echo $this->partial('common/data.phtml',
 		'show_categories_filter' => $this->show_categories_filter,
 		'show_tags_filter' => $this->show_tags_filter,
 		'view' => $this->view,
-		'o' => $this->o
+		'o' => $this->o,
+        'source' => 'expenses'
 	)
 );
 ?>

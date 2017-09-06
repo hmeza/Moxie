@@ -12,8 +12,8 @@ class TagsController extends Zend_Controller_Action
     public function multiupdateAction() {
         try {
             $a_userTags = $this->tags->getTagsByUser($_SESSION['user_id']);
-	    	$a_data = $this->_request->getParam('taggles');
-            $a_data = array_unique($a_data);
+	    	$a_data = $this->_request->getParam('tags');
+            $a_data = array_unique(explode(",", $a_data));
 
             foreach($a_data as $tag) {
                 // remove each tag from $a_userTags

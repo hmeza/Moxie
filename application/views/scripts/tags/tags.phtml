@@ -1,35 +1,19 @@
-<head>
-<style>
-/*** taggle fixes ***/
-.taggle_list {
-    background: #fafafa;
-    border: #ddd 1px solid;
-    max-width: 90%;
-}
-</style>
-</head>
 <div id="tags_table" class="accordion-body collapse">
 	<h2 id="tags_title">
 	    <?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?>
 	</h2>
-    <form action="/tags/multi_update">
+    <form action="/tags/multi_update" method="POST">
         <?php
         global $st_lang;
         echo $st_lang['tags_notice'];
         ?>
-        <div id="tags" class="tags" style="width: 100%"></div>
-        <input type="submit" value="<?php echo $st_lang['tags_update']; ?>">
+        <input id="tags" name="tags" type="text" data-role="tagsinput">
+        <input type="submit" value="<?php echo $st_lang['tags_update']; ?>" class="form-control">
     </form>
 </div>
 <br><br>
 
 <script type="text/javascript">
     var tagList = [<?php if(!empty($this->tag_list)) echo "'".implode($this->tag_list, "','")."'"; ?>];
-
-    var taggle = new Taggle('tags', {
-        tags: tagList,
-        duplicateTagClass: 'bounce'
-    });
-
-    $('.taggle_list').css('width: 90%; max-width: 100%;');
+    $('#tags').val(tagList);
 </script>

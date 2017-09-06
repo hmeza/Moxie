@@ -1,14 +1,5 @@
 <script type="text/javascript" src="/js/incomes/data.js"></script>
 <!--<script type="text/javascript" src="/bower_components/chosen/chosen.jquery.js"></script>-->
-<?php
-global $st_lang;
-$editSlug = '/incomes/edit/id/';
-$current_month_and_year = date("Y", strtotime("01-01-".$this->year));
-$last_url = "/incomes/index/year/".($this->year-1);
-$next_url = "/incomes/index/year/".($this->year+1);
-$this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
-?>
-
 <div id="form">
 	<div class="moxie_expenses_form_div moxie_expenses_form_left">
 		<?php

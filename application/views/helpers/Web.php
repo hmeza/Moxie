@@ -8,7 +8,7 @@ class Moxie_View_Helper_Web extends Zend_View_Helper_Abstract {
 
 	public function printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year) {
 ?>
-<ul class="pager">
+<ul class="pager" style="margin: 0px;">
   <li><a href="<?php echo $last_url; ?>"> < </a></li>
   <li><span class="moxie_header_date"><?php echo $current_month_and_year; ?></span></li>
   <li><a href="<?php echo $next_url; ?>"> > </a></li>
