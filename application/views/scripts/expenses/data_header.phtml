@@ -1,11 +1,5 @@
 <?php
 global $st_lang;
-$last_month = ($this->month == 1) ? 12 : $this->month-1;
-$last_year = ($this->month == 1) ? $this->year-1 : $this->year;
-$next_month = ($this->month == 12) ? 1 : $this->month+1;
-$next_year = ($this->month == 12) ? $this->year+1 : $this->year;
-$last_url = "/expenses/index/month/".$last_month."/year/".$last_year;
-$next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
 ?>
 <script type="text/javascript" language="text/javascript">
 	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
