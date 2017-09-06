@@ -12,25 +12,28 @@ class CategoriesController extends Zend_Controller_Action
 	private function getForm() {
 		global $st_lang;
     	$form  = new Zend_Form();
-    	
-    	$form->setAction('/categories/add')->setMethod('post');
-    	$form->addElement('select', 'parent', array(
-			'label' => $st_lang['category_parent'],
-			'multioptions' => $this->categories->getCategoriesForSelect(3),
-			)
-		);
-		$form->addElement('text', 'name', array('label' => $st_lang['category_name']));
-		$form->addElement('text', 'description', array('label' => $st_lang['category_description']));
+
+    	$form->setAction('/categories/add')
+            ->setMethod('post')
+    	    ->addElement('select', 'parent', array(
+                    'label' => $st_lang['category_parent'],
+                    'multioptions' => $this->categories->getCategoriesForSelect(3),
+                    'class' => 'form-control'
+                )
+            )
+		    ->addElement('text', 'name', array('label' => $st_lang['category_name'], 'class' => 'form-control'))
+		    ->addElement('text', 'description', array('label' => $st_lang['category_description'], 'class' => 'form-control'));
 		
 		$categoryTypes = array(Categories::EXPENSES => $st_lang['category_expense'], Categories::INCOMES => $st_lang['category_income'], Categories::BOTH => $st_lang['category_both']);
 		$types = new Zend_Form_Element_Radio('type');
 		$types->setRequired(true)  // field required
-		->setLabel($st_lang['category_type'])
-		->setValue(Categories::BOTH) // first radio button selected
-		->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
+            ->setLabel($st_lang['category_type'])
+            ->setValue(Categories::BOTH) // first radio button selected
+            ->setMultiOptions($categoryTypes)  // add array of values / labels for radio group
+            ->setAttribute('class', 'form-control');
 		$form->addElement($types);
 		
-		$form->addElement('submit','submit', array('label' => $st_lang['category_send']));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control'));
     	
 		return $form;
 	}
@@ -49,11 +52,12 @@ class CategoriesController extends Zend_Controller_Action
 		$form->addElement('select', 'parent', array(
 			'label' => $st_lang['category_parent'],
 			'multioptions' => $this->categories->getCategoriesForSelect(3),
-			'value'	=>	$st_category[0]['parent']
+			'value'	=>	$st_category[0]['parent'],
+                'class' => 'form-control'
 			)
 		);
-		$form->addElement('text', 'name', array('label' => $st_lang['category_name'], 'value' => $st_category[0]['name']));
-		$form->addElement('text', 'description', array('label' => $st_lang['category_description'], 'value' => $st_category[0]['description']));
+		$form->addElement('text', 'name', array('label' => $st_lang['category_name'], 'value' => $st_category[0]['name'], 'class' => 'form-control'));
+		$form->addElement('text', 'description', array('label' => $st_lang['category_description'], 'value' => $st_category[0]['description'], 'class' => 'form-control'));
 		
 		$categoryTypes = array(Categories::EXPENSES => $st_lang['category_expense'], Categories::INCOMES => $st_lang['category_income'], Categories::BOTH => $st_lang['category_both']);
 		$types = new Zend_Form_Element_Radio('type');
@@ -67,7 +71,7 @@ class CategoriesController extends Zend_Controller_Action
 				array(
 					'label' => $st_lang['categories_delete'],
 					'onclick' => 'window.location.replace("/categories/delete/id/'.$i_categoryPK.'");',
-                    'class' => 'moxie'
+                    'class' => 'form-control'
 				)
 		);
 		return $form;
