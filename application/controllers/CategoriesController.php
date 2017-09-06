@@ -29,8 +29,8 @@ class CategoriesController extends Zend_Controller_Action
 		$types->setRequired(true)  // field required
             ->setLabel($st_lang['category_type'])
             ->setValue(Categories::BOTH) // first radio button selected
-            ->setMultiOptions($categoryTypes)  // add array of values / labels for radio group
-            ->setAttribute('class', 'form-control');
+            ->setAttrib('class', 'form-control')
+            ->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
 		$form->addElement($types);
 		
 		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control'));
