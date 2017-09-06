@@ -39,7 +39,7 @@ if (empty($_SESSION['user_id'])) {
         </div>
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav nav-pills">
+			<ul class="nav navbar-nav nav-pills navbar-left">
 <?php
 $st_lang['users'] = $st_lang['users_title'];
 $s_webMenu = '';
@@ -64,6 +64,10 @@ else {
 echo $s_webMenu;
 ?>
 			</ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/Moxie-111446182371815/?ref=bookmarks"><i class="fa fa-facebook"></i></a></li>
+                <li><a class="btn btn-block btn-social-icon btn-twitter" href=""><span class="fa fa-twitter"></span></a></li>
+            </ul>
 		</div>
 	</div>
 </nav>
