@@ -20,16 +20,10 @@ $(document).ready(function() {
 <button data-toggle="collapse" data-target="#budget_table" class="btn btn-info"><?php echo $st_lang['budget']; ?></button>
 <button data-toggle="collapse" data-target="#tags_table" class="btn btn-info"><?php echo $st_lang['tags_title']; ?></button>
 
-<div id="my_account" class="accordion-body collapse">
-	<table width="100%" cellspacing="20">
-		<tr>
-		<td valign=top>
-		<?php
-		echo $this->form;
-		?>
-		</td>
-		</tr>
-	</table>
+<div id="my_account" class="accordion-body collapse form-group">
+    <?php
+    echo $this->form;
+    ?>
 </div>
 
 <?php

@@ -31,20 +31,20 @@ class UsersController extends Zend_Controller_Action {
 		$form->setAction('/users/update')->setMethod('post');
 
 		$form->addElement('hidden', 'id', array('value' => $i_userPK));
-		$form->addElement('text', 'login',
-							array('label' => $st_lang['login'], 'readonly' => 'true', 'readonly' => true, 'value' => $st_user[0]['login']));
-		$form->addElement('password', 'password', array('label' => $st_lang['password']));
-		$form->addElement('password', 'password_check', array('label' => $st_lang['repeat_password']));
-		$form->addElement('text', 'email', array('label' => $st_lang['email'], 'value' => $st_user[0]['email']));
+		$form->addElement('text', 'login', array('label' => $st_lang['login'], 'readonly' => 'true', 'readonly' => true, 'value' => $st_user[0]['login'], 'class' => 'form-control'));
+		$form->addElement('password', 'password', array('label' => $st_lang['password'], 'class' => 'form-control'));
+		$form->addElement('password', 'password_check', array('label' => $st_lang['repeat_password'], 'class' => 'form-control'));
+		$form->addElement('text', 'email', array('label' => $st_lang['email'], 'value' => $st_user[0]['email'], 'class' => 'form-control'));
 
 		$st_langs = array('es' => 'Español', 'ca' => 'Catalan', 'en' => 'English');
 		$multiOptions = new Zend_Form_Element_Select('language', $st_langs);
 		$multiOptions->setLabel($st_lang['language']);
 		$multiOptions->addMultiOptions($st_langs);
 		$multiOptions->setValue($st_user[0]['language']);
+        $multiOptions->setAttrib('class', 'form-control');
 		$form->addElement($multiOptions);
 		
-		$form->addElement('submit', 'submit', array('label'=> $st_lang['user_send']));
+		$form->addElement('submit', 'submit', array('label'=> $st_lang['user_send'], 'class' => 'form-control'));
 		return $form;
 	}
 
