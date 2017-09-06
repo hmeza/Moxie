@@ -1,18 +1,34 @@
 <?php
 global $st_lang;
-$last_month = ($this->month == 1) ? 12 : $this->month-1;
-$last_year = ($this->month == 1) ? $this->year-1 : $this->year;
-$next_month = ($this->month == 12) ? 1 : $this->month+1;
-$next_year = ($this->month == 12) ? $this->year+1 : $this->year;
-$last_url = "/expenses/index/month/".$last_month."/year/".$last_year;
-$next_url = "/expenses/index/month/".$next_month."/year/".$next_year;
-$current_month_and_year = date("M Y", strtotime("01-".$this->month."-".$this->year));
+if($this->source == "expenses") {
+    $last_month = ($this->month == 1) ? 12 : $this->month - 1;
+    $last_year = ($this->month == 1) ? $this->year - 1 : $this->year;
+    $next_month = ($this->month == 12) ? 1 : $this->month + 1;
+    $next_year = ($this->month == 12) ? $this->year + 1 : $this->year;
+    $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;
+    $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;
+    $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));
+}
+else {
+    $editSlug = '/incomes/edit/id/';
+    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));
+    $last_url = "/incomes/index/year/".($this->year-1);
+    $next_url = "/incomes/index/year/".($this->year+1);
+
+}
 ?>
 <table class="table table-striped table-bordered table-condensed table-hover" id="mytable" width="100%">
 <thead>
     <tr>
         <td colspan="5">
-        <?php $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year); ?>
+        <?php
+        if($this->source == "expenses") {
+            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
+        }
+        else {
+            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
+        }
+        ?>
         </td>
     </tr>
 	<tr>

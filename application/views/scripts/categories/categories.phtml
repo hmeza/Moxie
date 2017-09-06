@@ -1,11 +1,9 @@
+<div id="categories_table" class="form-group accordion-body collapse">
 <?php
 global $st_lang;
-?>
-<div id="categories_table" class="accordion-body collapse form-group">
-<?php
 echo $this->categories_form;
 ?>
-<table width=100%>
+echo "<table width=100%>
 <?php
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
