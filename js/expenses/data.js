@@ -16,6 +16,7 @@ var use_favourite_as_expense = function() {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
 			$('#amount').val(-favourite_data[i]["amount"]);
+			$('#tags').val(favourite_data[i]["tags"]);
 			var c = $('#category');
 			c.find('option[selected="selected"]').attr('selected', false);
 			c.find('option[value="'+ favourite_data[i]["category"] +'"]').attr('selected', 'selected');
@@ -33,34 +34,6 @@ var load_favourites_data = function() {
 };
 
 $(document).ready(function() {
-    //$('#mytable').DataTable();
-
-
-/*	var taggle = new Taggle('tags', {
-			tags: tagList,
-			placeholder: tagsPlaceholder,
-			duplicateTagClass: 'bounce'
-	});
-
-	var container = taggle.getContainer();
-	var input = taggle.getInput();
-
-	$(input).autocomplete({
-		source: usedTagList,
-		appendTo: container,
-		position: { at: "left bottom", of: container },
-		select: function(event, data) {
-			event.preventDefault();
-			//Add the tag if user clicks
-			if (event.which === 1) {
-				taggle.add(data.item.value);
-			}
-		}
-	});*/
-
-/*	$('#tag_search').autocomplete({
-		source: usedTagList
-	});*/
 	$("#login").submit(function(e) {
 	     var self = this;
 	     var items_array = $("#tags").tagsinput('items');
@@ -72,4 +45,30 @@ $(document).ready(function() {
 
 	load_favourites_data();
 	$('#favourites').change(use_favourite_as_expense);
+
+	var tags = new Bloodhound({
+	    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+	    queryTokenizer: Bloodhound.tokenizers.whitespace,
+	    local: $.map(usedTagList, function (tag) {
+	        return {
+	            name: tag
+	        };
+	    })
+	});
+	tags.initialize();
+
+	$('#tags-element > > input').tagsinput({
+	    typeaheadjs: [{
+	          minLength: 1,
+	          highlight: true,
+	    },{
+	        minlength: 1,
+	        name: 'tags',
+	        displayKey: 'name',
+	        valueKey: 'name',
+	        source: tags.ttAdapter(),
+		hint: true
+	    }],
+	    freeInput: true
+	});
 });

@@ -163,9 +163,6 @@ class ExpensesController extends TransactionsController
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
-//			foreach($tag_list as $t) {
-//				error_log($t);
-//			}
 			$tag_value = implode(", ", $tag_list);
 		}
 
@@ -201,7 +198,7 @@ class ExpensesController extends TransactionsController
 // 		$multiOptions->removeDecorator('HtmlTag');
 		
 		$form->addElement($multiOptions);
-		$form->addElement('text', 'tags', array('label' => 'Tags', 'data-role' => 'tagsinput', 'value' => $tag_value));
+		$form->addElement('text', 'tags', array('id' => 'tags', 'label' => 'Tags', 'data-role' => 'tagsinput', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
 		$form->addElement(
 				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
 				);

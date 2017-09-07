@@ -6,7 +6,6 @@ global $st_lang;
     var deleteMessage = "<?php echo $st_lang['expenses_delete_message']; ?>";
 	var tagList = [<?php if(!empty($this->tags)) echo "'".implode($this->tags, "','")."'"; ?>];
     var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
-	var tagsPlaceholder = "<?php echo $st_lang['tags_placeholder']; ?>";
 </script>
 <script type="text/javascript" src="/js/expenses/data.js?v=4"></script>
 
