@@ -8,6 +8,7 @@ $st_urls = array(
 		'expenses' => '/expenses',
 		'stats' => '/stats',
 		'sheets' => '/sheets',
+        'users' => '/users',
 		//'finance' => '/finance',
 );
 
@@ -44,13 +45,10 @@ if (empty($_SESSION['user_id'])) {
 $st_lang['users'] = $st_lang['users_title'];
 $s_webMenu = '';
 if (isset($_SESSION['user_id'])) {
-	$s_webMenu .= '
-	<li role="presentation"><a href="'.$settingsUrl.'/users">'.$_SESSION['user_name'].'</a></li>';
-
 	foreach($st_urls as $key => $value) {
 		$class = (strpos($url, $value) !== false) ? 'class="active"' : '';
 		$s_webMenu .= '<li role="presentation" '.$class.'>'
-		.'<a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
+		    .'<a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
 	}
 	$s_webMenu .= '<li role="presentation"><a href="'.$settingsUrl.'/login/logout">'.$st_lang['logout'].'</a></li>';
 }
