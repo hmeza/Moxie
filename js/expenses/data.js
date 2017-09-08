@@ -57,7 +57,9 @@ $(document).ready(function() {
 	});
 	tags.initialize();
 
-	$('#tags-element > > #tags').tagsinput({
+	// data-role must be set here
+	$('#tags').attr('data-role', 'tagsinput');
+	$('#tags').tagsinput({
 	    typeaheadjs: [{
 	          minLength: 1,
 	          highlight: true,

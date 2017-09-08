@@ -198,7 +198,7 @@ class ExpensesController extends TransactionsController
 // 		$multiOptions->removeDecorator('HtmlTag');
 		
 		$form->addElement($multiOptions);
-		$form->addElement('text', 'tags', array('id' => 'tags', 'label' => 'Tags', 'data-role' => 'tagsinput', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
+		$form->addElement('text', 'tags', array('id' => 'tags', 'label' => 'Tags', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
 		$form->addElement(
 				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
 				);
