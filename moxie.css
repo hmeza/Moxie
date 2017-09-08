@@ -506,10 +506,7 @@ h2 {
 	}
 
 	form {
-		background: #fafafa;
-		padding: 5px;
-		border: 1px solid #eee;
-		margin: 5px;
+		max-width: none;
 	}
 
 	.moxie_expenses_form_div {
