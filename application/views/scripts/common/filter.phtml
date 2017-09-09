@@ -1,3 +1,11 @@
-<div id="search_form" class="search_button_mobile">
+<h2 id="search_title" class="search_button">
+    <button id="" data-toggle="collapse" data-target="#search_form" class="btn btn-info right">
+        <?php
+        global $st_lang;
+        echo $st_lang['search_header'];
+        ?>
+    </button>
+</h2>
+<div id="search_form" class="search_button_mobile accordion-body">
 <?php echo $this->search_form; ?>
 </div>
