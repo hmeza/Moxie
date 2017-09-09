@@ -32,6 +32,7 @@ class IncomesController extends TransactionsController
 		}
 		else {
 			$action = '/incomes/add';
+			$id = null;
 		}
 
 		// fix for datetime to date
@@ -40,7 +41,6 @@ class IncomesController extends TransactionsController
 
 		$form->setAction($action)->setMethod('post');
 		$form->setAttrib('id', 'login');
-		$form->addElement('hidden', 'id', array('value' => $st_income[0]['id']));
 
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
