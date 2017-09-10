@@ -41,29 +41,39 @@ class IncomesController extends TransactionsController
 
 		$form->setAction($action)->setMethod('post');
 		$form->setAttrib('id', 'login');
+        $form->setDecorators(array(
+            'FormElements',
+            array('HtmlTag',array('tag' => 'table')),
+            'Form'
+        ));
+
+        $form_elements = array();
+
+        $form_elements[] = new Zend_Form_Element_Text('note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Text('amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Date('date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'));
 
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setLabel($st_lang['expenses_category']);
 		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
 		$multiOptions->setValue(array($st_income[0]['category']));
 		$multiOptions->setAttrib('class', 'form-control');
+		$form_elements[] = $multiOptions;
 		
-		$form->setAction($action)
-			->setMethod('post')
-			->setAttrib('id', 'login')
-			->addElement('text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'))
-			->addElement('text', 'amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'))
-			->addElement('date', 'date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'))
-			->addElement($multiOptions)
-			->addElement('submit','submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
 		if (isset($st_income[0]['id'])) {
-			$form->addElement('button', 'delete', array(
-					'label' => 'Borrar',
-					'class' => 'btn btn-error pull-right',
-					'onclick' => 'confirmDelete("'.$id.'")'
-			));
-			$form->addElement('hidden', 'id', array('value' => $id));
+			$form_elements[] = new Zend_Form_Element_Button('delete', array(
+                'label' => 'Borrar',
+                'class' => 'btn btn-danger pull-right',
+                'onclick' => 'confirmDelete("'.$id.'")'
+            ));
 		}
+		$form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
+        if (isset($st_income[0]['id'])) {
+            $form_elements[] = new Zend_Form_Element_Hidden('id', array('value' => $id));
+        }
+
+        $this->prepareFormDecorators($form, $form_elements);
+
 		return $form;
 	}
 

@@ -171,6 +171,12 @@ class ExpensesController extends TransactionsController
 
 		$form->setAttrib('id', 'add_expense');
 
+        $form->setDecorators(array(
+            'FormElements',
+            array('HtmlTag',array('tag' => 'table')),
+            'Form'
+        ));
+
 		$st_categories = $this->categories->getCategoriesForView(Categories::EXPENSES);
 		asort($st_categories);
 		if(empty($st_expense['category'])) {
@@ -179,43 +185,39 @@ class ExpensesController extends TransactionsController
 		}
 
 		$f_expense = !empty($st_expense['amount']) && $st_expense['amount'] != '0.00' ? $st_expense['amount'] : '';
-		$form->addElement(
-				'text', 'amount', array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control')
-		);
-		$form->addElement(
-				'text', 'note', array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control')
-				);
-		$form->addElement(
-				'date', 'date', array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control')
-				);
-		$multiOptions = new Zend_Form_Element_Select('category');
-		$multiOptions->setName('category');
-		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($st_categories);
-		$multiOptions->setValue(array($st_expense['category']));
-		$multiOptions->setAttrib('class', 'form-control');
-// 		$multiOptions->removeDecorator('DtDdWrapper');
-// 		$multiOptions->removeDecorator('HtmlTag');
-		
-		$form->addElement($multiOptions);
-		$form->addElement('text', 'tags', array('id' => 'tags', 'label' => 'Tags', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
-		$form->addElement(
-				"checkbox", 'in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
-				);
-		$form->addElement(
-				"checkbox", 'favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline')
-				);
-		
+
+        $form_elements = array();
+        $form_elements[] = new Zend_Form_Element_Text('amount' , array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Text('note' , array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Date('date' , array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control'));
+
+        $multiOptions = new Zend_Form_Element_Select('category');
+        $multiOptions->setName('category');
+        $multiOptions->setLabel($st_lang['expenses_category']);
+        $multiOptions->addMultiOptions($st_categories);
+        $multiOptions->setValue(array($st_expense['category']));
+        $multiOptions->setAttrib('class', 'form-control');
+        $form_elements[] = $multiOptions;
+
+        $form_elements[] = new Zend_Form_Element_Text('tags', array('id' => 'tags', 'label' => 'Tags', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
+        $form_elements[] = new Zend_Form_Element_Checkbox('in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline'));
+        $form_elements[] = new Zend_Form_Element_Checkbox('favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline'));
+
 		if (isset($st_expense['id'])) {
-			$form->addElement('button', 'delete', array(
-					'label' => $st_lang['expenses_delete'],
-					'class' => 'btn btn-danger pull-right',
-					'onclick' => 'confirmDelete("'.$st_expense['id'].'")'
-			));
-			$form->addElement('hidden', 'id', array('label' => null, 'value' => $st_expense['id']));
+			$remove = new Zend_Form_Element_Button('delete', array(
+                'label' => $st_lang['expenses_delete'],
+                'class' => 'btn btn-danger pull-right',
+                'onclick' => 'confirmDelete("'.$st_expense['id'].'")'
+            ));
+            $form_elements[] = $remove;
 		}
 
-		$form->addElement('submit','submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
+        $form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
+        if (isset($st_expense['id'])) {
+            $form_elements[] = new Zend_Form_Element_Hidden('id', array('label' => null, 'value' => $st_expense['id']));
+        }
+
+		$this->prepareFormDecorators($form, $form_elements);
 
 		return $form;
 	}

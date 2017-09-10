@@ -25,6 +25,14 @@ class TransactionsController extends Zend_Controller_Action
 		$form->setName("search_form");
 		$form->setAttrib('class', 'moxie_form');
 
+        $form->setDecorators(array(
+            'FormElements',
+            array('HtmlTag',array('tag' => 'table')),
+            'Form'
+        ));
+
+        $form_elements = array();
+
 		// mount default min and max date
 		if($category_type == Categories::EXPENSES) {
 			$month = $num_padded = sprintf("%02d", $request->getParam('month', date('m')));
@@ -50,21 +58,40 @@ class TransactionsController extends Zend_Controller_Action
 		$multiOptions->addMultiOptions($st_categories);
 		$multiOptions->setValue($request->getParam('category_search', ''));
 		$multiOptions->setAttrib('class', 'form-control');
-		$form->addElement($multiOptions);
+        $form_elements[] = $multiOptions;
 
 		if($category_type == Categories::EXPENSES) {
-			$form->addElement('text', 'tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', ''), 'class' => 'form-control'));
+			$tag_search = new Zend_Form_Element_Text('tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', ''), 'class' => 'form-control'));
+			$form_elements[] = $tag_search;
 		}
 
-		$form->addElement('text', 'note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', ''), 'class' => 'form-control'));
+		$form_elements[] = new Zend_Form_Element_Text('note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', ''), 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Text('amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Text('amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Date('date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date), 'class' => 'form-control'));
+		$form_elements[] = new Zend_Form_Element_Date('date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date), 'class' => 'form-control'));
+		$form_elements[] = new Zend_Form_Element_Hidden('to_excel', array('value' => 0));
+		$form_elements[] = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info pull-right'));
 
-		$form->addElement('text', 'amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
-		$form->addElement('text', 'amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
-
-		$form->addElement('date', 'date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date), 'class' => 'form-control'));
-		$form->addElement('date', 'date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date), 'class' => 'form-control'));
-		$form->addElement('hidden', 'to_excel', array('value' => 0));
-		$form->addElement('submit','search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info pull-right'));
+        $this->prepareFormDecorators($form, $form_elements);
 		return $form;
 	}
+
+	protected function prepareFormDecorators($form, $form_elements) {
+        $decorators = array(
+            'ViewHelper',
+            array('Errors'),
+            array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+            array('Label', array('tag' => 'td')),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+        );
+
+        foreach($form_elements as $element) {
+            $decorator = $element->getDecorator('Label');
+            if ($decorator) $decorator->setOption('placement', Zend_Form_Decorator_Abstract::APPEND);
+            $element->removeDecorator('DtDdWrapper');
+            $element->setDecorators($decorators);
+            $form->addElement($element);
+        }
+    }
 }
