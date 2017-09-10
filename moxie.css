@@ -158,13 +158,14 @@ form.budget {
 .moxietitle {
 	cursor: hand;
 	cursor: pointer;
-	background:url("img/moxie-title.png") no-repeat;
-	width: 233px;
-	height: 65px;
+	color: #337ab7;
+	font-family: Helvetica, sans-serif;
+	font-size: 35px;
+	font-weight: bold;
 }
 
 .moxietitle:hover {
-	background:url("img/moxie-title-hover.png") no-repeat;
+	color: #286090;
 }
 
 .moxiebutton {
@@ -201,13 +202,6 @@ div.moxieedit {
 div:hover.moxieedit {
 	background:url("/img/edit_hover.png") no-repeat;
 }
-/*button.moxie {
-	display:inline-block;
-	border-top: 5px;
-    margin-top: 5px;
-    background-color: #ff9999;
-	height: 32px;
-}*/
 
 tr.alt td.alt {
 	background: #ecf6fc;
@@ -622,26 +616,6 @@ h2 {
 	.moxie_date_inline {
 		display:none;
 		width: 0px;
-	}
-
-    .moxietitle {
-        width: 0px;
-        cursor: default;
-        background: #ffffff;
-    }
-
-    .moxietitle:hover {
-        background: #ffffff;
-    }
-
-	.moxietitle_mobile_not_logged {
-		background:url("img/moxie-title.png") no-repeat;
-		width: 233px;
-		height: 65px;
-	}
-
-	.moxietitle_mobile_not_logged:hover {
-		background:url("img/moxie-title-hover.png") no-repeat;
 	}
 
 	.moxie_expenses_form_left {}

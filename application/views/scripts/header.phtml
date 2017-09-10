@@ -11,26 +11,12 @@ $st_urls = array(
         'users' => '/users',
 		//'finance' => '/finance',
 );
-
-if (empty($_SESSION['user_id'])) {
-?>
-<header>
-<table width=100%>
-<tr>
-<td valign="top" class="moxietitle moxietitle_mobile_not_logged" onclick="window.location='<?php echo $settingsUrl; ?>'"></td>
-<td align="right" class="moxie_login_header">
-</td>
-</tr>
-</table>
-</header>
-<?php
-}
 ?>
 <!-- web menu -->
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="container">
-
         <div class="navbar-header">
+            <span class="moxietitle">Moxi€</span>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
