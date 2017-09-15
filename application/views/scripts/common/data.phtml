@@ -32,9 +32,9 @@ else {
         </td>
     </tr>
 	<tr>
-		<td class="list moxie_edit">&nbsp;</td>
-		<td class="list moxie_category"><?php echo $st_lang['expenses_category']; ?></td>
-		<td class="list moxie_note"><?php echo $st_lang['expenses_note']; ?></td>
+		<th class="list moxie_edit">&nbsp;</th>
+		<th class="list moxie_category"><?php echo $st_lang['expenses_category']; ?></th>
+		<th class="list moxie_note"><?php echo $st_lang['expenses_note']; ?></th>
 	<?php
 	if ($this->view) {
 		$target = '/'.$this->view.'/index';
@@ -47,11 +47,11 @@ else {
 		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";
 		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";
 	?>
-		<td align="center" class="list moxie_date_inline sorting"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></td>
-		<td align="right" class="list moxie_amount sorting"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></td>
+		<th class="list moxie_date_inline sorting text-center"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></th>
+		<th class="list moxie_amount sorting text-right"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></th>
 	<?php } else { ?>
-		<td align="center" class="list moxie_date_inline sorting"><?php echo $st_lang['expenses_date']; ?></td>
-		<td align="right" class="list moxie_amount sorting"><?php echo $st_lang['expenses_amount']; ?></td>
+		<th class="list moxie_date_inline sorting text-center"><?php echo $st_lang['expenses_date']; ?></th>
+		<th class="list moxie_amount sorting text-right"><?php echo $st_lang['expenses_amount']; ?></th>
 	<?php } ?>
 	</tr>
 	</thead>
