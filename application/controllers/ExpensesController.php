@@ -187,6 +187,22 @@ class ExpensesController extends TransactionsController
 		$f_expense = !empty($st_expense['amount']) && $st_expense['amount'] != '0.00' ? $st_expense['amount'] : '';
 
         $form_elements = array();
+
+        $favs = $this->expenses->getFavourites($_SESSION['user_id']);
+        if(!empty($favs)) {
+            $st_favs = array(0 => '');
+            foreach ($favs as $fav) {
+                $st_favs[$fav['id']] = $fav['note'];
+            }
+            $favouritesOptions = new Zend_Form_Element_Select('category');
+            $favouritesOptions->setName('favourites');
+            $favouritesOptions->setLabel("Favoritos"); //  $st_lang['expenses_category']);
+            $favouritesOptions->addMultiOptions($st_favs);
+            $favouritesOptions->setValue(array($st_expense['category']));
+            $favouritesOptions->setAttrib('class', 'form-control font-weight-bold');
+            $form_elements[] = $favouritesOptions;
+        }
+        
         $form_elements[] = new Zend_Form_Element_Text('amount' , array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('note' , array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Date('date' , array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control'));

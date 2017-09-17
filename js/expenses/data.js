@@ -12,6 +12,13 @@ var export_to_excel = function(){
 
 var use_favourite_as_expense = function() {
 	var id = $('#favourites').find(":selected").val();
+	if (id == "0") {
+		$('#amount').val(null);
+		$('#note').val('');
+		$('#tags').tagsinput('removeAll');
+		// todo set current date
+		return;
+	}
 	for (var i=0; i < favourite_data.length; i++) {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
@@ -27,12 +34,6 @@ var use_favourite_as_expense = function() {
 	}
 };
 
-var load_favourites_data = function() {
-	for (var i=0; i < favourite_data.length; i++) {
-		$('#favourites').append('<option value="'+favourite_data[i]["id"]+'">'+favourite_data[i]["note"]+'</option>');
-	}
-};
-
 $(document).ready(function() {
 	$("#login").submit(function(e) {
 	     var self = this;
@@ -43,7 +44,6 @@ $(document).ready(function() {
 
 	$("#export_to_excel_button").click(export_to_excel);
 
-	load_favourites_data();
 	$('#favourites').change(use_favourite_as_expense);
 
 	var tags = new Bloodhound({
