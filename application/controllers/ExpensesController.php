@@ -196,7 +196,7 @@ class ExpensesController extends TransactionsController
             }
             $favouritesOptions = new Zend_Form_Element_Select('category');
             $favouritesOptions->setName('favourites');
-            $favouritesOptions->setLabel("Favoritos"); //  $st_lang['expenses_category']);
+            $favouritesOptions->setLabel($st_lang['use_favourite']);
             $favouritesOptions->addMultiOptions($st_favs);
             $favouritesOptions->setValue(array($st_expense['category']));
             $favouritesOptions->setAttrib('class', 'form-control font-weight-bold');
