@@ -1,5 +1,5 @@
 <script src="/bower_components/clipboard/dist/clipboard.min.js"></script>
-<script src="/js/sheets/data.js?v=7"></script>
+<script src="/js/sheets/data.js?v=8"></script>
 <div class="moxie-container">
 <div>
 <div id="messages">
@@ -31,11 +31,9 @@ if (isset($this->sheet)) {
     <div style="width: 300px; display: inline">
         <h1>
             <a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
-            <span>
-            <img class="btn"
-            style="width: 28px; height: 28px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
-            alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
-            title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+            <span class="glyphicon glyphicon-duplicate text-info"
+                  alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+                  title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
             </span>
         </h1>
     </div>
