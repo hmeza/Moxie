@@ -108,6 +108,7 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	public function deleteAction() {
+	    global $st_lang;
 		// validations: logged user
 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
 			// return 403
