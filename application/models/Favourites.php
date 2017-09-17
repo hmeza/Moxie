@@ -13,4 +13,8 @@ class Favourites extends Zend_Db_Table_Abstract {
 		$this->database = $db;
 		$this->_db = Zend_Registry::get('db');
 	}
+
+	public function deleteByTransactionId($transactionId) {
+	    $this->delete("id_transaction = ".$transactionId);
+    }
 }

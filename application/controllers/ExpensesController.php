@@ -8,12 +8,15 @@ class ExpensesController extends TransactionsController
 	private $budgets;
 	/** @var Tags */
 	private $tags;
+	/** @var  Favourites */
+	private $favourites;
 
 	public function init() {
 		parent::init();
 		$this->expenses = new Expenses();
 		$this->budgets = new Budgets();
 		$this->tags = new Tags();
+		$this->favourites = new Favourites();
 	}
 
 	/**
@@ -128,13 +131,13 @@ class ExpensesController extends TransactionsController
 	}
 	
 	/**
-	 * Deletes a given expense
-	 * @author	hmeza
+	 * Deletes an expense.
 	 */
 	public function deleteAction() {
 		$i_expensePK = $this->getRequest()->getParam('id');
 		try {
 			$this->transactionTags->getAdapter()->beginTransaction();
+			$this->favourites->deleteByTransactionId($i_expensePK);
 			$this->transactionTags->removeTagsFromTransaction($i_expensePK);
 			$this->expenses->delete($i_expensePK, $_SESSION['user_id']);
 			$this->transactionTags->getAdapter()->commit();
