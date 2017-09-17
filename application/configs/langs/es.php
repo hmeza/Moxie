@@ -143,14 +143,17 @@ Ya puedes entrar con tu login y password para empezar a utilizar Moxie.',
 	'myaccount_password_error'	=>	'Error: Los passwords no coinciden',
 	'error_nouser' => 'No estás identificado. Por favor <a href="/">accede</a> o <a href="/login/newuser">registrate</a> como usuario.',
 	'text_about_title' => 'Acerca de...',
-	'text_about_text' => 'Moxie utiliza:<br> 
+	'text_about_text' => '
+Moxie recibe apoyo, mediante licencias, de:<br>
+<a href="https://www.jetbrains.com/phpstorm/">JetBrains</a><br><br>
+Moxie utiliza:<br> 
 		<a href="http://www.php.net" target="blank">PHP</a><br>
 		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
 		<a href="https://developers.google.com/chart/" target="blank">Google charts</a><br>
 		<a href="https://www.mysql.com/" target="blank">MySQL</a><br>
 		<a href="https://httpd.apache.org/" target="blank">Apache</a><br><br>
-        Moxie está alojado en:<br>
-        <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>',
+        Moxie está hospedado en:<br>
+        <a href="https://www.ovh.com/" target="blank">OVH</a><br><br>',
 
 );
 ?>

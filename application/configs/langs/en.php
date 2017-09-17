@@ -143,14 +143,17 @@ Now you can log in with your login and password to start using Moxie.',
 	'myaccount_password_error'	=>	'Error: Passwords do not match',
 	'error_nouser' => 'You are not logged in. Please <a href="/">log in</a> or <a href="login/newuser">register</a> a new user.',
 	'text_about_title' => 'About...',
-	'text_about_text' => 'Moxie uses:<br> 
+	'text_about_text' => '
+Moxie is helped, through licenses, from:<br>
+<a href="https://www.jetbrains.com/phpstorm/">JetBrains</a><br><br>
+Moxie uses:<br> 
 		<a href="http://www.php.net" target="blank">PHP</a><br>
 		<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
 		<a href="https://developers.google.com/chart/" target="blank">Google charts</a><br>
 		<a href="https://www.mysql.com/">MySQL</a><br>
 		<a href="https://httpd.apache.org/">Apache</a><br><br>
          Moxie is hosted at:<br>
-         <a href="http://api.hostinger.es/redir/457908" target="blank">Hostinger.es</a><br><br>',
+         <a href="https://www.ovh.com/" target="blank">OVH</a><br><br>',
 
 );
 ?>
