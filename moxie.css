@@ -640,15 +640,6 @@ h2 {
 	max-width: 160px;
 }
 
-.sheets_form {
-	background:#ffffff;
-	padding: 5px;
-	border: 0px solid #eee;
-	margin: 1px;
-	font: 16px roboto sans-serif;
-	width: 98%;
-}
-
 /*** Fix for typeahead ***/
 .tt-query, /* UPDATE: newer versions use tt-input instead of tt-query */
 .tt-hint {

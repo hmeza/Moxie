@@ -27,46 +27,46 @@ echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->shee
 if (isset($this->sheet)) {
 ?>
 	<div class="moxie_expenses_form_div">
-	<h1>
-		<div style="width: 100%;">
-		<div style="width: 300px; display: inline">
-		<a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
-		<span>
-		<img class="btn"
-		style="width: 28px; height: 28px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
-		alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
-		title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
-		</span>
-		</div>
-		<div style="float: right; display: inline;">
-			<?php
-			if (empty($this->sheet['closed_at'])) {
-			?>
-			<form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
-			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
-			</form>
-			<?php
-			}
-			else {
-			?>
-			<form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="sheets_form">
-			<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-			<button onclick="submit()" class="btn btn-primary"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <?php echo $st_lang['sheets_using_category']; ?>
-			<select name="id_category" id="id_category">
-			<?php
-			foreach($this->categories as $k => $c) {
-				echo "<option value='".$k."'>".$c."</option>";
-			}
-			?>
-			</select>
-			</form>
-			<?php
-			}
-			?>
-		</div>
-		</div>
-	</h1>
+    <div style="width: 100%;">
+    <div style="width: 300px; display: inline">
+        <h1>
+            <a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
+            <span>
+            <img class="btn"
+            style="width: 28px; height: 28px; background: #ffffff; border: 0px; padding: 0px; margin: 0px;" src="/img/copy.png"
+            alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+            title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+            </span>
+        </h1>
+    </div>
+    <div style="float: right; display: inline;">
+        <?php
+        if (empty($this->sheet['closed_at'])) {
+        ?>
+        <form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
+        <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+        <input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
+        </form>
+        <?php
+        }
+        else {
+        ?>
+        <form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
+            <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+            <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <p class="text-normal"><?php echo $st_lang['sheets_using_category']; ?></p>
+            <select name="id_category" id="id_category" class="form-control">
+            <?php
+            foreach($this->categories as $k => $c) {
+                echo "<option value='".$k."'>".$c."</option>";
+            }
+            ?>
+            </select>
+        </form>
+        <?php
+        }
+        ?>
+    </div>
+    </div>
 	</div>
 	
 	<?php
