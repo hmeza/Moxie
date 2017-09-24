@@ -26,7 +26,6 @@ class IncomesController extends TransactionsController
 		}
 		else {
 			$action = '/incomes/add';
-			$id = null;
 		}
 
 		// fix for datetime to date
