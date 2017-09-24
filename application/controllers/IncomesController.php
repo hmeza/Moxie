@@ -20,15 +20,9 @@ class IncomesController extends TransactionsController
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-		if (isset($st_income['id'])) {
-			$id = $st_income['id'];
-			$action = '/incomes/update';
 
-			$form->addElement('button', 'delete', array(
-					'label' => 'Borrar',
-					'class' => 'btn btn-error pull-right',
-					'onclick' => 'confirmDelete("'.$id.'")'
-			));
+		if (isset($st_income[0]['id'])) {
+			$action = '/incomes/update';
 		}
 		else {
 			$action = '/incomes/add';
@@ -61,6 +55,7 @@ class IncomesController extends TransactionsController
 		$form_elements[] = $multiOptions;
 		
 		if (isset($st_income[0]['id'])) {
+            $id = $st_income[0]['id'];
 			$form_elements[] = new Zend_Form_Element_Button('delete', array(
                 'label' => 'Borrar',
                 'class' => 'btn btn-danger pull-right',
