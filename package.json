@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/hmeza/Moxie#readme",
   "dependencies": {
+    "clipboard": "^1.7.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-util": "^0.5.3",
