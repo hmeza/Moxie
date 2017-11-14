@@ -356,6 +356,9 @@ class ExpensesController extends TransactionsController
 		if (isset($st_params['o'])) {
 			$this->view->assign('o', $st_params['o']);
 		}
+		if($this->getRequest()->getParam('is_search', false) == 1) {
+		    $this->view->assign('is_search', true);
+        }
 		$this->view->assign('favourites_json', json_encode($this->expenses->getFavourites($_SESSION['user_id'])));
 	}
 }

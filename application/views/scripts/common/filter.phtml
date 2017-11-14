@@ -6,6 +6,6 @@
         ?>
     </button>
 </h2>
-<div id="search_form" class="search_button_mobile accordion-body">
+<div id="search_form" class="search_button_mobile accordion-body" <?php if ($this->is_search) { echo "style='display:block'"; } ?>>
 <?php echo $this->search_form; ?>
 </div>

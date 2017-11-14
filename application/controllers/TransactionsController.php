@@ -71,6 +71,7 @@ class TransactionsController extends Zend_Controller_Action
         $form_elements[] = new Zend_Form_Element_Date('date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date), 'class' => 'form-control'));
 		$form_elements[] = new Zend_Form_Element_Date('date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date), 'class' => 'form-control'));
 		$form_elements[] = new Zend_Form_Element_Hidden('to_excel', array('value' => 0));
+        $form_elements[] = new Zend_Form_Element_Hidden('is_search', array('value' => 1));
 		$form_elements[] = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info pull-right'));
 
         $this->prepareFormDecorators($form, $form_elements);
