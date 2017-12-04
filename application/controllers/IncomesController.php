@@ -42,8 +42,8 @@ class IncomesController extends TransactionsController
 
         $form_elements = array();
 
-        $form_elements[] = new Zend_Form_Element_Text('note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'));
+        $form_elements[] = new Zend_Form_Element_Text('note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Date('date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'));
 
 		$multiOptions = new Zend_Form_Element_Select('category');
