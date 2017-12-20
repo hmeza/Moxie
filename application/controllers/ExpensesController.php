@@ -58,6 +58,9 @@ class ExpensesController extends TransactionsController
 	 */
 	public function addAction() {
 		$st_form = $this->getRequest()->getPost();
+		if(empty($st_form['amount'])) {
+            $this->_helper->redirector('index','expenses');
+        }
 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
 		if(empty($st_form['category'])) {
