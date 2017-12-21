@@ -164,12 +164,14 @@ class ExpensesController extends TransactionsController
 			$in_sum_value = 1;
 			$slug = '/expenses/add';
 			$tag_value = '';
+			$save_text = $st_lang['expenses_header'];
 		}
 		else {
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
 			$tag_value = implode(", ", $tag_list);
+            $save_text = $st_lang['expenses_edit'];
 		}
 
 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
@@ -234,7 +236,7 @@ class ExpensesController extends TransactionsController
             $form_elements[] = $remove;
 		}
 
-        $form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['expenses_header'], 'class' => 'btn btn-primary pull-right'));
+        $form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $save_text, 'class' => 'btn btn-primary pull-right'));
         if (isset($st_expense['id'])) {
             $form_elements[] = new Zend_Form_Element_Hidden('id', array('label' => null, 'value' => $st_expense['id']));
         }

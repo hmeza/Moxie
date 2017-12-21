@@ -16,6 +16,7 @@ $st_lang = array(
 	'back_to_top' => 'Tornar a dalt',
 	// Expenses
 	'expenses_header'     => 'Afegir despesa',
+    'expenses_edit'		=> 'Desar',
 	'expenses_amount'	=>	'Import',
 	'expenses_category'	=>	'Categoria',
 	'expenses_note'		=>	'Nota',

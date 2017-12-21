@@ -16,6 +16,7 @@ $st_lang = array(
 	'back_to_top' => 'Back to top',
 	// Expenses
 	'expenses_header'     => 'Add expense',
+    'expenses_edit'		=> 'Save',
 	'expenses_amount'	=>	'Amount',
 	'expenses_category'	=>	'Category',
 	'expenses_note'		=>	'Note',
