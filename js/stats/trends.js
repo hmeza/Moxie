@@ -19,7 +19,12 @@ function drawChart() {
 
     var options = {
         title: '',
-        hAxis: {title: 'Mes/año',  titleTextStyle: {color: '#333'}},
+        hAxis: {
+            //title: 'Mes/año',
+            titleTextStyle: {color: '#333'},
+            slantedText:true,
+            slantedTextAngle:38,
+        },
         vAxis: {minValue: 0},
         legend: {position: 'top'}
     };
