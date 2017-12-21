@@ -100,7 +100,7 @@ class IncomesController extends TransactionsController
 			$st_params['date_min'] = $i_year.'-01-01';
 			$st_params['date_max'] = date("Y-12-t", strtotime($i_year.'-01-01'));
 		}
-		$st_params['category_search'] = $this->getRequest()->getParam('category', null);
+		$st_params['category_search'] = $this->getRequest()->getParam('category_search', null);
 
 		$this->view->assign('list', $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params));
 		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
