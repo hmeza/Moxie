@@ -17,6 +17,7 @@ $(document).ready(function() {
 
 <button data-toggle="collapse" data-target="#my_account" class="btn btn-info"><?php echo $st_lang['users_my_account']; ?></button>
 <button data-toggle="collapse" data-target="#categories_table" class="btn btn-info"><?php echo $st_lang['categories']; ?></button>
+<button data-toggle="collapse" data-target="#favourites_table" class="btn btn-info"><?php echo $st_lang['favourites_message']; ?></button>
 <button data-toggle="collapse" data-target="#budget_table" class="btn btn-info"><?php echo $st_lang['budget']; ?></button>
 <button data-toggle="collapse" data-target="#tags_table" class="btn btn-info"><?php echo $st_lang['tags_title']; ?></button>
 
@@ -29,6 +30,9 @@ $(document).ready(function() {
 <?php
 echo $this->partial('categories/categories.phtml',
 		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display));
+
+echo $this->partial('categories/favourites.phtml',
+        array('favourites_list' => $this->favourites_list));
 
 echo $this->partial('categories/budget.phtml',
 		array('categories'=>$this->categories, 'budgets_list' => $this->budgets_list));

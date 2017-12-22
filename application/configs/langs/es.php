@@ -50,6 +50,7 @@ $st_lang = array(
 	// Transactions
 	'in_sum_message'    => 'Mostrar en "Total"',
 	'favourite_message'  => 'Favorito',
+    'favourites_message'  => 'Favorito',
 	'use_favourite' => 'Usar favorito',
 	// Budgets
 	'budgets_title'     => 'Presupuestos',

@@ -82,7 +82,9 @@ class UsersController extends Zend_Controller_Action {
 	 * @param   string	$password
 	 */
 	public function indexAction() {
-		$st_budgetsList = array();
+        $expenses = new Transactions();
+        $this->view->assign('favourites_list', $expenses->getFavourites($_SESSION['user_id']));
+
 		$this->view->assign('form', $this->getForm($_SESSION['user_id']));
 		// from categories
 		if (empty($this->view->categories_form)) {
