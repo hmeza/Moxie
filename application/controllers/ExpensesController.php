@@ -307,13 +307,8 @@ class ExpensesController extends TransactionsController
 	 * @throws Exception
 	 */
 	private function updateTags($tags, $expenseId) {
-		$existingTags = $this->tags->getTagsByUser($_SESSION['user_id']);
 		foreach($tags as $tag) {
-			$searchTag = str_replace("'", "\\'", $tag);
-			$tagId = array_search($searchTag, $existingTags);
-			if($tagId === FALSE) {
-				$tagId = $this->tags->addTag($_SESSION['user_id'], $tag);
-			}
+            $tagId = $this->tags->addTag($_SESSION['user_id'], $tag);
 			$this->transactionTags->addTagToTransaction($expenseId, $tagId);
 		}
 	}

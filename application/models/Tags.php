@@ -10,6 +10,8 @@ class Tags extends Zend_Db_Table_Abstract {
     /* @var TransactionTags */
     private $transactionTags;
 
+    private $existingTags = null;
+
 	public function __construct() {
 		global $db;
 		$this->database = $db;
@@ -30,15 +32,33 @@ class Tags extends Zend_Db_Table_Abstract {
 		if(empty($name)) {
 			throw new Exception("Empty tag name");
 		}
-		$data = array(
-			'user_owner' => $userId,
-			'name' => $name
-		);
-		try {
-			return $this->insert($data);
-		} catch (Exception $e) {
-			error_log('Exception caught on '.__METHOD__.'('.$e->getLine().'), message: '.$e->getMessage());
-		}
+        if(is_null($this->existingTags)) {
+            $this->existingTags = $this->getTagsByUser($userId);
+        }
+
+        // check if backslashes have been already replaced
+        $pos = strpos($name, "\\'");
+		if ($pos === false) {
+        }
+        else {
+            $name = str_replace("\\'", "'", $name);
+        }
+        $tagId = array_search($name, $this->existingTags);
+        if($tagId === FALSE) {
+            $data = array(
+                'user_owner' => $userId,
+                'name' => $name
+            );
+            try {
+                return $this->insert($data);
+            } catch (Exception $e) {
+                error_log('Exception caught on '.__METHOD__.'('.$e->getLine().'), message: '.$e->getMessage());
+                return null;
+            }
+        }
+        else {
+            return $tagId;
+        }
 	}
 	
 	/**
@@ -97,7 +117,11 @@ class Tags extends Zend_Db_Table_Abstract {
 			$rows = $this->fetchAll($query)->toArray();
 			$tags = array();
 			foreach($rows as $row) {
-				$tags[$row['id']] = str_replace("'", "\'", $row['name']);
+                $pos = strpos("'", $row['name']);
+                $pos2 = strpos("\\'", $row['name']);
+                if ($pos === false and $pos2 !== false) {
+                    $tags[$row['id']] = str_replace("'", "\\'", $row['name']);
+                }
 			}
 		}
 		catch(Exception $e) {
