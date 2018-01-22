@@ -115,7 +115,7 @@ $st_lang = array(
 		'sheets_add_user' => 'Afegir usuari',
 		'sheets_add_user_message' => 'Introdueix l\'adreça de correu de la persona amb la que comparteixes despeses.&nbsp;'
 		.'Si introdueixes un nom d\'usuari existent, vincularem aquest full al seu compte.',
-		'sheets_copy_to_clipboard' => 'Copiar al porta-retalls',
+		'sheets_copy_to_clipboard' => 'Copiar adreça permanent d\'aquesta pàgina al porta-retalls',
 		'sheets_email_subject' => 'Nou full de despeses compartides',
 		'sheets_email_body_1' => 'Han compartit un full de despeses amb tu:',
 		'sheets_email_body_2' => 'Si tienes cuenta en Moxie, podrás ver esta hoja en tus hojas de gastos'

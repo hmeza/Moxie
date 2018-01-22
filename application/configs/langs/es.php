@@ -115,7 +115,7 @@ $st_lang = array(
 		'sheets_add_user' => 'Añadir usuario',
 		'sheets_add_user_message' => 'Introduce la dirección de correo de la persona con la que compartes gastos.&nbsp;'
 					.'Si introduces un nombre de usuario existente, asociaremos esta hoja a su cuenta.',
-		'sheets_copy_to_clipboard' => 'Copiar al portapapeles',
+		'sheets_copy_to_clipboard' => 'Copiar dirección permanente de esta página al portapapeles',
 		'sheets_email_subject' => 'Nueva hoja de gastos compartidos',
 		'sheets_email_body_1' => 'Han compartido una hoja de gastos contigo:',
 		'sheets_email_body_2' => 'Si tienes cuenta en Moxie, podrás ver esta hoja en tus hojas de gastos'

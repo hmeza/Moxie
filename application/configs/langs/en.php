@@ -115,7 +115,7 @@ $st_lang = array(
 		'sheets_add_user' => 'Add user',
 		'sheets_add_user_message' => 'Enter address of person with whom you are sharing expenses.&nbsp;'
 		.'If you enter an existing username, the sheet will be added to the user account.',
-		'sheets_copy_to_clipboard' => 'Copy to clipboard',
+		'sheets_copy_to_clipboard' => 'Copy permalink of this page to clipboard',
 		'sheets_email_subject' => 'New shared expenses sheet',
 		'sheets_email_body_1' => 'Someone shared an expenses sheet with you:',
 		'sheets_email_body_2' => 'If you have a Moxie account, you will see this sheet in your shared expenses sheets.'
