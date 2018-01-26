@@ -37,6 +37,7 @@ class Tags extends Zend_Db_Table_Abstract {
         }
 
         // check if backslashes have been already replaced
+        $name = trim($name);
         $pos = strpos($name, "\\'");
 		if ($pos === false) {
         }
@@ -118,8 +119,7 @@ class Tags extends Zend_Db_Table_Abstract {
 			$tags = array();
 			foreach($rows as $row) {
                 $pos = strpos("'", $row['name']);
-                $pos2 = strpos("\\'", $row['name']);
-                if ($pos === false and $pos2 !== false) {
+                if ($pos === false) {
                     $tags[$row['id']] = str_replace("'", "\\'", $row['name']);
                 }
 			}
