@@ -29,7 +29,7 @@ $(document).ready(function() {
 
 <?php
 echo $this->partial('categories/categories.phtml',
-		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display));
+		array('categories'=>$this->categories, 'categories_form' => $this->categories_form, 'categories_list' => $this->categories_list, 'categories_display' => $this->categories_display, 'categories_collapse' => $this->categories_collapse));
 
 echo $this->partial('categories/favourites.phtml',
         array('favourites_list' => $this->favourites_list));
