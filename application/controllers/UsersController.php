@@ -118,6 +118,9 @@ class UsersController extends Zend_Controller_Action {
 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
 		$this->view->assign('categories', $st_categories);
 		$this->view->assign('budgets_list', $this->budgets->getBudgetsDatesList());
+		if(!isset($this->view->categories_collapse)) {
+			$this->view->assign('categories_collapse', true);
+		}
 	}
 	
 	/**
