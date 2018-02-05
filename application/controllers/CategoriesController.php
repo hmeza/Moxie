@@ -81,6 +81,7 @@ class CategoriesController extends Zend_Controller_Action
     public function indexAction() {
 	    $this->view->assign('categories_form', $this->getForm());
 	    $this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
+		$this->view->assign('categories_collapse', true);
 		$this->_forward('index', 'users');
     }
     
@@ -98,6 +99,7 @@ class CategoriesController extends Zend_Controller_Action
     public function editAction() {
     	$this->view->assign('categories_form', $this->getEditForm($this->_request->getParam('id')));
     	$this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
+		$this->view->assign('categories_collapse', false);
     	$this->_forward('index', 'users');
     }
     
