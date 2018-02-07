@@ -7,7 +7,7 @@ class LastLogin extends AbstractMigration
     public function change()
     {
         $this->table('users')
-            ->addColumn('last_login', 'timestamp', array('null' => false))
+            ->addColumn('last_login', 'timestamp', array('null' => true))
             ->update();
     }
 }
