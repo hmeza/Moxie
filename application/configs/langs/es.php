@@ -84,6 +84,8 @@ $st_lang = array(
 	'stats_budget_expense' => 'TOTAL GASTOS',
 	'stats_budget_total' => 'SALDO (Ingresos - gastos)',
 	'stats_trends' => 'Tendencias',
+	'stats_anual_positive' => 'FLUJO POSITIVO',
+	'stats_anual_negative' => 'FLUJO NEGATIVO',
 	// Finance
 	'finance_title' => 'Calculadora de depósitos',
 	'finance_name' => 'Nombre (opcional)',

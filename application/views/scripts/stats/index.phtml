@@ -1,5 +1,8 @@
 <?php
 function print_yearly_loop($yearly, $categories, $init_year) {
+    global $st_lang;
+    $positives = array();
+    $negatives = array();
 	$totals = array();
 	foreach($categories as $key => $cat) {
 		echo "<td style='text-align:left;'>".$cat."</td>";
@@ -7,11 +10,23 @@ function print_yearly_loop($yearly, $categories, $init_year) {
 			if(!isset($totals[$i])) {
 				$totals[$i] = 0;
 			}
+			if(!isset($positives[$i])) {
+			    $positives[$i] = 0;
+            }
+            if(!isset($negatives[$i])) {
+			    $negatives[$i] = 0;
+            }
 			$found = false;
 			foreach($yearly[$i] as $data) {
 				if($data['category'] == $key) {
 					echo "<td>".$data['sum(amount)']." &euro;</td>";
 					$totals[$i] += $data['sum(amount)'];
+                    if($data['sum(amount)'] > 0) {
+                        $positives[$i] += $data['sum(amount)'];
+                    }
+                    else {
+                        $negatives[$i] += $data['sum(amount)'];
+                    }
 					$found = true;
 					break;
 				}
@@ -22,7 +37,15 @@ function print_yearly_loop($yearly, $categories, $init_year) {
 		}
 		echo "<tr>";
 	}
-	echo "<th style='text-align:left;'>TOTAL</th>";
+	echo "<tr><th style='text-align: left;'>".$st_lang['stats_anual_positive']."</th>";
+    for($i = $init_year; $i <= date('Y'); $i++) {
+        echo "<th>" . number_format($positives[$i], 2) . " &euro;</th>";
+    }
+    echo "</tr><tr><th style='text-align: left;'>".$st_lang['stats_anual_negative']."</th>";
+    for($i = $init_year; $i <= date('Y'); $i++) {
+        echo "<th>" . number_format($negatives[$i], 2) . " &euro;</th>";
+    }
+	echo "</tr><tr></tr><th style='text-align:left;'>TOTAL</th>";
 	for($i = $init_year; $i <= date('Y'); $i++) {
 		echo "<th>" . number_format($totals[$i], 2) . " &euro;</th>";
 	}
