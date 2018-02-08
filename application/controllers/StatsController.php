@@ -36,7 +36,7 @@ class StatsController extends Zend_Controller_Action {
 			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params);
 		}
 		// get expenses and incomes for all years
-		$min_year = 2014;
+		$min_year = date('Y') - 4;
 		$st_yearly = array();
 		for($i = $min_year; $i <= date('Y'); $i++) {
 			$st_yearly[$i] = $this->expenses->getYearly($_SESSION['user_id'], $i);
