@@ -66,12 +66,6 @@ input[type="checkbox"] {
 	width: 25px;
 	height: 32px;
 }
-/*input[type="radio"] {
-    width: 25px;
-}
-input[type="submit"] {
-	height: 32px;
-}*/
 
 .my-checkbox {
 	width: 1em;
@@ -416,7 +410,6 @@ h2 {
 	}
 
     input[type="submit"] {
-        padding: 0px;
         height: 34px;
     }
 
