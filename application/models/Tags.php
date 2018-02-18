@@ -24,6 +24,7 @@ class Tags extends Zend_Db_Table_Abstract {
 	 * @var int $userId
 	 * @var string $name
 	 * @return int
+     * @throws Exception
 	 */	
 	public function addTag($userId, $name) {
 		if(empty($userId)) {
