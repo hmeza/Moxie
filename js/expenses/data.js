@@ -30,8 +30,12 @@ var use_favourite_as_expense = function() {
 			var favourite_category = favourite_data[i]["category"];
 			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
-			c.find(option_string).attr('selected', 'selected');
-			alert("option string selected" + option_string);
+			//c.find(option_string).attr('selected', 'selected');
+			var op_str = c.find(option_string);
+			alert("option string found? "+op_str);
+			//alert("option string selected" + option_string);
+			op_str.attr("selected", "selected");
+			alert("setting selected "+op_str.attr("selected"));
 			break;
 		}
 	}
