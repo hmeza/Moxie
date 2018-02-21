@@ -36,7 +36,8 @@ var use_favourite_as_expense = function() {
 			//alert("option string selected" + option_string);
 			op_str.attr("selected", "selected");
 
-			var current = null;
+			c.selectmenu("refresh");
+/*			var current = null;
             for (j = 0; j < c.length; j++) {
                 current = options[i];
                 if (current.selected === true && !current.hasAttribute('selected')) {
@@ -45,7 +46,7 @@ var use_favourite_as_expense = function() {
                 if (current.selected === false && current.hasAttribute('selected')) {
                     options[i].removeAttribute('selected');
                 }
-            }
+            }*/
             break;
 		}
 	}
