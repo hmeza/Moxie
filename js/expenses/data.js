@@ -26,14 +26,14 @@ var use_favourite_as_expense = function() {
 			for(var j=0; j < favourite_data[i]["tags"].length; j++) {
 				$('#tags').tagsinput('add', favourite_data[i]["tags"][j]);
 			}
-			var c = $('#category');
+/*			var c = $('#category');
 			var favourite_category = favourite_data[i]["category"];
 			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
 			var opt = c.find(option_string);
 			c.val(favourite_data[i]["category"]);
 			opt.attr("selected", "selected");
-			opt.prop("selected", "selected");
+			opt.prop("selected", "selected");*/
             break;
 		}
 	}
