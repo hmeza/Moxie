@@ -12,7 +12,6 @@ var export_to_excel = function(){
 
 var use_favourite_as_expense = function() {
 	var id = $('#favourites').find(":selected").val();
-	alert("id "+id);
 	if (id == "0") {
 		$('#amount').val(null);
 		$('#note').val('');
@@ -21,19 +20,18 @@ var use_favourite_as_expense = function() {
 		return;
 	}
 	for (var i=0; i < favourite_data.length; i++) {
-		alert("checking id "+favourite_data[i]["id"]);
 		if (id == favourite_data[i]["id"]) {
-			alert("found");
 			$('#note').val(favourite_data[i]["note"]);
 			$('#amount').val(-favourite_data[i]["amount"]);
 			for(var j=0; j < favourite_data[i]["tags"].length; j++) {
 				$('#tags').tagsinput('add', favourite_data[i]["tags"][j]);
 			}
 			var c = $('#category');
-			alert("category is "+c);
+			var favourite_category = favourite_data[i]["category"];
+			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
-			c.find('option[value="'+ favourite_data[i]["category"] +'"]').attr('selected', 'selected');
-			alert("selected...");
+			c.find(option_string).attr('selected', 'selected');
+			alert("option string selected" + option_string);
 			break;
 		}
 	}
