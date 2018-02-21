@@ -65,7 +65,6 @@ class TransactionsController extends Zend_Controller_Action
 			$form_elements[] = $tag_search;
 		}
 
-        $submit = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info'));
 		$form_elements[] = new Zend_Form_Element_Text('note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', ''), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
@@ -73,10 +72,9 @@ class TransactionsController extends Zend_Controller_Action
 		$form_elements[] = new Zend_Form_Element_Date('date_max', array('label' => $st_lang['search_date_max'], 'value' => $request->getParam('date_max', $current_max_date), 'class' => 'form-control'));
 		$form_elements[] = new Zend_Form_Element_Hidden('to_excel', array('value' => 0));
         $form_elements[] = new Zend_Form_Element_Hidden('is_search', array('value' => 1));
-		$form_elements[] = $submit;
+		$form_elements[] = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info pull-right'));
 
         $this->prepareFormDecorators($form, $form_elements);
-        $submit->removeDecorator("label");
 		return $form;
 	}
 

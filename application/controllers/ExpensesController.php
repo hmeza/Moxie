@@ -236,15 +236,12 @@ class ExpensesController extends TransactionsController
             $form_elements[] = $remove;
 		}
 
-        $submit = new Zend_Form_Element_Submit('submit', array('label' => $save_text, 'class' => 'btn btn-primary pull-right'));
-        $form_elements[] = $submit;
+        $form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $save_text, 'class' => 'btn btn-primary pull-right'));
         if (isset($st_expense['id'])) {
             $form_elements[] = new Zend_Form_Element_Hidden('id', array('label' => null, 'value' => $st_expense['id']));
         }
 
 		$this->prepareFormDecorators($form, $form_elements);
-        // removing label works after this point
-        $submit->removeDecorator("Label");
 
 		return $form;
 	}

@@ -61,14 +61,12 @@ class IncomesController extends TransactionsController
                 'onclick' => 'confirmDelete("'.$id.'")'
             ));
 		}
-		$submit = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
-		$form_elements[] = $submit;
+		$form_elements[] = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
         if (isset($st_income[0]['id'])) {
             $form_elements[] = new Zend_Form_Element_Hidden('id', array('value' => $id));
         }
 
         $this->prepareFormDecorators($form, $form_elements);
-        $submit->removeDecorator("label");
 
 		return $form;
 	}
