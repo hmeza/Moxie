@@ -30,23 +30,9 @@ var use_favourite_as_expense = function() {
 			var favourite_category = favourite_data[i]["category"];
 			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
-
-			//c.find(option_string).attr('selected', 'selected');
-			var op_str = c.find(option_string);
-			//alert("option string selected" + option_string);
-			op_str.attr("selected", "selected");
-
-			c.selectmenu("refresh");
-/*			var current = null;
-            for (j = 0; j < c.length; j++) {
-                current = options[i];
-                if (current.selected === true && !current.hasAttribute('selected')) {
-                    options[i].setAttribute('selected', '');
-                }
-                if (current.selected === false && current.hasAttribute('selected')) {
-                    options[i].removeAttribute('selected');
-                }
-            }*/
+			var opt = c.find(option_string);
+			opt.attr("selected", "selected");
+			opt.prop("selected", "selected");
             break;
 		}
 	}
