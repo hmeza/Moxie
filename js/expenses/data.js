@@ -31,6 +31,7 @@ var use_favourite_as_expense = function() {
 			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
 			var opt = c.find(option_string);
+			c.val(favourite_data[i]["category"]);
 			opt.attr("selected", "selected");
 			opt.prop("selected", "selected");
             break;
