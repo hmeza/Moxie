@@ -22,8 +22,10 @@ var use_favourite_as_expense = function() {
 		if (id == favourite_data[i]["id"]) {
 			$('#note').val(favourite_data[i]["note"]);
 			$('#amount').val(-favourite_data[i]["amount"]);
+            var tags = $('#tags');
+            tags.tagsinput('removeAll');
 			for(var j=0; j < favourite_data[i]["tags"].length; j++) {
-				$('#tags').tagsinput('add', favourite_data[i]["tags"][j]);
+				tags.tagsinput('add', favourite_data[i]["tags"][j]);
 			}
 			var c = $('#category');
 			var favourite_category = favourite_data[i]["category"];
