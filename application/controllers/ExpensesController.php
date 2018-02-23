@@ -244,6 +244,9 @@ class ExpensesController extends TransactionsController
 
 		$this->prepareFormDecorators($form, $form_elements);
         // removing label works after this point
+        if(isset($remove)) {
+            $remove->removeDecorator("Label");
+        }
         $submit->removeDecorator("Label");
 
 		return $form;
