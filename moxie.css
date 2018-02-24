@@ -680,3 +680,7 @@ h2 {
 .tt-suggestion p {
 	margin: 0;
 }
+
+.moxie-stats-trends-container {
+	padding-bottom: 40px;
+}
