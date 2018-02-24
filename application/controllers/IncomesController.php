@@ -55,11 +55,12 @@ class IncomesController extends TransactionsController
 		
 		if (isset($st_income[0]['id'])) {
             $id = $st_income[0]['id'];
-			$form_elements[] = new Zend_Form_Element_Button('delete', array(
+            $remove = new Zend_Form_Element_Button('delete', array(
                 'label' => 'Borrar',
                 'class' => 'btn btn-danger pull-right',
                 'onclick' => 'confirmDelete("'.$id.'")'
             ));
+            $form_elements[] = $remove;
 		}
 		$submit = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
 		$form_elements[] = $submit;
@@ -68,6 +69,9 @@ class IncomesController extends TransactionsController
         }
 
         $this->prepareFormDecorators($form, $form_elements);
+        if(isset($remove)) {
+            $remove->removeDecorator("label");
+        }
         $submit->removeDecorator("label");
 
 		return $form;
