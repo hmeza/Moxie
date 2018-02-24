@@ -4,8 +4,8 @@ global $st_lang;
 <script type="text/javascript" language="text/javascript">
 	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
     var deleteMessage = "<?php echo $st_lang['expenses_delete_message']; ?>";
-	var tagList = [<?php if(!empty($this->tags)) echo "'".implode($this->tags, "','")."'"; ?>];
-    var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".implode($this->used_tag_list, "','")."'"; ?>];
+	var tagList = [<?php if(!empty($this->tags)) echo "'".str_replace('\\"', '"',implode($this->tags, "','"))."'"; ?>];
+    var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".str_replace('\\"', '"', implode($this->used_tag_list, "','"))."'"; ?>];
     var favourite_data = <?php echo $this->favourites_json; ?>;
 </script>
 <script type="text/javascript" src="/js/expenses/data.js?v=9"></script>

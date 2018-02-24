@@ -159,7 +159,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 			// use $result['id'] to retrieve tags
 			$tags = array();
 			foreach($tagsModel->getTagsForTransaction($result['id']) as $t) {
-				$tags[] = $t;
+				$tags[] = str_replace("\\'", "'", $t);
 			}
 			$results[$key]['tags'] = $tags;
 		}

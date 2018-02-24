@@ -170,6 +170,7 @@ class ExpensesController extends TransactionsController
 			$in_sum_value = $st_expense['in_sum'];
 			$slug = '/expenses/update';
 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
+			$tag_list = str_replace("\\'", "'", $tag_list);
 			$tag_value = implode(", ", $tag_list);
             $save_text = $st_lang['expenses_edit'];
 		}
