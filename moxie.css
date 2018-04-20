@@ -337,10 +337,6 @@ h2 {
 }
 
 @media only screen and (min-width: 1060px) {
-	nav {
-		display: none;
-	}
-
 	.moxie-container {
 		width: 100%;
 	}
