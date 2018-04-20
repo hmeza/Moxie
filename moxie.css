@@ -685,3 +685,7 @@ h2 {
 .moxie-stats-trends-container {
 	padding-bottom: 40px;
 }
+
+.bootstrap-tagsinput input {
+	width: 100%;
+}
