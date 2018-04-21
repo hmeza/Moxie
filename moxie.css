@@ -360,7 +360,7 @@ h2 {
 	}
 
 	nav {
-		display: none;
+		display: block;
 	}
 
 	.moxie-submenu {
