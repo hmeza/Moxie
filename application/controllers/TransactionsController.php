@@ -61,7 +61,7 @@ class TransactionsController extends Zend_Controller_Action
         $form_elements[] = $multiOptions;
 
 		if($category_type == Categories::EXPENSES) {
-			$tag_search = new Zend_Form_Element_Text('tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', ''), 'class' => 'form-control'));
+			$tag_search = new Zend_Form_Element_Text('tag_search', array('label' => $st_lang['search_tag'], 'value' => $request->getParam('tag_search', ''), 'class' => 'form-control typeahead'));
 			$form_elements[] = $tag_search;
 		}
 

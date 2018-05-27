@@ -40,6 +40,20 @@ var use_favourite_as_expense = function() {
 	}
 };
 
+function get_tags_object() {
+    var tags = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: $.map(usedTagList, function (tag) {
+            return {
+                name: tag
+            };
+        })
+    });
+    tags.initialize();
+    return tags;
+}
+
 $(document).ready(function() {
 	$("#login").submit(function(e) {
 	     var self = this;
@@ -52,16 +66,8 @@ $(document).ready(function() {
 
 	$('#favourites').change(use_favourite_as_expense);
 
-	var tags = new Bloodhound({
-	    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	    queryTokenizer: Bloodhound.tokenizers.whitespace,
-	    local: $.map(usedTagList, function (tag) {
-	        return {
-	            name: tag
-	        };
-	    })
-	});
-	tags.initialize();
+    tags = get_tags_object();
+    tags_search = get_tags_object();
 
 	// data-role must be set here
 	$('#tags').attr('data-role', 'tagsinput');
@@ -79,4 +85,19 @@ $(document).ready(function() {
 	    }],
 	    freeInput: true
 	});
+    $('#tag_search').attr('data-role', 'tagsinput');
+    $('#tag_search').tagsinput({
+        typeaheadjs: [{
+            minLength: 1,
+            highlight: true,
+        },{
+            minlength: 1,
+            name: 'tag_search',
+            displayKey: 'name',
+            valueKey: 'name',
+            source: tags_search.ttAdapter(),
+            hint: true
+        }],
+        freeInput: true
+    });
 });
