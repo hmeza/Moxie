@@ -84,6 +84,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$o_config = Zend_Registry::getInstance()->get('config');
 		ini_set('error_prepend_string', $o_config->error_prepend_string);
 	}
+
+	protected function _initSessions() {
+	    $this->bootstrap('session');
+    }
 	
 	/**
 	 * Start Moxie
