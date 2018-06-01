@@ -18,6 +18,9 @@ moxie.db.database = "MOXIE"
 moxie.db.charset = "latin1"
 moxie.email = "moxie@dootic.com"
 log.error_prepend_string = "moxie - "
+remember_me_seconds = 604800
+save_path = /tmp/
+use_only_cookies = on
 
 [staging : production]
 moxie.app.name = "Moxie"
