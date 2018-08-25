@@ -8,6 +8,16 @@ if($this->source == "expenses") {
     $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;
     $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;
     $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));
+    // modify current month and year if we are in a search
+    try {
+        $first = $this->list->getRow(0);
+        if (strtotime($first['date']) < strtotime(date('Y-m-01'))) {
+            $current_month_and_year = date('M Y', strtotime($first['date']));
+        }
+    }
+    catch(Exception $e) {
+        // avoid error, previous and next will appear with current date
+    }
 }
 else {
     $editSlug = '/incomes/edit/id/';
