@@ -25,7 +25,9 @@ class TransactionsController extends Zend_Controller_Action
 		$params = $request->getParams();
 
 		if(!isset($params['is_search']) || $params['is_search'] != 1) {
-		    $request->setParams($_SESSION['search_params']);
+		    if(isset($_SESSION['search_params'])) {
+                $request->setParams($_SESSION['search_params']);
+            }
         }
         else {
 		    $_SESSION['search_params'] = $params;
