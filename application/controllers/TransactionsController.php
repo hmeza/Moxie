@@ -21,6 +21,16 @@ class TransactionsController extends Zend_Controller_Action
 	 */
 	protected function getSearchForm($request, $category_type = Categories::EXPENSES) {
 		global $st_lang;
+
+		$params = $request->getParams();
+
+		if(!isset($params['is_search']) || $params['is_search'] != 1) {
+		    $request->setParams($_SESSION['search_params']);
+        }
+        else {
+		    $_SESSION['search_params'] = $params;
+        }
+
 		$form  = new Zend_Form();
 		$form->setName("search_form");
 		$form->setAttrib('class', 'moxie_form');
@@ -66,7 +76,7 @@ class TransactionsController extends Zend_Controller_Action
 		}
 
         $submit = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info'));
-		$form_elements[] = new Zend_Form_Element_Text('note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note', ''), 'class' => 'form-control'));
+		$form_elements[] = new Zend_Form_Element_Text('note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note_search', ''), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Date('date_min', array('label' => $st_lang['search_date_min'], 'value' => $request->getParam('date_min', $current_min_date), 'class' => 'form-control'));
