@@ -77,7 +77,7 @@ class TransactionsController extends Zend_Controller_Action
 			$form_elements[] = $tag_search;
 		}
 
-        $submit = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info'));
+        $submit = new Zend_Form_Element_Submit('search_submit', array('label' => $st_lang['search_send'], 'class' => 'btn btn-info pull-right'));
 		$form_elements[] = new Zend_Form_Element_Text('note_search', array('label' => $st_lang['search_note'], 'value' => $request->getParam('note_search', ''), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_min', array('label' => $st_lang['search_amount_min'], 'value' => $request->getParam('amount_min', 0), 'class' => 'form-control'));
         $form_elements[] = new Zend_Form_Element_Text('amount_max', array('label' => $st_lang['search_amount_max'], 'value' => $request->getParam('amount_max', ''), 'class' => 'form-control'));
@@ -102,9 +102,19 @@ class TransactionsController extends Zend_Controller_Action
         );
 
         foreach($form_elements as $element) {
+            /** @var Zend_Form_Decorator_Label $decorator */
             $decorator = $element->getDecorator('Label');
             if ($decorator) $decorator->setOption('placement', Zend_Form_Decorator_Abstract::APPEND);
             $element->removeDecorator('DtDdWrapper');
+            if($element instanceof Zend_Form_Element_Submit) {
+                echo "submit found";
+                 $decorators = array(
+                    'ViewHelper',
+                    array('Errors'),
+                    array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element', 'colspan' => 2)),
+                    array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+                );
+            }
             $element->setDecorators($decorators);
             $form->addElement($element);
         }
