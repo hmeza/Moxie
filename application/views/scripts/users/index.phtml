@@ -12,14 +12,30 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+
+    $('.toggable ').each(function (e) {
+        $(this).click(function(e) {
+            $('.toggable').not(this).each(function(e) {
+                var button = $(this);
+                button.removeClass('btn-primary');
+                button.addClass('btn-info');
+                var collapse = button.attr('data-target');
+                $(collapse).hide();
+            });
+            $(this).removeClass('btn-info');
+            $(this).addClass('btn-primary');
+            var collapse = $(this).attr('data-target');
+            $(collapse).show();
+        });
+    });
 });
 </script>
 
-<button data-toggle="collapse" data-target="#my_account" class="btn btn-info"><?php echo $st_lang['users_my_account']; ?></button>
-<button data-toggle="collapse" data-target="#categories_table" class="btn btn-info"><?php echo $st_lang['categories']; ?></button>
-<button data-toggle="collapse" data-target="#favourites_table" class="btn btn-info"><?php echo $st_lang['favourites_message']; ?></button>
-<button data-toggle="collapse" data-target="#budget_table" class="btn btn-info"><?php echo $st_lang['budget']; ?></button>
-<button data-toggle="collapse" data-target="#tags_table" class="btn btn-info"><?php echo $st_lang['tags_title']; ?></button>
+<button data-target="#my_account" class="toggable btn btn-info"><?php echo $st_lang['users_my_account']; ?></button>
+<button data-target="#categories_table" class="toggable btn btn-info"><?php echo $st_lang['categories']; ?></button>
+<button data-target="#favourites_table" class="toggable btn btn-info"><?php echo $st_lang['favourites_message']; ?></button>
+<button data-target="#budget_table" class="toggable btn btn-info"><?php echo $st_lang['budget']; ?></button>
+<button data-target="#tags_table" class="toggable btn btn-info"><?php echo $st_lang['tags_title']; ?></button>
 
 <div id="my_account" class="accordion-body collapse form-group">
     <?php
