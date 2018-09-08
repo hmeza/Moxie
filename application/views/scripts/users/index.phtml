@@ -12,22 +12,6 @@ $(document).ready(function() {
 			return false;
 		}
 	});
-
-    $('.toggable ').each(function (e) {
-        $(this).click(function(e) {
-            $('.toggable').not(this).each(function(e) {
-                var button = $(this);
-                button.removeClass('btn-primary');
-                button.addClass('btn-info');
-                var collapse = button.attr('data-target');
-                $(collapse).hide();
-            });
-            $(this).removeClass('btn-info');
-            $(this).addClass('btn-primary');
-            var collapse = $(this).attr('data-target');
-            $(collapse).show();
-        });
-    });
 });
 </script>
 

@@ -103,10 +103,10 @@ var categories = [<?php echo implode(',', $s_categories);?>];
 var budget_index = <?php echo date('m'); ?>;
 </script>
 
-<button data-toggle="collapse" data-target="#budget" class="btn btn-info"><?php echo $st_lang['stats_budget_title']; ?></button>
-<button data-toggle="collapse" data-target="#stats_table_yearly" class="btn btn-info">Anual</button>
-<button data-toggle="collapse" data-target="#stats_trends_container" class="btn btn-info"><?php echo $st_lang['stats_trends']; ?></button>
-<button data-toggle="collapse" data-target="#box" class="btn btn-info"><?php echo $st_lang['stats_title']; ?></button>
+<button data-target="#budget" class="toggable btn btn-info"><?php echo $st_lang['stats_budget_title']; ?></button>
+<button data-target="#stats_table_yearly" class="toggable btn btn-info">Anual</button>
+<button data-target="#stats_trends_container" class="toggable btn btn-info"><?php echo $st_lang['stats_trends']; ?></button>
+<button data-target="#box" class="toggable btn btn-info"><?php echo $st_lang['stats_title']; ?></button>
 <div id="budget" class="accordion-body">
 <table width=100%>
 	<!-- Form + expenses list -->

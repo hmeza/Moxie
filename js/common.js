@@ -2,7 +2,7 @@ var moxieRedirector = {
 	'redirect': function(url) {
 		window.location = url;
 	}
-}
+};
 
 function confirmDelete(id) {
     var response;
@@ -50,3 +50,30 @@ function addDoubleClickListener(chart, data, filterFunction) {
         }
     });
 }
+
+/**
+ * Add data-target="#toggableDiv" and class toggable to any button
+ * to toggle div and change button color, and collapse the rest of
+ * the toggable divs.
+ */
+function enableToggableButtons() {
+    $('.toggable ').each(function (e) {
+        $(this).click(function (e) {
+            $('.toggable').not(this).each(function (e) {
+                var button = $(this);
+                button.removeClass('btn-primary');
+                button.addClass('btn-info');
+                var collapse = button.attr('data-target');
+                $(collapse).hide();
+            });
+            $(this).removeClass('btn-info');
+            $(this).addClass('btn-primary');
+            var collapse = $(this).attr('data-target');
+            $(collapse).show();
+        });
+    });
+}
+
+$(document).ready(function() {
+    enableToggableButtons();
+});
