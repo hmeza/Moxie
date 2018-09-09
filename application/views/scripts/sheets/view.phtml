@@ -25,50 +25,51 @@ if(!empty($this->errors)) {
 echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
 
 if (isset($this->sheet)) {
+    $sheetNotClosed = empty($this->sheet['closed_at']);
 ?>
 	<div class="moxie_expenses_form_div">
-    <div style="width: 100%;">
-    <div style="width: 300px; display: inline">
-        <h1>
-            <a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
-            <span class="glyphicon glyphicon-duplicate text-primary"
-                  alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
-                  title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
-            </span>
-        </h1>
-    </div>
-    <div style="float: right; display: inline;">
-        <?php
-        if (empty($this->sheet['closed_at'])) {
-        ?>
-        <form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
-        <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-        <input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
-        </form>
-        <?php
-        }
-        else {
-        ?>
-        <form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
-            <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-            <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <p class="text-normal"><?php echo $st_lang['sheets_using_category']; ?></p>
-            <select name="id_category" id="id_category" class="form-control">
-            <?php
-            foreach($this->categories as $k => $c) {
-                echo "<option value='".$k."'>".$c."</option>";
-            }
-            ?>
-            </select>
-        </form>
-        <?php
-        }
-        ?>
-    </div>
-    </div>
+        <div style="width: 100%;">
+            <div style="width: 300px; display: inline">
+                <h1>
+                    <a href="/sheets/view/id/<?php echo $this->sheet['unique_id']; ?>"><?php echo $this->sheet['name']; ?></a>
+                    <span class="glyphicon glyphicon-duplicate text-primary"
+                          alt="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>"
+                          title="<?php echo $st_lang['sheets_copy_to_clipboard']; ?>">
+                    </span>
+                </h1>
+            </div>
+            <div style="float: right; display: inline;">
+                <?php
+                if ($sheetNotClosed) {
+                ?>
+                <form action="/sheets/close/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
+                <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+                <input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
+                </form>
+                <?php
+                }
+                else {
+                    $categoriesList = '<option></option>';
+                    foreach($this->categories as $k => $c) {
+                        $categoriesList .= "<option value='".$k."'>".$c."</option>";
+                    }
+                ?>
+                <form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
+                    <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+                    <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <p class="text-normal"><?php echo $st_lang['sheets_using_category']; ?></p>
+                    <select name="id_category" id="id_category" class="form-control">
+                    <?php echo $categoriesList; ?>
+                    </select>
+                </form>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
 	</div>
 	
 	<?php
-	if (empty($this->sheet['closed_at'])) {
+	if ($sheetNotClosed) {
 	?>
 	<div id="forms">
 		<div class="moxie_expenses_form_div moxie_expenses_form_left">
@@ -124,7 +125,7 @@ if (isset($this->sheet)) {
 	<table class="table table-striped table-bordered" id="mytable" width="100%">
 	<tr>
 	<?php
-	if (empty($this->sheet['closed_at'])) {
+	if ($sheetNotClosed) {
 	?>
 	<th style="width: 5%"></th>
 	<?php
@@ -137,6 +138,9 @@ if (isset($this->sheet)) {
 		$name = empty($user['login']) ? $user['email'] : $user['login'];
 		echo "<th align='right'>".$name."</th>";
 	}
+	if(!$sheetNotClosed) {
+	    echo "<th class='text-right'>Asignar a</th>";
+    }
 	?>
 	</tr>
 	<?php
@@ -162,6 +166,13 @@ if (isset($this->sheet)) {
 				echo "<td align='right'>0.00 &euro;</td>";
 			}
 		}
+		echo "<td class='text-right'>";
+        if(isset($categoriesList)) {
+            echo "<select id='' name='' class='form-control'>";
+            echo $categoriesList;
+            echo "</select>";
+        }
+        echo "</td>";
 		echo "</tr>";
 	}
 	$average = ($this->sheet['distinct_users'] > 0) ? $total / $this->sheet['distinct_users'] : 0;
@@ -184,29 +195,28 @@ if (isset($this->sheet)) {
 	?>
 	</tr>
 	<tr>
-	<?php
-	if (empty($this->sheet['closed_at'])) {
-	?>
-	<th></th>
-	<?php
-	}
-	?>
-	<th></th>
-	<th></th>
-	<?php
-	foreach($this->sheet['users'] as $user) {
-		$current = -($average - $user['total']);
-		if($current <= 0) {
-			// debes pasta
-			$color = '#ff0000';
-		}
-		else {
-			// has pagado de mas
-			$color = '#00ff00';
-		}
-		echo "<th align='right' style='color: ".$color."'>".number_format($current, 2)." &euro;</th>";
-	}
-	?>	
+        <?php
+        if ($sheetNotClosed) {
+        ?>
+        <th></th>
+        <?php
+        }
+        ?>
+        <th></th>
+        <th></th>
+        <?php
+        foreach($this->sheet['users'] as $user) {
+            $current = -($average - $user['total']);
+            $color = ($current <= 0) ? '#ff0000' : '#00ff00';
+            echo "<th align='right' style='color: ".$color."'>".number_format($current, 2)." &euro;</th>";
+        }
+        ?>
+        <th>
+            <form action="/sheets/copy/id/<?php echo $this->sheet['unique_id']; ?>" method="POST" class="form-group">
+                <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+                <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button>
+            </form>
+        </th>
 	</tr>
 	
 	</table>
