@@ -107,7 +107,6 @@ class TransactionsController extends Zend_Controller_Action
             if ($decorator) $decorator->setOption('placement', Zend_Form_Decorator_Abstract::APPEND);
             $element->removeDecorator('DtDdWrapper');
             if($element instanceof Zend_Form_Element_Submit) {
-                echo "submit found";
                  $decorators = array(
                     'ViewHelper',
                     array('Errors'),
