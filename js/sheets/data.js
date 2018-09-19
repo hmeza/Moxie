@@ -7,6 +7,13 @@ if (typeof Clipboard == 'function') {
 	});
 }
 
+function changeSelectors() {
+    var val = $('#id_category').val();
+    $('.sheet_categories_select').each(function(i, e) {
+        $(this).val(val);
+    });
+}
+
 $(document).ready(function() {
 	$("#add_user_button").click(function (event) {
 		$("#add_user_form").slideToggle();

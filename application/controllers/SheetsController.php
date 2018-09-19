@@ -113,7 +113,7 @@ class SheetsController extends Zend_Controller_Action
 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
 			// return 403
 			$this->_request->setPost(array(
-					'id' => $id_sheet,
+					'id' => $this->getRequest()->getParam('id'),
 					'errors' => array($st_lang['error_nouser'])
 			));
 			return $this->_forward("view", "sheets");
@@ -168,7 +168,7 @@ class SheetsController extends Zend_Controller_Action
 	 * Copy Moxies to user.
 	 */
 	public function copyAction() {
-		$cat_id = $this->getRequest()->getParam('id_category');
+		//$cat_id = $this->getRequest()->getParam('id_category');
 		$sheet_id = $this->getRequest()->getParam('id_sheet');
 		// @todo validate user
 		if(empty($_SESSION['user_id'])) {
@@ -178,24 +178,7 @@ class SheetsController extends Zend_Controller_Action
 		}
 		// validate that category belongs to user
 		$catModel = new Categories();
-		try {
-			$cat = $catModel->fetchRow("id = ".$cat_id)->toArray();
-			if(empty($cat)) {
-				throw new Exception("Category does not exists");
-			}
-		}
-		catch(Exception $e) {
-			error_log($e->getMessage());
-			throw new Exception("Category does not exists");
-		}
-		error_log(print_r($cat),true);
- 		if ($cat['user_owner'] != $_SESSION['user_id']) {
-			error_log("category does not belong to user ".$_SESSION['user_id']);
-			throw new Exception("Category does not belong to user");
-		}
-		error_log("about to copy");
-		// @todo copy only moxies for current user
-		
+
 		$sheet = $this->getSheet();
 		
 		// find sheet_user_id for this sheet and for this user
@@ -212,24 +195,46 @@ class SheetsController extends Zend_Controller_Action
 		}
 		$sharedExpenses = new SharedExpenses();
 		$expenses = new Expenses();
-		foreach($sheet['expenses'] as $e) {
-			if($e['id_sheet_user'] == $id_sheet_user) {
-				// add expense with category received
-				$expenses->insert(array(
-						'user_owner' => $_SESSION['user_id'],
-						'amount' => -$e['amount'],
-						'category' => $cat['id'],
-						'note' => $e['note'],
-						'date' => $e['date'],
-				));
-				error_log("added expense, date ".$e['date']);
-				// update closed
-				$sharedExpenses->update(array('copied' => 1), 'id = '.$e['id']);
-				error_log("shared expense closed");
-			}
-		}
+		foreach($_POST['row'] as $row) {
+		    // sanity check
+            $found = false;
+            $e = null;
+            foreach ($sheet['expenses'] as $e) {
+                if ($e['id'] == $row['id']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if(!$found) {
+                continue;
+            }
+            try {
+                $cat = $catModel->fetchRow("id = ".$row['category_id'])->toArray();
+                if(empty($cat)) {
+                    throw new Exception("Category does not exists");
+                }
+            }
+            catch(Exception $e) {
+                error_log($e->getMessage());
+                throw new Exception("Category does not exists");
+            }
+            if ($cat['user_owner'] != $_SESSION['user_id']) {
+                error_log("category does not belong to user ".$_SESSION['user_id']);
+                throw new Exception("Category does not belong to user");
+            }
+            // add expense with category received
+            $expenses->insert(array(
+                'user_owner' => $_SESSION['user_id'],
+                'amount' => -$e['amount'],
+                'category' => $row['category_id'],
+                'note' => $e['note'],
+                'date' => $e['date'],
+            ));
+            // update closed
+            $sharedExpenses->update(array('copied' => 1), 'id = ' . $e['id']);
+        }
 		$this->redirect('/expenses');
-		
+
 	}
 	
 	public function adduserAction() {
