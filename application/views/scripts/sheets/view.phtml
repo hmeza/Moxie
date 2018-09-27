@@ -203,7 +203,7 @@ if (isset($this->sheet)) {
 	<th style="border-top: 1px solid #c5c5c5"><?php echo number_format($total, 2); ?> &euro;</th>
 	<?php
 	foreach($this->sheet['users'] as $user) {
-		echo "<th align='right' style='border-top: 1px solid #c5c5c5; text-align: right;'>".number_format($user['total'], 2)." &euro;</th>";
+		echo "<th style='border-top: 1px solid #c5c5c5; text-align: right;'>".number_format($user['total'], 2)." &euro;</th>";
 	}
 	?>
 	</tr>
@@ -221,7 +221,7 @@ if (isset($this->sheet)) {
         foreach($this->sheet['users'] as $user) {
             $current = -($average - $user['total']);
             $color = ($current < 0) ? '#ff0000' : '#00ff00';
-            echo "<th align='right' style='color: ".$color."; text-align: right'>".number_format($current, 2)." &euro;</th>";
+            echo "<th style='color: ".$color."; text-align: right'>".number_format($current, 2)." &euro;</th>";
         }
         if(!$sheetNotClosed) {
         ?>
