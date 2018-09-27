@@ -89,10 +89,11 @@ class SheetsController extends Zend_Controller_Action
 		}
 		try {
 			$sharedExpenseModel = new SharedExpenses();
+            $amount = str_replace(",",".",$this->getRequest()->getParam('amount'));
 			$data = array(
 					'id_sheet' => $sheet['id'],
 					'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
-					'amount' => $this->getRequest()->getParam('amount'),
+					'amount' => $amount,
 					'note' => $this->getRequest()->getParam('note', ''),
 					'date' => $this->getRequest()->getParam('date'),
 			);
