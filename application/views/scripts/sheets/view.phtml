@@ -223,12 +223,14 @@ if (isset($this->sheet)) {
             $color = ($current < 0) ? '#ff0000' : '#00ff00';
             echo "<th align='right' style='color: ".$color."'>".number_format($current, 2)." &euro;</th>";
         }
+        if(!$sheetNotClosed) {
         ?>
         <th>
                 <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
                 <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button>
 
         </th>
+        <?php } ?>
 	</tr>
         </form>
 	</table>
