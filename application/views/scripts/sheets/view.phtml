@@ -170,20 +170,22 @@ if (isset($this->sheet)) {
 				echo "<td align='right'>0.00 &euro;</td>";
 			}
 		}
-		echo "<td class='text-right'><input type='hidden' name='row[".$e['id']."][id]' value='".$e['id']."'>";
+		if(!$sheetNotClosed) {
+            echo "<td class='text-right'><input type='hidden' name='row[" . $e['id'] . "][id]' value='" . $e['id'] . "'>";
 
-        if($isMyExpense) {
-            if ($e['copied'] == 1) {
-                echo "<span style='color: #777777'>".$st_lang['sheets_already_copied']."</span>";
-            } else {
-                if (isset($categoriesList)) {
-                    echo "<select id='' name='row[" . $e['id'] . "][category_id]' class='form-control sheet_categories_select'>";
-                    echo $categoriesList;
-                    echo "</select>";
+            if ($isMyExpense) {
+                if ($e['copied'] == 1) {
+                    echo "<span style='color: #777777'>" . $st_lang['sheets_already_copied'] . "</span>";
+                } else {
+                    if (isset($categoriesList)) {
+                        echo "<select id='' name='row[" . $e['id'] . "][category_id]' class='form-control sheet_categories_select'>";
+                        echo $categoriesList;
+                        echo "</select>";
+                    }
                 }
             }
+            echo "</td>";
         }
-        echo "</td>";
 		echo "</tr>";
 	}
 	$average = ($this->sheet['distinct_users'] > 0) ? $total / $this->sheet['distinct_users'] : 0;
