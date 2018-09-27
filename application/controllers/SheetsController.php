@@ -196,6 +196,9 @@ class SheetsController extends Zend_Controller_Action
 		$sharedExpenses = new SharedExpenses();
 		$expenses = new Expenses();
 		foreach($_POST['row'] as $row) {
+		    if(empty($row['category_id'])) {
+		        continue;
+            }
 		    // sanity check
             $found = false;
             $e = null;

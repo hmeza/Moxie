@@ -54,10 +54,8 @@ if (isset($this->sheet)) {
                         $categoriesList .= "<option value='".$k."'>".$c."</option>";
                     }
                 ?>
-                    <!--<input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-                    <button onclick="submit()" class="btn btn-primary form-control"><?php echo $st_lang['sheets_copy_to_my_account']; ?></button> <p class="text-normal"><?php echo $st_lang['sheets_using_category']; ?></p>-->
                     <div style="padding-bottom: 5px;">
-                    Aplicar categoría a todos
+                        <?php echo $st_lang['sheets_apply_to_all']; ?>
                     <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
                     <?php echo $categoriesList; ?>
                     </select>
@@ -148,6 +146,7 @@ if (isset($this->sheet)) {
 	<?php
 	$total = 0;
 	foreach($this->sheet['expenses'] as $e) {
+	    $isMyExpense = false;
 		$total += $e['amount'];
 		// distinct_users_list will mark column for each row
 		echo "<tr>";
@@ -163,6 +162,9 @@ if (isset($this->sheet)) {
 			if ($e['id_sheet_user'] == $du['id_sheet_user']) {
 				echo "<td align='right'>".$e['amount']." &euro;</td>";
 				$this->sheet['users'][$k]['total'] += $e['amount'];
+				if($du['login'] == $_SESSION['user_name']) {
+				    $isMyExpense = true;
+                }
 			}
 			else {
 				echo "<td align='right'>0.00 &euro;</td>";
@@ -170,14 +172,15 @@ if (isset($this->sheet)) {
 		}
 		echo "<td class='text-right'><input type='hidden' name='row[".$e['id']."][id]' value='".$e['id']."'>";
 
-		if($e['copied'] == 1) {
-		    echo "<span style='color: #777777'>Ya copiado</span>";
-        }
-        else {
-            if (isset($categoriesList)) {
-                echo "<select id='' name='row[".$e['id']."][category_id]' class='form-control sheet_categories_select'>";
-                echo $categoriesList;
-                echo "</select>";
+        if($isMyExpense) {
+            if ($e['copied'] == 1) {
+                echo "<span style='color: #777777'>".$st_lang['sheets_already_copied']."</span>";
+            } else {
+                if (isset($categoriesList)) {
+                    echo "<select id='' name='row[" . $e['id'] . "][category_id]' class='form-control sheet_categories_select'>";
+                    echo $categoriesList;
+                    echo "</select>";
+                }
             }
         }
         echo "</td>";

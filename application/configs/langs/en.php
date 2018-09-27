@@ -109,7 +109,6 @@ $st_lang = array(
 		'sheets_create_new' => 'Create new sheet',
 		'sheets_close' => 'Close sheet',
 		'sheets_copy_to_my_account' => 'Copy to my expenses',
-		'sheets_using_category' => 'using category&nbsp;',
 		'sheets_create' => 'Create',
 		'sheets_name' => 'Name',
 		'sheets_add' => 'Add',
@@ -124,6 +123,8 @@ $st_lang = array(
 		.'If you do not have an account, you can register and this sheet will be linked to your account'
 		.' automatically.',
 		'sheets_distribution' => 'Distribution',
+    	'sheets_apply_to_all' => 'Apply to all',
+    'sheets_already_copied' => 'Already copied',
 	// User, login, etc.
 	'users'		=>	'Settings',
 	'users_title'	=>	'Settings',

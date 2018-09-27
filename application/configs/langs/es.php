@@ -109,7 +109,6 @@ $st_lang = array(
 	'sheets_create_new' => 'Crear nueva hoja',
 		'sheets_close' => 'Cerrar hoja',
 		'sheets_copy_to_my_account' => 'Copiar a mis gastos',
-		'sheets_using_category' => 'usando la categoría&nbsp;',
 		'sheets_create' => 'Crear',
 		'sheets_name' => 'Nombre',
 		'sheets_add' => 'Agregar',
@@ -124,6 +123,8 @@ $st_lang = array(
 		.' compartidos. En caso de que no tengas usuario, podrás registrarte y esta hoja quedará vinculada'
 		.' a tu cuenta automáticamente.',
 		'sheets_distribution' => 'Reparto',
+    	'sheets_apply_to_all' => 'Aplicar categoría a todos',
+	'sheets_already_copied' => 'Ya copiado',
 	// User, login, etc.
 	'users'		=>	'Configuración',
 	'users_title' => 'Configuración',

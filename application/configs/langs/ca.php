@@ -109,7 +109,6 @@ $st_lang = array(
 		'sheets_create_new' => 'Crear nou full',
 		'sheets_close' => 'Tancar full',
 		'sheets_copy_to_my_account' => 'Copiar a les meves despeses',
-		'sheets_using_category' => 'utilitzant la categoria&nbsp;',
 		'sheets_create' => 'Crear',
 		'sheets_name' => 'Nom',
 		'sheets_add' => 'Afegir',
@@ -124,6 +123,8 @@ $st_lang = array(
 		.' compartidos. En caso de que no tengas usuario, podrás registrarte y esta hoja quedará vinculada'
 		.' a tu cuenta automáticamente.',
 		'sheets_distribution' => 'Distribució',
+		'sheets_apply_to_all' => 'Aplicar categoria a totes',
+    'sheets_already_copied' => 'Ja copiat',
 	// User, login, etc.
 	'users'		=>	'Configuració',
 	'users_title'	=>	'Configuració',
