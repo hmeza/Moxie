@@ -9,7 +9,7 @@ class SharedExpenses extends Zend_Db_Table_Abstract {
 		$this->_db = Zend_Registry::get('db');
 	}
 	
-	public function getSheetByExpensIdAndUserId($sharedExpenseId, $userId) {
+	public function getSheetByExpenseIdAndUserId($sharedExpenseId, $userId) {
 		$select = $this->select()
 			->from(array('se' => $this->_name), array())
 			->setIntegrityCheck(false)

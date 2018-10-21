@@ -124,7 +124,7 @@ class SheetsController extends Zend_Controller_Action
 			// validate that current user appears in the sheet of this shared expense
 			$seModel = new SharedExpenses();
 			$seModel->find($seid);
-			$row = $seModel->getSheetByExpensIdAndUserId($seid, $_SESSION['user_id']);
+			$row = $seModel->getSheetByExpenseIdAndUserId($seid, $_SESSION['user_id']);
 			if(empty($row)) {
 				throw new Exception("Shared expense does not appear in a sheet from current user");
 			}
