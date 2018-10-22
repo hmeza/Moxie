@@ -1,7 +1,8 @@
 <?php
 
 class SharedExpenses extends Zend_Db_Table_Abstract {
-	
+	const DEFAULT_CURRENCY = 'eur';
+
 	protected $_name = 'shared_expenses';
 	protected $_primary = 'id';
 	

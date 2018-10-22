@@ -124,6 +124,9 @@ $st_lang = array(
 		.' automatically.',
 		'sheets_distribution' => 'Distribution',
     	'sheets_apply_to_all' => 'Apply to all',
+    'sheets_currency' => 'Currency',
+    'sheets_currency_change' => 'Change (from your local currency to this)',
+    'sheets_in_currency' => 'In sheet currency?',
     'sheets_already_copied' => 'Already copied',
 	// User, login, etc.
 	'users'		=>	'Settings',

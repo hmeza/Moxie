@@ -24,6 +24,22 @@ if(!empty($this->errors)) {
 <?php
 echo $this->partial('sheets/select_sheet.phtml', array('sheet_list'=>$this->sheet_list, 'sheet_list_form' => $this->sheet_list_form));
 
+/**
+ * @param $this
+ * @return string
+ */
+function getCurrencyChar($currency)
+{
+    if ($currency == 'gbp') {
+        $currencyChar = '&pound;';
+    } else if($currency == 'usd') {
+        $currencyChar = '&dollar;';
+    } else {
+        $currencyChar = '&euro;';
+    }
+    return $currencyChar;
+}
+
 if (isset($this->sheet)) {
     $sheetNotClosed = empty($this->sheet['closed_at']);
 ?>
@@ -103,6 +119,16 @@ if (isset($this->sheet)) {
 				<input type="text" id="note" name="note" class="form-control">
 				<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
 				<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>" class="form-control">
+                    <label for="currency">
+                        <?php
+                        echo $st_lang['sheets_in_currency'];
+                        if($this->sheet['currency'] != 'eur') {
+                            $cur = getCurrencyChar($this->sheet['currency']);
+                            echo " <span>(Divisa ".$cur.", 1 &euro; = ".$this->sheet['change']. " ".$cur.")</span>";
+                        }
+                        ?>
+                    </label>
+                    <input type="checkbox" id="currency" name="currency" class="form-control">
 				<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>" class="form-control">
 				<input type="submit" value="<?php echo $st_lang['sheets_add_expense']; ?>" class="form-control btn btn-primary">
 				</form>
@@ -147,7 +173,12 @@ if (isset($this->sheet)) {
 	$total = 0;
 	foreach($this->sheet['expenses'] as $e) {
 	    $isMyExpense = false;
-		$total += $e['amount'];
+	    if($e['currency'] == 'eur') {
+            $total += $e['amount'];
+        }
+        else {
+            $total += ($e['amount'] / $this->sheet['change']);
+        }
 		// distinct_users_list will mark column for each row
 		echo "<tr>";
 		if (empty($this->sheet['closed_at'])) {
@@ -160,8 +191,15 @@ if (isset($this->sheet)) {
 		echo "<td align='left'>".$e['note']."</td>";
 		foreach($this->sheet['users'] as $k => $du) {
 			if ($e['id_sheet_user'] == $du['id_sheet_user']) {
-				echo "<td align='right'>".$e['amount']." &euro;</td>";
-				$this->sheet['users'][$k]['total'] += $e['amount'];
+			    $currencyChar = getCurrencyChar($e['currency']);
+				echo "<td align='right'>".$e['amount']." ".$currencyChar."</td>";
+				if($e['currency'] == SharedExpenses::DEFAULT_CURRENCY) {
+                    $this->sheet['users'][$k]['total'] += $e['amount'];
+                }
+                else {
+                    $this->sheet['users'][$k]['total'] += $e['amount'] / $this->sheet['change'];
+                }
+
 				if($du['login'] == $_SESSION['user_name']) {
 				    $isMyExpense = true;
                 }

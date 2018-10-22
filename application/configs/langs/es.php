@@ -124,6 +124,9 @@ $st_lang = array(
 		.' a tu cuenta automáticamente.',
 		'sheets_distribution' => 'Reparto',
     	'sheets_apply_to_all' => 'Aplicar categoría a todos',
+	'sheets_currency' => 'Divisa',
+	'sheets_currency_change' => 'Cambio (¿Cuanto te dan por 1 €?)',
+	'sheets_in_currency' => '¿En divisa?',
 	'sheets_already_copied' => 'Ya copiado',
 	// User, login, etc.
 	'users'		=>	'Configuración',

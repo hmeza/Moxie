@@ -2,10 +2,21 @@
 	<div class="form-group moxie_expenses_form_div">
 		<form action="/sheets/create" method="POST">
 		
-		<label for="name"><?php global $st_lang; echo $st_lang['sheets_name']; ?></label>
-		<input type="text" id="name" name="name" class="form-control">
-		
-		<input type="submit" value="<?php echo $st_lang['sheets_create']; ?>" class="form-control btn btn-info">
+            <label for="name"><?php global $st_lang; echo $st_lang['sheets_name']; ?></label>
+            <input type="text" id="name" name="name" class="form-control">
+
+            <label for="currency"><?php echo $st_lang['sheets_currency']; ?></label>
+            <select id="currency" name="currency">
+                <option value="eur">Euro</option>
+                <option value="gbp">Libra</option>
+                <option value="usd">Dolar</option>
+                <option value="nan">Otra</option>
+            </select>
+
+            <label for="change"><?php echo $st_lang['sheets_currency_change']; ?></label>
+            <input type="text" id="change" name="change" class="form-control">
+
+            <input type="submit" value="<?php echo $st_lang['sheets_create']; ?>" class="form-control btn btn-info">
 		
 		</form>
 	</div>

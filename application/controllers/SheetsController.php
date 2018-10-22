@@ -43,9 +43,11 @@ class SheetsController extends Zend_Controller_Action
 					throw new Exception("Please set name for sheet");
 				}
 				$data = array(
-						'user_owner' => $_SESSION['user_id'],
-						'name' => $this->getRequest()->getParam('name', ''),
-						'unique_id' => uniqid()
+                    'user_owner' => $_SESSION['user_id'],
+                    'name' => $this->getRequest()->getParam('name', ''),
+                    'unique_id' => uniqid(),
+                    'currency' => $this->getRequest()->getParam('currency', SharedExpenses::DEFAULT_CURRENCY),
+                    'change' => str_replace(",", ".", $this->getRequest()->getParam('change', 1))
 				);
 				$id = $this->sheetModel->insert($data);
 				$sheet = $this->sheetModel->find($id)->current();
@@ -90,12 +92,15 @@ class SheetsController extends Zend_Controller_Action
 		try {
 			$sharedExpenseModel = new SharedExpenses();
             $amount = str_replace(",",".",$this->getRequest()->getParam('amount'));
+            $currency = $this->getRequest()->getParam('currency');
+            $currencyValue = ($currency === "on") ? $sheet['currency'] : SharedExpenses::DEFAULT_CURRENCY;
 			$data = array(
 					'id_sheet' => $sheet['id'],
 					'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
 					'amount' => $amount,
 					'note' => $this->getRequest()->getParam('note', ''),
 					'date' => $this->getRequest()->getParam('date'),
+                    'currency' => $currencyValue
 			);
 			$sharedExpenseModel->insert($data);
 		}
