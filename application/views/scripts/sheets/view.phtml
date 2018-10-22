@@ -119,6 +119,7 @@ if (isset($this->sheet)) {
 				<input type="text" id="note" name="note" class="form-control">
 				<label for="date"><?php echo $st_lang['expenses_date']; ?></label>
 				<input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>" class="form-control">
+                    <?php if($this->sheet['currency'] != 'eur') { ?>
                     <label for="currency">
                         <?php
                         echo $st_lang['sheets_in_currency'];
@@ -129,6 +130,10 @@ if (isset($this->sheet)) {
                         ?>
                     </label>
                     <input type="checkbox" id="currency" name="currency" class="form-control">
+                    <?php }  else { ?>
+                        <input type="hidden" id="currency" name="currency" value="">
+                    <?php } ?>
+
 				<input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>" class="form-control">
 				<input type="submit" value="<?php echo $st_lang['sheets_add_expense']; ?>" class="form-control btn btn-primary">
 				</form>
