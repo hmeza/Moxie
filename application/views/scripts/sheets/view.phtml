@@ -72,9 +72,14 @@ if (isset($this->sheet)) {
                 ?>
                     <div style="padding-bottom: 5px;">
                         <?php echo $st_lang['sheets_apply_to_all']; ?>
-                    <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
-                    <?php echo $categoriesList; ?>
-                    </select>
+                        <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
+                        <?php echo $categoriesList; ?>
+                        </select>
+                        <?php
+                        if($this->sheet['currency'] != 'eur') {
+                            echo $st_lang['sheets_using_this_currency']." <input type='text' name='change' value='".$this->sheet['change']."' class='form-control'>";
+                        }
+                        ?>
                     </div>
                 <?php
                 }

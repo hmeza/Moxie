@@ -127,6 +127,7 @@ $st_lang = array(
     'sheets_currency' => 'Currency',
     'sheets_currency_change' => 'Change (from your local currency to this)',
     'sheets_in_currency' => 'In sheet currency?',
+    'sheets_using_this_currency' => 'Use this change rate for sheet currency',
     'sheets_already_copied' => 'Already copied',
 	// User, login, etc.
 	'users'		=>	'Settings',

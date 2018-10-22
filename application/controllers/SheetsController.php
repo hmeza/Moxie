@@ -174,7 +174,6 @@ class SheetsController extends Zend_Controller_Action
 	 * Copy Moxies to user.
 	 */
 	public function copyAction() {
-		//$cat_id = $this->getRequest()->getParam('id_category');
 		$sheet_id = $this->getRequest()->getParam('id_sheet');
 		// @todo validate user
 		if(empty($_SESSION['user_id'])) {
@@ -186,6 +185,9 @@ class SheetsController extends Zend_Controller_Action
 		$catModel = new Categories();
 
 		$sheet = $this->getSheet();
+
+		// Default change rate is 1, so if change is not set from the form, 1 will be used
+		$changeRate = $this->getParam('change', $sheet['change']);
 		
 		// find sheet_user_id for this sheet and for this user
 		$id_sheet_user = null;
@@ -234,7 +236,7 @@ class SheetsController extends Zend_Controller_Action
             // add expense with category received
             $expenses->insert(array(
                 'user_owner' => $_SESSION['user_id'],
-                'amount' => -$e['amount'],
+                'amount' => -$e['amount'] / $changeRate,
                 'category' => $row['category_id'],
                 'note' => $e['note'],
                 'date' => $e['date'],

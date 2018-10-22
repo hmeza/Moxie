@@ -127,6 +127,7 @@ $st_lang = array(
     'sheets_currency' => 'Divisa',
     'sheets_currency_change' => 'Canvi (Quant et donen per 1 €?)',
     'sheets_in_currency' => 'En divisa?',
+    'sheets_using_this_currency' => 'Emprar aquesta taxa de canvi per a la divisa',
     'sheets_already_copied' => 'Ja copiat',
 	// User, login, etc.
 	'users'		=>	'Configuració',
