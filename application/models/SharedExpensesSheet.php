@@ -34,7 +34,7 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 		$row = $this->fetchRow('unique_id = "' . $id . '"')->toArray();
 		// now fetch expenses, order by date
 		$sharedExpense = new SharedExpenses();
-		$list = $sharedExpense->fetchAll('id_sheet = ' . $row['id'], 'date ASC');
+		$list = $sharedExpense->fetchAll('id_sheet = ' . $row['id'], array('date ASC', 'id ASC'));
 		$row['expenses'] = array();
 		$distinct_users = 0;
 		$distinct_users_list = array();
