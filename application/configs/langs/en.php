@@ -52,6 +52,7 @@ $st_lang = array(
 	'favourite_message'  => 'Favourites',
     'favourites_message'  => 'Favourites',
     'use_favourite' => 'Use favourite',
+    'empty_category' => 'Without category',
 	// Budgets
 	'budgets_title'     => 'Budgets',
 	'budgets_save_successful' => 'Saved successfully',

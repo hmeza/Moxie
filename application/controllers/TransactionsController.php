@@ -61,8 +61,8 @@ class TransactionsController extends Zend_Controller_Action
 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)->setMethod('post');
 
 		$st_categories = $this->categories->getCategoriesForView($category_type);
-		$st_categories[0] = '---';
 		asort($st_categories);
+		$st_categories = array(0 => '---', -1 => $st_lang['empty_category']) + $st_categories;
 
 		$multiOptions = new Zend_Form_Element_Select('category');
 		$multiOptions->setName('category_search');

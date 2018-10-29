@@ -17,8 +17,12 @@ class Transactions extends Zend_Db_Table_Abstract {
 	 */
 	protected function query_filter($query, $st_searchParams) {
 		if(!empty($st_searchParams['category_search'])) {
-			$query = $query->where('i.category = ?', $st_searchParams['category_search']);
-		}
+            if ((int)$st_searchParams['category_search'] >= 0) {
+                $query = $query->where('i.category = ?', $st_searchParams['category_search']);
+            } else {
+                $query = $query->having('c.id IS NULL');
+            }
+        }
 		if(!empty($st_searchParams['note_search'])) {
 			$query = $query->where('i.note like ?', '%'.$st_searchParams['note_search'].'%');
 		}
