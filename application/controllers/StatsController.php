@@ -22,6 +22,8 @@ class StatsController extends Zend_Controller_Action {
 	 * @todo	Use a group by to retrieve data and match with array
 	 */
 	public function indexAction() {
+	    global $st_lang;
+
 		$year = $this->getRequest()->getParam('year', date('Y'));
 		$data = $this->getIncomeStatsByCategory();
 		// Get all categories, expenses and incomes from current year
@@ -32,8 +34,8 @@ class StatsController extends Zend_Controller_Action {
 			$current_date = $year.'-'.str_pad($month, 2, '0', STR_PAD_LEFT).'-01';
 			$st_params['date_min'] = $current_date;
 			$st_params['date_max'] = $st_params['date_max'] = date("Y-m-t", strtotime($current_date));
-			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES, $st_params);
-			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params);
+			$expenses[$month] = $this->expenses->get($_SESSION['user_id'], Categories::EXPENSES, $st_params)->toArray();
+			$incomes[$month] = $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params)->toArray();
 		}
 		// get expenses and incomes for all years
 		$min_year = date('Y') - 4;
@@ -49,7 +51,10 @@ class StatsController extends Zend_Controller_Action {
 		asort($st_incomes);
 
 		$st_trends = $this->getTrends($st_expenses);
-		
+
+		// Check if there is a category on expenses that does not exist on categories, add "No category"
+        list($st_expenses, $st_incomes, $expenses, $incomes) = $this->checkNoCategory($st_yearly, $st_expenses, $st_incomes, $st_lang, $expenses, $incomes);
+
 		$this->view->assign('budget_expenses', $st_expenses);
 		$this->view->assign('budget_incomes', $st_incomes);
 		$this->view->assign('expenses', $expenses);
@@ -91,4 +96,49 @@ class StatsController extends Zend_Controller_Action {
 		}
 		return $st_trends;
 	}
+
+    /**
+     * @param $st_yearly
+     * @param $st_expenses
+     * @param $st_incomes
+     * @param $st_lang
+     * @param $expenses
+     * @param $incomes
+     * @return array
+     */
+    private function checkNoCategory($st_yearly, $st_expenses, $st_incomes, $st_lang, $expenses, $incomes)
+    {
+        $empty_categories = array();
+        foreach ($st_yearly as $st_year) {
+            foreach ($st_year as $value) {
+                $cat = $value['category'];
+                if (!array_key_exists($cat, $st_expenses + $st_incomes)) {
+                    $st_expenses[$cat] = $st_lang['empty_category'];
+                    $st_incomes[$cat] = $st_lang['empty_category'];
+                    $empty_categories[] = $cat;
+                }
+            }
+        }
+        if (!empty($empty_categories)) {
+            foreach ($expenses as $month => $data) {
+                foreach ($data as $key => $expense) {
+                    if (empty($expense['category'])) {
+                        $expenses[$month][$key]['category'] = $empty_categories[0];
+                        $expenses[$month][$key]['name'] = $st_lang['empty_category'];
+                        $expenses[$month][$key]['description'] = $st_lang['empty_category'];
+                    }
+                }
+            }
+            foreach ($incomes as $month => $data) {
+                foreach ($data as $key => $income) {
+                    if (empty($income['category'])) {
+                        $incomes[$month][$key]['category'] = $empty_categories[0];
+                        $incomes[$month][$key]['name'] = $st_lang['empty_category'];
+                        $incomes[$month][$key]['description'] = $st_lang['empty_category'];
+                    }
+                }
+            }
+        }
+        return array($st_expenses, $st_incomes, $expenses, $incomes);
+    }
 }

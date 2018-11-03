@@ -144,7 +144,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 			->setIntegrityCheck(false)
 			->from(array('t' => 'transactions'), array('category', 'sum(amount)'))
-			->joinInner(array('c' => 'categories'), 't.category = c.id', array())
+			->joinLeft(array('c' => 'categories'), 't.category = c.id', array())
 			->where('t.user_owner = ?', $user)
 			->where('year(date) = ?', $year)
 			->group(array('year(date)', 'category'));
