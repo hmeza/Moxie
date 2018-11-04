@@ -8,8 +8,11 @@ class CategoriesController extends Zend_Controller_Action
 		parent::init();
 		$this->categories = new Categories();
 	}
-	
-	private function getForm() {
+
+    /**
+     * @return Zend_Form
+     */
+	public function getForm() {
 		global $st_lang;
     	$form  = new Zend_Form();
 
@@ -33,7 +36,7 @@ class CategoriesController extends Zend_Controller_Action
             ->setMultiOptions($categoryTypes);  // add array of values / labels for radio group
 		$form->addElement($types);
 		
-		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control'));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control btn-primary'));
     	
 		return $form;
 	}
@@ -67,12 +70,12 @@ class CategoriesController extends Zend_Controller_Action
         	->setAttrib('class', 'form-control');
 		$form->addElement($types);
 		
-		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control'));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control btn-primary'));
 		$form->addElement('button', 'delete',
 				array(
 					'label' => $st_lang['categories_delete'],
 					'onclick' => 'window.location.replace("/categories/delete/id/'.$i_categoryPK.'");',
-                    'class' => 'form-control'
+                    'class' => 'form-control btn-danger'
 				)
 		);
 		return $form;

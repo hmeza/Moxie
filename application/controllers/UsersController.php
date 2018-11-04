@@ -71,7 +71,7 @@ class UsersController extends Zend_Controller_Action {
                 ->setAttrib('class', 'form-control');
 		$form->addElement($types);
 
-		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control'));
+		$form->addElement('submit','submit', array('label' => $st_lang['category_send'], 'class' => 'form-control btn-primary'));
 
 		return $form;
 	}
