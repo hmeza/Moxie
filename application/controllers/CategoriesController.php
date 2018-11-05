@@ -12,15 +12,17 @@ class CategoriesController extends Zend_Controller_Action
     /**
      * @return Zend_Form
      */
-	public function getForm() {
+	public static function getForm() {
 		global $st_lang;
     	$form  = new Zend_Form();
+
+    	$categories = new Categories();
 
     	$form->setAction('/categories/add')
             ->setMethod('post')
     	    ->addElement('select', 'parent', array(
                     'label' => $st_lang['category_parent'],
-                    'multioptions' => $this->categories->getCategoriesForSelect(3),
+                    'multioptions' => $categories->getCategoriesForSelect(3),
                     'class' => 'form-control'
                 )
             )
@@ -82,7 +84,7 @@ class CategoriesController extends Zend_Controller_Action
 	}
 	
     public function indexAction() {
-	    $this->view->assign('categories_form', $this->getForm());
+	    $this->view->assign('categories_form', self::getForm());
 	    $this->view->assign('categories_list', $this->categories->mountCategoryTree($this->categories->getCategoriesByUser(3), $_SESSION['user_id']));
 		$this->view->assign('categories_collapse', true);
 		$this->_forward('index', 'users');
