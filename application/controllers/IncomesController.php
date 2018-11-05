@@ -136,17 +136,18 @@ class IncomesController extends TransactionsController
 	 * Adds an expense and shows expenses index again
 	 */
 	public function addAction() {
-		$o_income = $this->getRequest()->getPost();
-		if(empty($o_income['category'])) {
+		$st_income = $this->getRequest()->getPost();
+		if(empty($st_income['category'])) {
 			throw new Exception('Empty category not allowed for incomes');
 		}
 		if(empty($_SESSION['user_id'])) {
 			$this->redirect('/index');
 		}
-		unset($o_income['submit']);
-		$o_income['user_owner'] = $_SESSION['user_id'];
-		$o_income['in_sum'] = 1;
-		$this->incomes->insert($o_income);
+		unset($st_income['submit']);
+		$st_income['user_owner'] = $_SESSION['user_id'];
+		$st_income['in_sum'] = 1;
+		$st_income['amount'] = str_replace(",", ".", $st_income['amount']);
+		$this->incomes->insert($st_income);
 		$this->_helper->redirector('index','incomes');
 	}
 	
@@ -172,6 +173,7 @@ class IncomesController extends TransactionsController
 		$i_incomePK = $st_params['id'];
 		$i_userOwner = $_SESSION['user_id'];
 		unset($st_params['submit']);
+        $st_params['amount'] = str_replace(",", ".", $st_params['amount']);
 		
 		try {
 			$this->incomes->update($st_params, 'id = '.$i_incomePK.' AND user_owner = '.$i_userOwner);
