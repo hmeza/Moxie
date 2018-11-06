@@ -1,16 +1,37 @@
+<!-- estilos para la lista -->
+<style>
+    ul.categories_list {
+        border:1px solid #ccc;
+        margin:0;
+        padding:0;
+        list-style-type: none;
+    }
+    ul.categories_list, li.categories_list{
+        cursor: pointer;
+        display: block;
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid #CCC;
+        background: #fff;
+    }
+    span.categories_list {
+        padding: 5px;
+        padding-left: 20px;
+        width: 100px;
+    }
+</style>
 <div id="categories_table" class="form-group accordion-body <?php if ($this->categories_collapse) { echo "collapse"; } ?>">
 <?php
 global $st_lang;
 echo $this->categories_form;
 ?>
-<table width=100%>
+<ul width=100% id="categories_list" class="categories_list ">
 <?php
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
-
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-		echo '<td><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></td>';
-		echo '<td>'.$first_name.$value['name2']."</td><td>";
+		echo '<li><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a>';
+		echo '<span class="categories_list">'.$first_name.$value['name2']."</span><span>";
 		switch($value['type']) {
 			case 1:
 				echo $st_lang['categories_expense'];
@@ -22,10 +43,16 @@ foreach ($this->categories_list as $key => $value) {
 				echo $st_lang['categories_both'];
 				break;
 		}
-		echo "</td><tr>";
+		echo "</span></li>";
 	}
 }
 ?>
-</table>
+</ul>
 </div>
 <br><br>
+
+<script>
+    $(document).ready(function() {
+        $('#categories_list').sortable({});
+    });
+</script>
