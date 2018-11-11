@@ -8,8 +8,10 @@ echo $this->categories_form;
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-		echo '<li><input type="hidden" name="'.$value['id1'].'"/><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a>';
-		echo '<span class="categories_list">'.$first_name.$value['name2']."</span><span>";
+		echo '<li><input type="hidden" name="'.$value['id1'].'"/>';
+		echo "<div style='display: flex'>";
+		echo '<div style="float: left; margin-right: 10px; padding-top: 10px; padding-bottom: 10px;"><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></div>';
+        echo '<div style="float: right; min-width: 150px; padding-top: 10px; padding-bottom: 10px;">';
 		switch($value['type']) {
 			case 1:
 				echo $st_lang['categories_expense'];
@@ -21,7 +23,10 @@ foreach ($this->categories_list as $key => $value) {
 				echo $st_lang['categories_both'];
 				break;
 		}
-		echo "</span></li>";
+		echo "</div>";
+        echo '<div class="categories_list" style="float: right; background: #BBBBBB; padding-left: 5px; padding-top: 10px; padding-bottom: 10px; border: 1px #000 solid; min-width: 200px; border-radius: 15px;">'.$first_name.$value['name2']."</div>";
+        echo '</div>';
+        echo "</li>";
 	}
 }
 ?>
