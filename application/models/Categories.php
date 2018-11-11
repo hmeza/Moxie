@@ -47,19 +47,15 @@ class Categories extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * 
 	 * Gets categories for a given user.
 	 * i_typeFilter stands for the type of category to retrieve. 
 	 * @param int $i_typeFilter
+     * @throws Exception No user found in session
 	 */
 	public function getCategoriesByUser($i_typeFilter) {
 		if(empty($_SESSION) || empty($_SESSION['user_id'])) {
 			throw new Exception("No user id found in session");
 		}
-		//select distinct(c2.id),c1.parent,c1.name, c2.name
-		//from categories c1 left join categories c2 on c2.parent = c1.id
-		//where c2.id is not null
-		//order by c1.parent,c2.parent;
 		if ($i_typeFilter == self::BOTH) $s_typeFilter = '1 = 1';
 		else $s_typeFilter = 'c2.type = '.self::BOTH.' OR c2.type = '.$i_typeFilter;
 		
@@ -71,12 +67,14 @@ class Categories extends Zend_Db_Table_Abstract {
 				'name1'	=>	'c1.name',
 				'name2'	=>	'c2.name',
 				'type'	=>	'c2.type',
-				'parent' => 'c2.parent'
+				'parent' => 'c2.parent',
+                'order' => 'c1.order'
 			))
 			->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
 			->where('c1.user_owner = ?', $_SESSION['user_id'])
 			->where('c2.id is not null')
 			->where($s_typeFilter)
+            ->order('c1.order')
 			->order('c1.parent')
 			->order('c2.parent');
 		$stmt = $this->database->query($query);
@@ -86,7 +84,6 @@ class Categories extends Zend_Db_Table_Abstract {
 	/**
 	 * @desc	Get 3 level categories tree, only with leaves
 	 * @author	hmeza
-	 * @since	2011-04-23
 	 * @return	array
 	 */
 	public function getCategoriesTree() {
