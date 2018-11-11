@@ -68,13 +68,13 @@ class Categories extends Zend_Db_Table_Abstract {
 				'name2'	=>	'c2.name',
 				'type'	=>	'c2.type',
 				'parent' => 'c2.parent',
-                'order' => 'c1.order'
+                'order' => 'c2.order'
 			))
 			->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
 			->where('c1.user_owner = ?', $_SESSION['user_id'])
 			->where('c2.id is not null')
 			->where($s_typeFilter)
-            ->order('c1.order')
+            ->order('c2.order')
 			->order('c1.parent')
 			->order('c2.parent');
 		$stmt = $this->database->query($query);
@@ -201,6 +201,7 @@ class Categories extends Zend_Db_Table_Abstract {
 	 * @return boolean
 	 */
 	public function insertCategoriesForRegisteredUser($i_lastInsertId) {
+	    $orderIndex = 0;
 		// first insert root category
 		$st_categoriesData = array(
 				'user_owner' => $i_lastInsertId,
@@ -213,15 +214,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Hogar',
 				'description' => 'Hogar',
-				'type' => 3
-		);
-		$this->insert($st_categoriesData);
-		$st_categoriesData = array(
-				'user_owner' => $i_lastInsertId,
-				'parent' => $i_rootCategory,
-				'name' => 'Comida',
-				'description' => 'Comida',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -229,7 +223,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Diversión',
 				'description' => 'Salidas, cenas fuera, ocio, etc.',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -237,7 +232,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Tecnología',
 				'description' => 'Tecnología',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -245,7 +241,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Regalos',
 				'description' => 'Navidad, reyes, aniversarios, san Valentín, etc.',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -253,7 +250,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Ropa',
 				'description' => 'Ropa',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -261,9 +259,19 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $i_rootCategory,
 				'name' => 'Varios',
 				'description' => 'Otros gastos',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
+        $st_categoriesData = array(
+            'user_owner' => $i_lastInsertId,
+            'parent' => $i_rootCategory,
+            'name' => 'Comida',
+            'description' => 'Comida',
+            'type' => 3,
+            'order' => $orderIndex++
+        );
+        $this->insert($st_categoriesData);
 
 		$o_foodCategory = $this->fetchRow(
 				$this->select()->where('name = "Comida" AND user_owner = ' . $i_lastInsertId)
@@ -273,7 +281,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $o_foodCategory->id,
 				'name' => 'Casa',
 				'description' => 'Comida comprada para casa',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -281,7 +290,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $o_foodCategory->id,
 				'name' => 'Fuera',
 				'description' => 'Comidas fuera de casa',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex++
 		);
 		$this->insert($st_categoriesData);
 		$st_categoriesData = array(
@@ -289,7 +299,8 @@ class Categories extends Zend_Db_Table_Abstract {
 				'parent' => $o_foodCategory->id,
 				'name' => 'Café',
 				'description' => 'Cafés, bollería durante el día, desayuno en cafetería, etc.',
-				'type' => 3
+				'type' => 3,
+                'order' => $orderIndex
 		);
 		$this->insert($st_categoriesData);
 		return true;

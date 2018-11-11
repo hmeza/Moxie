@@ -187,7 +187,6 @@ class ExpensesController extends TransactionsController
         ));
 
 		$st_categories = $this->categories->getCategoriesForView(Categories::EXPENSES);
-		asort($st_categories);
 		if(empty($st_expense['category'])) {
 			reset($st_categories);
 			$st_expense['category'] = key($st_categories);
