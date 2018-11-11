@@ -47,5 +47,6 @@ foreach ($this->categories_list as $key => $value) {
                 $.post('/categories/order', cats);
             }
         });
+        $('#categories_list').disableSelection();
     });
 </script>
