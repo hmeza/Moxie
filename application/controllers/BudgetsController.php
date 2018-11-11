@@ -88,17 +88,17 @@ class BudgetsController extends Zend_Controller_Action
 	 * @since	2011-11-12
 	 */
 	public function snapshotAction() {
+	    $result = true;
 		header("Cache-Control: no-cache");
 		try {
-			error_log('snapshoting');
 			$this->budgets->snapshot($_SESSION['user_id']);
-			error_log('snapshoted');
 		}
 		catch (Exception $e) {
 			error_log(__METHOD__.": ".$e->getMessage());
+			$result = false;
 		}
 		$this->render('index','categories');
-		return true;
+		return $result;
 	}
 
 	public function deleteAction() {

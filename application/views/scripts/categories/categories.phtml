@@ -30,7 +30,7 @@ echo $this->categories_form;
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-		echo '<li><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a>';
+		echo '<li><input type="hidden" name="'.$value['id1'].'"/><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a>';
 		echo '<span class="categories_list">'.$first_name.$value['name2']."</span><span>";
 		switch($value['type']) {
 			case 1:
@@ -53,6 +53,16 @@ foreach ($this->categories_list as $key => $value) {
 
 <script>
     $(document).ready(function() {
-        $('#categories_list').sortable({});
+        $('#categories_list').sortable({
+            delay: 100,
+            stop:  function (event, ui) {
+                // get all inputs inside categories_list and send
+                var cats = {};
+                $('#categories_list').find('input').each(function(index) {
+                    cats[index] = $(this).attr('name');
+                });
+                $.post('/categories/order', cats);
+            }
+        });
     });
 </script>

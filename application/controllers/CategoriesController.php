@@ -139,4 +139,21 @@ class CategoriesController extends Zend_Controller_Action
 		}
 		$this->_helper->redirector('index','categories');
     }
+
+    public function orderAction() {
+        try {
+            $data = $this->_request->getParams();
+            $order = 0;
+            foreach($data as $key => $category_id) {
+                if(!is_int($key)) {
+                    continue;
+                }
+                $st_update = array('order'	=>	++$order);
+                $this->categories->update($st_update,'id = '.$category_id.' AND user_owner = '.$_SESSION['user_id']);
+            }
+        } catch (Exception $e) {
+            error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
+        }
+        $this->_helper->redirector('index','categories');
+    }
 }
