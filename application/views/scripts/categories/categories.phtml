@@ -1,54 +1,27 @@
-<style type="text/css">
-    #categories_list { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-    #categories_list li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-    #categories_list li span { position: absolute; margin-left: -1.3em; }
-</style>
 <div id="categories_table" class="form-group accordion-body <?php if ($this->categories_collapse) { echo "collapse"; } ?>">
 <?php
 global $st_lang;
 echo $this->categories_form;
 ?>
-<ul width=100% id="categories_list" class="categories_list ">
+<ul id="categories_list" class="categories_list">
 <?php
 foreach ($this->categories_list as $key => $value) {
 	if (!empty($value['parent1'])) {
 		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";
-//		echo '<li><input type="hidden" name="'.$value['id1'].'"/>';
-//		echo "<div style='display: flex'>";
-//		echo '<div style="float: left; margin-right: 10px; padding-top: 10px; padding-bottom: 10px;"><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></div>';
-//        echo '<div style="float: right; min-width: 150px; padding-top: 10px; padding-bottom: 10px;">';
-//		switch($value['type']) {
-//			case 1:
-//				echo $st_lang['categories_expense'];
-//				break;
-//			case 2:
-//				echo $st_lang['categories_income'];
-//				break;
-//			case 3:
-//				echo $st_lang['categories_both'];
-//				break;
-//		}
-//		echo "</div>";
-//        echo '<div class="categories_list" style="float: right; background: #BBBBBB; padding-left: 5px; padding-top: 10px; padding-bottom: 10px; border: 1px #000 solid; min-width: 200px; border-radius: 15px;">'.$first_name.$value['name2']."</div>";
-//        echo '</div>';
-//        echo "</li>";
-
         echo '<li class="ui-state-default">';
-		//echo '<span style="float: left; margin-right: 10px; padding-top: 10px; padding-bottom: 10px;"><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></span>';
-        /*echo '<span style="float: right; min-width: 150px; padding-top: 10px; padding-bottom: 10px;">';
+		echo '<span><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></span>';
 		switch($value['type']) {
 			case 1:
-				echo $st_lang['categories_expense'];
+				$cat = $st_lang['categories_expense'];
 				break;
 			case 2:
-				echo $st_lang['categories_income'];
+				$cat = $st_lang['categories_income'];
 				break;
 			case 3:
-				echo $st_lang['categories_both'];
+				$cat = $st_lang['categories_both'];
 				break;
 		}
-		echo "</span>";*/
-        echo '<span class="categories_list" style="float: right; background: #BBBBBB; padding-left: 5px; padding-top: 10px; padding-bottom: 10px; border: 1px #000 solid; min-width: 200px; border-radius: 15px;"><input type="hidden" name="'.$value['id1'].'"/>'.$first_name.$value['name2']."</span>";
+        echo '<span class="categories_list"><input type="hidden" name="'.$value['id1'].'"/>'.$first_name.$value['name2']." (".$cat.")</span>";
         echo '<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
         echo "</li>";
 	}
