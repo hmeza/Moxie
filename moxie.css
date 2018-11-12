@@ -686,6 +686,6 @@ span.categories_list {
 	width: 100px;
 }
 
-#categories_list { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#categories_list { list-style-type: none; margin: 0; padding: 0; width: 70%; }
 #categories_list li { margin: 2px 3px 3px 2px; padding: 0.35em; padding-left: 1em; height: 2em; border: 1px #bbbbbb solid; border-radius: 5px; font-size: 20px;}
 #categories_list li span { position: relative; vertical-align: middle; }
