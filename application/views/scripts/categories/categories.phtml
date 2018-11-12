@@ -28,9 +28,9 @@ foreach ($this->categories_list as $key => $value) {
 //        echo '</div>';
 //        echo "</li>";
 
-        echo '<li class="ui-state-default"><input type="hidden" name="'.$value['id1'].'"/>';
-		echo '<span style="float: left; margin-right: 10px; padding-top: 10px; padding-bottom: 10px;"><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></span>';
-        echo '<span style="float: right; min-width: 150px; padding-top: 10px; padding-bottom: 10px;">';
+        echo '<li class="ui-state-default">';
+		//echo '<span style="float: left; margin-right: 10px; padding-top: 10px; padding-bottom: 10px;"><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></span>';
+        /*echo '<span style="float: right; min-width: 150px; padding-top: 10px; padding-bottom: 10px;">';
 		switch($value['type']) {
 			case 1:
 				echo $st_lang['categories_expense'];
@@ -42,8 +42,8 @@ foreach ($this->categories_list as $key => $value) {
 				echo $st_lang['categories_both'];
 				break;
 		}
-		echo "</span>";
-        echo '<span class="categories_list" style="float: right; background: #BBBBBB; padding-left: 5px; padding-top: 10px; padding-bottom: 10px; border: 1px #000 solid; min-width: 200px; border-radius: 15px;">'.$first_name.$value['name2']."</span>";
+		echo "</span>";*/
+        echo '<span class="categories_list" style="float: right; background: #BBBBBB; padding-left: 5px; padding-top: 10px; padding-bottom: 10px; border: 1px #000 solid; min-width: 200px; border-radius: 15px;"><input type="hidden" name="'.$value['id1'].'"/>'.$first_name.$value['name2']."</span>";
         echo '<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';
         echo "</li>";
 	}
