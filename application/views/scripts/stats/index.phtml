@@ -183,9 +183,6 @@ foreach ($this->budget_expenses as $key => $category) {
 	$expenses .= '<td style="text-align:left;">'.$category.'</td>';
 	for ($month = 1; $month <= 12; $month++) {
 		$current_expense = 0;
-//		echo "<pre>";
-//		print_r($this->expenses);
-//		die();
 		foreach ($this->expenses[$month] as $expense_key => $value) {
 			if ($value['category'] == $key) $current_expense += $value['amount'];
 		}

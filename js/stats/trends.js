@@ -23,7 +23,8 @@ function drawChart() {
             //title: 'Mes/año',
             titleTextStyle: {color: '#333'},
             slantedText:true,
-            slantedTextAngle:38,
+            slantedTextAngle:10,
+            type: 'string'
         },
         vAxis: {minValue: 0},
         legend: {position: 'top'}
