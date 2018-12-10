@@ -134,7 +134,7 @@ class Expenses extends Transactions {
 	public function updateExpense($st_params = null) {
 		try {
 			$st_data = array(
-				'amount'	=>	-$st_params['amount'],
+				'amount'	=>	-(float)$st_params['amount'],
 				'category'	=>	$st_params['category'],
 				'note'		=>	$st_params['note'],
 				'date'	=>	$st_params['date'],
