@@ -2,6 +2,9 @@
 /** Zend_Controller_Action */
 class SheetsController extends Zend_Controller_Action
 {
+    /**
+     * @var SharedExpensesSheet
+     */
 	private $sheetModel;
 	
 	public function init() {
@@ -319,7 +322,8 @@ class SheetsController extends Zend_Controller_Action
 	
 	/**
 	 * This function generates the form to add expenses.
-	 * @param array $st_expense
+	 * @param array $st_users
+     * @param int $id_sheet
 	 * @return Zend_Form
 	 */
 	private function getForm($st_users, $id_sheet) {

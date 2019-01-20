@@ -22,7 +22,7 @@ class SharedExpensesSheet extends Zend_Db_Table_Abstract {
 			->joinLeft(array('su' => 'shared_expenses_sheet_users'), 'su.id_sheet = s.id', array())
 			->where('s.user_owner = ?', $user_id)
 			->orWhere('su.id_user = ?', $user_id)
-			->order('s.id asc');
+			->order('s.id desc');
 		return $this->fetchAll($select);
 	}
 	
