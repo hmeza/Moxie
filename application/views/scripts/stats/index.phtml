@@ -81,23 +81,8 @@ table.table-stats {
 </style>
 <script type="text/javascript" src="/js/stats/stats.js"></script>
 <script type="text/javascript">
-	var budgets = [];
 <?php
 global $st_lang;
-
-$s_budget = "";
-$s_categories = array();
-foreach ($this->budget as $key => $value) {
-	$s_budget .= "budgets[".$key."] = new Array();\n";
-	foreach ($value as $inner_key => $inner_value) {
-		$s_budget .= "budgets[".$key."][".$inner_key."] = ".$inner_value.";\n";
-		if(!in_array($inner_key, $s_categories)) {
-			$s_categories[] = $inner_key;
-		}
-	}
-}
-echo $s_budget;
-
 ?>
 var categories = [<?php echo implode(',', $s_categories);?>];
 var budget_index = <?php echo date('m'); ?>;
