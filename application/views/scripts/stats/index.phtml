@@ -146,9 +146,6 @@ foreach ($this->budget_incomes as $key => $category) {
 
 		$incomes .= '<td><a style="color: #000000" href="/incomes/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'"> '.number_format($current_income,2).' &euro;</a></td>';
 	}
-	if (!empty($this->budget)) {
-		$incomes .= '<td>'.number_format($incomes_as_budget[$key],2).' &euro;</td>';
-	}
 	$incomes .= '<tr>';
 }
 echo $incomes;
@@ -190,10 +187,6 @@ foreach ($this->budget_expenses as $key => $category) {
 			$s_color = '';
 		}
 		$expenses .= '<td name="month'.$month.'"><a '.$s_color.' href="/expenses/index/category/'.$key.'/month/'.$month.'/year/'.$this->year.'">'.number_format($current_expense,2).' &euro;</a></td>';
-	}
-	if (!empty($this->budget)) {
-		$i_budget = (!empty($this->budget[date('m')][$key])) ? $this->budget[date('m')][$key] : 0;
-		$expenses .= '<td style="color: #00FF00" id="budget'.$key.'">'.number_format($i_budget,2).' &euro;</td>';
 	}
 	$expenses .= '<tr>';
 }
