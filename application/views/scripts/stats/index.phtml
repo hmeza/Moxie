@@ -229,7 +229,6 @@ for ($month = 1; $month <= 12; $month++) {
 }
 $balance_style = $balance < 0 ? "color: #ff0000" : "";
 echo $totals;
-if (!empty($this->budget)) echo '<th></th>';
 ?>
 <tr>
 <td colspan='.$i_colspan.'>&nbsp;</td><tr>
@@ -237,7 +236,6 @@ if (!empty($this->budget)) echo '<th></th>';
 <th style="text-align:left;"><?php echo $st_lang['stats_budget_total']; ?></th>
 <?php echo $balance_output; ?>
 
-<th align="right"><span style="'.$style.'"><?php echo number_format($balance,2); ?> &euro;</span></th>
 </tr>
 </table>
 </div>
