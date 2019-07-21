@@ -40,20 +40,21 @@ class SheetsController extends Zend_Controller_Action
 	}
 	
 	public function createAction() {
-		if (isset($_POST) && !empty($_POST)) {
+	    $request = $this->getRequest();
+		if ($request->isPost()) {
 			try {
-				if (empty($_POST['name'])) {
+				if (empty($request->getParam('name', null))) {
 					throw new Exception("Please set name for sheet");
 				}
-				$change = floatval(str_replace(",", ".", $this->getRequest()->getParam('change', 1)));
+				$change = floatval(str_replace(",", ".", $request->getParam('change', 1)));
 				if($change === 0.0) {
 				    $change = 1;
                 }
 				$data = array(
                     'user_owner' => $_SESSION['user_id'],
-                    'name' => $this->getRequest()->getParam('name', ''),
+                    'name' => $request->getParam('name', ''),
                     'unique_id' => uniqid(),
-                    'currency' => $this->getRequest()->getParam('currency', SharedExpenses::DEFAULT_CURRENCY),
+                    'currency' => $request->getParam('currency', SharedExpenses::DEFAULT_CURRENCY),
                     'change' => $change
 				);
 				$id = $this->sheetModel->insert($data);
