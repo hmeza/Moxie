@@ -45,12 +45,16 @@ class SheetsController extends Zend_Controller_Action
 				if (empty($_POST['name'])) {
 					throw new Exception("Please set name for sheet");
 				}
+				$change = floatval(str_replace(",", ".", $this->getRequest()->getParam('change', 1)));
+				if($change === 0.0) {
+				    $change = 1;
+                }
 				$data = array(
                     'user_owner' => $_SESSION['user_id'],
                     'name' => $this->getRequest()->getParam('name', ''),
                     'unique_id' => uniqid(),
                     'currency' => $this->getRequest()->getParam('currency', SharedExpenses::DEFAULT_CURRENCY),
-                    'change' => str_replace(",", ".", $this->getRequest()->getParam('change', 1))
+                    'change' => $change
 				);
 				$id = $this->sheetModel->insert($data);
 				$sheet = $this->sheetModel->find($id)->current();
