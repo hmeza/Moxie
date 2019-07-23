@@ -71,8 +71,9 @@ class ExpensesController extends TransactionsController
 		}
 		try {
 			$expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form);
-			if (!empty($_POST['tags'])) {
-				$this->updateTags(explode(",", $_POST['tags']), $expenseId);
+			$tags = $this->getRequest()->getParam('tags', array());
+			if (!empty($tags)) {
+				$this->updateTags(explode(",", $tags), $expenseId);
             }
 		}
 		catch(Zend_Db_Statement_Exception $e) {
