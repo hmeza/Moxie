@@ -24,7 +24,7 @@ class Transactions extends Zend_Db_Table_Abstract {
             }
         }
 		if(!empty($st_searchParams['note_search'])) {
-			$query = $query->where('i.note like ?', '%'.$st_searchParams['note_search'].'%');
+			$query = $query->where('LOWER(i.note) like ?', '%'.strtolower($st_searchParams['note_search']).'%');
 		}
 		if(!empty($st_searchParams['tag_search'])) {
 			$s_tag = urldecode($st_searchParams['tag_search']);
