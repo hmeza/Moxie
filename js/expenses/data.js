@@ -20,21 +20,24 @@ var use_favourite_as_expense = function() {
 	}
 	for (var i=0; i < favourite_data.length; i++) {
 		if (id == favourite_data[i]["id"]) {
-			$('#note').val(favourite_data[i]["note"]);
-			$('#amount').val(-favourite_data[i]["amount"]);
+			row = favourite_data[i];
+			$('#note').val(row["note"]);
+			$('#amount').val(-row["amount"]);
             var tags = $('#tags');
             tags.tagsinput('removeAll');
-			for(var j=0; j < favourite_data[i]["tags"].length; j++) {
-				tags.tagsinput('add', favourite_data[i]["tags"][j]);
+			for(var j=0; j < row["tags"].length; j++) {
+				tags.tagsinput('add', row["tags"][j]);
 			}
 			var c = $('#category');
-			var favourite_category = favourite_data[i]["category"];
+			var favourite_category = row["category"];
 			var option_string = 'option[value="'+ favourite_category +'"]';
 			c.find('option[selected="selected"]').attr('selected', false);
 			var opt = c.find(option_string);
-			c.val(favourite_data[i]["category"]);
+			c.val(row["category"]);
 			opt.attr("selected", "selected");
 			opt.prop("selected", "selected");
+			var in_sum = row["in_sum"] == "1";
+			$('#in_sum').prop("checked", in_sum);
             break;
 		}
 	}

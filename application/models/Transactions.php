@@ -155,7 +155,7 @@ class Transactions extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 				->setIntegrityCheck(false)
 				->from(array('f' => 'favourites'), array())
-				->joinInner(array('t' => 'transactions'), 'f.id_transaction = t.id', array('t.id', 't.amount', 't.note', 't.category'))
+				->joinInner(array('t' => 'transactions'), 'f.id_transaction = t.id', array('t.id', 't.amount', 't.note', 't.category', 't.in_sum'))
 				->where('t.user_owner = ?', $user);
 		$results = $this->fetchAll($select)->toArray();
 		$tagsModel = new Tags();
