@@ -27,7 +27,7 @@ var expensesBarRedirector = function(chart, data) {
     if(currentMonth <= targetMonth) {
         targetYear -= 1;
     }
-    window.location.href = "https://moxie.dootic.com/expenses/index/month/"+targetMonth+"/year/"+targetYear;
+    window.location.href = baseUrl + "/expenses/index/month/"+targetMonth+"/year/"+targetYear;
 }
 
 
@@ -70,7 +70,10 @@ function drawChart() {
 		title: barTitle,
 		hAxis: {title: 'Meses', titleTextStyle: {color: 'red'}},
         vAxis: { viewWindow: { min: 0}},
-		chartArea:{width:width}
+		chartArea:{width:width},
+        isStacked: true,
+        legend: {position: 'top'},
+        is3D: true
 	};
 
 	var chart2 = new google.visualization.ColumnChart(document.getElementById('expenses_all'));

@@ -31,6 +31,8 @@ $st_lang = array(
 	'expenses_none'		=>	'Ninguno',
 	'expenses_delete'   => 'Borrar',
     'expenses_delete_message' => '¿Borrar este gasto?',
+	'expenses_in_total' => 'En la suma total',
+	'expenses_not_in_total' => 'Fuera del total',
 	// Incomes
 	'income_header'     => 'Añadir ingreso',
 	'incomes_stats'		=>	'Gráfica de ingresos',

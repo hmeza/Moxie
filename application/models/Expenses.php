@@ -160,14 +160,14 @@ class Expenses extends Transactions {
      * @param string $s_category
      * @return mixed
      */
-    public function getMonthExpensesData($i_userId, $s_dateLimit, $i_category=null) {
+    public function getMonthExpensesData($i_userId, $s_dateLimit, $i_category=null, $inSum=1) {
         $s_query = $this->select()
             ->from($this->_name, array(
 		            'year' => new Zend_Db_Expr('YEAR('.$this->_name.'.date)'),
 		            'month' => new Zend_Db_Expr('MONTH('.$this->_name.'.date)'),
 		            'amount' => new Zend_Db_Expr('-sum('.$this->_name.'.amount)'))
             )
-            ->where('in_sum = 1')
+            ->where('in_sum = ?', $inSum)
             ->where('user_owner = ?', $i_userId)
             ->where('date >= "'.$s_dateLimit.'"')
             ->where('amount < 0')

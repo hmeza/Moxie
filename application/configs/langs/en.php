@@ -31,6 +31,8 @@ $st_lang = array(
 	'expenses_none'		=>	'None',
 	'expenses_deca.plete'   => 'Delete',
     'expenses_delete_message' => 'Delete this expense?',
+    'expenses_in_total' => 'In total sum',
+    'expenses_not_in_total' => 'Out of total',
 	// Incomes
 	'income_header'     => 'Add income',
 	'income_stats'		=>	'Income stats',

@@ -262,11 +262,13 @@ class ExpensesController extends TransactionsController
 		$i_dateLimit = date("Y-m-01 00:00:00", strtotime("-12 months"));
 
 		$o_rows = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit);
+		$o_rowsNotInSum = $this->expenses->getMonthExpensesData($_SESSION['user_id'], $i_dateLimit, null, 0);
 
+		// base expense
 		foreach ($o_rows as $key => $value) {
 			try {
 				$timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
-				$st_data[] = array(
+				$st_data[$timestamp] = array(
 						date("M", $timestamp),
 						(float)$value['amount']
 				);
@@ -276,7 +278,25 @@ class ExpensesController extends TransactionsController
 				error_log(__METHOD__." data: ".$key." ".print_r($value,true));
 			}
 		}
-		$st_data = array_merge(array(array('Month', 'Expense')), $st_data);
+		// expense not in sum
+		foreach($o_rowsNotInSum as $key => $value) {
+		    try {
+                $timestamp = mktime(0, 0, 0, $value['month'], 1, $value['year']);
+                $st_data[$timestamp][] = (float)$value['amount'];
+            }
+            catch(Exception $e) {
+                error_log(__METHOD__.": ".$e->getMessage());
+                error_log(__METHOD__." data: ".$key." ".print_r($value,true));
+            }
+        }
+        // fill with zeros months without expense
+        foreach($st_data as $key => $value) {
+		    if(count($value) == 2) {
+		        $st_data[$key][] = 0;
+            }
+        }
+        global $st_lang;
+		$st_data = array_merge(array(array('Month', $st_lang['expenses_in_total'], $st_lang['expenses_not_in_total'])), $st_data);
 		return $st_data;
 	}
 

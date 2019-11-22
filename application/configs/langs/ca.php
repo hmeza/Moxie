@@ -31,6 +31,8 @@ $st_lang = array(
 	'expenses_none'		=>	'Cap',
 	'expenses_delete'   => 'Esborrar',
     'expenses_delete_message' => 'Esborrar aquesta despesa?',
+    'expenses_in_total' => 'A la suma total',
+    'expenses_not_in_total' => 'Fora del total',
 	// Incomes
 	'income_header'     => 'Afegir ingrés',
 	'incomes_stats'		=>	'Gràfica d\'ingressos',
