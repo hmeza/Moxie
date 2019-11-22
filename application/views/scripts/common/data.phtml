@@ -32,12 +32,7 @@ else {
     <tr>
         <td colspan="5">
         <?php
-        if($this->source == "expenses") {
-            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
-        }
-        else {
-            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
-        }
+        $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
         ?>
         </td>
     </tr>
