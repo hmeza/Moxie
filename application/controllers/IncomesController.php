@@ -20,13 +20,8 @@ class IncomesController extends TransactionsController
 		$form  = new Zend_Form();
 		$categories = new Categories();
 
-
-		if (isset($st_income[0]['id'])) {
-			$action = '/incomes/update';
-		}
-		else {
-			$action = '/incomes/add';
-		}
+		$action = '/incomes/';
+		$action .= isset($st_income[0]['id']) ? 'update' : 'add';
 
 		// fix for datetime to date
 		$s_date = explode(" ", $st_income[0]['date']);
