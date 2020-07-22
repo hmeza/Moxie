@@ -19,7 +19,7 @@ class Users extends Zend_Db_Table_Abstract {
 			}
 		}
 		catch (Exception $e) {
-			error_log("Exception caught in ".__CLASS__."::".__FUNCTION__." on line ".$e->getLine().": ".$e->getMessage());
+			error_log(__METHOD__.", line ".$e->getLine().": ".$e->getMessage());
 		}
 		return $result;
 	}
@@ -91,7 +91,7 @@ class Users extends Zend_Db_Table_Abstract {
 			}
 		}
 		catch(Exception $e) {
-			error_log($e->getMessage());
+			error_log(__METHOD__.", line ".$e->getLine().": ".$e->getMessage());
 		}
 	}
 	
