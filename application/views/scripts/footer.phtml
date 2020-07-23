@@ -7,9 +7,8 @@
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));</script>
 
-<div id="bottom">
-<center>
-2013 - <a href="mailto:<?php echo Zend_Registry::get('config')->moxie->email; ?>">Moxie</a> -
+<div id="bottom" class="text-center">
+2013-<?php echo date('Y'); ?> - <a href="mailto:<?php echo Zend_Registry::get('config')->moxie->email; ?>">Moxie</a> -
 <div class="fb-like" data-href="https://www.facebook.com/Moxie-111446182371815/" data-width="400" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
 
   <div class="g-plusone" data-size="medium" data-href="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>"></div>
@@ -22,4 +21,4 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
   })();
 </script>
-</center></div>
+</div>

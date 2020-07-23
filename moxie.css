@@ -316,6 +316,12 @@ h2 {
 	padding-left: 10px;
 }
 
+moxie_expenses_form_left,
+moxie_expenses_form_right {
+    padding-left: 1.5px;
+    padding-right: 1.5px;
+}
+
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
 		width: 100%;
@@ -692,4 +698,6 @@ span.categories_list {
 div.moxie_expenses_form_left table,
 div.moxie_expenses_form_right table {
 	width: 100%;
+    padding-left: 1.5px;
+    padding-right: 1.5px;
 }
