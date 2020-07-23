@@ -1,11 +1,23 @@
-<h2 id="search_title" class="search_button">
-    <button id="" data-toggle="collapse" data-target="#search_form" class="btn btn-info right">
-        <?php
-        global $st_lang;
-        echo $st_lang['search_header'];
-        ?>
-    </button>
-</h2>
-<div id="search_form" class="search_button_mobile accordion-body" <?php if ($this->is_search) { echo "style='display:block'"; } ?>>
-<?php echo $this->search_form; ?>
+<div style="margin-bottom: 25px">
+    <h2 id="search_title" class="search_button p-0" style="padding: 0px 3px 0px 3px;">
+        <div>
+        <span id="search-toggle" data-toggle="collapse" data-target="#search_form" class="glyphicon glyphicon-search">
+            <?php
+            global $st_lang;
+            echo $st_lang['search_header'];
+            ?>
+        </span>
+        </div>
+        <div data-toggle="collapse" data-target="#search_form" class="center w100">
+            <i class="glyphicon glyphicon-chevron-down btn btn-default" style="display: block; text-align: center; height: 1.2rem; padding: 0px"></i>
+        </div>
+    </h2>
+    <div id="search_form" class="search_button_mobile accordion-body" <?php if ($this->is_search) { echo "style='display:block'"; } ?>>
+    <?php echo $this->search_form; ?>
+    </div>
 </div>
+<script type="text/javascript">
+    $('#search_title').click(function() {
+        $("i", this).toggleClass('glyphicon-chevron-down glyphicon-chevron-up')
+    });
+</script>
