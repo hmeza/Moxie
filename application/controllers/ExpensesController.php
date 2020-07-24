@@ -39,9 +39,10 @@ class ExpensesController extends TransactionsController
 
 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
 
+		// order + switch order by
 		if (isset($st_params['o'])) {
 			$st_params['o'] = ($st_params['o'][0] == '-')
-					? substr($st_params['o'], 1, strlen($st_params['o'])-1)
+					? substr($st_params['o'], 1)
 					: "-".$st_params['o'];
 		}
 
