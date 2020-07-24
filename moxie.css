@@ -669,6 +669,10 @@ moxie_expenses_form_right {
 	padding-bottom: 40px;
 }
 
+.bootstrap-tagsinput {
+	width: 100%;
+}
+
 .bootstrap-tagsinput input {
 	width: 100%;
 }
