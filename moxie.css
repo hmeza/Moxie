@@ -705,3 +705,16 @@ div.moxie_expenses_form_right table {
     padding-left: 1.5px;
     padding-right: 1.5px;
 }
+
+#incomes_all {
+	height: 600px;
+}
+
+#expenses_month {
+    min-height: 350px;
+}
+
+#expenses_all {
+	margin-top: 2rem;
+    margin-bottom: 3rem;
+}
