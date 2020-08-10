@@ -322,6 +322,14 @@ moxie_expenses_form_right {
     padding-right: 1.5px;
 }
 
+.search_button {
+	padding: 0px 3px 0px 3px;
+    width: 100%;
+    height: 2.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 @media only screen and (min-width: 1060px) {
 	.moxie-container {
 		width: 100%;
