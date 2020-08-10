@@ -10,3 +10,4 @@ npm-debug.log
 bower_components/
 phpunit/
 backups/
+log/*
