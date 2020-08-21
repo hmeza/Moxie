@@ -52,7 +52,9 @@
 			<div><?php echo $st_lang['budgets_title']; ?></div>
 			<?php
 			foreach ($this->budgets_list as $key => $value) {
-				echo '<div><a href="/budgets/delete/budget/'.urlencode($value['date_created']).'">'.$value['date_created'].' - Borrar</a></div>';
+			    $date = $value['date_created'];
+			    $url = urlencode($value['date_created']);
+				echo '<div>'.$date.' - <a href="/budgets/delete/budget/'.$url.'">Borrar</a></div>';
 			}
 			?>
 		</td>
