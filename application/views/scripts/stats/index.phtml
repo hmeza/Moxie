@@ -150,7 +150,7 @@ foreach ($this->budget_incomes as $key => $category) {
 }
 echo $incomes;
 
-echo '<th style="text-align:left;">'.$st_lang['stats_budget_income'].'</th>';
+echo '<th class="text-left">'.$st_lang['stats_budget_income'].'</th>';
 $incomes_totals = '';
 for ($month = 1; $month <= 12; $month++) {
 	$incomes_totals .= '<th align="right">'.number_format($income[$month],2).' &euro;</th>';
@@ -191,7 +191,7 @@ foreach ($this->budget_expenses as $key => $category) {
 	$expenses .= '<tr>';
 }
 echo $expenses;
-echo '<th style="text-align:left;">'.$st_lang['stats_budget_expense'].'</th>';
+echo '<th class="text-left">'.$st_lang['stats_budget_expense'].'</th>';
 $totals = '';
 $balance_output = '';
 for ($month = 1; $month <= 12; $month++) {
@@ -211,7 +211,7 @@ echo $totals;
 <tr>
 <td colspan='.$i_colspan.'>&nbsp;</td><tr>
 
-<th style="text-align:left;"><?php echo $st_lang['stats_budget_total']; ?></th>
+<th class="text-left"><?php echo $st_lang['stats_budget_total']; ?></th>
 <?php echo $balance_output; ?>
 
 </tr>
@@ -224,7 +224,7 @@ print_yearly($this->yearly, $this->budget_incomes + $this->budget_expenses);
 echo $this->partial('stats/stats.phtml', array('trends'=>$this->trends));
 ?>
 <div id="box" class="accordion-body collapse">
-<table width=100% class="table table-striped table-bordered table-stats">
+<table class="table table-striped table-bordered table-stats w-100">
 <tr>
 <th align="left"><?= $st_lang['category']; ?></th>
 <th align="right"><?= $st_lang['total']; ?></th>
