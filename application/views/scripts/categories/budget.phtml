@@ -5,18 +5,15 @@
 <script type="text/javascript" src="/js/budgets/data.js?v=7"></script>
 
 <div id="budget_table" class="accordion-body collapse form-group">
-	<table>
+	<table class="table">
 		<td>
-			<table width=100% style="max-width: 500px">
+			<table class="table table-striped">
 			<?php
 			$f_initialBudget = 0;
-			$header_set = false;
+			$firstRow = reset($this->categories);
+            $date_created = isset($firstRow['date_created']) ? $firstRow['date_created'] : date('d-m-Y');
+            echo '<th colspan="3">'.$date_created.'</th>';
 			foreach ($this->categories as $key => $value) {
-				if(!$header_set) {
-					$date_created = isset($value['date_created']) ? $value['date_created'] : date('d-m-Y');
-					echo '<th>'.$date_created.'</th>';
-					$header_set = true;
-				}
 				$id = (isset($value['id3'])) ? $value['id3'] : $value['id2'];
 				echo '
 				<tr>
