@@ -3,7 +3,7 @@ global $st_lang;
 if (empty($_SESSION['user_id'])) {
 ?>
 <center>
-    <div align="center" class="form-group" style="width: 250px">
+    <div align="center" class="form-group text-center" style="width: 250px">
         <form name="login" id="login"
               action="<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/login/login" method="POST">
             <fieldset>
