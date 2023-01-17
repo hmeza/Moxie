@@ -104,12 +104,12 @@ $(document).ready(function() {
         freeInput: true
     });
 	let amount = $('#amount');
-    amount.attr('type', 'number');
-    amount.attr('pattern', '\d*\.,');
+    amount.attr('inputmode', 'numeric');
+    amount.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
     let amount_min = $('#amount_min');
-    amount_min.attr('type', 'number');
-    amount_min.attr('pattern', '\d*\.,');
+    amount_min.attr('inputmode', 'numeric');
+    amount_min.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
     let amount_max = $('#amount_max');
-    amount_max.attr('type', 'number');
-    amount_max.attr('pattern', '\d*\.,');
+    amount_max.attr('inputmode', 'numeric');
+    amount_max.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
 });
