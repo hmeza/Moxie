@@ -103,4 +103,7 @@ $(document).ready(function() {
         }],
         freeInput: true
     });
+    $('#amount').attr('type', 'number');
+    $('#amount_min').attr('type', 'number');
+    $('#amount_max').attr('type', 'number');
 });
