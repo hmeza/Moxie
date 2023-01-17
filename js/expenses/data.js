@@ -103,7 +103,13 @@ $(document).ready(function() {
         }],
         freeInput: true
     });
-    $('#amount').attr('type', 'number');
-    $('#amount_min').attr('type', 'number');
-    $('#amount_max').attr('type', 'number');
+	let amount = $('#amount');
+    amount.attr('type', 'number');
+    amount.attr('pattern', '\d*\.,');
+    let amount_min = $('#amount_min');
+    amount_min.attr('type', 'number');
+    amount_min.attr('pattern', '\d*\.,');
+    let amount_max = $('#amount_max');
+    amount_max.attr('type', 'number');
+    amount_max.attr('pattern', '\d*\.,');
 });
