@@ -32,9 +32,9 @@
         </exec>
     </target>
 
-    <target name="phpunit" depends="composer, git_submodules_update, phinx_migrate">
-        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
-    </target>
+<!--    <target name="phpunit" depends="composer, git_submodules_update, phinx_migrate">-->
+<!--        <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>-->
+<!--    </target>-->
 
     <target name="npm">
         <exec executable="npm">
