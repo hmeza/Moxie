@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Moxie" default="build">
 <!--    <target name="build" depends="phpunit, jasmine"/>-->
-    <target name="build" depends="jasmine"/>
+    <target name="build" depends="phinx_migrate, npm, bower"/>
 
     <!-- lint for js would be nice -->
 
@@ -50,7 +50,7 @@
         </exec>
     </target>
 
-    <target name="jasmine" depends="npm, bower">
-        <exec executable="grunt" failonerror="true"/>
-    </target>
+<!--    <target name="jasmine" depends="npm, bower">-->
+<!--        <exec executable="grunt" failonerror="true"/>-->
+<!--    </target>-->
 </project>
