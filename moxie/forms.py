@@ -1,10 +1,11 @@
 from django.forms import Form, ModelForm
-from models.models import Category
+from moxie.models import Category
 
 
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
+        exclude = []
 
 
 class CategoryUpdateForm(CategoryForm):

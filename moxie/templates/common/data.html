@@ -1,0 +1,125 @@
+{% load mathfilters %}
+<!--echo $this->partial('common/data.phtml',-->
+<!--	array(-->
+<!--		'form'=>$this->form,-->
+<!--		'list'=>$this->list,-->
+<!--		'year'=>$this->year,-->
+<!--		'month'=>$this->month,-->
+<!--		'editSlug'  => '/expenses/edit/id/',-->
+<!--		'tag_list' => $this->tag_list,-->
+<!--		'used_tag_list' => $this->used_tag_list,-->
+<!--		'show_categories_filter' => $this->show_categories_filter,-->
+<!--		'show_tags_filter' => $this->show_tags_filter,-->
+<!--		'view' => $this->view,-->
+<!--		'o' => $this->o,-->
+<!--        'source' => 'expenses'-->
+<!--	)-->
+<!--);-->
+<!--?>-->
+
+<!--<?php-->
+<!--global $st_lang;-->
+<!--if($this->source == "expenses") {-->
+<!--    $last_month = ($this->month == 1) ? 12 : $this->month - 1;-->
+<!--    $last_year = ($this->month == 1) ? $this->year - 1 : $this->year;-->
+<!--    $next_month = ($this->month == 12) ? 1 : $this->month + 1;-->
+<!--    $next_year = ($this->month == 12) ? $this->year + 1 : $this->year;-->
+<!--    $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;-->
+<!--    $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;-->
+<!--    $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));-->
+<!--    // modify current month and year if we are in a search-->
+<!--    try {-->
+<!--        $first = $this->list->getRow(0);-->
+<!--        if (strtotime($first['date']) < strtotime(date('Y-m-01'))) {-->
+<!--            $current_month_and_year = date('M Y', strtotime($first['date']));-->
+<!--        }-->
+<!--    }-->
+<!--    catch(Exception $e) {-->
+<!--        // avoid error, previous and next will appear with current date-->
+<!--    }-->
+<!--}-->
+<!--else {-->
+<!--    $editSlug = '/incomes/edit/id/';-->
+<!--    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));-->
+<!--    $last_url = "/incomes/index/year/".($this->year-1);-->
+<!--    $next_url = "/incomes/index/year/".($this->year+1);-->
+
+<!--}-->
+<!--?>-->
+<table class="table table-bordered table-condensed table-hover" id="mytable" width="100%">
+<thead>
+    <tr>
+        <td colspan="5">
+        <?php
+        $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
+        ?>
+        </td>
+    </tr>
+	<tr>
+		<th class="list moxie_edit">&nbsp;</th>
+		<th class="list moxie_category"><?php echo $st_lang['expenses_category']; ?></th>
+		<th class="list moxie_note"><?php echo $st_lang['expenses_note']; ?></th>
+	<?php
+	if ($this->view) {
+		$target = '/'.$this->view.'/index';
+		if ($this->month) {
+			$target .= '/month/'.$this->month;
+		}
+		if ($this->year) {
+			$target .= '/year/'.$this->year;
+		}
+		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";
+		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";
+	?>
+		<th class="list moxie_date_inline sorting text-center"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></th>
+		<th class="list moxie_amount sorting text-right"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></th>
+	<?php } else { ?>
+		<th class="list moxie_date_inline sorting text-center"><?php echo $st_lang['expenses_date']; ?></th>
+		<th class="list moxie_amount sorting text-right"><?php echo $st_lang['expenses_amount']; ?></th>
+	<?php } ?>
+	</tr>
+	</thead>
+{#<?php#}
+{#$f_totalAmount = 0;#}
+{#$f_currentAmount = 0;#}
+{#$b_showTotalAmount = false;#}
+{#$s_currentExpenseDate = '';#}
+<tbody>
+{% for object in object_list %}
+    <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
+    <td class="moxie_edit"><a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}"><div class="moxieicon moxieedit"></div></a></td>
+    <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
+    <td class="moxie_note">{{ object.note }}</td>
+    <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
+    <td class="moxie_amount right"><span id="val{{ object.id }}">{{ object.amount }} &euro;</span></td>
+    </tr>
+{% endfor %}
+
+
+{#foreach ($this->list as $key=>$value) {#}
+{#	$checked = ($value['in_sum'] == '1') ? "checked":"";#}
+{#	$checked_style = ($value['in_sum'] == '0') ? "total_amount" : "";#}
+{#	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';#}
+{#	$expense_date = date('d-m-Y', strtotime($value['date']));#}
+{#	if($expense_date != $s_currentExpenseDate) {#}
+{#		echo '<tr><th colspan="5" class="list_moxie_top" style="text-align: center; padding-top: 8px;">'.$expense_date.'</th></tr>';#}
+{#		$s_currentExpenseDate = $expense_date;#}
+{#	}#}
+{##}
+{#	$f_totalAmount = $f_totalAmount + $value['amount'];#}
+{#	$f_currentAmount += ($value['in_sum'] == 1) ? $value['amount'] : 0;#}
+{#	$b_showTotalAmount = ($value['in_sum'] != 1) || $b_showTotalAmount;#}
+{#}#}
+
+    <tr><th colspan="5" class="list_moxie_top" style="text-align: center; padding-top: 8px;">'.$expense_date.'</th></tr>
+        <br><span class="total_amount">{{ current_amount }} &euro;
+        {% if current_amount|sub:current_amount != 0 %}
+            <br><span class="total_amount">{{ total_amount }} &euro;
+        {% endif %}
+    <tr>
+<td colspan=2><button class="btn btn-default btn-xs" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
+<td colspan=3 align="right" class="list list_money"><span id="total"><?php echo $s_total; ?></span></td>
+</tr>
+</tbody>
+</table>
+<?php $this->getHelper('Web')->printToTop(); ?>

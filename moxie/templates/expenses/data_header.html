@@ -1,0 +1,36 @@
+{% load static %}
+<!--echo $this->partial('expenses/data_header.phtml',-->
+<!--    array(-->
+<!--        'form'=>$this->form,-->
+<!--        'list'=>$this->list,-->
+<!--        'year'=>$this->year,-->
+<!--        'month'=>$this->month,-->
+<!--        'most_frequent_expenses' => $this->most_frequent_expenses,-->
+<!--        'tags' => $this->tags,-->
+<!--        'used_tag_list' => $this->used_tag_list,-->
+<!--        'search_form' => $this->search_form,-->
+<!--        'favourites' => $this->favourites,-->
+<!--        'favourites_json' => $this->favourites_json,-->
+<!--        'is_search' => $this->is_search-->
+<!--    )-->
+<!--);-->
+
+<script type="text/javascript" type="text/javascript">
+	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
+    var deleteMessage = "<?php echo $st_lang['expenses_delete_message']; ?>";
+	var tagList = [<?php if(!empty($this->tags)) echo "'".str_replace('\\"', '"',implode($this->tags, "','"))."'"; ?>];
+    var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".str_replace('\\"', '"', implode($this->used_tag_list, "','"))."'"; ?>];
+    var favourite_data = <?php echo $this->favourites_json; ?>;
+</script>
+<script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v=13"></script>
+
+<div id="form">
+    <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
+    <?php
+        echo $this->form;
+    ?>
+    </div>
+    <div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
+        {% include 'common/filter.html' %}
+    </div>
+</div>

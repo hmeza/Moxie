@@ -92,7 +92,7 @@ fieldset {
 	clear:none;
 }
 
-table.list, td.list, th.list tr.list {
+table.list, td.list, th.list tr.list, tr.list > td {
 	color: #000000;
 	padding: 2px;
 	border-collapse: collapse;
@@ -110,11 +110,7 @@ table.list, td.list, th.list tr.list {
 	width: 100px;
 }
 
-.total_amount {
-	color: #777777;
-}
-
-td.total_amount {
+tr.total_amount > td {
 	color: #777777;
 }
 
@@ -169,12 +165,6 @@ div.moxie_header_date {
 	text-align: center;
 	width: 79%;
 	line-height: 50px;
-}
-div.moxieedit {
-	background:url("/img/edit.png") no-repeat;
-}
-div:hover.moxieedit {
-	background:url("/img/edit_hover.png") no-repeat;
 }
 
 tr.alt td.alt {

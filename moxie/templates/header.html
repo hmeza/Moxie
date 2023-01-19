@@ -1,17 +1,4 @@
-<?php
-global $st_lang;
-$settingsUrl = Zend_Registry::get('config')->moxie->settings->url;
-
-$url = $_SERVER['REQUEST_URI'];
-$st_urls = array(
-		'incomes' => '/incomes',
-		'expenses' => '/expenses',
-		'stats' => '/stats',
-		'sheets' => '/sheets',
-        'users' => '/users',
-		//'finance' => '/finance',
-);
-?>
+{% load i18n %}
 <!-- web menu -->
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="container">
@@ -27,26 +14,18 @@ $st_urls = array(
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-left">
-<?php
-$st_lang['users'] = $st_lang['users_title'];
-$s_webMenu = '';
-if (isset($_SESSION['user_id'])) {
-	foreach($st_urls as $key => $value) {
-		$class = (strpos($url, $value) !== false) ? 'class="active"' : '';
-		$s_webMenu .= '<li role="presentation" '.$class.'>'
-		    .'<a href="'.$settingsUrl.$st_urls[$key].'">'.$st_lang[$key].'</a></li>';
-	}
-	$s_webMenu .= '<li role="presentation"><a href="'.$settingsUrl.'/login/logout">'.$st_lang['logout'].'</a></li>';
-}
-else {
-	$s_webMenu .= '
-	<li role="presentation"><a href="'.$settingsUrl.'/">'.$st_lang['index'].'</a></li>
+
+{% if user.is_authenticated %}
+    {% for url in urls  %}
+		<li role="presentation {% if url in request.url %}active{% endif %}"><a href="/{{ url }}">{% trans url %}</a></li>
+    {% endfor %}
+	<li role="presentation"><a href="'.$settingsUrl.'/login/logout">{% trans 'logout' %}</a></li>
+{% else %}
+
+	<li role="presentation"><a href="/">{% trans 'index' %}</a></li>
 	<!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
-	<li role="presentation"><a href="'.$settingsUrl.'/index/about">'.$st_lang['about'].'</a></li>
-	';
-}
-echo $s_webMenu;
-?>
+	<li role="presentation"><a href="/index/about">{% trans 'about' %}</a></li>
+{% endif %}
 			</ul>
             <!--<ul class="nav navbar-nav nav-pills navbar-right">
                 <li><a class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/Moxie-111446182371815/?ref=bookmarks"><i class="fa fa-facebook"></i></a></li>

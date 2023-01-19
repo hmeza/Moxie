@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from moxie.views.views import ExpensesView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('expenses/', ExpensesView.as_view()),
 ]

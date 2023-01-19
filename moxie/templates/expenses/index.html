@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+<script type="text/javascript" language="text/javascript">
+    var baseUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>";
+	var year = <?php echo $this->year; ?>;
+	var month = <?php echo $this->month; ?>;
+</script>
+</head>
+
+<a name="top">
+<div class="moxie-submenu">
+<div><a href="#data">Ir a gastos</a></div>
+<div><a href="#stats">Ir a estadísticas</a></div>
+</div>
+</a>
+
+
+<div class="moxie-container">
+<div class="moxie-left">
+<a id="data"></a>
+{% include 'expenses/data_header.html' %}
+
+{% include 'common/data.html' %}
+
+</div>
+<div class="moxie-right">
+<a id="stats"></a>
+    {% include 'expenses/stats.html' %}
+</div>
+</div>
+{% endblock %}
