@@ -753,3 +753,101 @@ class Transaction(models.Model):
 #         $this->_db = Zend_Registry::get('db');
 #     }
 # }
+
+
+class Tag(models.Model):
+    class Meta:
+        db_table = 'tags'
+
+    transaction_tags = None
+    existing_tags = None
+
+    user_owner = models.IntegerField(blank=False, null=False)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+	# /**
+	#  * Adds a new tag for $userId
+	#  * @var int $userId
+	#  * @var string $name
+	#  * @return int
+    #  * @throws Exception
+	#  */
+	# public function addTag($userId, $name) {
+	# 	if(empty($userId)) {
+	# 		throw new Exception("Empty user id");
+	# 	}
+	# 	if(empty($name)) {
+	# 		throw new Exception("Empty tag name");
+	# 	}
+    #     if(is_null($this->existingTags)) {
+    #         $this->existingTags = $this->getTagsByUser($userId);
+    #     }
+    #
+    #     // check if backslashes have been already replaced
+    #     $name = trim($name);
+    #     $pos = strpos($name, "\\'");
+	# 	if ($pos === false) {
+    #     }
+    #     else {
+    #         $name = str_replace("\\'", "'", $name);
+    #     }
+    #     $tagId = array_search($name, $this->existingTags);
+    #     if($tagId === FALSE) {
+    #         $data = array(
+    #             'user_owner' => $userId,
+    #             'name' => $name
+    #         );
+    #         try {
+    #             return $this->insert($data);
+    #         } catch (Exception $e) {
+    #             error_log('Exception caught on '.__METHOD__.'('.$e->getLine().'), message: '.$e->getMessage());
+    #             return null;
+    #         }
+    #     }
+    #     else {
+    #         return $tagId;
+    #     }
+	# }
+
+    def get_tags_by_user(self, user=None):
+        if not user:
+            return []
+        queryset = Tag.objects.filter(user_owner=user)
+        return Tag.__get_tags_from_query(queryset)
+
+    def get_tags_for_transaction(self, transaction):
+        queryset = Tag.objects.prefetch_related('transaction_tags')\
+            .filter(transaction_tags__id_transaction=transaction)
+        return Tag.__get_tags_from_query(queryset)
+
+    def get_used_tags_by_user(self, user):
+        queryset = Tag.objects\
+            .select_related('transaction_tags')\
+            .filter(user_owner=user).group('id').order_by('-name')
+        return Tag.__get_tags_from_query(queryset)
+
+    def __get_tags_from_query(self, queryset):
+        tags = {}
+        for tag in queryset.all():
+            tags[tag.id] = tag.name.replace("'", "\\'")
+        return tags
+
+    # /**
+    #  * @param int $userId
+    #  * @param string $tag
+    #  */
+    # public function deleteTag($userId, $tag) {
+    #     try {
+    #         $query = $this->select()
+    #             ->where('name = ?', $tag)
+    #             ->where('user_owner = ?', $userId);
+    #         $tag = $this->fetchRow($query);
+    #         $this->transactionTags->removeTagsByTagId($tag->id);
+    #         $tag->delete();
+    #     }
+    #     catch(Exception $e) {
+    #         error_log(__METHOD__.": ".$e->getMessage());
+    #     }
+    # }

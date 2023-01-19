@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction
+from moxie.models import Transaction, Tag
 
 
 class CreateCategory(CreateView):
@@ -196,6 +196,7 @@ class ExpensesView(FilterView):
 		context['edit_slug'] = '/expenses/edit/id/'
 		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
+		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		return context
 
 	# todo export to excel

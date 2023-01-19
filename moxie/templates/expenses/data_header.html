@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!--echo $this->partial('expenses/data_header.phtml',-->
 <!--    array(-->
 <!--        'form'=>$this->form,-->
@@ -16,11 +17,19 @@
 <!--);-->
 
 <script type="text/javascript" type="text/javascript">
-	var deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/expenses/delete/id/";
-    var deleteMessage = "<?php echo $st_lang['expenses_delete_message']; ?>";
-	var tagList = [<?php if(!empty($this->tags)) echo "'".str_replace('\\"', '"',implode($this->tags, "','"))."'"; ?>];
-    var usedTagList = [<?php if(!empty($this->used_tag_list)) echo "'".str_replace('\\"', '"', implode($this->used_tag_list, "','"))."'"; ?>];
-    var favourite_data = <?php echo $this->favourites_json; ?>;
+	let deleteUrl = "/expenses/delete/id/";
+    let deleteMessage = "{% trans 'expenses_delete_message' %}";
+	let tagList = [
+        {% for tag in tags %}
+            '{{ tag }}'
+        {% endfor %}
+    ];
+    let usedTagList = [
+        {% for tag in used_tag_list %}
+            '{{ tag }}'
+        {% endfor %}
+    ];
+    let favourite_data = <?php echo $this->favourites_json; ?>;
 </script>
 <script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v=13"></script>
 
