@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 21:58+0000\n"
+"POT-Creation-Date: 2023-01-20 14:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: moxie/settings.py:134
+#: moxie/filters.py:7
+msgid "category"
+msgstr "Categoría"
+
+#: moxie/filters.py:8
+msgid "tag"
+msgstr "Tag"
+
+#: moxie/filters.py:9
+msgid "note"
+msgstr "Nota"
+
+#: moxie/filters.py:10
+msgid "amount"
+msgstr "Importe"
+
+#: moxie/filters.py:11
+msgid "date"
+msgstr "Fecha"
+
+#: moxie/settings.py:135
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:135
+#: moxie/settings.py:136
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:136
+#: moxie/settings.py:137
 msgid "Català"
+msgstr ""
+
+#: moxie/templates/common/filter.html:9
+msgid "search_header"
+msgstr "Buscar"
+
+#: moxie/templates/expenses/data_header.html:7
+msgid "expenses_delete_message"
+msgstr "Borrar"
+
+#: moxie/templates/expenses/index.html:14
+msgid "Go to expenses"
+msgstr "Ir a gastos"
+
+#: moxie/templates/expenses/index.html:15
+msgid "Go to stats"
+msgstr "Ir a estadísticas"
+
+#: moxie/templates/expenses/stats.html:10
+msgid "expenses_expended"
+msgstr "Gastado"
+
+#: moxie/templates/expenses/stats.html:43
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_monthly"
+msgstr "Gastado"
+
+#: moxie/templates/expenses/stats.html:44
+msgid "expenses_by_months"
 msgstr ""
 
 #: moxie/templates/header.html:22

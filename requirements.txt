@@ -2,3 +2,4 @@ Django==3.1.0
 django-filter
 mysqlclient
 django-mathfilters
+django-crispy-forms

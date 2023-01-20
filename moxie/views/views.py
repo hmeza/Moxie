@@ -1,10 +1,11 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
-from moxie.forms import CategoryForm, CategoryUpdateForm
+from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum
+from django.db.models.functions import Abs
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag
+from moxie.models import Transaction, Tag, Budget
 
 
 class CreateCategory(CreateView):
@@ -197,7 +198,15 @@ class ExpensesView(FilterView):
 		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
+		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
+		context['form'] = ExpensesForm()
+		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
+		context['budget'] = Budget.get_budget(1)
 		return context
+
+	def __get_category_amounts(self, expenses):
+		return expenses.values('category__name').order_by('category__name')\
+			.annotate(total=Abs(Sum('amount')))
 
 	# todo export to excel
 	# todo check if order and order by works properly

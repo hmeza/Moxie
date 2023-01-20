@@ -1,22 +1,19 @@
-    <?php
-
-        echo $this->partial('common/filter.phtml', array('search_form' => $this->search_form, 'is_search' => $this->is_search));
-    ?>
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
 
 <div style="margin-bottom: 25px">
     <div class="center-block" style="padding-left: 5px; padding-right: 5px;">
         <div id="search_title" class="btn btn-default center search_button" data-toggle="collapse" data-target="#search_form">
             <span id="search-toggle" class="glyphicon glyphicon-search p-0">
-                <?php
-                global $st_lang;
-                echo $st_lang['search_header'];
-                ?>
+                {% trans 'search_header' %}
             </span>
             <i class="glyphicon glyphicon-chevron-down center-block" style="height: 1.6rem; padding: 0px"></i>
         </div>
-        <span id="search_form" class="search_button_mobile accordion-body" <?php if ($this->is_search) { echo "style='display:block'"; } ?>>
-            {{ form }}
+        <span id="search_form" class="search_button_mobile accordion-body {% if is_search %}d-block{% endif %}">
+            {{ filter.form|crispy }}
+            <input type="submit">
         </span>
     </div>
 </div>
-<script type="text/javascript" src="/js/common/search.js?v=1"></script>
+<script type="text/javascript" src="{% static '/js/common/search.js' %}?v=1"></script>

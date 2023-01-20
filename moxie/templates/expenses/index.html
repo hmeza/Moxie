@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 <head>
 <script type="text/javascript" language="text/javascript">
     var baseUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>";
-	var year = <?php echo $this->year; ?>;
-	var month = <?php echo $this->month; ?>;
+	var year = {% now 'Y' %}
+	var month = {% now 'm' %}
 </script>
 </head>
 
 <a name="top">
 <div class="moxie-submenu">
-<div><a href="#data">Ir a gastos</a></div>
-<div><a href="#stats">Ir a estadísticas</a></div>
+<div><a href="#data">{% trans 'Go to expenses' %}</a></div>
+<div><a href="#stats">{% trans 'Go to stats' %}</a></div>
 </div>
 </a>
 

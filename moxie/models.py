@@ -2,117 +2,6 @@ from django.db import models
 import datetime
 
 
-class Budget(models.Model):
-    class Meta:
-        db_table = 'budgets'
-        # protected $_name = 'budgets';
-        # protected $_primary = 'id';
-
-    @staticmethod
-    def get_budget(user_id):
-        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True)
-
-    def getBudget(user_id):
-        data = Budget.get_budget(user_id)
-        return [{element['category']: element['amount']} for element in data]
-
-    @staticmethod
-    def getLastBudgetByCategoryId(category_id):
-        return Budget.objects.filter(category=category_id, date_ended_isnull=True)
-
-    @staticmethod
-    def snapshot(user_id):
-        currentBudget = Budget.get_budget(user_id)
-        currentBudget.date_ended = datetime.datetime.now()
-        pass
-    #
-    #
-    #     // mark current budget with end date
-    #     $st_data = array('date_ended'    => date('Y-m-d h:i:s'));
-    #     $this->_db->beginTransaction();
-    #     try {
-    #         $this->_db->update($this->_name, $st_data,
-    #             'user_owner = '.$user_id.' AND date_ended IS NULL');
-    #         // duplicate latest budget
-    #         foreach ($st_currentBudget as $key => $value) {
-    #             $st_data = array(
-    #                 'user_owner'    =>    $user_id,
-    #                 'category'        =>    $key,
-    #                 'amount'        =>    $value,
-    #                 'date_created'    =>    date('Y-m-d h:i:s')
-    #             );
-    #             $this->_db->insert($this->_name, $st_data);
-    #         }
-    #         $this->_db->commit();
-    #     }
-    #     catch (Exception $e) {
-    #         $this->_db->rollBack();
-    #         throw $e;
-    #     }
-    #     // finally get the current budget for this user
-    #     return $this->getBudget($user_id);
-    # }
-
-    def getYearBudgets(user_id, i_year=None):
-        if not i_year:
-            i_year = datetime.date.today().year
-        year_budget = []
-        for r in range(1, 13):
-            pass
-    #         $s_nextMonthDate = ($i == 12)
-    #                 ? strtotime('-1 day', mktime(23, 59, 59, 1, 1, $i_year+1))
-    #                 : strtotime('-1 day', mktime(23, 59, 59, $i+1, 1, $i_year));
-    #         $st_data = $this->_db->fetchAll(
-    #             $this->_db->select()
-    #                     ->from('budgets')
-    #                     ->where('user_owner = '.$user_id)
-    #                     ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
-    #                     ->where('unix_timestamp(date_created) <= '.$s_nextMonthDate)
-    #                     ->where('unix_timestamp(date_ended) >= '.$s_nextMonthDate.' OR date_ended IS NULL')
-    #                     ->order('date_created ASC')
-    #             );
-    #         if (empty($st_data)) {
-    #             $st_data = $this->_db->fetchAll(
-    #                 $this->_db->select()
-    #                         ->from('budgets')
-    #                         ->where('user_owner = '.$user_id)
-    #                         ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
-    #                         ->where('date_ended IS NULL')
-    #                         ->order('date_created ASC')
-    #                 );
-    #         }
-    #         $st_budget = array();
-    #         $s_currentDate = null;
-    #         foreach($st_data as $key => $value) {
-    #             $st_budget[$value['category']] = $value['amount'];
-    #         }
-    #         $st_yearBudget[$i] = $st_budget;
-    #     }
-    #     return $st_yearBudget;
-    # }
-
-    def getBudgetsDatesList():
-        return Budget.objects.all().filter()
-        #     $st_budgetsList = array();
-        #     $st_budgetsListObjects = $this->fetchAll(
-        #             $this->select()
-        #                     ->from("budgets", array('DISTINCT(date_created) as date_created'))
-        #                     ->where('user_owner = ?', $_SESSION['user_id'])
-        #                     ->where('date_ended IS NOT NULL')
-        #     );
-        #     foreach($st_budgetsListObjects as $target => $budget) {
-        #         $st_budgetsList[] = $budget->toArray();
-        #     }
-        #     return $st_budgetsList;
-        # }
-
-
-    def delete(user=None, date=None, *args, **kwargs):
-        if user and date:
-            return Budget.objects.all().filter(user_owner=user, date_created=date).delete()
-        return super().delete(*args, **kwargs)
-
-
 class Category(models.Model):
     EXPENSES = 1
     INCOMES = 2
@@ -402,6 +291,124 @@ class Category(models.Model):
 #         return true;
 #     }
 # }
+
+
+class Budget(models.Model):
+    class Meta:
+        db_table = 'budgets'
+        # protected $_name = 'budgets';
+        # protected $_primary = 'id';
+
+    user_owner = models.IntegerField(default=0)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
+    amount = models.FloatField(default=0)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    date_ended = models.DateTimeField()
+
+    @staticmethod
+    def get_budget(user_id):
+        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True)
+
+    def getBudget(user_id):
+        data = Budget.get_budget(user_id)
+        return [{element['category']: element['amount']} for element in data]
+
+    @staticmethod
+    def getLastBudgetByCategoryId(category_id):
+        return Budget.objects.filter(category=category_id, date_ended_isnull=True)
+
+    @staticmethod
+    def snapshot(user_id):
+        currentBudget = Budget.get_budget(user_id)
+        currentBudget.date_ended = datetime.datetime.now()
+        pass
+    #
+    #
+    #     // mark current budget with end date
+    #     $st_data = array('date_ended'    => date('Y-m-d h:i:s'));
+    #     $this->_db->beginTransaction();
+    #     try {
+    #         $this->_db->update($this->_name, $st_data,
+    #             'user_owner = '.$user_id.' AND date_ended IS NULL');
+    #         // duplicate latest budget
+    #         foreach ($st_currentBudget as $key => $value) {
+    #             $st_data = array(
+    #                 'user_owner'    =>    $user_id,
+    #                 'category'        =>    $key,
+    #                 'amount'        =>    $value,
+    #                 'date_created'    =>    date('Y-m-d h:i:s')
+    #             );
+    #             $this->_db->insert($this->_name, $st_data);
+    #         }
+    #         $this->_db->commit();
+    #     }
+    #     catch (Exception $e) {
+    #         $this->_db->rollBack();
+    #         throw $e;
+    #     }
+    #     // finally get the current budget for this user
+    #     return $this->getBudget($user_id);
+    # }
+
+    def getYearBudgets(user_id, i_year=None):
+        if not i_year:
+            i_year = datetime.date.today().year
+        year_budget = []
+        for r in range(1, 13):
+            pass
+    #         $s_nextMonthDate = ($i == 12)
+    #                 ? strtotime('-1 day', mktime(23, 59, 59, 1, 1, $i_year+1))
+    #                 : strtotime('-1 day', mktime(23, 59, 59, $i+1, 1, $i_year));
+    #         $st_data = $this->_db->fetchAll(
+    #             $this->_db->select()
+    #                     ->from('budgets')
+    #                     ->where('user_owner = '.$user_id)
+    #                     ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
+    #                     ->where('unix_timestamp(date_created) <= '.$s_nextMonthDate)
+    #                     ->where('unix_timestamp(date_ended) >= '.$s_nextMonthDate.' OR date_ended IS NULL')
+    #                     ->order('date_created ASC')
+    #             );
+    #         if (empty($st_data)) {
+    #             $st_data = $this->_db->fetchAll(
+    #                 $this->_db->select()
+    #                         ->from('budgets')
+    #                         ->where('user_owner = '.$user_id)
+    #                         ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
+    #                         ->where('date_ended IS NULL')
+    #                         ->order('date_created ASC')
+    #                 );
+    #         }
+    #         $st_budget = array();
+    #         $s_currentDate = null;
+    #         foreach($st_data as $key => $value) {
+    #             $st_budget[$value['category']] = $value['amount'];
+    #         }
+    #         $st_yearBudget[$i] = $st_budget;
+    #     }
+    #     return $st_yearBudget;
+    # }
+
+    def getBudgetsDatesList(self):
+        return Budget.objects.all().filter()
+        #     $st_budgetsList = array();
+        #     $st_budgetsListObjects = $this->fetchAll(
+        #             $this->select()
+        #                     ->from("budgets", array('DISTINCT(date_created) as date_created'))
+        #                     ->where('user_owner = ?', $_SESSION['user_id'])
+        #                     ->where('date_ended IS NOT NULL')
+        #     );
+        #     foreach($st_budgetsListObjects as $target => $budget) {
+        #         $st_budgetsList[] = $budget->toArray();
+        #     }
+        #     return $st_budgetsList;
+        # }
+
+
+    def delete(user=None, date=None, *args, **kwargs):
+        if user and date:
+            return Budget.objects.all().filter(user_owner=user, date_created=date).delete()
+        return super().delete(*args, **kwargs)
 
 
 class Transaction(models.Model):
