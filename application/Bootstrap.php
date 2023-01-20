@@ -86,7 +86,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 
 	protected function _initSessions() {
-	    $this->bootstrap('session');
+	    try {
+            $this->bootstrap('session');
+        }
+        catch(Exception $e) {
+	        error_log($e->getMessage());
+	        echo "Bootstrapping session failed: ".$e->getMessage();
+	        throw $e;
+        }
     }
 	
 	/**
