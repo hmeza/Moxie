@@ -1,3 +1,5 @@
+import datetime
+
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
@@ -185,8 +187,8 @@ class ExpensesView(FilterView):
 		import datetime
 		queryset = queryset.filter(user_owner=1)\
 			.filter(amount__lt=0)\
-			.filter(date__lt=datetime.datetime.strptime("2011-03-01", "%Y-%m-%d"))\
-			.filter(date__gte=datetime.datetime.strptime("2011-02-01", "%Y-%m-%d"))
+			.filter(date__lt=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-03-01", "%Y-%m-%d"))\
+			.filter(date__gte=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-02-01", "%Y-%m-%d"))
 		return queryset
 
 	def get_context_data(self, **kwargs):
@@ -207,6 +209,34 @@ class ExpensesView(FilterView):
 	def __get_category_amounts(self, expenses):
 		return expenses.values('category__name').order_by('category__name')\
 			.annotate(total=Abs(Sum('amount')))
+
+	def __get_navigation_links(self, date):
+		last_month = date - datetime.timedelta(days=31)
+	# <!--if($this->source == "expenses") {-->
+	# <!--    $last_month = ($this->month == 1) ? 12 : $this->month - 1;-->
+	# <!--    $last_year = ($this->month == 1) ? $this->year - 1 : $this->year;-->
+	# <!--    $next_month = ($this->month == 12) ? 1 : $this->month + 1;-->
+	# <!--    $next_year = ($this->month == 12) ? $this->year + 1 : $this->year;-->
+	# <!--    $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;-->
+	# <!--    $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;-->
+	# <!--    $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));-->
+	# <!--    // modify current month and year if we are in a search-->
+	# <!--    try {-->
+	# <!--        $first = $this->list->getRow(0);-->
+	# <!--        if (strtotime($first['date']) < strtotime(date('Y-m-01'))) {-->
+	# <!--            $current_month_and_year = date('M Y', strtotime($first['date']));-->
+	# <!--        }-->
+	# <!--    }-->
+	# <!--    catch(Exception $e) {-->
+	# <!--        // avoid error, previous and next will appear with current date-->
+	# <!--    }-->
+	# <!--}-->
+	# <!--else {-->
+	# # slugs for incomes
+	# <!--    $editSlug = '/incomes/edit/id/';-->
+	# <!--    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));-->
+	# <!--    $last_url = "/incomes/index/year/".($this->year-1);-->
+	# <!--    $next_url = "/incomes/index/year/".($this->year+1);-->
 
 	# todo export to excel
 	# todo check if order and order by works properly

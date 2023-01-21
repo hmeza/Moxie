@@ -1,58 +1,10 @@
 {% load mathfilters %}
-<!--echo $this->partial('common/data.phtml',-->
-<!--	array(-->
-<!--		'form'=>$this->form,-->
-<!--		'list'=>$this->list,-->
-<!--		'year'=>$this->year,-->
-<!--		'month'=>$this->month,-->
-<!--		'editSlug'  => '/expenses/edit/id/',-->
-<!--		'tag_list' => $this->tag_list,-->
-<!--		'used_tag_list' => $this->used_tag_list,-->
-<!--		'show_categories_filter' => $this->show_categories_filter,-->
-<!--		'show_tags_filter' => $this->show_tags_filter,-->
-<!--		'view' => $this->view,-->
-<!--		'o' => $this->o,-->
-<!--        'source' => 'expenses'-->
-<!--	)-->
-<!--);-->
-<!--?>-->
 
-<!--<?php-->
-<!--global $st_lang;-->
-<!--if($this->source == "expenses") {-->
-<!--    $last_month = ($this->month == 1) ? 12 : $this->month - 1;-->
-<!--    $last_year = ($this->month == 1) ? $this->year - 1 : $this->year;-->
-<!--    $next_month = ($this->month == 12) ? 1 : $this->month + 1;-->
-<!--    $next_year = ($this->month == 12) ? $this->year + 1 : $this->year;-->
-<!--    $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;-->
-<!--    $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;-->
-<!--    $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));-->
-<!--    // modify current month and year if we are in a search-->
-<!--    try {-->
-<!--        $first = $this->list->getRow(0);-->
-<!--        if (strtotime($first['date']) < strtotime(date('Y-m-01'))) {-->
-<!--            $current_month_and_year = date('M Y', strtotime($first['date']));-->
-<!--        }-->
-<!--    }-->
-<!--    catch(Exception $e) {-->
-<!--        // avoid error, previous and next will appear with current date-->
-<!--    }-->
-<!--}-->
-<!--else {-->
-<!--    $editSlug = '/incomes/edit/id/';-->
-<!--    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));-->
-<!--    $last_url = "/incomes/index/year/".($this->year-1);-->
-<!--    $next_url = "/incomes/index/year/".($this->year+1);-->
-
-<!--}-->
-<!--?>-->
 <table class="table table-bordered table-condensed table-hover" id="mytable" width="100%">
 <thead>
     <tr>
         <td colspan="5">
-        <?php
-        $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
-        ?>
+			{% include 'common/next_last_interval.html' with last_url=last_url next_url=next_url current_month_and_year=current_month_and_year %}
         </td>
     </tr>
 	<tr>

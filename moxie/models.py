@@ -16,7 +16,7 @@ class Category(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=False, null=False)
     type = models.SmallIntegerField()
-    order = models.SmallIntegerField()
+    # order = models.SmallIntegerField()
 
     # unused
     # public function editCategory($category_id, $name, $description) {
