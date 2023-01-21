@@ -196,7 +196,7 @@ class ExpensesView(FilterView):
 		queryset = self.get_queryset()
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['edit_slug'] = '/expenses/edit/id/'
+		context['edit_slug'] = '/expenses/'
 		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
@@ -264,6 +264,16 @@ class ExpensesView(FilterView):
 	#
 	# 	$this->assignViewData($st_list, $st_params);
 	# }
+
+
+class ExpenseView(UpdateView):
+	model = Transaction
+	form_class = ExpensesForm
+	template_name = 'expenses/index.html'
+
+	def get_success_url(self):
+		# todo get month and year for expense, get order, redirect
+		return reverse_lazy('expenses_edit')
 
 
 class AddExpense(CreateView):

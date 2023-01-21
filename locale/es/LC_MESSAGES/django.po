@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-20 14:44+0000\n"
+"POT-Creation-Date: 2023-01-21 17:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,9 +50,37 @@ msgstr ""
 msgid "Català"
 msgstr ""
 
+#: moxie/templates/common/data.html:13
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_category"
+msgstr "Gastado"
+
+#: moxie/templates/common/data.html:14
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_note"
+msgstr "Nota"
+
+#: moxie/templates/common/data.html:19
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_date"
+msgstr "Fecha"
+
+#: moxie/templates/common/data.html:28
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_amount"
+msgstr "Importe"
+
 #: moxie/templates/common/filter.html:9
 msgid "search_header"
 msgstr "Buscar"
+
+#: moxie/templates/common/to_top.html:4
+msgid "back_to_top"
+msgstr "Volver arriba"
 
 #: moxie/templates/expenses/data_header.html:7
 msgid "expenses_delete_message"
@@ -66,17 +94,23 @@ msgstr "Ir a gastos"
 msgid "Go to stats"
 msgstr "Ir a estadísticas"
 
-#: moxie/templates/expenses/stats.html:10
+#: moxie/templates/expenses/stats.html:11
 msgid "expenses_expended"
 msgstr "Gastado"
 
-#: moxie/templates/expenses/stats.html:43
+#: moxie/templates/expenses/stats.html:15
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses_budget"
+msgstr "Gastado"
+
+#: moxie/templates/expenses/stats.html:48
 #, fuzzy
 #| msgid "expenses_expended"
 msgid "expenses_monthly"
 msgstr "Gastado"
 
-#: moxie/templates/expenses/stats.html:44
+#: moxie/templates/expenses/stats.html:49
 msgid "expenses_by_months"
 msgstr ""
 
