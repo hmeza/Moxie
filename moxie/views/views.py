@@ -181,8 +181,6 @@ class ExpensesView(FilterView, CreateView):
 	model = Transaction
 	template_name = 'expenses/index.html'
 	filterset_class = ExpensesFilter
-	form_class = ExpensesForm
-	success_url = reverse_lazy('expenses')
 
 	def get_queryset(self):
 		queryset = super().get_queryset()
@@ -266,6 +264,13 @@ class ExpensesView(FilterView, CreateView):
 	#
 	# 	$this->assignViewData($st_list, $st_params);
 	# }
+
+
+class ExpenseAddView(CreateView):
+	model = Transaction
+	form_class = ExpensesForm
+	success_url = reverse_lazy('expenses')
+	template_name = 'expenses/index.html'
 
 
 class ExpenseView(UpdateView):
