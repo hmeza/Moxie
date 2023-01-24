@@ -21,7 +21,10 @@
 
 <div id="form">
     <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
-        {% crispy form %}
+        <form method="POST" action="/expenses/add/">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
     </div>
     <div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
         {% include 'common/filter.html' %}

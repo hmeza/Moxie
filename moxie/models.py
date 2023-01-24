@@ -18,6 +18,9 @@ class Category(models.Model):
     type = models.SmallIntegerField()
     # order = models.SmallIntegerField()
 
+    def __str__(self):
+        return self.name if self.name else ''
+
     # unused
     # public function editCategory($category_id, $name, $description) {
     #     try {
@@ -30,6 +33,14 @@ class Category(models.Model):
     #         error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
     #     }
     # }
+
+    @staticmethod
+    def get_categories_by_user(user):
+        return Category.objects \
+            .filter(user_owner=user.pk)\
+            .order_by('name') \
+            .all()
+#.order_by('order')\
 
 #     /**
 #      * Gets categories for a given user.
@@ -414,8 +425,6 @@ class Budget(models.Model):
 class Transaction(models.Model):
     class Meta:
         db_table = 'transactions'
-        # protected $_name = 'transactions';
-        # protected $_primary = 'id';
 
     user_owner = models.IntegerField(blank=False, null=False)
     amount = models.IntegerField(blank=False, null=False)

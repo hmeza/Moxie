@@ -8,6 +8,7 @@ from django.db.models import Sum
 from django.db.models.functions import Abs
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget
+from django.http import HttpResponseRedirect
 
 
 class CreateCategory(CreateView):
@@ -177,7 +178,7 @@ class DeleteCategory(DeleteView):
 # }
 
 
-class ExpensesView(FilterView, CreateView):
+class ExpensesView(FilterView):
 	model = Transaction
 	template_name = 'expenses/index.html'
 	filterset_class = ExpensesFilter
@@ -187,7 +188,7 @@ class ExpensesView(FilterView, CreateView):
 		import datetime
 		queryset = queryset.filter(user_owner=1)\
 			.filter(amount__lt=0)\
-			.filter(date__lt=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-03-01", "%Y-%m-%d"))\
+			.filter(date__lt=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-01-01", "%Y-%m-%d"))\
 			.filter(date__gte=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-02-01", "%Y-%m-%d"))
 		return queryset
 
@@ -201,7 +202,7 @@ class ExpensesView(FilterView, CreateView):
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
-		context['form'] = ExpensesForm()
+		context['form'] = ExpensesForm(self.request.user)
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
 		context['budget'] = Budget.get_budget(1)
 		return context
@@ -271,6 +272,12 @@ class ExpenseAddView(CreateView):
 	form_class = ExpensesForm
 	success_url = reverse_lazy('expenses')
 	template_name = 'expenses/index.html'
+
+	def form_valid(self, form):
+		transaction = form.save(commit=False)
+		transaction.user_owner = self.request.user
+		transaction.save()
+		return HttpResponseRedirect(self.get_success_url())
 
 
 class ExpenseView(UpdateView):
