@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.functions import Concat
+from django.db.models import F, Value
 import datetime
 
 
@@ -12,7 +14,7 @@ class Category(models.Model):
         # protected $_primary = 'id';
 
     user_owner = models.IntegerField(blank=False, null=False)
-    parent = models.IntegerField(blank=False, null=False)
+    parent = models.ForeignKey("Category", on_delete=models.PROTECT, blank=False, null=False, db_column='parent')
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=False, null=False)
     type = models.SmallIntegerField()
@@ -35,11 +37,25 @@ class Category(models.Model):
     # }
 
     @staticmethod
-    def get_categories_by_user(user):
-        return Category.objects \
-            .filter(user_owner=user.pk)\
-            .order_by('name') \
+    def get_categories():
+        # todo fix
+        user = User.objects.get(pk=1)
+        queries = Category.get_categories_by_user(user, include_incomes=False)
+        return tuple((q.id, q.category_name) for q in queries)
+
+    @staticmethod
+    def get_categories_by_user(user, include_expenses=True, include_incomes=True):
+        categories = Category.objects.all()
+        if not include_expenses:
+            categories = categories.exclude(type=Category.EXPENSES)
+        if not include_incomes:
+            categories = categories.exclude(type=Category.INCOMES)
+        categories = categories.filter(user_owner=user.pk)\
+            .select_related('parent')\
+            .annotate(category_name=Concat(F('parent__name'), Value(' - '), F('name')))\
+            .order_by('category_name') \
             .all()
+        return categories
 #.order_by('order')\
 
 #     /**
@@ -867,3 +883,18 @@ class Tag(models.Model):
     #         error_log(__METHOD__.": ".$e->getMessage());
     #     }
     # }
+
+
+# todo replace this with Django user
+class User(models.Model):
+    class Meta:
+        db_table = 'users'
+
+    login = models.CharField(max_length=12, blank=False, null=False)
+    password = ''
+    email = ''
+    language = ''
+    confirmed = ''
+    created_at = ''
+    updated_at = ''
+    last_login = ''

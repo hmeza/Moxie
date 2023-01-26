@@ -1,8 +1,8 @@
 from django.forms import Form, ModelForm, ModelChoiceField, CharField, FloatField, DateField
-from moxie.models import Category, Transaction
+from django import forms
+from moxie.models import Category, Transaction, User
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from moxie.filters import get_category_queryset
 from django.utils.translation import gettext as _
 
 
@@ -19,19 +19,22 @@ class CategoryUpdateForm(CategoryForm):
 
 
 class ExpensesForm(ModelForm):
-    category = ModelChoiceField(label=_('category'), queryset=Category.objects.none())
+    category = forms.ChoiceField(
+        label=_('category'),
+        choices=Category.get_categories,
+        widget=forms.Select(attrs={'class': 'select form-control'})
+    )
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
     amount = FloatField(label=_('amount'))
-    date = DateField(label=_('date'))
+    date = DateField(label=_('date'), widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = Transaction
         exclude = ['income_update', 'user_owner']
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.get_categories_by_user(user)
         self.helper = FormHelper()
         self.helper.form_id = 'id-exampleForm'
         self.helper.form_class = 'form-horizontal'
@@ -40,4 +43,4 @@ class ExpensesForm(ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
 
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', _('Save')))

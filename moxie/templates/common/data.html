@@ -82,9 +82,10 @@
     <span id="total">
         <span class="total_amount">{{ current_amount }} &euro;
         {% if current_amount|sub:current_amount != 0 %}
-            <br><span class="total_amount">{{ total_amount }} &euro;
+            <br><span class="total_amount">{{ total_amount }} &euro;</span>
         {% endif %}
-    </span></td>
+    </span>
+</td>
 </tr>
 </tbody>
 </table>

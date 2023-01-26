@@ -199,13 +199,21 @@ class ExpensesView(FilterView):
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['edit_slug'] = '/expenses/'
 		context['date_get'] = ''
+		context['current_month_and_year'] = self.__get_filter_date().strftime(format="%b %Y")
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
-		context['form'] = ExpensesForm(self.request.user)
+		context['form'] = ExpensesForm()
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
 		context['budget'] = Budget.get_budget(1)
 		return context
+
+	def __get_filter_date(self):
+		month = self.request.GET.get('month')
+		year = self.request.GET.get('year')
+		if month and year:
+			return datetime.datetime.strptime(__date_string=f"{year}-{month}-01", __format="%Y-%m-%d").date()
+		return datetime.date.today()
 
 	def __get_category_amounts(self, expenses):
 		return expenses.values('category__name').order_by('category__name')\
