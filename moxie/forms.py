@@ -19,10 +19,10 @@ class CategoryUpdateForm(CategoryForm):
 
 
 class ExpensesForm(ModelForm):
-    category = forms.ChoiceField(
+    category = forms.ModelChoiceField(
         label=_('category'),
-        choices=Category.get_categories,
-        widget=forms.Select(attrs={'class': 'select form-control'})
+        widget=forms.Select(attrs={'class': 'select form-control'}),
+        queryset=Category.get_categories()
     )
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))

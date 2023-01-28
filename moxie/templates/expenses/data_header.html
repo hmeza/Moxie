@@ -5,14 +5,12 @@
 <script type="text/javascript">
 	let deleteUrl = "/expenses/delete/id/";
     let deleteMessage = "{% trans 'expenses_delete_message' %}";
-	let tagList = [
-        {% for tag in tags %}
-            '{{ tag }}'
-        {% endfor %}
-    ];
+	let tagList = [{% for tag in tags %}
+        '{{ tag.name.replace }}',
+    {% endfor %}];
     let usedTagList = [
         {% for tag in used_tag_list %}
-            '{{ tag }}'
+            '{{ tag.name }}',
         {% endfor %}
     ];
     //let favourite_data = <?php echo $this->favourites_json; ?>;

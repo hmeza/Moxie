@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('expenses/<int:pk>/', ExpenseView.as_view(), name='expenses_edit'),
-    path('expenses/add/$', ExpenseAddView.as_view(), name='expenses_add'),
+    path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
     path('expenses/', ExpensesView.as_view(), name='expenses'),
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),

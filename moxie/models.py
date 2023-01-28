@@ -4,6 +4,21 @@ from django.db.models import F, Value
 import datetime
 
 
+# todo replace this with Django user
+class User(models.Model):
+    class Meta:
+        db_table = 'users'
+
+    login = models.CharField(max_length=12, blank=False, null=False)
+    password = ''
+    email = ''
+    language = ''
+    confirmed = ''
+    created_at = ''
+    updated_at = ''
+    last_login = ''
+
+
 class Category(models.Model):
     EXPENSES = 1
     INCOMES = 2
@@ -794,7 +809,7 @@ class Tag(models.Model):
     transaction_tags = None
     existing_tags = None
 
-    user_owner = models.IntegerField(blank=False, null=False)
+    user_owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, db_column='user_owner')
     name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -843,28 +858,23 @@ class Tag(models.Model):
     #     }
 	# }
 
-    def get_tags_by_user(self, user=None):
+    @staticmethod
+    def get_tags_by_user(user=None):
+        user = User.objects.get(pk=1)
         if not user:
             return []
-        queryset = Tag.objects.filter(user_owner=user)
-        return Tag.__get_tags_from_query(queryset)
+        return Tag.objects.filter(user_owner=user)
 
-    def get_tags_for_transaction(self, transaction):
-        queryset = Tag.objects.prefetch_related('transaction_tags')\
+    @staticmethod
+    def get_tags_for_transaction(transaction):
+        return Tag.objects.prefetch_related('transaction_tags')\
             .filter(transaction_tags__id_transaction=transaction)
-        return Tag.__get_tags_from_query(queryset)
 
-    def get_used_tags_by_user(self, user):
-        queryset = Tag.objects\
+    @staticmethod
+    def get_used_tags_by_user(user):
+        return Tag.objects\
             .select_related('transaction_tags')\
             .filter(user_owner=user).group('id').order_by('-name')
-        return Tag.__get_tags_from_query(queryset)
-
-    def __get_tags_from_query(self, queryset):
-        tags = {}
-        for tag in queryset.all():
-            tags[tag.id] = tag.name.replace("'", "\\'")
-        return tags
 
     # /**
     #  * @param int $userId
@@ -883,18 +893,3 @@ class Tag(models.Model):
     #         error_log(__METHOD__.": ".$e->getMessage());
     #     }
     # }
-
-
-# todo replace this with Django user
-class User(models.Model):
-    class Meta:
-        db_table = 'users'
-
-    login = models.CharField(max_length=12, blank=False, null=False)
-    password = ''
-    email = ''
-    language = ''
-    confirmed = ''
-    created_at = ''
-    updated_at = ''
-    last_login = ''
