@@ -8,8 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm, MyAccountForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum
-from django.db.models.functions import Abs
+from django.db.models import Sum, FloatField
+from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User
 from django.http import HttpResponseRedirect
@@ -221,6 +221,7 @@ class ExpensesView(FilterView, ListView):
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
 		context['form'] = ExpensesForm(self.request.user)
+		context['category_amounts'] = self.__get_category_amounts(queryset)
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
 		print(context['pie_data'])
 		context['month_expenses'] = self.__get_monthly_amounts(queryset)
@@ -230,7 +231,7 @@ class ExpensesView(FilterView, ListView):
 
 	def __get_category_amounts(self, expenses):
 		return expenses.values('category__name').order_by('category__name')\
-			.annotate(total=Abs(Sum('amount')))
+			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 	def __get_monthly_amounts(self, expenses):
 		# return expenses.values('')
