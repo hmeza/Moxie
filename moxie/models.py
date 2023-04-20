@@ -1,5 +1,63 @@
 from django.db import models
 import datetime
+from django.contrib.auth.models import AbstractUser
+
+
+from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+
+
+class CustomUserManager(BaseUserManager):
+    """
+    Custom user model manager where email is the unique identifiers
+    for authentication instead of usernames.
+    """
+    def create_user(self, email, password, **extra_fields):
+        """
+        Create and save a user with the given email and password.
+        """
+        if not email:
+            raise ValueError(_("The Email must be set"))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError(_("Superuser must have is_staff=True."))
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError(_("Superuser must have is_superuser=True."))
+        return self.create_user(email, password, **extra_fields)
+
+
+class User(AbstractUser):
+    id = models.IntegerField(primary_key=True, auto_created=True)
+    username = models.CharField(db_column='login', max_length=12, null=False, blank=False, default='', unique=True)
+    password = models.CharField(max_length=50, null=False, blank=False, default='')
+    email = models.CharField(max_length=255, null=False, blank=False, default='')
+    language = models.CharField(max_length=2, null=False, blank=False, default='es')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    last_login = models.DateTimeField(auto_now_add=True)
+    is_superuser = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
+
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
 
 class Category(models.Model):
@@ -7,38 +65,23 @@ class Category(models.Model):
     INCOMES = 2
     BOTH = 3
 
-    class Meta:
-        db_table = 'categories'
-        # protected $_primary = 'id';
-
-    user_owner = models.IntegerField(blank=False, null=False)
-    parent = models.IntegerField(blank=False, null=False)
+    user_owner = models.ForeignKey(User, db_column='user_owner', blank=False, null=False, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT, default=None
+    )
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=False, null=False)
     type = models.SmallIntegerField()
-    # order = models.SmallIntegerField()
+    order = models.SmallIntegerField(default=1)
 
     def __str__(self):
         return self.name if self.name else ''
 
-    # unused
-    # public function editCategory($category_id, $name, $description) {
-    #     try {
-    #         $query = $this->database->update('categories',
-    #             array(
-    #                 'name' => $name,
-    #                 'description' => $description
-    #             ));
-    #     } catch (Exception $e) {
-    #         error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
-    #     }
-    # }
-
     @staticmethod
-    def get_categories_by_user(user):
+    def get_categories_by_user(user, category_type=BOTH):
         return Category.objects \
-            .filter(user_owner=user.pk)\
-            .order_by('name') \
+            .filter(user_owner=user.pk, parent__isnull=False, type=category_type)\
+            .order_by('order', 'name') \
             .all()
 #.order_by('order')\
 
@@ -82,6 +125,14 @@ class Category(models.Model):
 #      * @author    hmeza
 #      * @return    array
 #      */
+    @staticmethod
+    def get_categories_tree(user):
+        data = Category.objects\
+            .filter(user_owner=user, name__isnull=True)\
+            .prefetch_related('subcategories', 'subcategories__subcategories')\
+            .order_by('subcategories__id')
+        print(data.query)
+        return data
 #     public function getCategoriesTree() {
 #         try {
 #             $query = $this->database->select()
@@ -305,11 +356,6 @@ class Category(models.Model):
 
 
 class Budget(models.Model):
-    class Meta:
-        db_table = 'budgets'
-        # protected $_name = 'budgets';
-        # protected $_primary = 'id';
-
     user_owner = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     amount = models.FloatField(default=0)
@@ -423,11 +469,8 @@ class Budget(models.Model):
 
 
 class Transaction(models.Model):
-    class Meta:
-        db_table = 'transactions'
-
     user_owner = models.IntegerField(blank=False, null=False)
-    amount = models.IntegerField(blank=False, null=False)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now=True)
@@ -583,66 +626,6 @@ class Transaction(models.Model):
 # }
 
 
-# /**
-#  * TransactionTags model.
-#  */
-# class TransactionTags extends Zend_Db_Table_Abstract {
-#     private $database;
-#     protected $_name = 'transaction_tags';
-#     protected $_primary = 'id';
-#
-#     public function __construct() {
-#         global $db;
-#         $this->database = $db;
-#         $this->_db = Zend_Registry::get('db');
-#     }
-#
-#     public function addTagToTransaction($transactionId, $tagId) {
-#         return $this->insert(array(
-#             'id_transaction' => $transactionId,
-#             'id_tag' => $tagId
-#         ));
-#     }
-#
-#     public function getTagsForTransaction($transactionId) {
-#         $select = $this->select()
-#                 ->setIntegrityCheck(false)
-#                 ->from(array('tt' => $this->_name), array())
-#                 ->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array('name'))
-#                 ->joinInner(array('tr' => 'transactions'), 'tr.id = tt.id_transaction', array())
-#                 ->where('tr.id = ?', $transactionId);
-#         $rows = $this->fetchAll($select)->toArray();
-#         $tags = array();
-#         foreach($rows as $row) {
-#             $tags[] = str_replace("'", "\'", $row['name']);
-#         }
-#         return $tags;
-#     }
-#
-#     /**
-#      * Removes tags from transactions.
-#      * @var int $transactionId
-#      * @var int|array $tags
-#      */
-#     public function removeTagsFromTransaction($transactionId) {
-#         $this->delete("id_transaction = ".$transactionId);
-#     }
-#
-#     /**
-#      * Removes relations between transactions and tags by tag id.
-#      * @param $tagId
-#      * @return int
-#      * @throws Zend_Db_Select_Exception
-#      */
-#     public function removeTagsByTagId($tagId) {
-#         $where = $this->select()
-#             ->where('id_tag = ?', $tagId)
-#             ->getPart(\Zend_Db_Table_Select::WHERE);
-#         return $this->delete($where);
-#     }
-# }
-
-
 # <?php
 #
 # class SharedExpenses extends Zend_Db_Table_Abstract {
@@ -772,13 +755,10 @@ class Transaction(models.Model):
 
 
 class Tag(models.Model):
-    class Meta:
-        db_table = 'tags'
-
     transaction_tags = None
     existing_tags = None
 
-    user_owner = models.IntegerField(blank=False, null=False)
+    user = models.IntegerField(db_column='user_owner', blank=False, null=False)
     name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -850,20 +830,44 @@ class Tag(models.Model):
             tags[tag.id] = tag.name.replace("'", "\\'")
         return tags
 
-    # /**
-    #  * @param int $userId
-    #  * @param string $tag
-    #  */
-    # public function deleteTag($userId, $tag) {
-    #     try {
-    #         $query = $this->select()
-    #             ->where('name = ?', $tag)
-    #             ->where('user_owner = ?', $userId);
-    #         $tag = $this->fetchRow($query);
-    #         $this->transactionTags->removeTagsByTagId($tag->id);
-    #         $tag->delete();
+    def get_tag(self, user_id=None, tag=None):
+        return self.objects.filter(user_owner=user_id, name=tag).first()
+
+
+class TransactionTag(models.Model):
+    transaction = models.ForeignKey(
+        Transaction, db_column='id_transaction', related_name='tags', on_delete=models.CASCADE
+    )
+    tag = models.ForeignKey(Tag, db_column='id_tag', related_name='transactions', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # public function getTagsForTransaction($transactionId) {
+    #     $select = $this->select()
+    #             ->setIntegrityCheck(false)
+    #             ->from(array('tt' => $this->_name), array())
+    #             ->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array('name'))
+    #             ->joinInner(array('tr' => 'transactions'), 'tr.id = tt.id_transaction', array())
+    #             ->where('tr.id = ?', $transactionId);
+    #     $rows = $this->fetchAll($select)->toArray();
+    #     $tags = array();
+    #     foreach($rows as $row) {
+    #         $tags[] = str_replace("'", "\'", $row['name']);
     #     }
-    #     catch(Exception $e) {
-    #         error_log(__METHOD__.": ".$e->getMessage());
-    #     }
+    #     return $tags;
     # }
+    #
+    # /**
+    #  * Removes tags from transactions.
+    #  * @var int $transactionId
+    #  * @var int|array $tags
+    #  */
+    # public function removeTagsFromTransaction($transactionId) {
+    #     $this->delete("id_transaction = ".$transactionId);
+    # }
+
+
+class Favourite(models.Model):
+    id_transaction = models.ForeignKey(Transaction, db_column='id_transaction', on_delete=models.PROTECT)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-21 17:09+0000\n"
+"POT-Creation-Date: 2023-04-19 22:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,35 +18,63 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: moxie/filters.py:7
+#: moxie/filters.py:14
+#, fuzzy
+#| msgid "amount"
+msgid "Minimum amount"
+msgstr "Importe"
+
+#: moxie/filters.py:15
+#, fuzzy
+#| msgid "amount"
+msgid "Maximum amount"
+msgstr "Importe"
+
+#: moxie/filters.py:17 moxie/forms.py:23
 msgid "category"
 msgstr "Categoría"
 
-#: moxie/filters.py:8
+#: moxie/filters.py:19 moxie/forms.py:24
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:9
+#: moxie/filters.py:20 moxie/forms.py:25
 msgid "note"
 msgstr "Nota"
 
-#: moxie/filters.py:10
-msgid "amount"
-msgstr "Importe"
-
-#: moxie/filters.py:11
+#: moxie/filters.py:21 moxie/forms.py:27
 msgid "date"
 msgstr "Fecha"
 
-#: moxie/settings.py:135
+#: moxie/forms.py:26
+msgid "amount"
+msgstr "Importe"
+
+#: moxie/forms.py:28
+msgid "in_sum"
+msgstr "Mostrar en \"Total\""
+
+#: moxie/models.py:21
+msgid "The Email must be set"
+msgstr "El campo Email debe ser rellenado"
+
+#: moxie/models.py:37
+msgid "Superuser must have is_staff=True."
+msgstr ""
+
+#: moxie/models.py:39
+msgid "Superuser must have is_superuser=True."
+msgstr ""
+
+#: moxie/settings.py:147
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:136
+#: moxie/settings.py:148
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:137
+#: moxie/settings.py:149
 msgid "Català"
 msgstr ""
 
@@ -54,7 +82,7 @@ msgstr ""
 #, fuzzy
 #| msgid "expenses_expended"
 msgid "expenses_category"
-msgstr "Gastado"
+msgstr "Categoría"
 
 #: moxie/templates/common/data.html:14
 #, fuzzy
@@ -74,6 +102,14 @@ msgstr "Fecha"
 msgid "expenses_amount"
 msgstr "Importe"
 
+#: moxie/templates/common/data.html:77
+msgid "Date"
+msgstr "Fecha"
+
+#: moxie/templates/common/data.html:80
+msgid "data_export"
+msgstr "Exportar"
+
 #: moxie/templates/common/filter.html:9
 msgid "search_header"
 msgstr "Buscar"
@@ -86,11 +122,11 @@ msgstr "Volver arriba"
 msgid "expenses_delete_message"
 msgstr "Borrar"
 
-#: moxie/templates/expenses/index.html:14
+#: moxie/templates/expenses/index.html:13
 msgid "Go to expenses"
 msgstr "Ir a gastos"
 
-#: moxie/templates/expenses/index.html:15
+#: moxie/templates/expenses/index.html:14
 msgid "Go to stats"
 msgstr "Ir a estadísticas"
 
@@ -108,20 +144,78 @@ msgstr "Gastado"
 #, fuzzy
 #| msgid "expenses_expended"
 msgid "expenses_monthly"
-msgstr "Gastado"
+msgstr "Gasto mensual"
 
 #: moxie/templates/expenses/stats.html:49
 msgid "expenses_by_months"
-msgstr ""
+msgstr "Mensual"
 
-#: moxie/templates/header.html:22
+#: moxie/templates/header.html:24
 msgid "logout"
 msgstr "Salir"
 
-#: moxie/templates/header.html:25
+#: moxie/templates/header.html:26
 msgid "index"
 msgstr "Inicio"
 
-#: moxie/templates/header.html:27
+#: moxie/templates/header.html:28
 msgid "about"
 msgstr "Acerca de"
+
+#: moxie/templates/login/registeruser.html:4
+msgid "registration_ok"
+msgstr ""
+
+#: moxie/templates/users/index.html:11
+msgid "myaccount_password_error"
+msgstr ""
+
+#: moxie/templates/users/index.html:23
+msgid "users_my_account"
+msgstr ""
+
+#: moxie/templates/users/index.html:24
+#, fuzzy
+#| msgid "category"
+msgid "categories"
+msgstr "Categoría"
+
+#: moxie/templates/users/index.html:25
+msgid "favourites_message"
+msgstr ""
+
+#: moxie/templates/users/index.html:26
+msgid "budget"
+msgstr ""
+
+#: moxie/templates/users/index.html:27
+msgid "tags_title"
+msgstr "Tags"
+
+#: moxie/views/views.py:209
+msgid "incomes"
+msgstr "Ingresos"
+
+#: moxie/views/views.py:210
+#, fuzzy
+#| msgid "expenses_expended"
+msgid "expenses"
+msgstr "Gastos"
+
+#: moxie/views/views.py:211
+#, fuzzy
+#| msgid "Go to stats"
+msgid "stats"
+msgstr "Estadísticas"
+
+#: moxie/views/views.py:212
+msgid "sheets"
+msgstr "Gastos compartidos"
+
+#: moxie/views/views.py:213
+msgid "users"
+msgstr "Configuración"
+
+#: moxie/views/views.py:672
+msgid "Login incorrect"
+msgstr "Autenticación incorrecta"

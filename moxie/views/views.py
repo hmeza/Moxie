@@ -1,13 +1,17 @@
 import datetime
-
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
-from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
+# login system
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
+
+from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm, MyAccountForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum
 from django.db.models.functions import Abs
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag, Budget
+from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User
 from django.http import HttpResponseRedirect
 
 
@@ -178,18 +182,27 @@ class DeleteCategory(DeleteView):
 # }
 
 
-class ExpensesView(FilterView):
+class ExpensesView(FilterView, ListView):
 	model = Transaction
 	template_name = 'expenses/index.html'
 	filterset_class = ExpensesFilter
 
+	def __get_dates_from_url(self):
+		return '', ''
+
 	def get_queryset(self):
+		start_date, end_date = self.__get_dates_from_url()
 		queryset = super().get_queryset()
-		import datetime
 		queryset = queryset.filter(user_owner=1)\
-			.filter(amount__lt=0)\
-			.filter(date__lt=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-01-01", "%Y-%m-%d"))\
-			.filter(date__gte=datetime.datetime.now(tz=datetime.timezone.utc).strptime("2011-02-01", "%Y-%m-%d"))
+			.filter(amount__lt=0)
+
+		if not start_date and not end_date:
+			start_date = datetime.date.today().replace(day=1)
+			end_date = datetime.date.today()
+			end_date = end_date.replace(month=end_date.month+1, day=1) - datetime.timedelta(days=1)
+			queryset = queryset\
+				.filter(date__lt=end_date)\
+				.filter(date__gte=start_date)
 		return queryset
 
 	def get_context_data(self, **kwargs):
@@ -199,17 +212,29 @@ class ExpensesView(FilterView):
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['edit_slug'] = '/expenses/'
 		context['date_get'] = ''
+		_('incomes')
+		_('expenses')
+		_('stats')
+		_('sheets')
+		_('users')
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
 		context['form'] = ExpensesForm(self.request.user)
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
+		print(context['pie_data'])
+		context['month_expenses'] = self.__get_monthly_amounts(queryset)
 		context['budget'] = Budget.get_budget(1)
+		context['current_month_and_year'] = "Junio"
 		return context
 
 	def __get_category_amounts(self, expenses):
 		return expenses.values('category__name').order_by('category__name')\
 			.annotate(total=Abs(Sum('amount')))
+
+	def __get_monthly_amounts(self, expenses):
+		# return expenses.values('')
+		return expenses.filter()
 
 	def __get_navigation_links(self, date):
 		last_month = date - datetime.timedelta(days=31)
@@ -267,7 +292,14 @@ class ExpensesView(FilterView):
 	# }
 
 
-class ExpenseAddView(CreateView):
+class UpdateTagsView:
+	def update_tags(self, tags, expense, user):
+		for tag_name in tags:
+			(tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
+			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
+
+
+class ExpenseAddView(CreateView, UpdateTagsView):
 	model = Transaction
 	form_class = ExpensesForm
 	success_url = reverse_lazy('expenses')
@@ -280,7 +312,7 @@ class ExpenseAddView(CreateView):
 		return HttpResponseRedirect(self.get_success_url())
 
 
-class ExpenseView(UpdateView):
+class ExpenseView(UpdateView, UpdateTagsView):
 	model = Transaction
 	form_class = ExpensesForm
 	template_name = 'expenses/index.html'
@@ -565,18 +597,7 @@ class ExpenseView(UpdateView):
 # 		}
 # 		exit(0);
 # 	}
-#
-# 	/**
-# 	 * @param array $tags
-# 	 * @param int $expenseId
-# 	 * @throws Exception
-# 	 */
-# 	private function updateTags($tags, $expenseId) {
-# 		foreach($tags as $tag) {
-#             $tagId = $this->tags->addTag($_SESSION['user_id'], $tag);
-# 			$this->transactionTags->addTagToTransaction($expenseId, $tagId);
-# 		}
-# 	}
+
 #
 # 	/**
 # 	 * Retrieves parameters from request.
@@ -627,3 +648,31 @@ class ExpenseView(UpdateView):
 # 		$this->view->assign('favourites_json', json_encode($this->expenses->getFavourites($_SESSION['user_id'])));
 # 	}
 # }
+
+
+class UserConfigurationView(ListView):
+	template_name = 'users/index.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context = super().get_context_data(*args, **kwargs)
+		context['my_account_form'] = MyAccountForm()
+		context['categories_form'] = None
+		user = User.objects.get(id=1)
+		print(user)
+		context['categories_list'] = Category.get_categories_tree(user=user)
+		return context
+
+	def get_queryset(self):
+		pass
+
+
+def login_view(request):
+	username = request.POST.get("username")
+	password = request.POST.get("password")
+	user = authenticate(request, username=username, password=password)
+	if user is not None and password is not None:
+		login(request, user)
+		return redirect(reverse_lazy('expenses'))
+	else:
+		# Return an 'invalid login' error message.
+		raise Exception(_("Login incorrect"))

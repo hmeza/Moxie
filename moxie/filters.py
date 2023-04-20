@@ -10,12 +10,13 @@ def get_category_queryset(request):
 
 
 class ExpensesFilter(django_filters.FilterSet):
+    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'))
+    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'))
     category = django_filters.ModelChoiceFilter(
         field_name='category', label=_('category'), queryset=get_category_queryset
     )
     tag = django_filters.CharFilter(field_name='tag', label=_('tag'))
     note = django_filters.CharFilter(field_name='note', label=_('note'))
-    amount = django_filters.NumericRangeFilter(field_name='amount', label=_('amount'))
     date = django_filters.DateRangeFilter(field_name='date', label=_('date'))
 
     class Meta:
