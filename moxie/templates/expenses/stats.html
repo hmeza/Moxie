@@ -43,8 +43,8 @@
 
 <script type="text/javascript">
     let pieData = {{ pie_data|safe }};
-    // let barChartData = <?php echo $this->month_expenses; ?>;
-    let barChartData = [["Month","En la suma total","Fuera del total"],["Jan",1629.41,0],["Feb",1209.11,0],["Mar",1721.59,0],["Apr",1799.17,0],["May",2148.78,0],["Jun",1248.46,0],["Jul",1316.78,0],["Aug",1797.03,0],["Sep",2690.11,2119],["Oct",1910.97,0],["Nov",1357.63,0],["Dec",1970.57,0],["Jan",1504.36,0]];
+    let barChartData = {{ month_expenses|safe }};
+    //let barChartData = [["Month","En la suma total","Fuera del total"],["Jan",1629.41,0],["Feb",1209.11,0],["Mar",1721.59,0],["Apr",1799.17,0],["May",2148.78,0],["Jun",1248.46,0],["Jul",1316.78,0],["Aug",1797.03,0],["Sep",2690.11,2119],["Oct",1910.97,0],["Nov",1357.63,0],["Dec",1970.57,0],["Jan",1504.36,0]];
     let pieTitle = "{% trans 'expenses_monthly' %}";
     let barTitle = "{% trans 'expenses_by_months' %}";
 </script>

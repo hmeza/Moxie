@@ -10,13 +10,13 @@
     </tr>
 	<tr>
 		<th class="list moxie_edit">&nbsp;</th>
-		<th class="list moxie_category">{% trans 'expenses_category' %}</th>
-		<th class="list moxie_note">{% trans 'expenses_note' %}</th>
+		<th class="list moxie_category">{% trans 'Category' %}</th>
+		<th class="list moxie_note">{% trans 'Note' %}</th>
         <th class="list moxie_date_inline sorting text-center">
             {% if month or year or o %}
                 <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
             {% endif %}
-            {% trans 'expenses_date' %}
+            {% trans 'Date' %}
             {% if month or year or o %}
                 </a>
             {% endif %}
@@ -25,7 +25,7 @@
             {% if month or year or o %}
                 <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
             {% endif %}
-            {% trans 'expenses_amount' %}
+            {% trans 'Amount' %}
             {% if month or year or o%}
                 </a>
             {% endif %}

@@ -8,8 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm, MyAccountForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum, FloatField
-from django.db.models.functions import Abs, Cast
+from django.db.models import Sum, FloatField, Count
+from django.db.models.functions import Abs, Cast, ExtractMonth
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User
 from django.http import HttpResponseRedirect
@@ -223,19 +223,38 @@ class ExpensesView(FilterView, ListView):
 		context['form'] = ExpensesForm(self.request.user)
 		context['category_amounts'] = self.__get_category_amounts(queryset)
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
-		print(context['pie_data'])
-		context['month_expenses'] = self.__get_monthly_amounts(queryset)
+		month_expenses = [list(a.values()) for a in self.__get_monthly_amounts(queryset)]
+		month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
+		for expense in month_expenses:
+			month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
+			month_expenses_list.append([month_name, expense[1], expense[2]])
+		context['month_expenses'] = month_expenses_list
 		context['budget'] = Budget.get_budget(1)
-		context['current_month_and_year'] = "Junio"
+		import calendar
+		context['current_month_and_year'] = calendar.month_name[datetime.date.today().month]
 		return context
 
 	def __get_category_amounts(self, expenses):
-		return expenses.values('category__name').order_by('category__name')\
+		# todo filter by current parameters month
+		today = datetime.date.today()
+		month = self.request.GET.get('month', today.month)
+		year = self.request.GET.get('year', today.year)
+		return Transaction.objects.filter(amount__lt=0, date__month=month, date__year=year)\
+			.values('category__name').order_by('category__name')\
 			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 	def __get_monthly_amounts(self, expenses):
-		# return expenses.values('')
-		return expenses.filter()
+		a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
+		q = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
+			.values_list('date__month')\
+			.annotate(
+				total_in_month=Cast(Abs(Sum('amount')), FloatField()),
+				total_out_month=Cast(Abs(Sum('amount')), FloatField())
+			)\
+			.values('date__month', 'total_in_month', 'total_out_month')\
+			.order_by('date__month')
+		print(q.query)
+		return q
 
 	def __get_navigation_links(self, date):
 		last_month = date - datetime.timedelta(days=31)

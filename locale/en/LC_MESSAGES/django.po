@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 22:41+0000\n"
+"POT-Creation-Date: 2023-04-20 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: moxie/filters.py:14
+#: moxie/filters.py:13
 msgid "Minimum amount"
 msgstr ""
 
-#: moxie/filters.py:15
+#: moxie/filters.py:14
 msgid "Maximum amount"
 msgstr ""
 
-#: moxie/filters.py:17 moxie/forms.py:23
+#: moxie/filters.py:16 moxie/forms.py:23
 msgid "category"
 msgstr ""
 
-#: moxie/filters.py:19 moxie/forms.py:24
+#: moxie/filters.py:18 moxie/forms.py:24
 msgid "tag"
 msgstr ""
 
-#: moxie/filters.py:20 moxie/forms.py:25
+#: moxie/filters.py:19 moxie/forms.py:25
 msgid "note"
 msgstr ""
 
-#: moxie/filters.py:21 moxie/forms.py:27
+#: moxie/filters.py:20 moxie/forms.py:27
 msgid "date"
 msgstr ""
 
@@ -75,23 +75,19 @@ msgid "Català"
 msgstr ""
 
 #: moxie/templates/common/data.html:13
-msgid "expenses_category"
-msgstr "Category"
-
-#: moxie/templates/common/data.html:14
-msgid "expenses_note"
+msgid "Category"
 msgstr ""
 
-#: moxie/templates/common/data.html:19
-msgid "expenses_date"
+#: moxie/templates/common/data.html:14
+msgid "Note"
+msgstr ""
+
+#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:77
+msgid "Date"
 msgstr ""
 
 #: moxie/templates/common/data.html:28
-msgid "expenses_amount"
-msgstr ""
-
-#: moxie/templates/common/data.html:77
-msgid "Date"
+msgid "Amount"
 msgstr ""
 
 #: moxie/templates/common/data.html:80
@@ -100,6 +96,10 @@ msgstr ""
 
 #: moxie/templates/common/filter.html:9
 msgid "search_header"
+msgstr ""
+
+#: moxie/templates/common/filter.html:16
+msgid "Filter"
 msgstr ""
 
 #: moxie/templates/common/to_top.html:4
@@ -174,28 +174,31 @@ msgstr ""
 msgid "tags_title"
 msgstr ""
 
-#: moxie/views/views.py:209
+#: moxie/views/views.py:215
 msgid "incomes"
 msgstr ""
 
-#: moxie/views/views.py:210
+#: moxie/views/views.py:216
 #, fuzzy
 #| msgid "expenses_monthly"
 msgid "expenses"
 msgstr "Monthly expense"
 
-#: moxie/views/views.py:211
+#: moxie/views/views.py:217
 msgid "stats"
 msgstr ""
 
-#: moxie/views/views.py:212
+#: moxie/views/views.py:218
 msgid "sheets"
 msgstr ""
 
-#: moxie/views/views.py:213
+#: moxie/views/views.py:219
 msgid "users"
 msgstr ""
 
-#: moxie/views/views.py:672
+#: moxie/views/views.py:680
 msgid "Login incorrect"
 msgstr ""
+
+#~ msgid "expenses_category"
+#~ msgstr "Category"
