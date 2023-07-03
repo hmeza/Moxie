@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-20 15:07+0000\n"
+"POT-Creation-Date: 2023-04-21 23:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,37 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: moxie/filters.py:13
+#: moxie/filters.py:16
 msgid "Minimum amount"
 msgstr ""
 
-#: moxie/filters.py:14
+#: moxie/filters.py:17
 msgid "Maximum amount"
 msgstr ""
 
-#: moxie/filters.py:16 moxie/forms.py:23
+#: moxie/filters.py:19 moxie/forms.py:25
 msgid "category"
 msgstr ""
 
-#: moxie/filters.py:18 moxie/forms.py:24
+#: moxie/filters.py:21 moxie/forms.py:26
 msgid "tag"
 msgstr ""
 
-#: moxie/filters.py:19 moxie/forms.py:25
+#: moxie/filters.py:22 moxie/forms.py:27
 msgid "note"
 msgstr ""
 
-#: moxie/filters.py:20 moxie/forms.py:27
+#: moxie/filters.py:23 moxie/forms.py:29
 msgid "date"
 msgstr ""
 
-#: moxie/forms.py:26
+#: moxie/forms.py:28
 msgid "amount"
 msgstr ""
 
-#: moxie/forms.py:28
+#: moxie/forms.py:30
 msgid "in_sum"
 msgstr ""
+
+#: moxie/forms.py:48
+#, fuzzy
+#| msgid "expenses_monthly"
+msgid "Add expense"
+msgstr "Monthly expense"
 
 #: moxie/models.py:21
 msgid "The Email must be set"
@@ -96,10 +102,6 @@ msgstr ""
 
 #: moxie/templates/common/filter.html:9
 msgid "search_header"
-msgstr ""
-
-#: moxie/templates/common/filter.html:16
-msgid "Filter"
 msgstr ""
 
 #: moxie/templates/common/to_top.html:4
@@ -196,7 +198,7 @@ msgstr ""
 msgid "users"
 msgstr ""
 
-#: moxie/views/views.py:680
+#: moxie/views/views.py:698
 msgid "Login incorrect"
 msgstr ""
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import datetime
 from django.contrib.auth.models import AbstractUser
 
@@ -8,56 +9,59 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 
-class CustomUserManager(BaseUserManager):
-    """
-    Custom user model manager where email is the unique identifiers
-    for authentication instead of usernames.
-    """
-    def create_user(self, email, password, **extra_fields):
-        """
-        Create and save a user with the given email and password.
-        """
-        if not email:
-            raise ValueError(_("The Email must be set"))
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
+# class CustomUserManager(BaseUserManager):
+#     """
+#     Custom user model manager where email is the unique identifiers
+#     for authentication instead of usernames.
+#     """
+#     def create_user(self, email, password, **extra_fields):
+#         """
+#         Create and save a user with the given email and password.
+#         """
+#         if not email:
+#             raise ValueError(_("The Email must be set"))
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, **extra_fields)
+#         user.set_password(password)
+#         user.save()
+#         return user
+#
+#     def create_superuser(self, email, password, **extra_fields):
+#         """
+#         Create and save a SuperUser with the given email and password.
+#         """
+#         extra_fields.setdefault("is_staff", True)
+#         extra_fields.setdefault("is_superuser", True)
+#         extra_fields.setdefault("is_active", True)
+#
+#         if extra_fields.get("is_staff") is not True:
+#             raise ValueError(_("Superuser must have is_staff=True."))
+#         if extra_fields.get("is_superuser") is not True:
+#             raise ValueError(_("Superuser must have is_superuser=True."))
+#         return self.create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
-        """
-        Create and save a SuperUser with the given email and password.
-        """
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_active", True)
 
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError(_("Superuser must have is_staff=True."))
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError(_("Superuser must have is_superuser=True."))
-        return self.create_user(email, password, **extra_fields)
-
-
-class User(AbstractUser):
-    id = models.IntegerField(primary_key=True, auto_created=True)
-    username = models.CharField(db_column='login', max_length=12, null=False, blank=False, default='', unique=True)
-    password = models.CharField(max_length=50, null=False, blank=False, default='')
-    email = models.CharField(max_length=255, null=False, blank=False, default='')
-    language = models.CharField(max_length=2, null=False, blank=False, default='es')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    last_login = models.DateTimeField(auto_now_add=True)
-    is_superuser = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.username
-
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = []
-
-    objects = CustomUserManager()
+# class User(AbstractUser):
+#     id = models.IntegerField(primary_key=True, auto_created=True)
+#     username = models.CharField(max_length=12, null=False, blank=False, default='', unique=True)
+#     password = models.CharField(max_length=50, null=False, blank=False, default='')
+#     email = models.CharField(max_length=255, null=False, blank=False, default='')
+#     language = models.CharField(max_length=2, null=False, blank=False, default='es')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     last_login = models.DateTimeField(auto_now_add=True)
+#     is_superuser = models.BooleanField(default=False)
+#
+#     def __str__(self):
+#         return self.username
+#
+#     USERNAME_FIELD = "username"
+#     REQUIRED_FIELDS = []
+#
+#     objects = CustomUserManager()
+#
+#     class Meta:
+#         db_table = 'auth_user'
 
 
 class Category(models.Model):
@@ -473,7 +477,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(default=None)
     in_sum = models.BooleanField(blank=False, null=False)
     income_update = models.DateTimeField(auto_now=True)
 

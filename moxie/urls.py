@@ -15,17 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, UserConfigurationView, login_view
+from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, UserConfigurationView, login_view,\
+    logout_view
 from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('expenses/<int:pk>/', ExpenseView.as_view(), name='expenses_edit'),
-    path('expenses/add/$', ExpenseAddView.as_view(), name='expenses_add'),
+    path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
     path('expenses/year/2023/month/4/', ExpensesView.as_view(), name='expenses_with_parameters'),
     path('expenses/', ExpensesView.as_view(), name='expenses'),
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('users', UserConfigurationView.as_view(), name='users'),
     path('login', login_view, name='login'),
+    path('logout', logout_view, name='logout'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),
 ]

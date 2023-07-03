@@ -1,7 +1,7 @@
 import datetime
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 # login system
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
@@ -325,11 +325,16 @@ class ExpenseAddView(CreateView, UpdateTagsView):
 	success_url = reverse_lazy('expenses')
 	template_name = 'expenses/index.html'
 
-	def form_valid(self, form):
-		transaction = form.save(commit=False)
-		transaction.user_owner = self.request.user
-		transaction.save()
-		return HttpResponseRedirect(self.get_success_url())
+	def get_form_kwargs(self):
+		return {
+			'user': self.request.user
+		}
+	#
+	# def form_valid(self, form):
+	# 	transaction = form.save(commit=False)
+	# 	transaction.user_owner = self.request.user
+	# 	transaction.save()
+	# 	return HttpResponseRedirect(self.get_success_url())
 
 
 class ExpenseView(UpdateView, UpdateTagsView):
@@ -696,3 +701,8 @@ def login_view(request):
 	else:
 		# Return an 'invalid login' error message.
 		raise Exception(_("Login incorrect"))
+
+
+def logout_view(request):
+	logout(request)
+	return HttpResponseRedirect(reverse_lazy('index'))

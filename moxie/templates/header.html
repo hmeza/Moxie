@@ -21,7 +21,7 @@
     {% for url in urls  %}
 		<li role="presentation {% if url in request.url %}active{% endif %}"><a href="/{{ url }}">{% trans url %}</a></li>
     {% endfor %}
-	<li role="presentation"><a href="'.$settingsUrl.'/login/logout">{% trans 'logout' %}</a></li>
+	<li role="presentation"><a href="{% url 'logout' %}">{% trans 'logout' %}</a></li>
 {% else %}
 	<li role="presentation"><a href="/">{% trans 'index' %}</a></li>
 	<!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
