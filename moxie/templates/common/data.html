@@ -81,7 +81,7 @@
 <td colspan=3 class="list list_money text-right">
     <span id="total">
         <span class="total_amount">{{ current_amount|default_if_none:"0.00" }} &euro;
-        {% if current_amount|sub:current_amount != 0 %}
+        {% if total_amount|sub:current_amount != 0 %}
             <br><span class="total_amount">{{ total_amount|default_if_none:"0.00" }} &euro;
         {% endif %}
     </span></td>
