@@ -1,8 +1,6 @@
 {% load static %}
 {% load i18n %}
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript" src="{% static '/js/expenses/stats.js' %}?v=10.6"></script>
 <div id="expenses_month"></div>
 
 <table class="table table-striped" id="mytable" width="100%">
@@ -48,6 +46,8 @@
     let pieTitle = "{% trans 'expenses_monthly' %}";
     let barTitle = "{% trans 'expenses_by_months' %}";
 </script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="{% static '/js/expenses/stats.js' %}?v=10.6"></script>
 
 <div id="expenses_all"></div>
 

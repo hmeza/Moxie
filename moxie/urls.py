@@ -25,6 +25,11 @@ urlpatterns = [
     path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
     path('expenses/year/2023/month/4/', ExpensesView.as_view(), name='expenses_with_parameters'),
     path('expenses/', ExpensesView.as_view(), name='expenses'),
+
+    # TODO
+    path('incomes/', ExpensesView.as_view(), name='incomes'),
+    path('stats/', ExpensesView.as_view(), name='stats'),
+
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('users', UserConfigurationView.as_view(), name='users'),
     path('login', login_view, name='login'),

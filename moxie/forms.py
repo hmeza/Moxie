@@ -20,16 +20,19 @@ class CategoryUpdateForm(CategoryForm):
 
 
 class ExpensesForm(ModelForm):
+    # todo add favorites
+    # todo add checkbox to add as favorite
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(), widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
     amount = FloatField(label=_('amount'))
     date = DateField(label=_('date'))
-    in_sum = BooleanField(label=_('in_sum'), initial=False)
+    in_sum = BooleanField(label=_('in_sum'), initial=False, required=False)
 
     class Meta:
         model = Transaction
-        exclude = ['income_update', 'user_owner']
+        fields = ['amount', 'note', 'date', 'category', 'in_sum']
+        exclude = ['user', 'income_update', 'tag']
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,12 +40,20 @@ class ExpensesForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_id = 'id-exampleForm'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
+        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
 
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', _('Add expense')))
+
+    def clean_in_sum(self):
+        self.cleaned_data['in_sum'] = 1 if self.data.get('in_sum') else 0
+        return self.cleaned_data['in_sum']
+
+    def clean_amount(self):
+        self.cleaned_data['amount'] = -self.cleaned_data['amount']
+        return self.cleaned_data['amount']
 
 
 class MyAccountForm(ModelForm):

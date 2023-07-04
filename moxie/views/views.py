@@ -193,7 +193,7 @@ class ExpensesView(FilterView, ListView):
 	def get_queryset(self):
 		start_date, end_date = self.__get_dates_from_url()
 		queryset = super().get_queryset()
-		queryset = queryset.filter(user_owner=1)\
+		queryset = queryset.filter(user=1)\
 			.filter(amount__lt=0)
 
 		if not start_date and not end_date:
@@ -319,6 +319,7 @@ class UpdateTagsView:
 			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
 
 
+# TODO VALIDATE THAT EXPENSE BELONGS TO USER
 class ExpenseAddView(CreateView, UpdateTagsView):
 	model = Transaction
 	form_class = ExpensesForm
@@ -326,15 +327,19 @@ class ExpenseAddView(CreateView, UpdateTagsView):
 	template_name = 'expenses/index.html'
 
 	def get_form_kwargs(self):
-		return {
-			'user': self.request.user
-		}
-	#
-	# def form_valid(self, form):
-	# 	transaction = form.save(commit=False)
-	# 	transaction.user_owner = self.request.user
-	# 	transaction.save()
-	# 	return HttpResponseRedirect(self.get_success_url())
+		kwargs = super().get_form_kwargs()
+		kwargs['user'] = self.request.user
+		return kwargs
+
+	def form_valid(self, form):
+		instance = form.save(commit=False)
+		instance.user_id = self.request.user.pk
+		instance.save()
+		return redirect(reverse_lazy('expenses'))
+
+
+class ExpenseDeleteView(DeleteView):
+	model = Transaction
 
 
 class ExpenseView(UpdateView, UpdateTagsView):

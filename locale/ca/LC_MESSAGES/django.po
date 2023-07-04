@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 23:28+0000\n"
+"POT-Creation-Date: 2023-07-04 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: moxie/auth/hashers.py:32
+msgid "algorithm"
+msgstr ""
+
+#: moxie/auth/hashers.py:33
+msgid "salt"
+msgstr ""
+
+#: moxie/auth/hashers.py:34
+msgid "hash"
+msgstr ""
 
 #: moxie/filters.py:16
 #, fuzzy
@@ -34,7 +46,7 @@ msgstr "Amount"
 msgid "category"
 msgstr "Category"
 
-#: moxie/filters.py:21 moxie/forms.py:26
+#: moxie/filters.py:21
 msgid "tag"
 msgstr "Tag"
 
@@ -60,32 +72,19 @@ msgstr ""
 msgid "Add expense"
 msgstr "Despeses"
 
-#: moxie/models.py:21
-msgid "The Email must be set"
-msgstr ""
-
-#: moxie/models.py:37
-msgid "Superuser must have is_staff=True."
-msgstr ""
-
-#: moxie/models.py:39
-msgid "Superuser must have is_superuser=True."
-msgstr ""
-
-#: moxie/settings.py:147
+#: moxie/settings.py:151
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:148
+#: moxie/settings.py:152
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:149
+#: moxie/settings.py:153
 msgid "Català"
 msgstr ""
 
 #: moxie/templates/common/data.html:13
-#| msgid "category"
 msgid "Category"
 msgstr "Categoria"
 
@@ -111,6 +110,10 @@ msgstr ""
 msgid "search_header"
 msgstr ""
 
+#: moxie/templates/common/filter.html:17
+msgid "filter_submit"
+msgstr ""
+
 #: moxie/templates/common/to_top.html:4
 msgid "back_to_top"
 msgstr ""
@@ -127,19 +130,19 @@ msgstr ""
 msgid "Go to stats"
 msgstr ""
 
-#: moxie/templates/expenses/stats.html:11
+#: moxie/templates/expenses/stats.html:9
 msgid "expenses_expended"
 msgstr ""
 
-#: moxie/templates/expenses/stats.html:15
+#: moxie/templates/expenses/stats.html:13
 msgid "expenses_budget"
 msgstr ""
 
-#: moxie/templates/expenses/stats.html:48
+#: moxie/templates/expenses/stats.html:46
 msgid "expenses_monthly"
 msgstr "Despesa mensual"
 
-#: moxie/templates/expenses/stats.html:49
+#: moxie/templates/expenses/stats.html:47
 msgid "expenses_by_months"
 msgstr "Per mes"
 
@@ -207,7 +210,7 @@ msgstr ""
 msgid "users"
 msgstr "Usuaris"
 
-#: moxie/views/views.py:698
+#: moxie/views/views.py:697
 msgid "Login incorrect"
 msgstr ""
 

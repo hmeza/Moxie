@@ -465,7 +465,6 @@ class Budget(models.Model):
         #     return $st_budgetsList;
         # }
 
-
     def delete(user=None, date=None, *args, **kwargs):
         if user and date:
             return Budget.objects.all().filter(user_owner=user, date_created=date).delete()
@@ -473,7 +472,7 @@ class Budget(models.Model):
 
 
 class Transaction(models.Model):
-    user_owner = models.IntegerField(blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)

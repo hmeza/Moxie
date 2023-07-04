@@ -12,11 +12,9 @@
         </div>
         <span id="search_form" class="search_button_mobile accordion-body {% if is_search %}d-block{% endif %}">
         <form method="GET" action="{% url 'expenses' %}">
-            {{ filter.form|crispy }}
-
-{#            <input type="submit" value="{% trans 'Filter' %}" class="btn btn-primary">#}
             {% csrf_token %}
-            {{ filter_form|crispy }}
+            {{ filter.form|crispy }}
+            <input type="submit" value="{% trans 'filter_submit' %}" class="btn btn-primary">
         </form>
         </span>
     </div>
