@@ -14,16 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, register_converter
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, UserConfigurationView, login_view,\
     logout_view
 from django.views.generic import TemplateView
+from . import converters
+
+
+register_converter(converters.FourDigitYearConverter, 'yyyy')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('expenses/<int:pk>/', ExpenseView.as_view(), name='expenses_edit'),
     path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
-    path('expenses/year/2023/month/4/', ExpensesView.as_view(), name='expenses_with_parameters'),
+    path(r'expenses/year/<yyyy:year>/month/<int:month>/', ExpensesView.as_view(), name='expenses_with_parameters'),
     path('expenses/', ExpensesView.as_view(), name='expenses'),
 
     # TODO

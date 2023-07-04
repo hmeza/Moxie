@@ -3,4 +3,5 @@ django-filter
 mysqlclient
 django-mathfilters
 django-crispy-forms
+python-dateutil
 #PyMySQL

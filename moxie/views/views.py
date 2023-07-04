@@ -1,4 +1,7 @@
 import datetime
+import calendar
+import re
+from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 # login system
 from django.contrib.auth import authenticate, login, logout
@@ -187,22 +190,47 @@ class ExpensesView(FilterView, ListView):
 	template_name = 'expenses/index.html'
 	filterset_class = ExpensesFilter
 
-	def __get_dates_from_url(self):
-		return '', ''
+	def __get_active_year_and_month(self):
+		url = self.request.path
+		if 'year' in url and 'month' in url:
+			groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
+			if groups:
+				year = groups.group(1)
+				month = groups.group(2)
+			else:
+				raise Exception(f"Dates not found in url {url}")
+		else:
+			current_date = datetime.date.today()
+			year = current_date.year
+			month = current_date.month
+		return year, month
+
+	def __get_last_year_and_month(self, year, month):
+		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
+		date = date - relativedelta(months=1)
+		return (date.year, date.month)
+
+	def __get_next_year_and_month(self, year, month):
+		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
+		date = date + relativedelta(months=1)
+		return (date.year, date.month)
 
 	def get_queryset(self):
-		start_date, end_date = self.__get_dates_from_url()
+		(year, month) = self.__get_active_year_and_month()
 		queryset = super().get_queryset()
 		queryset = queryset.filter(user=1)\
 			.filter(amount__lt=0)
 
-		if not start_date and not end_date:
+		if year and month:
+			start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
+			end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
+		else:
 			start_date = datetime.date.today().replace(day=1)
 			end_date = datetime.date.today()
 			end_date = end_date.replace(month=end_date.month+1, day=1) - datetime.timedelta(days=1)
-			queryset = queryset\
-				.filter(date__lt=end_date)\
-				.filter(date__gte=start_date)
+		queryset = queryset\
+			.filter(date__lt=end_date)\
+			.filter(date__gte=start_date)
 		return queryset
 
 	def get_context_data(self, **kwargs):
@@ -230,8 +258,14 @@ class ExpensesView(FilterView, ListView):
 			month_expenses_list.append([month_name, expense[1], expense[2]])
 		context['month_expenses'] = month_expenses_list
 		context['budget'] = Budget.get_budget(1)
-		import calendar
-		context['current_month_and_year'] = calendar.month_name[datetime.date.today().month]
+		year, month = self.__get_active_year_and_month()
+		context['year'] = year
+		context['month'] = month
+		context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
+		(last_year, last_month) = self.__get_last_year_and_month(year, month)
+		(next_year, next_month) = self.__get_next_year_and_month(year, month)
+		context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
+		context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
 		return context
 
 	def __get_category_amounts(self, expenses):
