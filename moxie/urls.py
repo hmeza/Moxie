@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, register_converter
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, UserConfigurationView, login_view,\
-    logout_view
+    logout_view, ExpenseDeleteView
 from django.views.generic import TemplateView
 from . import converters
 
@@ -26,6 +26,7 @@ register_converter(converters.FourDigitYearConverter, 'yyyy')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('expenses/<int:pk>/delete', ExpenseDeleteView.as_view(), name='expenses_edit'),
     path('expenses/<int:pk>/', ExpenseView.as_view(), name='expenses_edit'),
     path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
     path(r'expenses/year/<yyyy:year>/month/<int:month>/', ExpensesView.as_view(), name='expenses_with_parameters'),

@@ -220,7 +220,7 @@ class ExpensesView(FilterView, ListView):
 		start_date, end_date = self.__get_start_and_end_date()
 
 		queryset = super().get_queryset()
-		queryset = queryset.filter(user=1)\
+		queryset = queryset.filter(user=self.request.user)\
 			.filter(amount__lt=0)\
 			.filter(date__lt=end_date)\
 			.filter(date__gte=start_date)

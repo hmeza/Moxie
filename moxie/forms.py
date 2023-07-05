@@ -22,17 +22,18 @@ class CategoryUpdateForm(CategoryForm):
 class ExpensesForm(ModelForm):
     # todo add favorites
     # todo add checkbox to add as favorite
-    category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(), widget=forms.Select(attrs={'class': 'select form-control'}))
+    category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
+                                widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
     amount = FloatField(label=_('amount'))
-    date = DateField(label=_('date'))
-    in_sum = BooleanField(label=_('in_sum'), initial=False, required=False)
+    date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
+    in_sum = BooleanField(label=_('in_sum'), initial=True, required=False)
 
     class Meta:
         model = Transaction
-        fields = ['amount', 'note', 'date', 'category', 'in_sum']
-        exclude = ['user', 'income_update', 'tag']
+        fields = ['amount', 'note', 'date', 'category', 'tag', 'in_sum']
+        exclude = ['user', 'income_update']
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)

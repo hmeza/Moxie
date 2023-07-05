@@ -14,7 +14,7 @@
 		<th class="list moxie_note">{% trans 'Note' %}</th>
         <th class="list moxie_date_inline sorting text-center">
             {% if month or year or o %}
-                <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
+                <a href="/year/{{ year }}/month/{{ month }}/<?php echo $target . $date_filter; ?>">
             {% endif %}
             {% trans 'Date' %}
             {% if month or year or o %}
@@ -23,7 +23,7 @@
         </th>
         <th class="list moxie_amount sorting text-right">
             {% if month or year or o %}
-                <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
+                <a href="/year/{{ year }}/month/{{ month }}/<?php echo $target . $date_filter; ?>">
             {% endif %}
             {% trans 'Amount' %}
             {% if month or year or o%}
@@ -68,9 +68,6 @@
 {#		$s_currentExpenseDate = $expense_date;#}
 {#	}#}
 {##}
-{#	$f_totalAmount = $f_totalAmount + $value['amount'];#}
-{#	$f_currentAmount += ($value['in_sum'] == 1) ? $value['amount'] : 0;#}
-{#	$b_showTotalAmount = ($value['in_sum'] != 1) || $b_showTotalAmount;#}
 {#}#}
 
     <tr>
