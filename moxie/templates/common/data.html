@@ -53,7 +53,7 @@
     <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
     <td class="moxie_note">{{ object.note }}</td>
     <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
-    <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount }} &euro;</div></td>
+    <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
     </tr>
 {% endfor %}
 
@@ -80,9 +80,9 @@
 <td colspan=2><button class="btn btn-default btn-xs" id="export_to_excel_button" value="{% trans 'data_export' %}" onclick="export_to_excel()">{% trans 'data_export' %}</button></td>
 <td colspan=3 class="list list_money text-right">
     <span id="total">
-        <span class="total_amount">{{ current_amount|default_if_none:"0.00" }} &euro;
+        <span class="total_amount">{{ current_amount|default_if_none:"0.00"|abs }} &euro;
         {% if total_amount|sub:current_amount != 0 %}
-            <br><span class="total_amount">{{ total_amount|default_if_none:"0.00" }} &euro;
+            <br><span class="total_amount">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
         {% endif %}
     </span></td>
 </tr>

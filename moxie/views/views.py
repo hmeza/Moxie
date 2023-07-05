@@ -208,30 +208,34 @@ class ExpensesView(FilterView, ListView):
 	def __get_last_year_and_month(self, year, month):
 		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
 		date = date - relativedelta(months=1)
-		return (date.year, date.month)
+		return date.year, date.month
 
 	def __get_next_year_and_month(self, year, month):
 		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
 		date = date + relativedelta(months=1)
-		return (date.year, date.month)
+		return date.year, date.month
 
 	def get_queryset(self):
-		(year, month) = self.__get_active_year_and_month()
+
+		start_date, end_date = self.__get_start_and_end_date()
+
 		queryset = super().get_queryset()
 		queryset = queryset.filter(user=1)\
-			.filter(amount__lt=0)
+			.filter(amount__lt=0)\
+			.filter(date__lt=end_date)\
+			.filter(date__gte=start_date)
+		return queryset
 
+	def __get_start_and_end_date(self):
+		(year, month) = self.__get_active_year_and_month()
 		if year and month:
 			start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
 			end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
 		else:
 			start_date = datetime.date.today().replace(day=1)
 			end_date = datetime.date.today()
-			end_date = end_date.replace(month=end_date.month+1, day=1) - datetime.timedelta(days=1)
-		queryset = queryset\
-			.filter(date__lt=end_date)\
-			.filter(date__gte=start_date)
-		return queryset
+			end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
+		return start_date, end_date
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -262,10 +266,11 @@ class ExpensesView(FilterView, ListView):
 		context['year'] = year
 		context['month'] = month
 		context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
-		(last_year, last_month) = self.__get_last_year_and_month(year, month)
-		(next_year, next_month) = self.__get_next_year_and_month(year, month)
+		last_year, last_month = self.__get_last_year_and_month(year, month)
+		next_year, next_month = self.__get_next_year_and_month(year, month)
 		context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
 		context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
+		context['edit_url'] = reverse_lazy('expenses_add')
 		return context
 
 	def __get_category_amounts(self, expenses):
@@ -290,28 +295,6 @@ class ExpensesView(FilterView, ListView):
 		print(q.query)
 		return q
 
-	def __get_navigation_links(self, date):
-		last_month = date - datetime.timedelta(days=31)
-	# <!--if($this->source == "expenses") {-->
-	# <!--    $last_month = ($this->month == 1) ? 12 : $this->month - 1;-->
-	# <!--    $last_year = ($this->month == 1) ? $this->year - 1 : $this->year;-->
-	# <!--    $next_month = ($this->month == 12) ? 1 : $this->month + 1;-->
-	# <!--    $next_year = ($this->month == 12) ? $this->year + 1 : $this->year;-->
-	# <!--    $last_url = "/expenses/index/month/" . $last_month . "/year/" . $last_year;-->
-	# <!--    $next_url = "/expenses/index/month/" . $next_month . "/year/" . $next_year;-->
-	# <!--    $current_month_and_year = date("M Y", strtotime("01-" . $this->month . "-" . $this->year));-->
-	# <!--    // modify current month and year if we are in a search-->
-	# <!--    try {-->
-	# <!--        $first = $this->list->getRow(0);-->
-	# <!--        if (strtotime($first['date']) < strtotime(date('Y-m-01'))) {-->
-	# <!--            $current_month_and_year = date('M Y', strtotime($first['date']));-->
-	# <!--        }-->
-	# <!--    }-->
-	# <!--    catch(Exception $e) {-->
-	# <!--        // avoid error, previous and next will appear with current date-->
-	# <!--    }-->
-	# <!--}-->
-	# <!--else {-->
 	# # slugs for incomes
 	# <!--    $editSlug = '/incomes/edit/id/';-->
 	# <!--    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));-->
@@ -381,9 +364,30 @@ class ExpenseView(UpdateView, UpdateTagsView):
 	form_class = ExpensesForm
 	template_name = 'expenses/index.html'
 
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs['user'] = self.request.user
+		return kwargs
+
+	def form_invalid(self, form):
+		print(form.errors)
+		print(form.data['amount'])
+		response = super().form_invalid(form)
+		return response
+
 	def get_success_url(self):
 		# todo get month and year for expense, get order, redirect
-		return reverse_lazy('expenses_edit')
+		return reverse_lazy('expenses')
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['edit_url'] = self.request.path
+		return context
+
+	def __get_transaction_id(self):
+		url = self.request.path
+		groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
+		return groups.group(1)
 
 
 # 	/**

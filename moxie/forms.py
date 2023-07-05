@@ -47,6 +47,9 @@ class ExpensesForm(ModelForm):
 
         self.helper.add_input(Submit('submit', _('Add expense')))
 
+        if self.initial.get('amount'):
+            self.initial['amount'] = -self.initial.get('amount')
+
     def clean_in_sum(self):
         self.cleaned_data['in_sum'] = 1 if self.data.get('in_sum') else 0
         return self.cleaned_data['in_sum']
