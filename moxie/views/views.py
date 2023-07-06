@@ -360,6 +360,10 @@ class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
 
 class ExpenseDeleteView(DeleteView):
 	model = Transaction
+	success_url = reverse_lazy('expenses')
+
+	def get(self, request, *args, **kwargs):
+		return self.delete(request, *args, **kwargs)
 
 
 class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
@@ -401,105 +405,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		return groups.group(1)
 
 
-# 	/**
-# 	 * Adds an expense and shows expenses index again
-# 	 * @author	hmeza
-# 	 */
-# 	public function addAction() {
-# 		$st_form = $this->getRequest()->getPost();
-# 		if(empty($st_form['amount'])) {
-#             $this->_helper->redirector('index','expenses');
-#         }
-# 		$st_form['amount'] = str_replace(",",".",$st_form['amount']);
-# 		$st_form['date'] = str_replace('/', '-', $st_form['date']);
-# 		if(empty($st_form['category'])) {
-# 			throw new Exception("Empty category not allowed for expenses");
-# 		}
-# 		if(empty($_SESSION['user_id'])) {
-# 			$this->redirect('/index');
-# 		}
-# 		try {
-# 			$expenseId = $this->expenses->addExpense($_SESSION['user_id'], $st_form);
-# 			$tags = $this->getRequest()->getParam('tags', array());
-# 			if (!empty($tags)) {
-# 				$this->updateTags(explode(",", $tags), $expenseId);
-#             }
-# 		}
-# 		catch(Zend_Db_Statement_Exception $e) {
-#             error_log(__METHOD__.": ".$e->getMessage());
-# 			throw new Exception("Error adding expense");
-# 		}
-# 		$this->_helper->redirector('index','expenses');
-# 	}
-#
-# 	/**
-# 	 * Edits a given expense
-# 	 * @author	hmeza
-# 	 */
-# 	public function editAction() {
-# 		$i_expensePK = $this->getRequest()->getParam('id');
-# 		// retrieve data to fill the form
-# 		$st_expense = $this->expenses->getExpenseByPK($i_expensePK);
-# 		if($st_expense['user_owner'] != $_SESSION['user_id']) {
-# 			throw new Exception("Access error");
-# 		}
-#
-# 		$st_params = $this->getParameters();
-#
-# 		$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
-#
-# 		if (isset($st_params['o'])) {
-# 			$st_params['o'] = "-".$st_params['o'];
-# 		}
-#
-# 		$this->assignViewData($st_list, $st_params, $st_expense);
-# 		$this->view->assign('tags', $this->transactionTags->getTagsForTransaction($i_expensePK));
-# 		$this->render('index');
-# 	}
-#
-# 	/**
-# 	 * Updates an expense
-# 	 */
-# 	public function updateAction() {
-# 		$st_params = $this->getRequest()->getPost();
-# 		$i_expensePK = $st_params['id'];
-#
-#         // retrieve data to perform user check
-#         $st_expense = $this->expenses->getExpenseByPK($i_expensePK);
-#         if($st_expense['user_owner'] != $_SESSION['user_id']) {
-#             throw new Exception("Access error");
-#         }
-#
-# 		$originalExpenseDate = explode("-", $st_expense['date']);
-# 		$this->transactionTags->removeTagsFromTransaction($i_expensePK);
-# 		if(!empty($st_params['tags'])) {
-# 			$this->updateTags(
-# 					explode(",", $st_params['tags']),
-# 					$i_expensePK
-# 			);
-# 		}
-#
-# 		$this->expenses->updateExpense($st_params);
-# 		$this->getResponse()->setRedirect('/expenses/index/month/'.$originalExpenseDate[1].'/year/'.$originalExpenseDate[0]);
-# 	}
-#
-# 	/**
-# 	 * Deletes an expense.
-# 	 */
-# 	public function deleteAction() {
-# 		$i_expensePK = $this->getRequest()->getParam('id');
-# 		try {
-# 			$this->transactionTags->getAdapter()->beginTransaction();
-# 			$this->favourites->deleteByTransactionId($i_expensePK);
-# 			$this->transactionTags->removeTagsFromTransaction($i_expensePK);
-# 			$this->expenses->delete($i_expensePK, $_SESSION['user_id']);
-# 			$this->transactionTags->getAdapter()->commit();
-# 		} catch (Exception $e) {
-# 			error_log(__METHOD__.": ".$e->getMessage());
-# 			$this->transactionTags->getAdapter()->rollBack();
-# 		}
-# 		$this->_helper->redirector('index','expenses');
-# 	}
 #
 # 	/**
 # 	 * This function generates the form to add expenses.

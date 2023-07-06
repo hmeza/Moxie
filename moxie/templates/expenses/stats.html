@@ -9,10 +9,9 @@
     <td align="right">{% trans 'expenses_expended' %}</td>
 
 {% if budget %}
-    <tr>
     <td align="right">{% trans 'expenses_budget' %}</td>
-    </tr>
-
+{% endif %}
+</tr>
 <!--$total = 0;-->
 <!--$budget_total = 0;-->
 <!--foreach ($this->expenses as $key => $data) {-->
@@ -36,13 +35,11 @@
 <!--    $budget_color = ($budget_total <= $total) ? '#FF0000' : '#00FF00';-->
 <!--    $s_out .= '<td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';-->
 <!--}-->
-{% endif %}
-</tr></table>
+</table>
 
 <script type="text/javascript">
-    let pieData = {{ pie_data|safe }};
-    let barChartData = {{ month_expenses|safe }};
-    //let barChartData = [["Month","En la suma total","Fuera del total"],["Jan",1629.41,0],["Feb",1209.11,0],["Mar",1721.59,0],["Apr",1799.17,0],["May",2148.78,0],["Jun",1248.46,0],["Jul",1316.78,0],["Aug",1797.03,0],["Sep",2690.11,2119],["Oct",1910.97,0],["Nov",1357.63,0],["Dec",1970.57,0],["Jan",1504.36,0]];
+    let pieData = {% if pie_data %}{{ pie_data|safe }}{% else %}[]{% endif %};
+    let barChartData = {% if month_expenses %}{{ month_expenses|safe }}{% else %}[["Month", "En la suma total", "Fuera del total"],["Jan",0,0]]{% endif %};
     let pieTitle = "{% trans 'expenses_monthly' %}";
     let barTitle = "{% trans 'expenses_by_months' %}";
 </script>

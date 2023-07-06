@@ -23,9 +23,24 @@
     <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
         <form method="POST" action="{{ edit_url }}">
             {% crispy form %}
+            {% if object.pk %}
+                <button id="expense_delete" class="btn btn-danger" onclick="window.location.href='{% url 'expenses_delete' object.pk %}/delete'">{% trans 'Delete' %}</button>
+            {% endif %}
         </form>
     </div>
     <div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
         {% include 'common/filter.html' %}
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // TODO do this modifying form classes
+        let expenseDeleteSelector = $('#expense_delete');
+        if(expenseDeleteSelector !== undefined) {
+            let submitParent = $('#submit-id-submit').parent();
+            submitParent.addClass('text-right');
+            submitParent.siblings().first().append(expenseDeleteSelector);
+        }
+    });
+</script>

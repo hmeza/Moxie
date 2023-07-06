@@ -26,7 +26,7 @@ register_converter(converters.FourDigitYearConverter, 'yyyy')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('expenses/<int:pk>/delete', ExpenseDeleteView.as_view(), name='expenses_edit'),
+    path('expenses/<int:pk>/delete', ExpenseDeleteView.as_view(), name='expenses_delete'),
     path('expenses/<int:pk>/', ExpenseView.as_view(), name='expenses_edit'),
     path('expenses/add/', ExpenseAddView.as_view(), name='expenses_add'),
     path(r'expenses/year/<yyyy:year>/month/<int:month>/', ExpensesView.as_view(), name='expenses_with_parameters'),
