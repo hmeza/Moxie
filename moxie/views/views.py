@@ -185,12 +185,31 @@ class DeleteCategory(DeleteView):
 # }
 
 
-class ExpensesView(FilterView, ListView):
-	model = Transaction
-	template_name = 'expenses/index.html'
+class TransactionListView(FilterView):
 	filterset_class = ExpensesFilter
 
-	def __get_active_year_and_month(self):
+	def get_queryset(self):
+		start_date, end_date = self.__get_start_and_end_date()
+
+		queryset = super().get_queryset()
+		queryset = queryset.filter(user=self.request.user)\
+			.filter(amount__lt=0)\
+			.filter(date__lt=end_date)\
+			.filter(date__gte=start_date)
+		return queryset
+
+	def __get_start_and_end_date(self):
+		(year, month) = self._get_active_year_and_month()
+		if year and month:
+			start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
+			end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
+		else:
+			start_date = datetime.date.today().replace(day=1)
+			end_date = datetime.date.today()
+			end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
+		return start_date, end_date
+
+	def _get_active_year_and_month(self):
 		url = self.request.path
 		if 'year' in url and 'month' in url:
 			groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
@@ -205,6 +224,11 @@ class ExpensesView(FilterView, ListView):
 			month = current_date.month
 		return year, month
 
+
+class ExpensesView(TransactionListView, ListView):
+	model = Transaction
+	template_name = 'expenses/index.html'
+
 	def __get_last_year_and_month(self, year, month):
 		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
 		date = date - relativedelta(months=1)
@@ -214,28 +238,6 @@ class ExpensesView(FilterView, ListView):
 		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
 		date = date + relativedelta(months=1)
 		return date.year, date.month
-
-	def get_queryset(self):
-
-		start_date, end_date = self.__get_start_and_end_date()
-
-		queryset = super().get_queryset()
-		queryset = queryset.filter(user=self.request.user)\
-			.filter(amount__lt=0)\
-			.filter(date__lt=end_date)\
-			.filter(date__gte=start_date)
-		return queryset
-
-	def __get_start_and_end_date(self):
-		(year, month) = self.__get_active_year_and_month()
-		if year and month:
-			start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
-			end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
-		else:
-			start_date = datetime.date.today().replace(day=1)
-			end_date = datetime.date.today()
-			end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
-		return start_date, end_date
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -262,7 +264,7 @@ class ExpensesView(FilterView, ListView):
 			month_expenses_list.append([month_name, expense[1], expense[2]])
 		context['month_expenses'] = month_expenses_list
 		context['budget'] = Budget.get_budget(1)
-		year, month = self.__get_active_year_and_month()
+		year, month = self._get_active_year_and_month()
 		context['year'] = year
 		context['month'] = month
 		context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
@@ -359,7 +361,7 @@ class ExpenseDeleteView(DeleteView):
 	model = Transaction
 
 
-class ExpenseView(UpdateView, UpdateTagsView):
+class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 	model = Transaction
 	form_class = ExpensesForm
 	template_name = 'expenses/index.html'
@@ -370,6 +372,7 @@ class ExpenseView(UpdateView, UpdateTagsView):
 		return kwargs
 
 	def form_invalid(self, form):
+		# TODO FIX PROBLEM WHEN ADDING DECIMALS
 		print(form.errors)
 		print(form.data['amount'])
 		response = super().form_invalid(form)
