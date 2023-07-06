@@ -1,3 +1,5 @@
+import datetime
+
 from django.forms import ModelForm, ModelChoiceField, CharField, FloatField, DateField, DateTimeField, \
     ChoiceField, BooleanField
 from django import forms
@@ -50,6 +52,10 @@ class ExpensesForm(ModelForm):
 
         if self.initial.get('amount'):
             self.initial['amount'] = -self.initial.get('amount')
+        if self.initial.get('date'):
+            self.initial['date'] = self.initial['date'].date
+        else:
+            self.initial['date'] = datetime.date.today()
 
     def clean_in_sum(self):
         self.cleaned_data['in_sum'] = 1 if self.data.get('in_sum') else 0
