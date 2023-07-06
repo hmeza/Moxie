@@ -871,6 +871,6 @@ class TransactionTag(models.Model):
 
 
 class Favourite(models.Model):
-    id_transaction = models.ForeignKey(Transaction, db_column='id_transaction', on_delete=models.PROTECT)
+    transaction = models.ForeignKey(Transaction, on_delete=models.PROTECT, null=False, blank=False, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

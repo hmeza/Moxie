@@ -14,7 +14,7 @@ from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Count
 from django.db.models.functions import Abs, Cast, ExtractMonth
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User
+from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User, Favourite
 from django.http import HttpResponseRedirect
 
 
@@ -338,8 +338,7 @@ class UpdateTagsView:
 			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
 
 
-# TODO VALIDATE THAT EXPENSE BELONGS TO USER
-class ExpenseAddView(CreateView, UpdateTagsView):
+class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
 	model = Transaction
 	form_class = ExpensesForm
 	success_url = reverse_lazy('expenses')
@@ -354,6 +353,8 @@ class ExpenseAddView(CreateView, UpdateTagsView):
 		instance = form.save(commit=False)
 		instance.user_id = self.request.user.pk
 		instance.save()
+		if form.data.get('favourite'):
+			Favourite.objects.get_or_create(transaction=instance)
 		return redirect(reverse_lazy('expenses'))
 
 
@@ -370,6 +371,13 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		kwargs = super().get_form_kwargs()
 		kwargs['user'] = self.request.user
 		return kwargs
+
+	def form_valid(self, form):
+		# TODO VALIDATE THAT EXPENSE BELONGS TO USER
+		response = super().form_valid(form)
+		if form.data.get('favourite'):
+			Favourite.objects.get_or_create(transaction=form.instance)
+		return response
 
 	def form_invalid(self, form):
 		# TODO FIX PROBLEM WHEN ADDING DECIMALS
