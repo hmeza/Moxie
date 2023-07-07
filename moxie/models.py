@@ -365,11 +365,11 @@ class Budget(models.Model):
     amount = models.FloatField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    date_ended = models.DateTimeField()
+    date_ended = models.DateTimeField(blank=True, null=True)
 
     @staticmethod
     def get_budget(user_id):
-        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True)
+        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True).last()
 
     def getBudget(user_id):
         data = Budget.get_budget(user_id)
@@ -476,7 +476,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)
-    date = models.DateField(default=None)
+    date = models.DateTimeField(default=None)
     in_sum = models.BooleanField(blank=False, null=False)
     income_update = models.DateTimeField(auto_now=True)
 

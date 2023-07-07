@@ -396,7 +396,7 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['edit_url'] = self.request.path
+		context['edit_slug'] = '/expenses/'
 		return context
 
 	def __get_transaction_id(self):
