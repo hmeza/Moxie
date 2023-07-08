@@ -43,17 +43,15 @@
 {#		<th class="list moxie_date_inline sorting text-center"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></th>#}
 {#		<th class="list moxie_amount sorting text-right"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></th>#}
 	</tr>
-	</thead>
-{#<?php#}
-{#$s_currentExpenseDate = '';#}
+</thead>
 <tbody>
 {% for object in object_list %}
     <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
-    <td class="moxie_edit"><a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}"><div class="moxieicon moxieedit"></div></a></td>
-    <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
-    <td class="moxie_note">{{ object.note }}</td>
-    <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
-    <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
+        <td class="moxie_edit"><a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}"><div class="moxieicon moxieedit"></div></a></td>
+        <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
+        <td class="moxie_note">{{ object.note }}</td>
+        <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
+        <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
     </tr>
 {% endfor %}
 
@@ -79,7 +77,7 @@
     <span id="total">
         <span class="total_amount">{{ current_amount|default_if_none:"0.00"|abs }} &euro;
         {% if total_amount|sub:current_amount != 0 %}
-            <br><span class="total_amount">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
+            <br><span class="" style="color:#777777">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
         {% endif %}
     </span></td>
 </tr>
