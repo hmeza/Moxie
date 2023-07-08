@@ -1,7 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
+from django.db.models.fields.related import ForeignKey
+from django.db.models.functions import Abs, Cast, ExtractMonth
+from django.db.models import Sum, FloatField, Count, F
 import datetime
-from django.contrib.auth.models import AbstractUser
 
 
 from django.contrib.auth.base_user import BaseUserManager
@@ -360,7 +362,7 @@ class Category(models.Model):
 
 
 class Budget(models.Model):
-    user_owner = models.IntegerField(default=0)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='budgets')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     amount = models.FloatField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -369,7 +371,21 @@ class Budget(models.Model):
 
     @staticmethod
     def get_budget(user_id):
-        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True).last()
+        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True)
+
+    @staticmethod
+    def get_budget_for_month(user, year, month):
+        qq = Transaction.objects\
+            .prefetch_related('user', 'user__budgets', 'category') \
+            .filter(date__year=year, date__month=month, user=user)\
+            .filter(user__budgets__user=user, user__budgets__date_ended__isnull=True, user__budgets__category=F('category')) \
+            .values('category')\
+            .annotate(category_group=Count('category'))\
+            .annotate(transaction_total=Cast(Sum('amount'), FloatField()))\
+            .values('transaction_total', 'category__name', 'user__budgets__amount', 'category_group')\
+            .order_by('category')
+        print(qq.query)
+        return qq
 
     def getBudget(user_id):
         data = Budget.get_budget(user_id)
@@ -472,7 +488,7 @@ class Budget(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)

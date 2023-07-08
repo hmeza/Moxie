@@ -263,8 +263,11 @@ class ExpensesView(TransactionListView, ListView):
 			month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
 			month_expenses_list.append([month_name, expense[1], expense[2]])
 		context['month_expenses'] = month_expenses_list
-		context['budget'] = Budget.get_budget(1)
 		year, month = self._get_active_year_and_month()
+		budget = Budget.get_budget_for_month(self.request.user, year, month)
+		context['budget'] = budget
+		context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
+		context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
 		context['year'] = year
 		context['month'] = month
 		context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
@@ -294,14 +297,7 @@ class ExpensesView(TransactionListView, ListView):
 			)\
 			.values('date__month', 'total_in_month', 'total_out_month')\
 			.order_by('date__month')
-		print(q.query)
 		return q
-
-	# # slugs for incomes
-	# <!--    $editSlug = '/incomes/edit/id/';-->
-	# <!--    $current_month_and_year = date("Y", strtotime("01-01-".$this->year));-->
-	# <!--    $last_url = "/incomes/index/year/".($this->year-1);-->
-	# <!--    $next_url = "/incomes/index/year/".($this->year+1);-->
 
 	# todo export to excel
 	# todo check if order and order by works properly
