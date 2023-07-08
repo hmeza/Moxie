@@ -14,6 +14,11 @@ def get_category_queryset(request):
 
 
 class ExpensesFilter(django_filters.FilterSet):
+    class SubmitLightBlue(Submit):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.field_classes = 'btn btn-info'
+
     amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'))
     amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'))
     category = django_filters.ModelChoiceFilter(
@@ -41,4 +46,4 @@ class ExpensesFilter(django_filters.FilterSet):
         # self.form.helper.form_method = 'post'
         # self.form.helper.form_action = ''
 
-        self.form.helper.add_input(Submit('submit', _('filter_submit')))
+        self.form.helper.add_input(ExpensesFilter.SubmitLightBlue('submit', _('filter_submit')))
