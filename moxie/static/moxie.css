@@ -722,3 +722,7 @@ div.moxie_expenses_form_right table {
 	margin-top: 2rem;
     margin-bottom: 3rem;
 }
+
+.form-group {
+	margin-bottom: 1px;
+}
