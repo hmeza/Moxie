@@ -39,7 +39,7 @@ class ExpensesForm(ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.get_categories_by_user(user)
+        self.fields['category'].queryset = Category.get_categories_tree(user)
         self.helper = FormHelper()
         self.helper.form_id = 'id-exampleForm'
         self.helper.form_class = 'form-horizontal'

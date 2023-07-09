@@ -14,7 +14,7 @@
 </tr>
     {% for budget_line in budget %}
     <tr>
-        <td><a href="">{{ budget_line.category__name }}</a></td>
+        <td><a href="/expenses/?csrfmiddlewaretoken={{ csrf_token }}&category={{ budget_line.category__id }}">{{ budget_line.category__name }}</a></td>
         <td class="text-right">{{ budget_line.transaction_total|abs|floatformat:2 }} &euro;</td>
         <td class="text-right" style="color: {% if budget_line.transaction_total < budget_line.user__budgets__amount %}#00FF00{% else %}#FF0000{% endif %}">{{ budget_line.user__budgets__amount|abs|floatformat:2 }} &euro;</td>
     </tr>

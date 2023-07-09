@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from django.db.models.fields.related import ForeignKey
-from django.db.models.functions import Abs, Cast, ExtractMonth
-from django.db.models import Sum, FloatField, Count, F
+from django.db.models.functions import Cast, Concat
+from django.db.models import Sum, FloatField, Count, F, Q, Value
 import datetime
 
 
@@ -73,7 +72,8 @@ class Category(models.Model):
 
     user_owner = models.ForeignKey(User, db_column='user_owner', blank=False, null=False, on_delete=models.CASCADE)
     parent = models.ForeignKey(
-        "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT, default=None
+        "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT,
+        default=None
     )
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=False, null=False)
@@ -89,7 +89,6 @@ class Category(models.Model):
             .filter(user_owner=user.pk, parent__isnull=False, type=category_type)\
             .order_by('order', 'name') \
             .all()
-#.order_by('order')\
 
 #     /**
 #      * Gets categories for a given user.
@@ -126,129 +125,28 @@ class Category(models.Model):
 #         return $stmt->fetchAll();
 #     }
 #
-#     /**
-#      * @desc    Get 3 level categories tree, only with leaves
-#      * @author    hmeza
-#      * @return    array
-#      */
+
+    def __str__(self):
+        if self.parent.parent is None:
+            return self.name
+        else:
+            return self.parent.name + " - " + self.name
+
     @staticmethod
-    def get_categories_tree(user):
-        data = Category.objects\
-            .filter(user_owner=user, name__isnull=True)\
-            .prefetch_related('subcategories', 'subcategories__subcategories')\
-            .order_by('subcategories__id')
-        print(data.query)
+    def get_type_filter(include_expenses, include_incomes):
+        return (Category.EXPENSES if include_expenses else 0) + (Category.INCOMES if include_incomes else 0)
+
+    @staticmethod
+    def get_categories_tree(user, expenses=True, incomes=False):
+        type_filter = Category.get_type_filter(expenses, incomes)
+        data = Category.objects.select_related('parent')\
+            .filter(user_owner=user)\
+            .filter(Q(type=type_filter)|Q(type=Category.BOTH))\
+            .filter(Q(parent__isnull=False))\
+            .annotate(cat_name=Concat(F('name'), Value('-'), F('parent__name')))\
+            .order_by('order')
         return data
-#     public function getCategoriesTree() {
-#         try {
-#             $query = $this->database->select()
-#                 ->from(array('c1'=>'categories'), array(
-#                     'id1'    =>    'c1.id',
-#                     'name1'    =>    'c1.name',
-#                     'id2'    =>    'c2.id',
-#                     'name2'    =>    'c2.name',
-#                     'id3'    =>    'c3.id',
-#                     'name3'    =>    'c3.name'
-#                 ))
-#                 ->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
-#                 ->joinLeft(array('c3'=>'categories'),'c3.parent = c2.id',array())
-#                 ->where('c1.user_owner = ?', $_SESSION['user_id'])
-#                 ->where('c1.name IS NULL')
-#                 ->order('c2.id');
-#             $stmt = $this->database->query($query);
-#             return $stmt->fetchAll();
-#         }
-#         catch (Exception $e) {
-#             error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
-#         }
-#         return array();
-#     }
-#
-#     public function getCategoriesForView($i_typeFilter) {
-#         // get categories and prepare them for view
-#         $s_categories = $this->getCategoriesByUser($i_typeFilter);
-#         $formCategories = array();
-#         foreach($s_categories as $key => $value) {
-#             $formCategories[$value['id1']] = $value['name2'];
-#             if (!empty($value['name1'])) {
-#                 $formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-#             }
-#         }
-#         return $formCategories;
-#     }
-#
-#     public function getCategoriesForSelect($i_typeFilter) {
-#         global $st_lang;
-#         // get categories and prepare them for view
-#         $s_categories = $this->getCategoriesByUser($i_typeFilter);
-#         // get root category
-#         $st_parent = $this->fetchRow($this->select()
-#             ->where('user_owner = '.$_SESSION['user_id'])
-#             ->where('parent IS NULL'));
-#
-#         $formCategories = array();
-#         $formCategories[$st_parent->id] = $st_lang['category_new'];
-#         foreach($s_categories as $key => $value) {
-#             $formCategories[$value['id1']] = $value['name2'];
-#             if (!empty($value['name1'])) {
-#                 $formCategories[$value['id1']] = $value['name1'].' - '.$formCategories[$value['id1']];
-#             }
-#         }
-#         return $formCategories;
-#     }
-#
-#     /**
-#      * Returns the list of categories mounted as a tree.
-#      * @param array $st_categories
-#      * @return array
-#      */
-#     public function mountCategoryTree($st_categories, $i_userId) {
-#         $st_parent = $this->fetchRow($this->select()
-#                 ->where('user_owner = '.$i_userId)
-#                 ->where('parent IS NULL'));
-#         $st_root = array(
-#                 'id1'        =>    $st_parent->id,
-#                 'parent1'    =>    null,
-#                 'name1'        =>    null,
-#                 'name2'        =>    'New category'
-#         );
-#         $st_parentCategories = array();
-#         $st_parentCategories[] = $st_root;
-#         foreach ($st_categories as $key => $value) {
-#             $st_parentCategories[] = $value;
-#         }
-#         return $st_parentCategories;
-#     }
-#
-#     /**
-#      * Mount the category tree for the current budget.
-#      * @param array $st_categories
-#      * @return array
-#      */
-#     public function prepareCategoriesTree($st_categories) {
-#         $st_preparedTree = array();
-#         foreach($st_categories as $key => $value) {
-#             if (empty($value['id3'])) {
-#                 $i_key = null;
-#                 $st_value = null;
-#             }
-#             if (!empty($value['id3']) && $i_key == null) {
-#                 $i_key = $value['id2'];
-#                 $st_parentLine = array(
-#                         'id1'    =>    $value['id1'],
-#                         'name1'    =>    $value['name1'],
-#                         'id2'    =>    $value['id2'],
-#                         'name2'    =>    $value['name2'],
-#                         'id3'    =>    null,
-#                         'name3'    =>    null
-#                 );
-#                 $st_preparedTree[] = $st_parentLine;
-#             }
-#             $st_preparedTree[] = $value;
-#         }
-#         return $st_preparedTree;
-#     }
-#
+
 #     /**
 #      * @param $i_lastInsertId
 #      * @return boolean
@@ -375,17 +273,16 @@ class Budget(models.Model):
 
     @staticmethod
     def get_budget_for_month(user, year, month):
-        qq = Transaction.objects\
+        queryset = Transaction.objects\
             .prefetch_related('user', 'user__budgets', 'category') \
             .filter(date__year=year, date__month=month, user=user)\
             .filter(user__budgets__user=user, user__budgets__date_ended__isnull=True, user__budgets__category=F('category')) \
             .values('category')\
             .annotate(category_group=Count('category'))\
             .annotate(transaction_total=Cast(Sum('amount'), FloatField()))\
-            .values('transaction_total', 'category__name', 'user__budgets__amount', 'category_group')\
+            .values('transaction_total', 'category__name', 'user__budgets__amount', 'category_group', 'category__id')\
             .order_by('category')
-        print(qq.query)
-        return qq
+        return queryset
 
     def getBudget(user_id):
         data = Budget.get_budget(user_id)

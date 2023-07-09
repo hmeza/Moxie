@@ -224,6 +224,11 @@ class TransactionListView(FilterView):
 			month = current_date.month
 		return year, month
 
+	def get_filterset_kwargs(self, filterset_class):
+		kwargs = super().get_filterset_kwargs(filterset_class)
+		kwargs['user'] = self.request.user
+		return kwargs
+
 
 class ExpensesView(TransactionListView, ListView):
 	model = Transaction
@@ -253,7 +258,6 @@ class ExpensesView(TransactionListView, ListView):
 		_('users')
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
-		context['filter'] = self.filterset_class(self.request.GET, queryset=queryset)
 		context['form'] = ExpensesForm(self.request.user)
 		context['category_amounts'] = self.__get_category_amounts(queryset)
 		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
@@ -643,9 +647,7 @@ class UserConfigurationView(ListView):
 		context = super().get_context_data(*args, **kwargs)
 		context['my_account_form'] = MyAccountForm()
 		context['categories_form'] = None
-		user = User.objects.get(id=1)
-		print(user)
-		context['categories_list'] = Category.get_categories_tree(user=user)
+		context['categories_list'] = Category.get_categories_tree(user=self.request.user)
 		return context
 
 	def get_queryset(self):

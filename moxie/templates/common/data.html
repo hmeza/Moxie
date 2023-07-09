@@ -48,7 +48,7 @@
 {% for object in object_list %}
     <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
         <td class="moxie_edit"><a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}"><div class="moxieicon moxieedit"></div></a></td>
-        <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
+        <td class="moxie_category"><div alt="{{ object.category.description }}" title="{{ object.category.description }}">{{ object.category.name }}</div></td>
         <td class="moxie_note">{{ object.note }}</td>
         <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
         <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
