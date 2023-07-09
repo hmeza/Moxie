@@ -190,13 +190,17 @@ class TransactionListView(FilterView):
 
 	def get_queryset(self):
 		start_date, end_date = self.__get_start_and_end_date()
+		order_field = self.__get_order_field()
 
 		queryset = super().get_queryset()
 		queryset = queryset.filter(user=self.request.user)\
-			.filter(amount__lt=0)\
-			.filter(date__lt=end_date)\
-			.filter(date__gte=start_date)
+			.filter(amount__lt=0, date__lt=end_date, date__gte=start_date)\
+			.order_by(order_field)
+
 		return queryset
+
+	def __get_order_field(self):
+		return self.request.GET.get('order', '-date')
 
 	def __get_start_and_end_date(self):
 		(year, month) = self._get_active_year_and_month()
