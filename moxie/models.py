@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from django.db.models.functions import Cast, Concat
+from django.db.models.functions import Cast, Concat, ExtractYear
 from django.db.models import Sum, FloatField, Count, F, Q, Value
 import datetime
 
@@ -131,6 +131,15 @@ class Category(models.Model):
             return self.name
         else:
             return self.parent.name + " - " + self.name
+
+    @property
+    def type_name(self):
+        if self.type == Category.EXPENSES:
+            return _('Expense')
+        elif self.type == Category.INCOMES:
+            return _('Income')
+        else:
+            return _('Both')
 
     @staticmethod
     def get_type_filter(include_expenses, include_incomes):
@@ -378,7 +387,7 @@ class Budget(models.Model):
         #     return $st_budgetsList;
         # }
 
-    def delete(user=None, date=None, *args, **kwargs):
+    def delete(self, user=None, date=None, *args, **kwargs):
         if user and date:
             return Budget.objects.all().filter(user_owner=user, date_created=date).delete()
         return super().delete(*args, **kwargs)
@@ -393,6 +402,21 @@ class Transaction(models.Model):
     in_sum = models.BooleanField(blank=False, null=False)
     income_update = models.DateTimeField(auto_now=True)
 
+    @staticmethod
+    def get_year_incomes(user, expenses=True, incomes=False):
+        queryset = Transaction.objects.filter(user=user)
+        if incomes and not expenses:
+            queryset = queryset.filter(amount__gte=0)
+        elif expenses and not incomes:
+            queryset = queryset.filter(amount__lt=0)
+        queryset = queryset\
+            .values(year=ExtractYear('date'))\
+            .filter(year__gt=1900)\
+            .annotate(year_group=Count(F('year')))\
+            .annotate(sum_amount=Cast(Sum('amount'), FloatField()))\
+            .order_by('year')\
+            .values_list('year', 'sum_amount')
+        return queryset
 
 # <?php
 #

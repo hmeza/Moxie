@@ -284,6 +284,7 @@ class ExpensesView(TransactionListView, ListView):
 		context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
 		context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
 		context['edit_url'] = reverse_lazy('expenses_add')
+		context['filter_url_name'] = 'expenses'
 		return context
 
 	def __get_category_amounts(self, expenses):
@@ -407,6 +408,7 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['edit_slug'] = '/expenses/'
+		context['filter_url_name'] = 'expenses'
 		return context
 
 	def __get_transaction_id(self):
@@ -644,18 +646,25 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 # }
 
 
-class UserConfigurationView(ListView):
+class UserConfigurationView(ListView, CreateView):
+	model = Category
 	template_name = 'users/index.html'
+	form_class = MyAccountForm
 
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		context['my_account_form'] = MyAccountForm()
-		context['categories_form'] = None
+		context['categories_form'] = CategoryForm(self.request.user)
 		context['categories_list'] = Category.get_categories_tree(user=self.request.user)
 		return context
 
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs['user'] = self.request.user
+		return kwargs
+
 	def get_queryset(self):
-		pass
+		return Category.objects.filter(user_owner=self.request.user)
 
 
 def login_view(request):

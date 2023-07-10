@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-04 09:18+0000\n"
+"POT-Creation-Date: 2023-07-10 22:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,51 +30,81 @@ msgstr ""
 msgid "hash"
 msgstr ""
 
-#: moxie/filters.py:16
+#: moxie/filters.py:15 moxie/filters.py:50
 msgid "Minimum amount"
 msgstr "Importe mínimo"
 
-#: moxie/filters.py:17
+#: moxie/filters.py:16 moxie/filters.py:51
 msgid "Maximum amount"
 msgstr "Importe máximo"
 
-#: moxie/filters.py:19 moxie/forms.py:25
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:67 moxie/forms.py:99
 msgid "category"
 msgstr "Categoría"
 
-#: moxie/filters.py:21
+#: moxie/filters.py:21 moxie/forms.py:69
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:22 moxie/forms.py:27
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:70 moxie/forms.py:102
 msgid "note"
 msgstr "Nota"
 
-#: moxie/filters.py:23 moxie/forms.py:29
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:72 moxie/forms.py:104
 msgid "date"
 msgstr "Fecha"
 
-#: moxie/forms.py:28
+#: moxie/filters.py:41 moxie/filters.py:76
+msgid "filter_submit"
+msgstr "Filtrar"
+
+#: moxie/forms.py:71 moxie/forms.py:103
 msgid "amount"
 msgstr "Importe"
 
-#: moxie/forms.py:30
+#: moxie/forms.py:73 moxie/forms.py:105
 msgid "in_sum"
 msgstr "Mostrar en \"Total\""
 
-#: moxie/forms.py:48
+#: moxie/forms.py:74
+msgid "Favourite"
+msgstr ""
+
+#: moxie/forms.py:84
 msgid "Add expense"
 msgstr "Añadir gasto"
 
-#: moxie/settings.py:151
-msgid "Español"
-msgstr ""
+#: moxie/forms.py:119
+#, fuzzy
+#| msgid "incomes"
+msgid "Add income"
+msgstr "Ingresos"
 
-#: moxie/settings.py:152
-msgid "English"
+#: moxie/models.py:138
+#, fuzzy
+#| msgid "expenses"
+msgid "Expense"
+msgstr "Gastos"
+
+#: moxie/models.py:140
+#, fuzzy
+#| msgid "incomes"
+msgid "Income"
+msgstr "Ingresos"
+
+#: moxie/models.py:142
+msgid "Both"
 msgstr ""
 
 #: moxie/settings.py:153
+msgid "Español"
+msgstr ""
+
+#: moxie/settings.py:154
+msgid "English"
+msgstr ""
+
+#: moxie/settings.py:155
 msgid "Català"
 msgstr ""
 
@@ -86,7 +116,7 @@ msgstr "Categoría"
 msgid "Note"
 msgstr "Nota"
 
-#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:77
+#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:72
 msgid "Date"
 msgstr "Fecha"
 
@@ -94,17 +124,13 @@ msgstr "Fecha"
 msgid "Amount"
 msgstr "Importe"
 
-#: moxie/templates/common/data.html:80
+#: moxie/templates/common/data.html:75
 msgid "data_export"
 msgstr "Exportar"
 
 #: moxie/templates/common/filter.html:9
 msgid "search_header"
 msgstr "Buscar"
-
-#: moxie/templates/common/filter.html:17
-msgid "filter_submit"
-msgstr "Filtrar"
 
 #: moxie/templates/common/to_top.html:4
 msgid "back_to_top"
@@ -114,27 +140,32 @@ msgstr "Volver arriba"
 msgid "expenses_delete_message"
 msgstr "Borrar"
 
+#: moxie/templates/expenses/data_header.html:27
+#: moxie/templates/incomes/data_header.html:18
+msgid "Delete"
+msgstr ""
+
 #: moxie/templates/expenses/index.html:13
 msgid "Go to expenses"
 msgstr "Ir a gastos"
 
-#: moxie/templates/expenses/index.html:14
+#: moxie/templates/expenses/index.html:14 moxie/templates/incomes/index.html:16
 msgid "Go to stats"
 msgstr "Ir a estadísticas"
 
-#: moxie/templates/expenses/stats.html:9
-msgid "expenses_expended"
+#: moxie/templates/expenses/stats.html:10
+msgid "expenses_spent"
 msgstr "Gastado"
 
-#: moxie/templates/expenses/stats.html:13
+#: moxie/templates/expenses/stats.html:12
 msgid "expenses_budget"
 msgstr "Presupuesto"
 
-#: moxie/templates/expenses/stats.html:46
+#: moxie/templates/expenses/stats.html:32
 msgid "expenses_monthly"
 msgstr "Gasto mensual"
 
-#: moxie/templates/expenses/stats.html:47
+#: moxie/templates/expenses/stats.html:33
 msgid "expenses_by_months"
 msgstr "Mensual"
 
@@ -149,6 +180,20 @@ msgstr "Inicio"
 #: moxie/templates/header.html:28
 msgid "about"
 msgstr "Acerca de"
+
+#: moxie/templates/incomes/index.html:15
+#, fuzzy
+#| msgid "incomes"
+msgid "Go to incomes"
+msgstr "Ingresos"
+
+#: moxie/templates/incomes/stats.html:8
+msgid "incomes_bar_title"
+msgstr "Ingresos anuales"
+
+#: moxie/templates/incomes/stats.html:9
+msgid "incomes_bar_year_label"
+msgstr "Por años"
 
 #: moxie/templates/login/registeruser.html:4
 msgid "registration_ok"
@@ -180,27 +225,27 @@ msgstr ""
 msgid "tags_title"
 msgstr "Tags"
 
-#: moxie/views/views.py:215
+#: moxie/views/incomes.py:86 moxie/views/views.py:258
 msgid "incomes"
 msgstr "Ingresos"
 
-#: moxie/views/views.py:216
+#: moxie/views/incomes.py:87 moxie/views/views.py:259
 msgid "expenses"
 msgstr "Gastos"
 
-#: moxie/views/views.py:217
+#: moxie/views/incomes.py:88 moxie/views/views.py:260
 msgid "stats"
 msgstr "Estadísticas"
 
-#: moxie/views/views.py:218
+#: moxie/views/incomes.py:89 moxie/views/views.py:261
 msgid "sheets"
 msgstr "Gastos compartidos"
 
-#: moxie/views/views.py:219
+#: moxie/views/incomes.py:90 moxie/views/views.py:262
 msgid "users"
 msgstr "Configuración"
 
-#: moxie/views/views.py:697
+#: moxie/views/views.py:679
 msgid "Login incorrect"
 msgstr "Autenticación incorrecta"
 
@@ -211,21 +256,20 @@ msgstr "Autenticación incorrecta"
 #~ msgstr "Filtrar"
 
 #, fuzzy
-#~| msgid "expenses_expended"
+#~| msgid "expenses_spent"
 #~ msgid "expenses_category"
 #~ msgstr "Categoría"
 
 #, fuzzy
-#~| msgid "expenses_expended"
+#~| msgid "expenses_spent"
 #~ msgid "expenses_note"
 #~ msgstr "Nota"
 
 #, fuzzy
-#~| msgid "expenses_expended"
+#~| msgid "expenses_spent"
 #~ msgid "expenses_date"
 #~ msgstr "Fecha"
 
-#, fuzzy
-#~| msgid "expenses_expended"
+#~| msgid "expenses_spent"
 #~ msgid "expenses_amount"
 #~ msgstr "Importe"

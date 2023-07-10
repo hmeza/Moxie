@@ -112,4 +112,13 @@ $(document).ready(function () {
     let amount_max = $('#amount_max');
     amount_max.attr('inputmode', 'decimal');
     amount_max.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
+
+    // TODO do this modifying form classes
+    let expenseDeleteSelector = $('#expense_delete');
+    if(expenseDeleteSelector !== undefined) {
+        let submitParent = $('#submit-id-submit').parent();
+        submitParent.addClass('text-right');
+        submitParent.siblings().first().append(expenseDeleteSelector);
+    }
+    $('#search_form :input[type="submit"]').parent().addClass('text-right')
 });

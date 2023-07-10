@@ -3,30 +3,31 @@
 {% block content %}
 <head>
 <script type="text/javascript">
-	var year = {% now 'Y' %}
-	var month = {% now 'm' %}
+	let year = {% now 'Y' %};
+	let month = {% now 'm' %};
+    let deleteUrl = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>/incomes/delete/id/";
+    let deleteMessage = "<?php echo $st_lang['incomes_delete_message']; ?>";
 </script>
 </head>
 
 <a>
 <div class="moxie-submenu">
-<div><a href="#data">{% trans 'Go to expenses' %}</a></div>
+<div><a href="#data">{% trans 'Go to incomes' %}</a></div>
 <div><a href="#stats">{% trans 'Go to stats' %}</a></div>
 </div>
 </a>
 
-
 <div class="moxie-container">
 <div class="moxie-left">
 <a id="data"></a>
-{% include 'expenses/data_header.html' %}
+{% include 'incomes/data_header.html' %}
 
 {% include 'common/data.html' %}
 
 </div>
 <div class="moxie-right">
 <a id="stats"></a>
-    {% include 'expenses/stats.html' %}
+    {% include 'incomes/stats.html' %}
 </div>
 </div>
 {% endblock %}
