@@ -66,7 +66,7 @@ class IncomesFilter(django_filters.FilterSet):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filters['category'].queryset = Category.get_categories_tree(user, expenses=False, incomes=True)
+        self.filters['category'].queryset = Category.get_categories_tree(user, type_filter=Category.INCOMES)
         self.form.helper = FormHelper()
         self.form.helper.form_id = 'id-filterForm'
         self.form.helper.form_class = 'form-horizontal'

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+{#{% include 'stats/top_function.html' %}#}
+
+<style type="text/css">
+table.table-stats {
+	font-size: 11px;
+	width: 100%;
+}
+.table-stats td, th {
+	text-align: right;
+}
+</style>
+<!--<script type="text/javascript" src="{% static '/js/stats/stats.js' %}"></script>-->
+<script type="text/javascript">
+    /*
+var categories = [<?php echo implode(',', $s_categories);?>];
+var budget_index = <?php echo date('m'); ?>;
+     */
+</script>
+
+<button data-target="#budget" class="toggable btn btn-info">{% trans 'stats_budget_title' %}</button>
+<button data-target="#stats_table_yearly" class="toggable btn btn-info">Anual</button>
+<button data-target="#stats_trends_container" class="toggable btn btn-info">{% trans 'stats_trends' %}</button>
+<button data-target="#box" class="toggable btn btn-info">{% trans 'stats_title' %}</button>
+<div id="budget" class="accordion-body">
+    <table class="w-100">
+        <!-- Form + expenses list -->
+        <tr>
+        <td>
+                        <div style="display: none">
+            <?php
+            global $st_lang;
+            $last_url = '/stats/index/year/'.($this->year-1);
+            $next_url = '/stats/index/year/'.($this->year+1);
+            $current_month_and_year = $this->year;
+            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
+            ?>
+                        </div>
+        </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped table-bordered table-stats table-condensed table-hover">
+    <th></th>
+
+    {#{% include 'stats/middle_function.html' %}#}
+
+    <tr>
+    <td colspan='.$i_colspan.'>&nbsp;</td><tr>
+
+    <th class="text-left"><?php echo $st_lang['stats_budget_total']; ?></th>
+    <?php echo $balance_output; ?>
+
+    </tr>
+    </table>
+</div>
+
+{% include 'stats/yearly.html' %}
+{% include 'stats/trends.html' %}
+{% include 'stats/stats.html' %}
+{% endblock %}

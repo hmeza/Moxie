@@ -1,0 +1,24 @@
+<div id="stats_table_yearly" class="collapse">
+<table class="table table-striped table-bordered table-stats">
+    <thead>
+    <tr>
+        {% for row in yearly_header %}
+            <th>{{ row }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+        {% for key, row in yearly.items %}
+        <tr>
+            <td>
+                {{ row.0.name }}
+            </td>
+            {% for item in row %}
+                <td>
+                {{ item.amount }}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table></div>

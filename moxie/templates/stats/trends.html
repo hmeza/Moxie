@@ -1,10 +1,14 @@
+{% load static %}
 <!-- Graphic -->
-<link rel="stylesheet" type="text/css" href="/css/trends.css"/>
+<link rel="stylesheet" type="text/css" href="{% static 'trends.css' %}?version={{ JS_VERSION }}"/>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-	var moxie_url = "<?php echo Zend_Registry::get('config')->moxie->settings->url; ?>";
-
-	var trends_array = [];
+//	let trends_array = {{ trends|safe }};
+	let trends_array = [];
+    {% for key, value in trends.items %}
+    trends_array[{{ key }}] = {{ value.data|safe }};
+    {% endfor %}
+	/*
 	<?php
 	$default = null;
 	foreach($this->trends as $key=>$value) {
@@ -23,20 +27,19 @@
 	<?php
 	}
 	?>
-	var default_category = <?php echo $default; ?>
+	let default_category = <?php echo $default; ?>
+	 */
 </script>
-<script type="text/javascript" src="/js/stats/trends.js"></script>
+<script type="text/javascript" src="{% static '/js/stats/trends.js' %}"></script>
 
 <div id="stats_trends_container" class="accordion-body collapse moxie-stats-trends-container">
 	<div id="stats_trends"></div>
 	<label for="trends_category"></label>
     <form class="form-group">
 	<select id="trends_category" name="trends_category" onchange="drawChart();" class="form-control">
-		<?php
-		foreach($this->trends as $key => $value) {
-			echo '<option value="'.$key.'">'.$value['name'].'</option>';
-		}
-		?>
+        {% for key, value in trends.items %}
+            <option value="{{ key }}">{{ value.name }}</option>
+        {% endfor %}
 	</select>
     </form>
 </div>

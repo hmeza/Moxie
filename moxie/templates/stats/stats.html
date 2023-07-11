@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div id="box" class="accordion-body collapse">
+    <table class="table table-striped table-bordered table-stats w-100">
+        <tr>
+        <th class="text-left">{% trans 'category' %}</th>
+        <th class="text-right">{% trans 'total' %}</th>
+        <th class="text-right">{% trans 'total_this_year' %}</th>
+        <th class="text-right">{% trans 'average_this_year' %}</th>
+        <th class="text-right">{% trans 'average_unit' %}</th>
+        </tr>
+
+        {% for k, stat in stats.items %}
+            <tr>
+            <td class="text-left">{{ stat.category }}</td>
+            <td class="text-right">{{ stat.total|floatformat:2 }} &euro;</td>
+            <td class="text-right">{{ stat.total_this_year|floatformat:2 }} &euro;</td>
+            <td class="text-right">{{ stat.avg_this_year|floatformat:2 }} &euro;</td>
+            <td class="text-right">{{ stat.avg|floatformat:2 }} &euro;</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>

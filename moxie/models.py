@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from django.db.models.functions import Cast, Concat, ExtractYear
-from django.db.models import Sum, FloatField, Count, F, Q, Value
+from django.db.models.functions import Cast, Concat, ExtractYear, Abs
+from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg
 import datetime
 
 
@@ -142,19 +142,18 @@ class Category(models.Model):
             return _('Both')
 
     @staticmethod
-    def get_type_filter(include_expenses, include_incomes):
-        return (Category.EXPENSES if include_expenses else 0) + (Category.INCOMES if include_incomes else 0)
-
-    @staticmethod
-    def get_categories_tree(user, expenses=True, incomes=False):
-        type_filter = Category.get_type_filter(expenses, incomes)
-        data = Category.objects.select_related('parent')\
-            .filter(user_owner=user)\
-            .filter(Q(type=type_filter)|Q(type=Category.BOTH))\
+    def get_categories_tree(user, type_filter=EXPENSES):
+        queryset = Category.objects.select_related('parent')\
+            .filter(user_owner=user)
+        if type_filter == Category.BOTH:
+            queryset = queryset.filter(Q(type=Category.EXPENSES) | Q(type=Category.INCOMES) | Q(type=Category.BOTH))
+        else:
+            queryset = queryset.filter(type=type_filter)
+        queryset = queryset\
             .filter(Q(parent__isnull=False))\
             .annotate(cat_name=Concat(F('name'), Value('-'), F('parent__name')))\
             .order_by('order')
-        return data
+        return queryset
 
 #     /**
 #      * @param $i_lastInsertId
@@ -414,9 +413,51 @@ class Transaction(models.Model):
             .filter(year__gt=1900)\
             .annotate(year_group=Count(F('year')))\
             .annotate(sum_amount=Cast(Sum('amount'), FloatField()))\
-            .order_by('year')\
-            .values_list('year', 'sum_amount')
+            .order_by('year').values_list('year', 'sum_amount')
         return queryset
+
+    @staticmethod
+    def get_year_incomes_with_category(user, expenses=True, incomes=False):
+        queryset = Transaction.objects.filter(user=user)
+        if incomes and not expenses:
+            queryset = queryset.filter(amount__gte=0)
+        elif expenses and not incomes:
+            queryset = queryset.filter(amount__lt=0)
+        first_year = int(datetime.date.today().year) - 5
+        queryset = queryset\
+            .values(year=ExtractYear('date'))\
+            .filter(year__gt=first_year)\
+            .annotate(year_group=Count(F('year')), category_group=Count(F('category')))\
+            .annotate(sum_amount=Cast(Sum('amount'), FloatField()))\
+            .order_by('category', 'year')\
+            .values_list('year', 'category', 'category__name', 'sum_amount')
+
+        incomes_by_year_and_category = {}
+        current_category = None
+        for value in queryset:
+            if value[1] != current_category:
+                current_category = value[1]
+                incomes_by_year_and_category[current_category] = []
+            incomes_by_year_and_category[current_category].append({
+                'year': value[0],
+                'category': value[1],
+                'name': value[2],
+                'amount': value[3]
+            })
+        return incomes_by_year_and_category
+
+    @staticmethod
+    def totals(user, year=None):
+        queryset = Transaction.objects.filter(user=user)
+        if year:
+            queryset = queryset.filter(date__year=year)
+        queryset = queryset.values('category')\
+            .annotate(category_count=Count('category'))\
+            .annotate(
+                category_sum=Cast(Sum(Abs('amount')), FloatField()),
+                category_avg=Cast(Avg(Abs('amount')), FloatField())
+            )
+        return {c['category']: {'sum': c['category_sum'], 'avg': c['category_avg']} for c in queryset}
 
 # <?php
 #

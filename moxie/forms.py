@@ -19,7 +19,7 @@ class CategoryForm(ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['parent'] = Category.get_categories_tree(user, expenses=True, incomes=True)
+        self.fields['parent'] = Category.get_categories_tree(user, type_filter=Category.BOTH)
 
 
 class CategoryUpdateForm(CategoryForm):
@@ -114,7 +114,7 @@ class IncomesForm(TransactionForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(user, *args, **kwargs)
-        self.fields['category'].queryset = Category.get_categories_tree(user, expenses=False, incomes=True)
+        self.fields['category'].queryset = Category.get_categories_tree(user, type_filter=Category.INCOMES)
         self.helper.form_id = 'id-incomesForm'
         self.helper.add_input(Submit('submit', _('Add income')))
         self.helper.form_action = reverse_lazy('incomes_edit', kwargs={'pk': self.instance.pk}) if self.instance.pk else reverse_lazy('incomes_add')
