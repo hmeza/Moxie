@@ -148,7 +148,7 @@ class Category(models.Model):
         if type_filter == Category.BOTH:
             queryset = queryset.filter(Q(type=Category.EXPENSES) | Q(type=Category.INCOMES) | Q(type=Category.BOTH))
         else:
-            queryset = queryset.filter(type=type_filter)
+            queryset = queryset.filter(Q(type=type_filter) | Q(type=Category.BOTH))
         queryset = queryset\
             .filter(Q(parent__isnull=False))\
             .annotate(cat_name=Concat(F('name'), Value('-'), F('parent__name')))\
@@ -459,6 +459,14 @@ class Transaction(models.Model):
             )
         return {c['category']: {'sum': c['category_sum'], 'avg': c['category_avg']} for c in queryset}
 
+    @staticmethod
+    def get_category_amounts(user, filter_date, get_params):
+        month = get_params.get('month', filter_date.month)
+        year = get_params.get('year', filter_date.year)
+        return Transaction.objects.filter(user=user, amount__lt=0, date__month=month, date__year=year) \
+            .values('category__name').order_by('category__name') \
+            .annotate(total=Cast(Abs(Sum('amount')), FloatField()))
+
 # <?php
 #
 # class SharedExpenses extends Zend_Db_Table_Abstract {
@@ -701,6 +709,22 @@ class TransactionTag(models.Model):
 
 
 class Favourite(models.Model):
-    transaction = models.ForeignKey(Transaction, on_delete=models.PROTECT, null=False, blank=False, default=None)
+    transaction = models.ForeignKey(Transaction, on_delete=models.PROTECT, null=False, blank=False, default=None, related_name='favourite')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @staticmethod
+    def get_favourites(user):
+        queryset = Transaction.objects\
+            .prefetch_related('favourite')\
+            .filter(user=user, id=F('favourite__transaction'))\
+            .annotate(favourite_amount=Cast('amount', FloatField()))\
+            .values('id', 'favourite_amount', 'category', 'note', 'in_sum', 'tags')
+        result = dict((obj['id'], obj) for obj in queryset)
+        for key in result:
+            result[key].update({
+                'amount': result[key]['favourite_amount'],
+                'in_sum': 1 if result[key]['in_sum'] else 0,
+                'tags': result[key]['tags'] if result[key]['tags'] else ''
+            })
+        return result

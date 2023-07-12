@@ -43,8 +43,13 @@ urlpatterns = [
     path('stats/year/<yyyy:year>/', StatsView.as_view(), name='stats'),
     path('stats/', StatsView.as_view(), name='stats'),
 
+    # TODO
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
+    # TODO
     path('users', UserConfigurationView.as_view(), name='users'),
+     # TODO
+    path('sheets', UserConfigurationView.as_view(), name='users'),
+
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),

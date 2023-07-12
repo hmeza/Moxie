@@ -7,3 +7,7 @@ def debug(context):
 
 def js_version(context):
     return {'JS_VERSION': settings.JS_VERSION}
+
+
+def urls(context):
+    return {'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users']}

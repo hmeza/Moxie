@@ -3,7 +3,7 @@ import datetime
 from django.forms import ModelForm, ModelChoiceField, CharField, FloatField, DateField, DateTimeField, \
     ChoiceField, BooleanField
 from django import forms
-from moxie.models import Category, Transaction, User
+from moxie.models import Category, Transaction, User, Favourite
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
@@ -63,7 +63,11 @@ class TransactionForm(ModelForm):
 
 
 class ExpensesForm(TransactionForm):
-    # todo show favourites
+    favourites = ChoiceField(label=_('favourites'),
+                             widget=forms.Select(
+                                 attrs={'class': 'select form-control', 'onchange': 'use_favourite_as_expense'}
+                             ),
+                             choices=())
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
@@ -75,7 +79,7 @@ class ExpensesForm(TransactionForm):
 
     class Meta:
         model = Transaction
-        fields = ['amount', 'note', 'date', 'category', 'tag', 'in_sum', 'favourite']
+        fields = ['favourites', 'amount', 'note', 'date', 'category', 'tag', 'in_sum']
         exclude = ['user', 'income_update']
 
     def __init__(self, user, *args, **kwargs):
@@ -84,6 +88,13 @@ class ExpensesForm(TransactionForm):
         self.helper.add_input(Submit('submit', _('Add expense')))
         if self.initial.get('amount'):
             self.initial['amount'] = -self.initial.get('amount')
+        self.fields['favourites'].choices = self.__mount_favourites(user)
+
+    def __mount_favourites(self, user):
+        values_list = Favourite.objects.filter(transaction__user=user)\
+            .select_related('transaction')\
+            .values_list('transaction__id', 'transaction__note')
+        return [('0', '-----')] + list(values_list)
 
     def clean_in_sum(self):
         self.cleaned_data['in_sum'] = 1 if self.data.get('in_sum') else 0
@@ -95,20 +106,15 @@ class ExpensesForm(TransactionForm):
 
 
 class IncomesForm(TransactionForm):
-    # todo show favourites
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
-    # tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
     amount = FloatField(label=_('amount'))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False, widget=forms.HiddenInput())
-    # favourite = BooleanField(label=_('Favourite'), initial=False, required=False)
 
     class Meta:
         model = Transaction
-        # fields = ['amount', 'note', 'date', 'category', 'tag', 'in_sum', 'favourite']
-        # exclude = ['user', 'income_update']
         fields = ['amount', 'note', 'date', 'category', 'in_sum']
         exclude = ['user', 'income_update', 'tag', 'favourite']
 

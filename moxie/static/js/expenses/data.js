@@ -1,50 +1,54 @@
-var filter = function () {
-    var chosen = document.getElementById('category_search').selectedIndex;
-    var redirect = document.getElementById('category_search').options[chosen].value;
-    var redirect_string = (redirect == "0") ? "" : "/category/" + redirect;
+let filter = function () {
+    let chosen = document.getElementById('category_search').selectedIndex;
+    let redirect = document.getElementById('category_search').options[chosen].value;
+    let redirect_string = (redirect == "0") ? "" : "/category/" + redirect;
     window.location = "/expenses/index" + redirect_string + "/year/" + year + "/month/" + month;
 };
 
-var export_to_excel = function () {
+const export_to_excel = function () {
     $('#search_form').find('[name=to_excel]').val(true);
     $('#search_submit').click();
 };
 
-var use_favourite_as_expense = function () {
-    var id = $('#favourites').find(":selected").val();
+function set_tags(row) {
+    try {
+        let tags = $('#id_tags');
+        tags.tagsinput('removeAll');
+        for (let j = 0; j < row["tags"].length; j++) {
+            tags.tagsinput('add', row["tags"][j]);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const use_favourite_as_expense = function () {
+    let id = $('#id_favourites').find(":selected").val();
+    let note = $('#id_note');
+    let amount = $('#id_amount');
     if (id == "0") {
-        $('#amount').val(null);
-        $('#note').val('');
-        $('#tags').tagsinput('removeAll');
+        amount.val(null);
+        note.val('');
+        $('#id_tags').tagsinput('removeAll');
         return;
     }
-    for (var i = 0; i < favourite_data.length; i++) {
-        if (id == favourite_data[i]["id"]) {
-            row = favourite_data[i];
-            $('#note').val(row["note"]);
-            $('#amount').val(-row["amount"]);
-            var tags = $('#tags');
-            tags.tagsinput('removeAll');
-            for (var j = 0; j < row["tags"].length; j++) {
-                tags.tagsinput('add', row["tags"][j]);
-            }
-            var c = $('#category');
-            var favourite_category = row["category"];
-            var option_string = 'option[value="' + favourite_category + '"]';
-            c.find('option[selected="selected"]').attr('selected', false);
-            var opt = c.find(option_string);
-            c.val(row["category"]);
-            opt.attr("selected", "selected");
-            opt.prop("selected", "selected");
-            var in_sum = row["in_sum"] == "1";
-            $('#in_sum').prop("checked", in_sum);
-            break;
-        }
-    }
+    let row = favourite_data[id];
+    note.val(row["note"]);
+    amount.val(-row["amount"]);
+    let c = $('#id_category');
+    let option_string = 'option[value="' + row["category"] + '"]';
+    c.find('option[selected="selected"]').attr('selected', false);
+    let opt = c.find(option_string);
+    c.val(row["category"]);
+    opt.attr("selected", "selected");
+    opt.prop("selected", "selected");
+    let in_sum = row["in_sum"] == "1";
+    $('#id_in_sum').prop("checked", in_sum);
+    set_tags(row);
 };
 
 function get_tags_object() {
-    var tags = new Bloodhound({
+    let tags = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         local: $.map(usedTagList, function (tag) {
@@ -59,22 +63,22 @@ function get_tags_object() {
 
 $(document).ready(function () {
     $("#login").submit(function (e) {
-        var self = this;
-        var items_array = $("#tags").tagsinput('items');
-        $("#tags").val(items_array);
+        let self = this;
+        let items_array = $("#id_tags").tagsinput('items');
+        $("#id_tags").val(items_array);
         return true;
     });
 
     $("#export_to_excel_button").click(export_to_excel);
 
-    $('#favourites').change(use_favourite_as_expense);
+    $('#id_favourites').change(use_favourite_as_expense);
 
     tags = get_tags_object();
     tags_search = get_tags_object();
 
     // data-role must be set here
-    $('#tags').attr('data-role', 'tagsinput');
-    $('#tags').tagsinput({
+    $('#id_tags').attr('data-role', 'tagsinput');
+    $('#id_tags').tagsinput({
         typeaheadjs: [{
             minLength: 1,
             highlight: true,
@@ -88,8 +92,8 @@ $(document).ready(function () {
         }],
         freeInput: true
     });
-    $('#tag_search').attr('data-role', 'tagsinput');
-    $('#tag_search').tagsinput({
+    $('#id_tag_search').attr('data-role', 'tagsinput');
+    $('#id_tag_search').tagsinput({
         typeaheadjs: [{
             minLength: 1,
             highlight: true,

@@ -15,7 +15,7 @@
             '{{ tag }}'
         {% endfor %}
     ];
-    //let favourite_data = <?php echo $this->favourites_json; ?>;
+    let favourite_data = {% if favourite_data %}{{ favourite_data|safe }}{% else %}{}{% endif %};
 </script>
 <script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v=13"></script>
 

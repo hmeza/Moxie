@@ -260,11 +260,11 @@ class ExpensesView(TransactionListView, ListView):
 		_('stats')
 		_('sheets')
 		_('users')
-		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags_by_user(self.request.user)
 		context['form'] = ExpensesForm(self.request.user)
-		context['category_amounts'] = self.__get_category_amounts(queryset)
-		context['pie_data'] = [list(a.values()) for a in self.__get_category_amounts(queryset)]
+		category_amounts = Transaction.get_category_amounts(self.request.user, datetime.date.today(), self.request.GET)
+		context['category_amounts'] = category_amounts
+		context['pie_data'] = [list(a.values()) for a in category_amounts]
 		month_expenses = [list(a.values()) for a in self.__get_monthly_amounts(queryset)]
 		month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
 		for expense in month_expenses:
@@ -285,16 +285,8 @@ class ExpensesView(TransactionListView, ListView):
 		context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
 		context['edit_url'] = reverse_lazy('expenses_add')
 		context['filter_url_name'] = 'expenses'
+		context['favourite_data'] = Favourite.get_favourites(self.request.user)
 		return context
-
-	def __get_category_amounts(self, expenses):
-		# todo filter by current parameters month
-		today = datetime.date.today()
-		month = self.request.GET.get('month', today.month)
-		year = self.request.GET.get('year', today.year)
-		return Transaction.objects.filter(amount__lt=0, date__month=month, date__year=year)\
-			.values('category__name').order_by('category__name')\
-			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 	def __get_monthly_amounts(self, expenses):
 		a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
@@ -416,109 +408,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
 		return groups.group(1)
 
-
-#
-# 	/**
-# 	 * This function generates the form to add expenses.
-# 	 * @param array $st_expense
-# 	 * @return Zend_Form
-# 	 */
-# 	private function getForm($st_expense) {
-# 		global $st_lang;
-# 		$form  = new Zend_Form();
-#
-# 		if(empty($st_expense['id'])) {
-# 			$in_sum_value = 1;
-# 			$slug = '/expenses/add';
-# 			$tag_value = '';
-# 			$save_text = $st_lang['expenses_header'];
-# 		}
-# 		else {
-# 			$in_sum_value = $st_expense['in_sum'];
-# 			$slug = '/expenses/update';
-# 			$tag_list = $this->transactionTags->getTagsForTransaction($st_expense['id']);
-# 			$tag_list = str_replace("\\'", "'", $tag_list);
-# 			$tag_value = implode(", ", $tag_list);
-#             $save_text = $st_lang['expenses_edit'];
-# 		}
-#
-# 		$form->setAction(Zend_Registry::get('config')->moxie->settings->url.$slug)
-# 				->setMethod('post');
-#
-# 		$form->setAttrib('id', 'add_expense');
-#
-#         $form->setDecorators(array(
-#             'FormElements',
-#             array('HtmlTag',array('tag' => 'table')),
-#             'Form'
-#         ));
-#
-# 		$st_categories = $this->categories->getCategoriesForView(Categories::EXPENSES);
-# 		if(empty($st_expense['category'])) {
-# 			reset($st_categories);
-# 			$st_expense['category'] = key($st_categories);
-# 		}
-#
-# 		$f_expense = !empty($st_expense['amount']) && $st_expense['amount'] != '0.00' ? $st_expense['amount'] : '';
-#
-#         $form_elements = array();
-#
-#         $favs = $this->expenses->getFavourites($_SESSION['user_id']);
-#         if(!empty($favs)) {
-#             $st_favs = array(0 => '');
-#             foreach ($favs as $fav) {
-#                 $st_favs[$fav['id']] = $fav['note'];
-#             }
-#             $favouritesOptions = new Zend_Form_Element_Select('category');
-#             $favouritesOptions->setName('favourites');
-#             $favouritesOptions->setLabel($st_lang['use_favourite']);
-#             $favouritesOptions->addMultiOptions($st_favs);
-#             $favouritesOptions->setValue(array($st_expense['category']));
-#             $favouritesOptions->setAttrib('class', 'form-control font-weight-bold');
-#             $form_elements[] = $favouritesOptions;
-#         }
-#
-#         $form_elements[] = new Zend_Form_Element_Text('amount' , array('label' => $st_lang['expenses_amount'], 'value' => $f_expense, 'placeholder' => '0,00', 'class' => 'form-control'));
-#         $form_elements[] = new Zend_Form_Element_Text('note' , array('label' => $st_lang['expenses_note'], 'value' => $st_expense['note'], 'class' => 'form-control'));
-#         $form_elements[] = new Zend_Form_Element_Date('date' , array('label' => $st_lang['expenses_date'], 'value' => $st_expense['date'], 'class' => 'form-control'));
-#
-#         $multiOptions = new Zend_Form_Element_Select('category');
-#         $multiOptions->setName('category');
-#         $multiOptions->setLabel($st_lang['expenses_category']);
-#         $multiOptions->addMultiOptions($st_categories);
-#         $multiOptions->setValue(array($st_expense['category']));
-#         $multiOptions->setAttrib('class', 'form-control');
-#         $form_elements[] = $multiOptions;
-#
-#         $form_elements[] = new Zend_Form_Element_Text('tags', array('id' => 'tags', 'label' => 'Tags', 'value' => $tag_value, 'placeholder' => $st_lang['tags_placeholder'], 'class' => 'form-control typeahead'));
-#         $form_elements[] = new Zend_Form_Element_Checkbox('in_sum', array('label' => $st_lang['in_sum_message'], 'value' => $in_sum_value, 'style' => 'width: 20px;', 'class' => 'checkbox-inline'));
-#         $form_elements[] = new Zend_Form_Element_Checkbox('favourite', array('label' => $st_lang['favourite_message'], 'value' => $st_expense['favourite'], 'style' => 'width: 20px;', 'class' => 'checkbox-inline'));
-#
-# 		if (isset($st_expense['id'])) {
-# 			$remove = new Zend_Form_Element_Button('delete', array(
-#                 'label' => $st_lang['expenses_delete'],
-#                 'class' => 'btn btn-danger pull-right',
-#                 'onclick' => 'confirmDelete("'.$st_expense['id'].'")'
-#             ));
-#             $form_elements[] = $remove;
-# 		}
-#
-#         $submit = new Zend_Form_Element_Submit('submit', array('label' => $save_text, 'class' => 'btn btn-primary pull-right'));
-#         $form_elements[] = $submit;
-#         if (isset($st_expense['id'])) {
-#             $form_elements[] = new Zend_Form_Element_Hidden('id', array('label' => null, 'value' => $st_expense['id']));
-#         }
-#
-# 		$this->prepareFormDecorators($form, $form_elements);
-#         // removing label works after this point
-#         if(isset($remove)) {
-#             $remove->removeDecorator("Label");
-#         }
-#         $submit->removeDecorator("Label");
-#
-# 		return $form;
-# 	}
-#
 # 	/**
 # 	 * Returns the monthly expense for a year.
 # 	 * @return array
@@ -593,57 +482,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 # 		}
 # 		exit(0);
 # 	}
-
-#
-# 	/**
-# 	 * Retrieves parameters from request.
-# 	 */
-# 	private function getParameters() {
-# 		$st_params = $this->getRequest()->getParams();
-# 		$st_params['month'] = $this->getRequest()->getParam('month', date('n'));
-# 		$st_params['year'] = $this->getRequest()->getParam('year', date('Y'));
-# 		$category = $this->getRequest()->getParam('category', null);
-# 		if(empty($st_params['category_search'])) {
-# 			$st_params['category_search'] = $category;
-# 		}
-#
-# 		// convert month+year to filters for search
-# 		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
-# 			$current_date = $st_params['year'].'-'.$st_params['month'].'-01';
-# 			$st_params['date_min'] = $current_date;
-# 			$st_params['date_max'] = date("Y-m-t", strtotime($current_date));
-# 		}
-#
-# 		return $st_params;
-# 	}
-#
-# 	/**
-# 	 * @param array $st_list
-# 	 * @param array $st_params
-# 	 * @param array $st_expense
-# 	 * @throws Exception
-# 	 */
-# 	private function assignViewData($st_list, $st_params, $st_expense) {
-# 		$this->view->assign('expenses', $this->expenses->getExpenses($_SESSION['user_id'], $st_params));
-# 		$this->view->assign('month_expenses', json_encode($this->getMonthExpensesData()));
-# 		$this->view->assign('budget', $this->budgets->getBudget($_SESSION['user_id']));
-# 		$this->view->assign('list', $st_list);
-# 		$this->view->assign('year', $st_params['year']);
-# 		$this->view->assign('month', $st_params['month']);
-# 		$this->view->assign('form', $this->getForm($st_expense));
-# 		$this->view->assign('tag_list', $this->tags->getTagsByUser($_SESSION['user_id']));
-# 		$this->view->assign('used_tag_list', $this->tags->getUsedTagsByUser($_SESSION['user_id']));
-# 		$this->view->assign('search_form', $this->getSearchForm($this->getRequest()));
-# 		$this->view->assign('view', 'expenses');
-# 		if (isset($st_params['o'])) {
-# 			$this->view->assign('o', $st_params['o']);
-# 		}
-# 		if($this->getRequest()->getParam('is_search', false) == 1) {
-# 		    $this->view->assign('is_search', true);
-#         }
-# 		$this->view->assign('favourites_json', json_encode($this->expenses->getFavourites($_SESSION['user_id'])));
-# 	}
-# }
 
 
 class UserConfigurationView(ListView, CreateView):
