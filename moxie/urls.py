@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, register_converter
-from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, UserConfigurationView, login_view,\
+from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, login_view,\
     logout_view, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
+from moxie.views.users import UserConfigurationView
 from moxie.views.stats import StatsView
 from django.views.generic import TemplateView
 from . import converters
@@ -52,5 +53,7 @@ urlpatterns = [
 
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
+
+    path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),
 ]

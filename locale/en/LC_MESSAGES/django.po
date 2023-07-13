@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-10 22:54+0000\n"
+"POT-Creation-Date: 2023-07-13 10:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,19 +38,20 @@ msgstr ""
 msgid "Maximum amount"
 msgstr ""
 
-#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:67 moxie/forms.py:99
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:85 moxie/forms.py:123
+#: moxie/templates/stats/stats.html:6
 msgid "category"
 msgstr ""
 
-#: moxie/filters.py:21 moxie/forms.py:69
+#: moxie/filters.py:21 moxie/forms.py:87
 msgid "tag"
 msgstr ""
 
-#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:70 moxie/forms.py:102
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:88 moxie/forms.py:125
 msgid "note"
 msgstr ""
 
-#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:72 moxie/forms.py:104
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:90 moxie/forms.py:127
 msgid "date"
 msgstr ""
 
@@ -58,25 +59,29 @@ msgstr ""
 msgid "filter_submit"
 msgstr ""
 
-#: moxie/forms.py:71 moxie/forms.py:103
+#: moxie/forms.py:80
+msgid "favourites"
+msgstr ""
+
+#: moxie/forms.py:89 moxie/forms.py:126
 msgid "amount"
 msgstr ""
 
-#: moxie/forms.py:73 moxie/forms.py:105
+#: moxie/forms.py:91 moxie/forms.py:128
 msgid "in_sum"
 msgstr ""
 
-#: moxie/forms.py:74
+#: moxie/forms.py:92
 msgid "Favourite"
 msgstr ""
 
-#: moxie/forms.py:84
+#: moxie/forms.py:102
 #, fuzzy
 #| msgid "expenses_monthly"
 msgid "Add expense"
 msgstr "Monthly expense"
 
-#: moxie/forms.py:119
+#: moxie/forms.py:139
 msgid "Add income"
 msgstr ""
 
@@ -94,15 +99,15 @@ msgstr ""
 msgid "Both"
 msgstr ""
 
-#: moxie/settings.py:153
+#: moxie/settings.py:154
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:154
+#: moxie/settings.py:155
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:155
+#: moxie/settings.py:156
 msgid "Català"
 msgstr ""
 
@@ -147,7 +152,7 @@ msgstr ""
 msgid "Go to expenses"
 msgstr ""
 
-#: moxie/templates/expenses/index.html:14 moxie/templates/incomes/index.html:16
+#: moxie/templates/expenses/index.html:14 moxie/templates/incomes/index.html:15
 msgid "Go to stats"
 msgstr ""
 
@@ -179,7 +184,7 @@ msgstr "Index"
 msgid "about"
 msgstr "About"
 
-#: moxie/templates/incomes/index.html:15
+#: moxie/templates/incomes/index.html:14
 msgid "Go to incomes"
 msgstr ""
 
@@ -191,8 +196,52 @@ msgstr ""
 msgid "incomes_bar_year_label"
 msgstr ""
 
+#: moxie/templates/index/about.html:6
+msgid ""
+"\n"
+"Moxie is helped, through licenses, from:<br>\n"
+"<a href=\"https://www.jetbrains.com/phpstorm/\">JetBrains</a><br><br>\n"
+"Moxie uses:<br>\n"
+"<a href=\"http://www.php.net\" target=\"blank\">PHP</a><br>\n"
+"<a href=\"http://www.zend.com/\" target=\"blank\">Zend framework</a><br>\n"
+"<a href=\"https://developers.google.com/chart/\" target=\"blank\">Google "
+"charts</a><br>\n"
+"<a href=\"https://www.mysql.com/\">MySQL</a><br>\n"
+"<a href=\"https://httpd.apache.org/\">Apache</a><br><br>\n"
+"Moxie is hosted at:<br>\n"
+"<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
+msgstr ""
+
 #: moxie/templates/login/registeruser.html:4
 msgid "registration_ok"
+msgstr ""
+
+#: moxie/templates/stats/index.html:24
+msgid "stats_budget_title"
+msgstr ""
+
+#: moxie/templates/stats/index.html:26
+msgid "stats_trends"
+msgstr ""
+
+#: moxie/templates/stats/index.html:27
+msgid "stats_title"
+msgstr ""
+
+#: moxie/templates/stats/stats.html:7
+msgid "total"
+msgstr ""
+
+#: moxie/templates/stats/stats.html:8
+msgid "total_this_year"
+msgstr ""
+
+#: moxie/templates/stats/stats.html:9
+msgid "average_this_year"
+msgstr ""
+
+#: moxie/templates/stats/stats.html:10
+msgid "average_unit"
 msgstr ""
 
 #: moxie/templates/users/index.html:11
@@ -241,7 +290,7 @@ msgstr ""
 msgid "users"
 msgstr ""
 
-#: moxie/views/views.py:679
+#: moxie/views/views.py:496
 msgid "Login incorrect"
 msgstr ""
 
