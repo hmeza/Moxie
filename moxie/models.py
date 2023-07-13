@@ -599,25 +599,25 @@ class Tag(models.Model):
     transaction_tags = None
     existing_tags = None
 
-    user = models.IntegerField(db_column='user_owner', blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-	# /**
-	#  * Adds a new tag for $userId
-	#  * @var int $userId
-	#  * @var string $name
-	#  * @return int
+    # /**
+    #  * Adds a new tag for $userId
+    #  * @var int $userId
+    #  * @var string $name
+    #  * @return int
     #  * @throws Exception
-	#  */
-	# public function addTag($userId, $name) {
-	# 	if(empty($userId)) {
-	# 		throw new Exception("Empty user id");
-	# 	}
-	# 	if(empty($name)) {
-	# 		throw new Exception("Empty tag name");
-	# 	}
+    #  */
+    # public function addTag($userId, $name) {
+    #     if(empty($userId)) {
+    #         throw new Exception("Empty user id");
+    #     }
+    #     if(empty($name)) {
+    #         throw new Exception("Empty tag name");
+    #     }
     #     if(is_null($this->existingTags)) {
     #         $this->existingTags = $this->getTagsByUser($userId);
     #     }
@@ -625,7 +625,7 @@ class Tag(models.Model):
     #     // check if backslashes have been already replaced
     #     $name = trim($name);
     #     $pos = strpos($name, "\\'");
-	# 	if ($pos === false) {
+    #     if ($pos === false) {
     #     }
     #     else {
     #         $name = str_replace("\\'", "'", $name);
@@ -646,33 +646,37 @@ class Tag(models.Model):
     #     else {
     #         return $tagId;
     #     }
-	# }
+    # }
 
-    def get_tags_by_user(self, user=None):
+    @staticmethod
+    def get_tags(user=None):
         if not user:
             return []
-        queryset = Tag.objects.filter(user_owner=user)
+        queryset = Tag.objects.filter(user=user)
         return Tag.__get_tags_from_query(queryset)
 
     def get_tags_for_transaction(self, transaction):
         queryset = Tag.objects.prefetch_related('transaction_tags')\
             .filter(transaction_tags__id_transaction=transaction)
-        return Tag.__get_tags_from_query(queryset)
+        return self.__get_tags_from_query(queryset)
 
-    def get_used_tags_by_user(self, user):
+    @staticmethod
+    def get_used_tags(user):
         queryset = Tag.objects\
-            .select_related('transaction_tags')\
-            .filter(user_owner=user).group('id').order_by('-name')
+            .prefetch_related('transactions')\
+            .annotate(count=Count('id'))\
+            .filter(user=user).order_by('-name')
         return Tag.__get_tags_from_query(queryset)
 
-    def __get_tags_from_query(self, queryset):
+    @staticmethod
+    def __get_tags_from_query(queryset):
         tags = {}
         for tag in queryset.all():
             tags[tag.id] = tag.name.replace("'", "\\'")
         return tags
 
     def get_tag(self, user_id=None, tag=None):
-        return self.objects.filter(user_owner=user_id, name=tag).first()
+        return self.objects.filter(user=user_id, name=tag).first()
 
 
 class TransactionTag(models.Model):

@@ -3,7 +3,7 @@ import datetime
 from django.forms import ModelForm, ModelChoiceField, CharField, FloatField, DateField, DateTimeField, \
     ChoiceField, BooleanField
 from django import forms
-from moxie.models import Category, Transaction, User, Favourite
+from moxie.models import Category, Transaction, User, Favourite, Tag
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
@@ -19,7 +19,18 @@ class CategoryForm(ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['parent'] = Category.get_categories_tree(user, type_filter=Category.BOTH)
+        self.fields['parent'].queryset = Category.get_categories_tree(user, type_filter=Category.BOTH)
+
+
+class TagsForm(ModelForm):
+    tags = forms.Textarea()
+
+    class Meta:
+        model = Tag
+        exclude = []
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class CategoryUpdateForm(CategoryForm):
@@ -39,6 +50,9 @@ class MyAccountForm(ModelForm):
         db_table = 'users'
         model = User
         exclude = ['login', 'created_at', 'updated_at', 'last_login']
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     password = CharField(max_length=50)
     email = CharField(max_length=12)

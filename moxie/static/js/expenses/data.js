@@ -62,10 +62,10 @@ function get_tags_object() {
 }
 
 $(document).ready(function () {
+    let tagsSelector = $('#id_tag');
     $("#login").submit(function (e) {
-        let self = this;
-        let items_array = $("#id_tags").tagsinput('items');
-        $("#id_tags").val(items_array);
+        let items_array = tagsSelector.tagsinput('items');
+        tagsSelector.val(items_array);
         return true;
     });
 
@@ -73,12 +73,12 @@ $(document).ready(function () {
 
     $('#id_favourites').change(use_favourite_as_expense);
 
-    tags = get_tags_object();
-    tags_search = get_tags_object();
+    let tags = get_tags_object();
+    let tagsSearch = get_tags_object();
 
     // data-role must be set here
-    $('#id_tags').attr('data-role', 'tagsinput');
-    $('#id_tags').tagsinput({
+    tagsSelector.attr('data-role', 'tagsinput');
+    tagsSelector.tagsinput({
         typeaheadjs: [{
             minLength: 1,
             highlight: true,
@@ -92,8 +92,10 @@ $(document).ready(function () {
         }],
         freeInput: true
     });
-    $('#id_tag_search').attr('data-role', 'tagsinput');
-    $('#id_tag_search').tagsinput({
+
+    let tagSearchSelector = $('#id_tag_search');
+    tagSearchSelector.attr('data-role', 'tagsinput');
+    tagSearchSelector.tagsinput({
         typeaheadjs: [{
             minLength: 1,
             highlight: true,
@@ -102,7 +104,7 @@ $(document).ready(function () {
             name: 'tag_search',
             displayKey: 'name',
             valueKey: 'name',
-            source: tags_search.ttAdapter(),
+            source: tagsSearch.ttAdapter(),
             hint: true
         }],
         freeInput: true

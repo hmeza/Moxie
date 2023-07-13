@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 <head>
 <script type="text/javascript">
 	var year = {% now 'Y' %}
 	var month = {% now 'm' %}
 </script>
+<script src="{% static 'dist/bundle.js' %}"></script>
 </head>
 
 <a>

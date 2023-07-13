@@ -8,13 +8,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
-from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm, MyAccountForm
+from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum, FloatField, Count, Case, When
-from django.db.models.functions import Abs, Cast, ExtractMonth
+from django.db.models import Sum, FloatField, Case, When
+from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag, Budget, Category, TransactionTag, User, Favourite
+from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
 from django.http import HttpResponseRedirect
 
 
@@ -250,6 +250,7 @@ class ExpensesView(TransactionListView, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		user = self.request.user
 		queryset = self.get_queryset()
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
@@ -260,9 +261,10 @@ class ExpensesView(TransactionListView, ListView):
 		_('stats')
 		_('sheets')
 		_('users')
-		context['tags'] = Tag.get_tags_by_user(self.request.user)
-		context['form'] = ExpensesForm(self.request.user)
-		category_amounts = Transaction.get_category_amounts(self.request.user, datetime.date.today(), self.request.GET)
+		context['tags'] = Tag.get_tags(user)
+		context['used_tag_list'] = Tag.get_used_tags(user)
+		context['form'] = ExpensesForm(user)
+		category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET)
 		context['category_amounts'] = category_amounts
 		context['pie_data'] = [list(a.values()) for a in category_amounts]
 		month_expenses = [list(a.values()) for a in self.__get_monthly_amounts(queryset)]
@@ -272,7 +274,7 @@ class ExpensesView(TransactionListView, ListView):
 			month_expenses_list.append([month_name, expense[1], expense[2]])
 		context['month_expenses'] = month_expenses_list
 		year, month = self._get_active_year_and_month()
-		budget = Budget.get_budget_for_month(self.request.user, year, month)
+		budget = Budget.get_budget_for_month(user, year, month)
 		context['budget'] = budget
 		context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
 		context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
@@ -285,7 +287,7 @@ class ExpensesView(TransactionListView, ListView):
 		context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
 		context['edit_url'] = reverse_lazy('expenses_add')
 		context['filter_url_name'] = 'expenses'
-		context['favourite_data'] = Favourite.get_favourites(self.request.user)
+		context['favourite_data'] = Favourite.get_favourites(user)
 		return context
 
 	def __get_monthly_amounts(self, expenses):
@@ -335,10 +337,11 @@ class ExpensesView(TransactionListView, ListView):
 
 
 class UpdateTagsView:
-	def update_tags(self, tags, expense, user):
+	def update_tags(self, form, transaction, user):
+		tags = form.data.get('tag').split(",")
 		for tag_name in tags:
 			(tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
-			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
+			TransactionTag.objects.get_or_create(transaction=transaction, tag=tag)
 
 
 class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
@@ -358,6 +361,7 @@ class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
 		instance.save()
 		if form.data.get('favourite'):
 			Favourite.objects.get_or_create(transaction=instance)
+		self.update_tags(form, instance, self.request.user)
 		return redirect(reverse_lazy('expenses'))
 
 
@@ -381,10 +385,11 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 
 	def form_valid(self, form):
 		# TODO VALIDATE THAT EXPENSE BELONGS TO USER
-		response = super().form_valid(form)
+		instance = form.save()
 		if form.data.get('favourite'):
 			Favourite.objects.get_or_create(transaction=form.instance)
-		return response
+		self.update_tags(form, instance, self.request.user)
+		return redirect(reverse_lazy('expenses'))
 
 	def form_invalid(self, form):
 		# TODO FIX PROBLEM WHEN ADDING DECIMALS
@@ -482,27 +487,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 # 		}
 # 		exit(0);
 # 	}
-
-
-class UserConfigurationView(ListView, CreateView):
-	model = Category
-	template_name = 'users/index.html'
-	form_class = MyAccountForm
-
-	def get_context_data(self, *args, **kwargs):
-		context = super().get_context_data(*args, **kwargs)
-		context['my_account_form'] = MyAccountForm()
-		context['categories_form'] = CategoryForm(self.request.user)
-		context['categories_list'] = Category.get_categories_tree(user=self.request.user)
-		return context
-
-	def get_form_kwargs(self):
-		kwargs = super().get_form_kwargs()
-		kwargs['user'] = self.request.user
-		return kwargs
-
-	def get_queryset(self):
-		return Category.objects.filter(user_owner=self.request.user)
 
 
 def login_view(request):

@@ -3,16 +3,16 @@
 {% load crispy_forms_tags %}
 
 <script type="text/javascript">
-	let deleteUrl = "/expenses/delete/id/";
+	let deleteUrl = {% if object.pk %}"{% url 'expenses_delete' object.pk %}"{% else %}""{% endif %};
     let deleteMessage = "{% trans 'expenses_delete_message' %}";
 	let tagList = [
-        {% for tag in tags %}
-            '{{ tag }}'
+        {% for key, tag in tags.items %}
+            '{{ tag }}',
         {% endfor %}
     ];
     let usedTagList = [
-        {% for tag in used_tag_list %}
-            '{{ tag }}'
+        {% for key, tag in used_tag_list.items %}
+            '{{ tag }}',
         {% endfor %}
     ];
     let favourite_data = {% if favourite_data %}{{ favourite_data|safe }}{% else %}{}{% endif %};
@@ -32,16 +32,3 @@
         {% include 'common/filter.html' %}
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        // TODO do this modifying form classes
-        let expenseDeleteSelector = $('#expense_delete');
-        if(expenseDeleteSelector !== undefined) {
-            let submitParent = $('#submit-id-submit').parent();
-            submitParent.addClass('text-right');
-            submitParent.siblings().first().append(expenseDeleteSelector);
-        }
-        $('#search_form :input[type="submit"]').parent().addClass('text-right')
-    });
-</script>
