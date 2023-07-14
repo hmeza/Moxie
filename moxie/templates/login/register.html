@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_filters %}
+{% block content %}
+
+<center>
+<div class="container">
+    <div class="row">
+        <div class="col-12 offset-2">
+            <div align="center" class="form-group" style="width: 400px;">
+            {% crispy form %}
+{#            <dt id="submit-label">&#160;</dt>#}
+{#            <dd id="submit-element">#}
+{#                <input type="submit" name="submit" id="submit" value="{% trans 'Submit' %}" class="form-control btn btn-info">#}
+{#            </dd>#}
+            </div>
+        </div>
+    </div>
+</div>
+</center>
+{% endblock %}

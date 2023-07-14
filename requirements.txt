@@ -5,3 +5,5 @@ django-mathfilters
 django-crispy-forms
 python-dateutil
 #PyMySQL
+django-simple-captcha
+Pillow<=9.5.0

@@ -3,19 +3,25 @@
 {% block content %}
 {% if not request.user.is_authenticated %}
 <center>
-    <div align="center" class="form-group text-center" style="width: 250px">
+    <div align="center" class="form-group text-center" style="width: 250px; margin-bottom: 3rem;">
         <form name="login" id="login_form" action="/login" method="POST">
             <fieldset>
-                <legend>Login</legend>
-				<input type="text" name="username" id="username" maxlength=12 class="form-control" placeholder="Login">
-                <input type="password" name="password" id="password" maxlength=50 class="form-control" placeholder="Password">
-                <input type="submit" value="Login" class="form-control btn btn-info moxie_login_button">
+                <legend>{% trans 'Login' %}</legend>
+				<input type="text" name="username" id="username" maxlength=12 class="form-control" placeholder="{% trans 'Login' %}">
+                <input type="password" name="password" id="password" maxlength=50 class="form-control" placeholder="{% trans 'Password' %}">
+                <input type="submit" value="{% trans 'Login' %}" class="form-control btn btn-info moxie_login_button" style="margin-bottom: 0.8rem">
                 {% csrf_token %}
-				<div align="left" class="text-normal"><a href="/login/newuser"><?php echo $st_lang['new_user']; ?></a></div>
-				<div align="left" class="text-normal"><a href="/login/forgotpassword"><?php echo $st_lang['forgot_password']; ?></a>
+
+                {% for message in messages %}
+                <div style="color: {% if 'error' in message.tags %}#FF0000{% else %}#00AA00{% endif %}; font-weight: bold; margin-bottom: 1rem;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+				<div class="text-normal text-left mb-1" style="margin-bottom: 0.8rem"><a href="{% url 'register' %}">{% trans 'New user' %}</a></div>
+                <div class="text-normal text-left mb-1" style="margin-bottom: 0.8rem"><a href="{% url 'forgot-password' %}">{% trans 'Forgot password?' %}</a></div>
             </fieldset>
         </form>
-        <div style="color:#00AA00">{{ message }}</div>
         <div>{{ error }}</div>
     </div>
 </center>
@@ -24,11 +30,5 @@
         <meta http-equiv="Refresh" content="0; url=http://127.0.0.1:8000/expenses">
     </head>
 {% endif %}
-<!-- Follow me on Twitter -->
-<!-- Last tweet -->
-<div align="center">
-<script src="https://widgets.twimg.com/j/2/widget.js"></script>
-<a class="twitter-timeline" href="https://twitter.com/___moxie___" data-widget-id="353844563590393856">Tweets por @___moxie___</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-</div>
+{% include 'index/twitter.html' %}
 {% endblock %}

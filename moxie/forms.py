@@ -1,13 +1,14 @@
 import datetime
 
 from django.forms import ModelForm, ModelChoiceField, CharField, FloatField, DateField, DateTimeField, \
-    ChoiceField, BooleanField
+    ChoiceField, BooleanField, ValidationError
 from django import forms
 from moxie.models import Category, Transaction, User, Favourite, Tag
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
+from captcha.fields import CaptchaField
 
 
 class CategoryForm(ModelForm):
@@ -141,3 +142,23 @@ class IncomesForm(TransactionForm):
 
     def clean_in_sum(self):
         return 1
+
+
+class RegisterForm(forms.ModelForm):
+    captcha = CaptchaField()
+    repeat_password = forms.CharField(label=_("Repeat password"))
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'repeat_password', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Submit')))
+        self.helper.form_action = reverse_lazy('register')
+
+    def clean_repeat_password(self):
+        if self.cleaned_data.get('password') != self.cleaned_data.get('repeat_password'):
+            raise ValidationError(_("Passwords do not match"))
+        return self.cleaned_data.get('repeat_password')

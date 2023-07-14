@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, register_converter
-from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, login_view,\
-    logout_view, ExpenseDeleteView
+from django.urls import path, register_converter, include
+from moxie.views.login import login_view, logout_view, RegisterView, ForgotPasswordView
+from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.users import UserConfigurationView
 from moxie.views.stats import StatsView
@@ -53,6 +53,9 @@ urlpatterns = [
 
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
+    path('register', RegisterView.as_view(), name='register'),
+    path('forgot-password', logout_view, name='forgot-password'),
+    path('captcha/', include('captcha.urls')),
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),

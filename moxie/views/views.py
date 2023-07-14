@@ -3,8 +3,6 @@ import calendar
 import re
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
-# login system
-from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
@@ -15,7 +13,6 @@ from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
-from django.http import HttpResponseRedirect
 
 
 class CreateCategory(CreateView):
@@ -487,20 +484,3 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 # 		}
 # 		exit(0);
 # 	}
-
-
-def login_view(request):
-	username = request.POST.get("username")
-	password = request.POST.get("password")
-	user = authenticate(request, username=username, password=password)
-	if user is not None and password is not None:
-		login(request, user)
-		return redirect(reverse_lazy('expenses'))
-	else:
-		# Return an 'invalid login' error message.
-		raise Exception(_("Login incorrect"))
-
-
-def logout_view(request):
-	logout(request)
-	return HttpResponseRedirect(reverse_lazy('index'))
