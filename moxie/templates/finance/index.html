@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<script type="text/javascript" src="{% static '/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static '/js/finance/utils.js' %}"></script>
+<script type="text/javascript">
+let currentId = 1;
+let currentComparison = 1;
+let formTemplate = "";
+let financeAddTxt = "{% trans 'finance_add_row' %}";
+
+let check = function() {
+    if($('#amount').val() != ""
+        && $('#rate').val() != ""
+        && $('#months').val() != "") {
+        let finance = new Finance();
+        finance.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
+        $('#interest').val(finance.interest);
+        $('#total').val(finance.getTotal());
+    }
+}
+
+function disableCurrentForm() {
+    $('#moxie_form_'+currentId+" *").filter(":input").each(function(e) {
+        $(this).attr('disabled', 'disabled');
+        $(this).attr('id', $(this).attr('id')+currentId);
+    });
+    currentId++;
+}
+
+function getDepositForm() {
+    return "<div id='moxie_form_"+currentId+"' style='float: left'>"+formTemplate+"</div>";
+}
+
+let addForm = function() {
+    disableCurrentForm();
+    $(getDepositForm()).insertBefore('#add_form');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+}
+
+let compare = function() {
+    disableCurrentForm();
+    $('#add_form').remove();
+    $("<div id='pepe"+currentComparison+"' style='display: flex'>"+getDepositForm()+"<div id='add_form' style='float: left'>"
+    +"<button class='btn btn-info'>"
+    +"<i>+</i>"+financeAddTxt
+    +"</button>"+"</div></div>").insertAfter('#compare');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+    $('#add_form').click(addForm);
+    currentComparison++;
+}
+
+$(document).ready(function() {
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+
+    $('#add_form').click(addForm);
+    $('#compare').click(compare);
+
+    formTemplate = $('.moxie_form').wrap('<p/>').parent().html();
+});
+</script>
+
+<h1>{% trans 'finance_title' %}</h1>
+<div id="container">
+    <div id="compare">
+        <button class="btn btn-info">
+            <i>+</i>
+            {% trans 'finance_compare' %}
+        </button>
+    </div>
+    <div id="pepe" style="display: flex">
+        <div id="moxie_form_1" style='float: left'>
+            <form class="moxie_form">
+                <div>
+                    <dt for="name">{% trans 'finance_name' %}</dt>
+                    <dd><input id="name" type="text" placeholder="" class="form-control"></dd>
+                </div>
+                <div>
+                <dt for="amount">{% trans 'finance_amount' %}</dt>
+                <dd><input id="amount" type="number" placeholder="0,00" class="form-control"></dd>
+                </div>
+                <div>
+                <dt for="rate">{% trans 'finance_interest' %}</dt>
+                <dd><input id="rate" type="number" placeholder="0" class="form-control"></dd>
+                </div>
+                <div>
+                <dt for="months">{% trans 'finance_period' %}</dt>
+                <dd><input id="months" type="number" placeholder="12" class="form-control"></dd>
+                </div>
+                <div>
+                <dt for="interest">{% trans 'finance_revenue' %}</dt>
+                <dd><input id="interest" class="form-control"></dd>
+                </div>
+                <div>
+                <dt for="total">{% trans 'finance_total' %}</dt>
+                <dd><input id="total" class="form-control"></dd>
+                </div>
+            </form>
+        </div>
+        <div id="add_form" style='float: left'>
+            <button class="btn btn-info">
+                <i>+</i>
+                {% trans 'finance_add_row' %}
+            </button>
+        </div>
+    </div>
+</div>
+<div height=20px>&nbsp;</div>
+{% endblock %}
