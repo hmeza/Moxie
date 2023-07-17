@@ -5,6 +5,8 @@ from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
+from django.http.response import HttpResponseForbidden, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
@@ -15,8 +17,15 @@ from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
 
 
-class CreateCategory(CreateView):
-	form_class = CategoryForm
+class UserOwnerMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if self.object.user != self.request.user:
+            return HttpResponseForbidden()
+        return super(UserOwnerMixin, self).dispatch(request, *args, **kwargs)
+
+
+class CreateCategory(LoginRequiredMixin, CreateView):
+    form_class = CategoryForm
 
     # def addAction():
     # 	try:
@@ -32,9 +41,9 @@ class CreateCategory(CreateView):
     # 	$this->_helper->redirector('index','categories');
 
 
-class UpdateCategory(UpdateView):
-	form_class = CategoryUpdateForm
-	success_url = reverse_lazy('')
+class UpdateCategory(LoginRequiredMixin, UpdateView, UserOwnerMixin):
+    form_class = CategoryUpdateForm
+    success_url = reverse_lazy('')
 
 	# private function getEditForm($i_categoryPK) {
 	# 	global $st_lang;
@@ -100,7 +109,7 @@ class UpdateCategory(UpdateView):
     # }
 
 
-class DeleteCategory(DeleteView):
+class DeleteCategory(LoginRequiredMixin, DeleteView, UserOwnerMixin):
 	pass
 
 
@@ -182,7 +191,8 @@ class DeleteCategory(DeleteView):
 # }
 
 
-class TransactionListView(FilterView):
+class TransactionListView(FilterView, ListView):
+	model = Transaction
 	filterset_class = ExpensesFilter
 
 	def get_queryset(self):
@@ -231,7 +241,7 @@ class TransactionListView(FilterView):
 		return kwargs
 
 
-class ExpensesView(TransactionListView, ListView):
+class ExpensesView(LoginRequiredMixin, TransactionListView, ListView):
 	model = Transaction
 	template_name = 'expenses/index.html'
 
@@ -328,9 +338,6 @@ class ExpensesView(TransactionListView, ListView):
 	# 	if($this->getRequest()->getParam('to_excel') == true) {
 	# 		$this->exportToExcel($st_list);
 	# 	}
-	#
-	# 	$this->assignViewData($st_list, $st_params);
-	# }
 
 
 class UpdateTagsView:
@@ -341,7 +348,7 @@ class UpdateTagsView:
 			TransactionTag.objects.get_or_create(transaction=transaction, tag=tag)
 
 
-class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
+class ExpenseAddView(LoginRequiredMixin, CreateView, UpdateTagsView, TransactionListView):
 	model = Transaction
 	form_class = ExpensesForm
 	success_url = reverse_lazy('expenses')
@@ -362,7 +369,7 @@ class ExpenseAddView(CreateView, UpdateTagsView, TransactionListView):
 		return redirect(reverse_lazy('expenses'))
 
 
-class ExpenseDeleteView(DeleteView):
+class ExpenseDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
 	model = Transaction
 	success_url = reverse_lazy('expenses')
 
@@ -370,7 +377,7 @@ class ExpenseDeleteView(DeleteView):
 		return self.delete(request, *args, **kwargs)
 
 
-class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
+class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionListView, UserOwnerMixin):
 	model = Transaction
 	form_class = ExpensesForm
 	template_name = 'expenses/index.html'
@@ -381,7 +388,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		return kwargs
 
 	def form_valid(self, form):
-		# TODO VALIDATE THAT EXPENSE BELONGS TO USER
 		instance = form.save()
 		if form.data.get('favourite'):
 			Favourite.objects.get_or_create(transaction=form.instance)
@@ -389,10 +395,12 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		return redirect(reverse_lazy('expenses'))
 
 	def form_invalid(self, form):
-		# TODO FIX PROBLEM WHEN ADDING DECIMALS
-		print(form.errors)
-		print(form.data['amount'])
+		# TODO FIX PROBLEM WHEN FORM IS INVALID
+		self.object_list = self.get_queryset()
+		filterset_class = self.get_filterset_class()
+		self.filterset = self.get_filterset(filterset_class)
 		response = super().form_invalid(form)
+		return HttpResponseRedirect(reverse_lazy('expenses_edit', kwargs={'pk': self.object.pk}))
 		return response
 
 	def get_success_url(self):
@@ -404,11 +412,6 @@ class ExpenseView(UpdateView, UpdateTagsView, TransactionListView):
 		context['edit_slug'] = '/expenses/'
 		context['filter_url_name'] = 'expenses'
 		return context
-
-	def __get_transaction_id(self):
-		url = self.request.path
-		groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
-		return groups.group(1)
 
 # 	/**
 # 	 * Returns the monthly expense for a year.

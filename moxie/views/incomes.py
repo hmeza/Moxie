@@ -1,11 +1,12 @@
 import datetime
-import calendar
 import re
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from moxie.forms import IncomesForm
 from django.urls import reverse_lazy
@@ -14,6 +15,7 @@ from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
+from moxie.views.views import UserOwnerMixin
 
 
 class IncomesListView(FilterView):
@@ -62,7 +64,7 @@ class IncomesListView(FilterView):
 		return kwargs
 
 
-class IncomesView(IncomesListView, ListView):
+class IncomesView(LoginRequiredMixin, IncomesListView, ListView):
 	model = Transaction
 	template_name = 'incomes/index.html'
 
@@ -168,7 +170,7 @@ class UpdateTagsView:
 			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
 
 
-class IncomeAddView(CreateView, UpdateTagsView, IncomesListView):
+class IncomeAddView(LoginRequiredMixin, CreateView, UpdateTagsView, IncomesListView):
 	model = Transaction
 	form_class = IncomesForm
 	success_url = reverse_lazy('incomes')
@@ -188,7 +190,7 @@ class IncomeAddView(CreateView, UpdateTagsView, IncomesListView):
 		return redirect(reverse_lazy('incomes'))
 
 
-class IncomeDeleteView(DeleteView):
+class IncomeDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
 	model = Transaction
 	success_url = reverse_lazy('incomes')
 
@@ -196,7 +198,7 @@ class IncomeDeleteView(DeleteView):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(UpdateView, UpdateTagsView, IncomesListView):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, UserOwnerMixin):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
@@ -234,137 +236,3 @@ class IncomeView(UpdateView, UpdateTagsView, IncomesListView):
 		url = self.request.path
 		groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
 		return groups.group(1)
-
-
-
-"""
-<?php
-/** Zend_Controller_Action */
-class IncomesController extends TransactionsController
-{
-    /** @var Incomes */
-	private $incomes;
-
-	public function init() {
-		parent::init();
-		$this->incomes = new Incomes();
-	}
-
-	/**
-	 * This function generates the form to add incomes.
-	 * @param array $st_income
-	 * @return Zend_Form
-	 */
-	private function getForm($st_income = array()) {
-		global $st_lang;
-		$form  = new Zend_Form();
-		$categories = new Categories();
-
-		$action = '/incomes/';
-		$action .= isset($st_income[0]['id']) ? 'update' : 'add';
-
-		// fix for datetime to date
-		$s_date = explode(" ", $st_income[0]['date']);
-		$st_income[0]['date'] = $s_date[0];
-
-		$form->setAction($action)->setMethod('post');
-		$form->setAttrib('id', 'login');
-        $form->setDecorators(array(
-            'FormElements',
-            array('HtmlTag',array('tag' => 'table')),
-            'Form'
-        ));
-
-        $form_elements = array();
-
-        $form_elements[] = new Zend_Form_Element_Text('amount', array('label' => $st_lang['expenses_amount'], 'placeholder' => '0.00', 'value' => $st_income[0]['amount'], 'class' => 'form-control'));
-        $form_elements[] = new Zend_Form_Element_Text('note', array('label' => $st_lang['expenses_note'], 'value' => $st_income[0]['note'], 'class' => 'form-control'));
-        $form_elements[] = new Zend_Form_Element_Date('date', array('label' => $st_lang['incomes_date'], 'value' => $st_income[0]['date'], 'class' => 'form-control'));
-
-		$multiOptions = new Zend_Form_Element_Select('category');
-		$multiOptions->setLabel($st_lang['expenses_category']);
-		$multiOptions->addMultiOptions($categories->getCategoriesForView(Categories::INCOMES));
-		$multiOptions->setValue(array($st_income[0]['category']));
-		$multiOptions->setAttrib('class', 'form-control');
-		$form_elements[] = $multiOptions;
-		
-		if (isset($st_income[0]['id'])) {
-            $id = $st_income[0]['id'];
-            $remove = new Zend_Form_Element_Button('delete', array(
-                'label' => 'Borrar',
-                'class' => 'btn btn-danger pull-right',
-                'onclick' => 'confirmDelete("'.$id.'")'
-            ));
-            $form_elements[] = $remove;
-		}
-		$submit = new Zend_Form_Element_Submit('submit', array('label' => $st_lang['income_header'], 'class' => 'btn btn-primary pull-right'));
-		$form_elements[] = $submit;
-        if (isset($st_income[0]['id'])) {
-            $form_elements[] = new Zend_Form_Element_Hidden('id', array('value' => $id));
-        }
-
-        $this->prepareFormDecorators($form, $form_elements);
-        if(isset($remove)) {
-            $remove->removeDecorator("label");
-        }
-        $submit->removeDecorator("label");
-
-		return $form;
-	}
-
-	/**
-	 * Retrieve the yearly incomes.
-	 * @return array
-	 */
-	public function getYearlyIncome() {
-		global $st_lang;
-		
-        $o_rows = $this->incomes->getYearlyIncome($_SESSION['user_id']);
-	
-		$st_data = array(array($st_lang['incomes_date'], $st_lang['expenses_amount']));
-		foreach($o_rows as $key => $value) {
-			$st_data[] = array(
-					(string)$value['date'],
-					(float)$value['amount']
-			);
-		}
-		return $st_data;
-	}
-
-	private function getViewData($st_data) {
-		global $st_lang;
-
-		$i_year = $this->getRequest()->getParam('year', date('Y'));
-		$st_params = $this->getRequest()->getParams();
-		// convert month+year to filters for search
-		if(empty($st_params['date_min']) && empty($st_params['date_max'])) {
-			$st_params['date_min'] = $i_year.'-01-01';
-			$st_params['date_max'] = date("Y-12-t", strtotime($i_year.'-01-01'));
-		}
-		$st_params['category_search'] = $this->getRequest()->getParam('category_search', null);
-
-		$this->view->assign('list', $this->incomes->get($_SESSION['user_id'],Categories::INCOMES, $st_params));
-		$this->view->assign('graphData', json_encode($this->getYearlyIncome()));
-		$this->view->assign('graphDataLabel', $st_lang['incomes_yearly']);
-		$this->view->assign('graphDataLabelYear', $st_lang['incomes_by_years']);
-		$this->view->assign('year', $i_year);
-		$this->view->assign('form', $this->getForm($st_data));
-		$this->view->assign('search_form', $this->getSearchForm($this->getRequest(), Categories::INCOMES));
-	}
-	
-	/**
-	 * Shows the expenses view
-	 */
-	public function indexAction() {
-		$st_data = array(array(
-			'id' => null,
-			'amount' => null,
-			'category' => null,
-			'note' => '',
-			'date' => date('Y-m-d H:i:s')
-		));
-
-		$this->getViewData($st_data);
-	}
-}
-"""
