@@ -1,15 +1,21 @@
-<div id="categories_table" class="form-group accordion-body <?php if ($this->categories_collapse) { echo "collapse"; } ?>">
-{{ categories_form }}
+{% load static %}
+{% load crispy_forms_tags %}
+<div id="categories_table" class="form-group accordion-body">
+
+<form>
+    {% crispy categories_form %}
+</form>
+
 <ul id="categories_list" class="categories_list">
     {% for category in categories_list %}
         <li class="ui-state-default">
         <span>
             <a href="/categories/edit/id/{{ category.subcategories.id }}">
-                <img src="/img/edit.png">
+                <img src="{% static '/img/edit.png' %}">
             </a>
         </span>
         <span class="categories_list">
-            <input type="hidden" name="{{ category.subcategories.id }}"/> {% if category.subcategories.name %}{{ category.name }} --- {% endif %}{{ category.subcategories.name }} ({{ category.type }})
+            <input type="hidden" name="{{ category.pk }}"/> {{ category }} ({{ category.type_name }})
         </span>
         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
         </li>

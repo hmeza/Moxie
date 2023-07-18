@@ -1,7 +1,8 @@
 from django.views.generic import ListView
 from moxie.forms import CategoryForm, MyAccountForm, TagsForm
-from moxie.models import Category, Tag, Favourite
+from moxie.models import Category, Tag, Favourite, Budget
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 
 
 class UserConfigurationView(LoginRequiredMixin, ListView):
@@ -14,10 +15,14 @@ class UserConfigurationView(LoginRequiredMixin, ListView):
 		user = self.request.user
 		context['my_account_form'] = MyAccountForm(user)
 		context['categories_form'] = CategoryForm(user)
-		context['categories_list'] = Category.get_categories_tree(user=user)
+		context['categories_list'] = Category.get_categories_tree(user)
 		context['tags_form'] = TagsForm(user)
 		context['tag_list'] = Tag.get_tags(user)
 		context['favourites'] = Favourite.get_for_config(user)
+		current_budget = Budget.get_budget(user)
+		context['current_budget'] = current_budget
+		context['current_budget_amount'] = current_budget.aggregate(total=Sum('amount'))['total']
+		context['budgets_list'] = Budget.objects.filter(user=user).order_by('date_created').all()
 		return context
 
 	# def get_form_kwargs(self):
@@ -26,7 +31,7 @@ class UserConfigurationView(LoginRequiredMixin, ListView):
 	# 	return kwargs
 
 	def get_queryset(self):
-		return Category.objects.filter(user_owner=self.request.user)
+		return Category.objects.filter(user=self.request.user)
 
 	def get_object(self, queryset=None):
 		return Category.objects.none()

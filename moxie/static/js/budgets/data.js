@@ -8,15 +8,15 @@ $(document).ready(function() {
 });
 
 function store(trigger_id) {
-    category = $("#category" + trigger_id).val();
-    amount = $("#amount" + trigger_id);
+    let category = $("#category" + trigger_id).val();
+    let amount = $("#amount" + trigger_id);
     $.ajax({
-        url: moxie_url+"/budgets/add/category/" + category + "/amount/" + amount.val()
+        url: "/budgets/add/category/" + category + "/amount/" + amount.val()
     });
 }
 
 function getSum(trigger_id) {
-    var sum = 0;
+    let sum = 0;
     $('[id^=amount]').each(function() {
         sum += parseFloat(this.value);
     });
@@ -30,7 +30,6 @@ function snapshot() {
         type: 'GET',
         data: '',
         success: function(data) {
-            // show OK message
             $('#message').html(message);
         }}
     );

@@ -87,7 +87,7 @@ class ExpensesForm(TransactionForm):
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
-    amount = FloatField(label=_('amount'))
+    amount = FloatField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False)
     favourite = BooleanField(label=_('Favourite'), initial=False, required=False)
@@ -100,7 +100,8 @@ class ExpensesForm(TransactionForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(user, *args, **kwargs)
         self.fields['category'].queryset = Category.get_categories_tree(user)
-        self.helper.add_input(Submit('submit', _('Add expense')))
+        translation = _('Update expense') if self.instance else _('Add expense')
+        self.helper.add_input(Submit('submit', translation))
         if self.initial.get('amount'):
             self.initial['amount'] = -self.initial.get('amount')
         self.fields['favourites'].choices = self.__mount_favourites(user)
@@ -124,7 +125,7 @@ class IncomesForm(TransactionForm):
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     note = CharField(label=_('note'))
-    amount = FloatField(label=_('amount'))
+    amount = FloatField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False, widget=forms.HiddenInput())
 
@@ -144,13 +145,16 @@ class IncomesForm(TransactionForm):
         return 1
 
 
-class RegisterForm(forms.ModelForm):
+from django.contrib.auth.forms import SetPasswordForm
+
+
+class RegisterForm(forms.ModelForm, SetPasswordForm):
     captcha = CaptchaField()
     repeat_password = forms.CharField(label=_("Repeat password"))
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'repeat_password', 'email']
+        fields = ['username', 'password', 'new_password2', 'email']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -158,7 +162,33 @@ class RegisterForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', _('Submit')))
         self.helper.form_action = reverse_lazy('register')
 
-    def clean_repeat_password(self):
+    def clean_new_password2(self):
+        if self.cleaned_data.get('password') != self.cleaned_data.get('repeat_password'):
+            raise ValidationError(_("Passwords do not match"))
+        return self.cleaned_data.get('repeat_password')
+
+
+class ChangePasswordForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
+
+
+class UpdateUserData(forms.ModelForm, SetPasswordForm):
+    captcha = CaptchaField()
+    repeat_password = forms.CharField(label=_("Repeat password"))
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'new_password2', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Submit')))
+        self.helper.form_action = reverse_lazy('register')
+
+    def clean_new_password2(self):
         if self.cleaned_data.get('password') != self.cleaned_data.get('repeat_password'):
             raise ValidationError(_("Passwords do not match"))
         return self.cleaned_data.get('repeat_password')

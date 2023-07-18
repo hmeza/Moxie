@@ -14,7 +14,7 @@ from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
-from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
+from moxie.models import Transaction, Tag, TransactionTag, Favourite
 from moxie.views.views import UserOwnerMixin
 
 

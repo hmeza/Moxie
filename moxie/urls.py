@@ -18,6 +18,7 @@ from django.urls import path, register_converter, include
 from moxie.views.login import login_view, logout_view, RegisterView#, ForgotPasswordView
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
+from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView
 from moxie.views.tags import TagView
 from moxie.views.stats import StatsView
@@ -41,6 +42,9 @@ urlpatterns = [
     path('incomes/add/', IncomeAddView.as_view(), name='incomes_add'),
     path(r'incomes/year/<yyyy:year>/', IncomesView.as_view(), name='incomes_with_parameters'),
     path('incomes/', IncomesView.as_view(), name='incomes'),
+
+    path('budget/<int:pk>/delete/', BudgetDeleteView.as_view(), name='budget_delete'),
+    path('budget/', BudgetView.as_view(), name='budget'),
 
     path('stats/year/<yyyy:year>/', StatsView.as_view(), name='stats'),
     path('stats/', StatsView.as_view(), name='stats'),

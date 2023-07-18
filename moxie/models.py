@@ -70,7 +70,7 @@ class Category(models.Model):
     INCOMES = 2
     BOTH = 3
 
-    user_owner = models.ForeignKey(User, db_column='user_owner', blank=False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=False, null=True, on_delete=models.CASCADE, default=None)
     parent = models.ForeignKey(
         "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT,
         default=None
@@ -81,56 +81,17 @@ class Category(models.Model):
     order = models.SmallIntegerField(default=1)
 
     def __str__(self):
-        return self.name if self.name else ''
+        if self.parent is None or self.parent.parent is None:
+            return self.name
+        else:
+            return self.parent.name + " - " + self.name
 
     @staticmethod
     def get_categories_by_user(user, category_type=BOTH):
         return Category.objects \
-            .filter(user_owner=user.pk, parent__isnull=False, type=category_type)\
+            .filter(user=user.pk, parent__isnull=False, type=category_type)\
             .order_by('order', 'name') \
             .all()
-
-#     /**
-#      * Gets categories for a given user.
-#      * i_typeFilter stands for the type of category to retrieve.
-#      * @param int $i_typeFilter
-#      * @throws Exception No user found in session
-#      */
-#     public function getCategoriesByUser($i_typeFilter) {
-#         if(empty($_SESSION) || empty($_SESSION['user_id'])) {
-#             throw new Exception("No user id found in session");
-#         }
-#         if ($i_typeFilter == self::BOTH) $s_typeFilter = '1 = 1';
-#         else $s_typeFilter = 'c2.type = '.self::BOTH.' OR c2.type = '.$i_typeFilter;
-#
-#         $query = $this->database->select()
-#             ->from(array('c1'=>'categories'), array(
-#                 'id1'    =>    'distinct(c2.id)',
-#                 'parent1'    =>    'c1.id',
-#                 'grandparent' => 'c1.parent',
-#                 'name1'    =>    'c1.name',
-#                 'name2'    =>    'c2.name',
-#                 'type'    =>    'c2.type',
-#                 'parent' => 'c2.parent',
-#                 'order' => 'c2.order'
-#             ))
-#             ->joinLeft(array('c2'=>'categories'),'c2.parent = c1.id',array())
-#             ->where('c1.user_owner = ?', $_SESSION['user_id'])
-#             ->where('c2.id is not null')
-#             ->where($s_typeFilter)
-#             ->order('c2.order')
-#             ->order('c1.parent')
-#             ->order('c2.parent');
-#         $stmt = $this->database->query($query);
-#         return $stmt->fetchAll();
-#     }
-#
-
-    def __str__(self):
-        if self.parent.parent is None:
-            return self.name
-        else:
-            return self.parent.name + " - " + self.name
 
     @property
     def type_name(self):
@@ -144,7 +105,7 @@ class Category(models.Model):
     @staticmethod
     def get_categories_tree(user, type_filter=EXPENSES):
         queryset = Category.objects.select_related('parent')\
-            .filter(user_owner=user)
+            .filter(user=user)
         if type_filter == Category.BOTH:
             queryset = queryset.filter(Q(type=Category.EXPENSES) | Q(type=Category.INCOMES) | Q(type=Category.BOTH))
         else:
@@ -155,116 +116,100 @@ class Category(models.Model):
             .order_by('order')
         return queryset
 
-#     /**
-#      * @param $i_lastInsertId
-#      * @return boolean
-#      */
-#     public function insertCategoriesForRegisteredUser($i_lastInsertId) {
-#         $orderIndex = 0;
-#         // first insert root category
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'description' => 'root category'
-#         );
-#         // add default categories for the new user
-#         $i_rootCategory = $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Hogar',
-#                 'description' => 'Hogar',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Diversión',
-#                 'description' => 'Salidas, cenas fuera, ocio, etc.',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Tecnología',
-#                 'description' => 'Tecnología',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Regalos',
-#                 'description' => 'Navidad, reyes, aniversarios, san Valentín, etc.',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Ropa',
-#                 'description' => 'Ropa',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $i_rootCategory,
-#                 'name' => 'Varios',
-#                 'description' => 'Otros gastos',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#             'user_owner' => $i_lastInsertId,
-#             'parent' => $i_rootCategory,
-#             'name' => 'Comida',
-#             'description' => 'Comida',
-#             'type' => 3,
-#             'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#
-#         $o_foodCategory = $this->fetchRow(
-#                 $this->select()->where('name = "Comida" AND user_owner = ' . $i_lastInsertId)
-#         );
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $o_foodCategory->id,
-#                 'name' => 'Casa',
-#                 'description' => 'Comida comprada para casa',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $o_foodCategory->id,
-#                 'name' => 'Fuera',
-#                 'description' => 'Comidas fuera de casa',
-#                 'type' => 3,
-#                 'order' => $orderIndex++
-#         );
-#         $this->insert($st_categoriesData);
-#         $st_categoriesData = array(
-#                 'user_owner' => $i_lastInsertId,
-#                 'parent' => $o_foodCategory->id,
-#                 'name' => 'Café',
-#                 'description' => 'Cafés, bollería durante el día, desayuno en cafetería, etc.',
-#                 'type' => 3,
-#                 'order' => $orderIndex
-#         );
-#         $this->insert($st_categoriesData);
-#         return true;
-#     }
-# }
+    def register_new_user_categories(self, user):
+        root_category = Category.objects.get_or_create(
+            user=user,
+            name=_('Root category'),
+            parent=None,
+            description=_('Root category'),
+            order=0,
+            type=Category.BOTH
+        )
+        new_categories = [
+            Category(
+                user=user,
+                name=_('Home'),
+                parent=root_category,
+                description=_('Home'),
+                order=1,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Fun'),
+                parent=root_category,
+                description=_('Going out, dinner outside, parties, fun...'),
+                order=2,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Technology'),
+                parent=root_category,
+                description=_('Technology'),
+                order=3,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Gifts'),
+                parent=root_category,
+                description=_("Christmas, Valentine's day, birthday..."),
+                order=4,
+                type=Category.BOTH
+            ),
+            Category(
+                user=user,
+                name=_('Clothing'),
+                parent=root_category,
+                description=_('Wear and dress'),
+                order=5,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Other'),
+                parent=root_category,
+                description=_('Non-classifiable transactions'),
+                order=6,
+                type=Category.BOTH
+            ),
+        ]
+        Category.objects.bulk_create(new_categories)
+        food_category = Category(
+            user=user,
+            name=_('Food'),
+            parent=root_category, description=_('Food'),
+            order=7,
+            type=Category.EXPENSES
+        ),
+        new_categories = [
+            Category(
+                user=user,
+                name=_('Home'),
+                parent=food_category,
+                description=_('Home food, grocery'),
+                order=8,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Away'),
+                parent=food_category,
+                description=_('Lunch and dinner out'),
+                order=9,
+                type=Category.EXPENSES
+            ),
+            Category(
+                user=user,
+                name=_('Coffee'),
+                parent=food_category,
+                description=_('Coffee outside, take away, some pastry maybe'),
+                order=10,
+                type=Category.EXPENSES
+            ),
+        ]
+        Category.objects.bulk_create(new_categories)
 
 
 class Budget(models.Model):
@@ -276,8 +221,13 @@ class Budget(models.Model):
     date_ended = models.DateTimeField(blank=True, null=True)
 
     @staticmethod
-    def get_budget(user_id):
-        return Budget.objects.filter(user_owner=user_id, date_ended__isnull=True)
+    def get_budget(user):
+        return Budget.objects.select_related('category')\
+            .filter(user=user, date_ended__isnull=True)
+
+    def getBudget(user):
+        data = Budget.get_budget(user)
+        return [{element['category']: element['amount']} for element in data]
 
     @staticmethod
     def get_budget_for_month(user, year, month):
@@ -292,19 +242,14 @@ class Budget(models.Model):
             .order_by('category')
         return queryset
 
-    def getBudget(user_id):
-        data = Budget.get_budget(user_id)
-        return [{element['category']: element['amount']} for element in data]
-
     @staticmethod
     def getLastBudgetByCategoryId(category_id):
         return Budget.objects.filter(category=category_id, date_ended_isnull=True)
 
     @staticmethod
     def snapshot(user_id):
-        currentBudget = Budget.get_budget(user_id)
-        currentBudget.date_ended = datetime.datetime.now()
-        pass
+        current_budget = Budget.get_budget(user_id)
+        current_budget.date_ended = datetime.datetime.now()
     #
     #
     #     // mark current budget with end date
@@ -385,11 +330,6 @@ class Budget(models.Model):
         #     }
         #     return $st_budgetsList;
         # }
-
-    def delete(self, user=None, date=None, *args, **kwargs):
-        if user and date:
-            return Budget.objects.all().filter(user_owner=user, date_created=date).delete()
-        return super().delete(*args, **kwargs)
 
 
 class Transaction(models.Model):
