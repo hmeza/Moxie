@@ -596,6 +596,7 @@ class Transaction(models.Model):
 
 
 class Tag(models.Model):
+    # TODO check if when adding tags, backslashes must be replaced
     transaction_tags = None
     existing_tags = None
 
@@ -604,49 +605,8 @@ class Tag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # /**
-    #  * Adds a new tag for $userId
-    #  * @var int $userId
-    #  * @var string $name
-    #  * @return int
-    #  * @throws Exception
-    #  */
-    # public function addTag($userId, $name) {
-    #     if(empty($userId)) {
-    #         throw new Exception("Empty user id");
-    #     }
-    #     if(empty($name)) {
-    #         throw new Exception("Empty tag name");
-    #     }
-    #     if(is_null($this->existingTags)) {
-    #         $this->existingTags = $this->getTagsByUser($userId);
-    #     }
-    #
-    #     // check if backslashes have been already replaced
-    #     $name = trim($name);
-    #     $pos = strpos($name, "\\'");
-    #     if ($pos === false) {
-    #     }
-    #     else {
-    #         $name = str_replace("\\'", "'", $name);
-    #     }
-    #     $tagId = array_search($name, $this->existingTags);
-    #     if($tagId === FALSE) {
-    #         $data = array(
-    #             'user_owner' => $userId,
-    #             'name' => $name
-    #         );
-    #         try {
-    #             return $this->insert($data);
-    #         } catch (Exception $e) {
-    #             error_log('Exception caught on '.__METHOD__.'('.$e->getLine().'), message: '.$e->getMessage());
-    #             return null;
-    #         }
-    #     }
-    #     else {
-    #         return $tagId;
-    #     }
-    # }
+    def __str__(self):
+        return self.name
 
     @staticmethod
     def get_tags(user=None):
@@ -677,6 +637,21 @@ class Tag(models.Model):
 
     def get_tag(self, user_id=None, tag=None):
         return self.objects.filter(user=user_id, name=tag).first()
+
+    @staticmethod
+    def clean_tags(tag_list, user):
+        tags_to_be_deleted = Tag.objects.filter(user=user).exclude(name__in=tag_list)
+        for tag in tags_to_be_deleted:
+            Tag.objects.filter(name=tag).delete()
+
+    @staticmethod
+    def create_new_tags(tag_list, user):
+        tags_in_list = Tag.objects.filter(user=user, name__in=tag_list).values_list('name')
+        tag_list_to_create = set(tag_list).difference(tags_in_list)
+        new_tags = []
+        for tag in tag_list_to_create:
+            new_tags.append(Tag(user=user, name=tag))
+        Tag.objects.bulk_create(new_tags)
 
 
 class TransactionTag(models.Model):

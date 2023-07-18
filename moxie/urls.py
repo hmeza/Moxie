@@ -19,6 +19,7 @@ from moxie.views.login import login_view, logout_view, RegisterView#, ForgotPass
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.users import UserConfigurationView
+from moxie.views.tags import TagView
 from moxie.views.stats import StatsView
 from django.views.generic import TemplateView
 from . import converters
@@ -48,6 +49,7 @@ urlpatterns = [
     path('finance', TemplateView.as_view(template_name='finance/index.html'), name='finance'),
     # TODO
     path('users', UserConfigurationView.as_view(), name='users'),
+    path('tag', TagView.as_view(), name='tags'),
      # TODO
     path('sheets', UserConfigurationView.as_view(), name='users'),
 

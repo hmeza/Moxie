@@ -1,19 +1,33 @@
+{% load i18n %}
+
 <div id="tags_table" class="accordion-body collapse">
-	<h2 id="tags_title">
-	    <?php global $st_lang; echo $st_lang['tags_title']." ".$st_lang['press_here_display']; ?>
-	</h2>
-    <form action="/tags/multi_update" method="POST">
-        <?php
-        global $st_lang;
-        echo $st_lang['tags_notice'];
-        ?>
-        <input id="tags" name="tags" type="text" data-role="tagsinput">
-        <input type="submit" value="<?php echo $st_lang['tags_update']; ?>" class="form-control">
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            <h2 id="tags_title">
+                {% trans 'tags_title' %} {% trans 'press_here_display' %}
+            </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form action="{% url 'tags' %}" method="POST">
+                    {% trans 'tags_notice' %}
+                    {% csrf_token %}
+                    <input id="tags" name="tags" type="text" data-role="tagsinput">
+                    <input type="submit" value="{% trans 'tags_update' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <br><br>
 
 <script type="text/javascript">
-    var tagList = [<?php if(!empty($this->tag_list)) echo "'".implode($this->tag_list, "','")."'"; ?>];
+    let tagList = [
+        {% for key, tag in tag_list.items %}
+            "{{ tag }}",
+        {% endfor %}
+    ];
     $('#tags').val(tagList);
 </script>
