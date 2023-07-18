@@ -656,9 +656,9 @@ class Tag(models.Model):
 
 class TransactionTag(models.Model):
     transaction = models.ForeignKey(
-        Transaction, db_column='id_transaction', related_name='tags', on_delete=models.CASCADE
+        Transaction, related_name='tags', on_delete=models.CASCADE
     )
-    tag = models.ForeignKey(Tag, db_column='id_tag', related_name='transactions', on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, related_name='transactions', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -707,3 +707,10 @@ class Favourite(models.Model):
                 'tags': result[key]['tags'] if result[key]['tags'] else ''
             })
         return result
+
+    @staticmethod
+    def get_for_config(user):
+        queryset = Favourite.objects.select_related('transaction')\
+            .prefetch_related('transaction__tags__tag')\
+            .filter(transaction__user=user).all()
+        return queryset

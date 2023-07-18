@@ -1,6 +1,6 @@
 from django.views.generic import ListView
 from moxie.forms import CategoryForm, MyAccountForm, TagsForm
-from moxie.models import Category, Tag
+from moxie.models import Category, Tag, Favourite
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -17,6 +17,7 @@ class UserConfigurationView(LoginRequiredMixin, ListView):
 		context['categories_list'] = Category.get_categories_tree(user=user)
 		context['tags_form'] = TagsForm(user)
 		context['tag_list'] = Tag.get_tags(user)
+		context['favourites'] = Favourite.get_for_config(user)
 		return context
 
 	# def get_form_kwargs(self):
