@@ -20,11 +20,11 @@ $(document).ready(function() {
 });
 </script>
 
-<button data-target="#my_account" class="toggable btn btn-info">{% trans 'users_my_account' %}</button>
-<button data-target="#categories_table" class="toggable btn btn-info">{% trans 'categories' %}</button>
-<button data-target="#favourites_table" class="toggable btn btn-info">{% trans 'favourites_message' %}</button>
-<button data-target="#budget_table" class="toggable btn btn-info">{% trans 'budget' %}</button>
-<button data-target="#tags_table" class="toggable btn btn-info">{% trans 'tags_title' %}</button>
+<button data-target="#my_account" class="toggable btn btn-info"><i class="fa fa-user-circle-o"></i> {% trans 'users_my_account' %}</button>
+<button data-target="#categories_table" class="toggable btn btn-info"><i class="fa fa-clipboard"></i> {% trans 'categories' %}</button>
+<button data-target="#favourites_table" class="toggable btn btn-info"><i class="fa fa-star"></i> {% trans 'favourites_message' %}</button>
+<button data-target="#budget_table" class="toggable btn btn-info"><i class="fa fa-calculator"></i> {% trans 'budget' %}</button>
+<button data-target="#tags_table" class="toggable btn btn-info"><i class="fa fa-tag"></i> {% trans 'tags_title' %}</button>
 
 <div id="my_account" class="accordion-body collapse form-group">
     {{ my_account_form|crispy }}
