@@ -48,14 +48,6 @@
                     {{ budget.date_created }} - <a href="{% url 'budget_delete' budget.pk %}">{% trans 'Borrar' %}</a>
                 </div>
             {% endfor %}
-			<?php
-
-			foreach ($this->budgets_list as $key => $value) {
-			    $date = $value['date_created'];
-			    $url = urlencode($value['date_created']);
-				echo '';
-			}
-			?>
 		</td>
         </tbody>
 	</table>
