@@ -730,3 +730,9 @@ div.moxie_expenses_form_right table {
 form {
 	line-height: 1;
 }
+
+/* nav button gradient */
+.aqua-gradient {
+	/*background: linear-gradient(40deg, #80f6ff, #0b77b7) !important;*/
+	background-color: #0b77b7;
+}

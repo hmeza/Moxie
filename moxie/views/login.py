@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
-from moxie.forms import RegisterForm
+from moxie.forms import RegisterForm, SetPasswordForm
 from django.contrib import messages
 
 
@@ -36,8 +36,11 @@ class RegisterView(CreateView):
 		return reverse_lazy('index')
 
 
-class ForgotPasswordView():
-	pass
+# @login_required
+# def password_change(request):
+#     user = request.user
+#     form = SetPasswordForm(user)
+#     return render(request, 'password_reset_confirm.html', {'form': form})
 
 
 # <?php

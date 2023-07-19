@@ -70,6 +70,12 @@ class Category(models.Model):
     INCOMES = 2
     BOTH = 3
 
+    CHOICE_TYPE = (
+        (EXPENSES, _('Expenses'), ),
+        (INCOMES, _('Incomes')),
+        (BOTH, _('Both'))
+    )
+
     user = models.ForeignKey(User, blank=False, null=True, on_delete=models.CASCADE, default=None)
     parent = models.ForeignKey(
         "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT,
@@ -77,7 +83,7 @@ class Category(models.Model):
     )
     name = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=200, blank=False, null=False)
-    type = models.SmallIntegerField()
+    type = models.SmallIntegerField(choices=CHOICE_TYPE)
     order = models.SmallIntegerField(default=1)
 
     def __str__(self):

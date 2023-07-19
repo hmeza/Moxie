@@ -12,15 +12,25 @@ from captcha.fields import CaptchaField
 
 
 class CategoryForm(ModelForm):
-    parent = forms.ModelChoiceField(queryset=Category.objects.none())
+    parent = forms.ModelChoiceField(queryset=Category.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Category
-        exclude = []
+        exclude = ['user']
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['parent'].queryset = Category.get_categories_tree(user, type_filter=Category.BOTH)
+
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-categoriesForm'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
+        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'submit_survey'
+
+        self.fields['type'].widget.attrs.update({'class': 'form-control'})
 
 
 class TagsForm(ModelForm):
