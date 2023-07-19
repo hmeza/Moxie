@@ -28,7 +28,9 @@ class CategoryForm(ModelForm):
         self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'submit_survey'
+        url = reverse_lazy('category_edit', kwargs={'pk': self.instance.pk}) if self.instance and self.instance.pk else reverse_lazy('category_view')
+        self.helper.form_action = url
+        self.helper.add_input(Submit('submit', _('Submit')))
 
         self.fields['type'].widget.attrs.update({'class': 'form-control'})
 

@@ -1,66 +1,73 @@
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 <div id="categories_table" class="form-group accordion-body">
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h3>{% trans 'Category' %}</h3>
+            </div>
+            <div class="col-12">
+                {% crispy categories_form %}
+            </div>
+        </div>
+    </div>
 
-<form>
-    {% crispy categories_form %}
-</form>
-
-<ul id="categories_list" class="categories_list">
-    {% for category in categories_list %}
-        <li class="ui-state-default">
-        <span>
-            <a href="/categories/edit/id/{{ category.subcategories.id }}">
-                <img src="{% static '/img/edit.png' %}">
-            </a>
-        </span>
-        <span class="categories_list">
-            <input type="hidden" name="{{ category.pk }}"/> {{ category }} ({{ category.type_name }})
-        </span>
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        </li>
-    {% endfor %}
-
-{#<?php#}
-{#foreach ($this->categories_list as $key => $value) {#}
-{#	if (!empty($value['parent1'])) {#}
-{#		$first_name = (!empty($value['name1'])) ? $value['name1']." --- " : "";#}
-{#        echo '<li class="ui-state-default">';#}
-{#		echo '<span><a href="/categories/edit/id/'.$value['id1'].'"><img src="/img/edit.png"></a></span>';#}
-{#		switch($value['type']) {#}
-{#			case 1:#}
-{#				$cat = $st_lang['categories_expense'];#}
-{#				break;#}
-{#			case 2:#}
-{#				$cat = $st_lang['categories_income'];#}
-{#				break;#}
-{#			case 3:#}
-{#				$cat = $st_lang['categories_both'];#}
-{#				break;#}
-{#		}#}
-{#        echo '<span class="categories_list"><input type="hidden" name="'.$value['id1'].'"/>'.$first_name.$value['name2']." (".$cat.")</span>";#}
-{#        echo '<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>';#}
-{#        echo "</li>";#}
-{#	}#}
-{#}#}
-{#?>#}
-</ul>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h3>{% trans 'Order' %}</h3>
+            </div>
+            <div class="col-12">
+                <small>{% trans 'Drag categories to reorder it when displaying. Press edit to modify it.' %}</small>
+            </div>
+            <div class="col-12">
+                <ul id="categories_list" class="categories_list mt-3">
+                {% for category in categories_list %}
+                    <li class="ui-state-default">
+                    <span>
+                        <a href="{% url 'category_edit' category.pk %}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </span>
+                    <span class="categories_list">
+                        <input type="hidden" name="{{ category.pk }}"/> {{ category }} ({% trans category.type_name %})
+                    </span>
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
-<br><br>
+{% csrf_token %}
 
 <script>
-    $(document).ready(function() {
+    let cat_list;
+
+    function stopCallback(event, ui) {
+        // get all inputs inside categories_list and send
         const cat_list = $('#categories_list');
+        let cats = {};
+        cat_list.find('input').each(function(index) {
+            cats[index] = $(this).attr('name');
+        });
+
+        $.ajax({
+            url: "{% url 'category_order' %}",
+            type: "POST",
+            dataType: 'json',
+            headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
+            data: cats
+        });
+    }
+
+    $(document).ready(function() {
+        cat_list = $('#categories_list');
         cat_list.sortable({
             delay: 100,
-            stop:  function (event, ui) {
-                // get all inputs inside categories_list and send
-                let cats = {};
-                cat_list.find('input').each(function(index) {
-                    cats[index] = $(this).attr('name');
-                });
-                $.post('/categories/order', cats);
-            }
+            stop:  stopCallback
         });
         cat_list.disableSelection();
     });

@@ -5,16 +5,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 
 
-class UserConfigurationView(LoginRequiredMixin, ListView):
-	model = Category
-	template_name = 'users/index.html'
-	form_class = MyAccountForm
-
+class ConfigUserContextData:
 	def get_context_data(self, *args, **kwargs):
 		context = super().get_context_data(*args, **kwargs)
 		user = self.request.user
 		context['my_account_form'] = MyAccountForm(user)
-		context['categories_form'] = CategoryForm(user)
+		if 'category' in self.request.path:
+			instance = Category.objects.get(pk=self.kwargs.get('pk'))
+			context['category'] = instance
+			category_form = CategoryForm(user, instance=instance)
+		else:
+			category_form = CategoryForm(user)
+		context['categories_form'] = category_form
 		context['categories_list'] = Category.get_categories_tree(user)
 		context['tags_form'] = TagsForm(user)
 		context['tag_list'] = Tag.get_tags(user)
@@ -24,6 +26,14 @@ class UserConfigurationView(LoginRequiredMixin, ListView):
 		context['current_budget_amount'] = current_budget.aggregate(total=Sum('amount'))['total']
 		context['budgets_list'] = Budget.objects.filter(user=user).order_by('date_created').all()
 		return context
+
+
+class UserConfigurationView(LoginRequiredMixin, ConfigUserContextData, ListView):
+	model = Category
+	template_name = 'users/index.html'
+	form_class = MyAccountForm
+
+
 
 	# def get_form_kwargs(self):
 	# 	kwargs = super().get_form_kwargs()
