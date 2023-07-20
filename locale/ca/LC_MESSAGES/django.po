@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-18 23:47+0000\n"
+"POT-Creation-Date: 2023-07-20 08:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,21 +42,22 @@ msgstr "Amount"
 msgid "Maximum amount"
 msgstr "Amount"
 
-#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:96 moxie/forms.py:135
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:98 moxie/forms.py:137
 #: moxie/templates/stats/stats.html:6
 msgid "category"
 msgstr "Category"
 
-#: moxie/filters.py:21 moxie/forms.py:98
+#: moxie/filters.py:21 moxie/forms.py:100
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:99 moxie/forms.py:137
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:101
+#: moxie/forms.py:139
 msgid "note"
 msgstr "Note"
 
-#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:101
-#: moxie/forms.py:139
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:103
+#: moxie/forms.py:141
 msgid "date"
 msgstr "Date"
 
@@ -64,47 +65,47 @@ msgstr "Date"
 msgid "filter_submit"
 msgstr ""
 
-#: moxie/forms.py:91
+#: moxie/forms.py:33 moxie/forms.py:174 moxie/forms.py:200
+msgid "Submit"
+msgstr ""
+
+#: moxie/forms.py:93
 msgid "favourites"
 msgstr ""
 
-#: moxie/forms.py:100 moxie/forms.py:138
+#: moxie/forms.py:102 moxie/forms.py:140
 msgid "amount"
 msgstr "Amount"
 
-#: moxie/forms.py:102 moxie/forms.py:140
+#: moxie/forms.py:104 moxie/forms.py:142
 msgid "in_sum"
 msgstr ""
 
-#: moxie/forms.py:103
+#: moxie/forms.py:105
 msgid "Favourite"
 msgstr ""
 
-#: moxie/forms.py:113
+#: moxie/forms.py:115
 #, fuzzy
 #| msgid "expenses_note"
 msgid "Update expense"
 msgstr "Despeses"
 
-#: moxie/forms.py:113
+#: moxie/forms.py:115
 #, fuzzy
 #| msgid "expenses_note"
 msgid "Add expense"
 msgstr "Despeses"
 
-#: moxie/forms.py:151
+#: moxie/forms.py:153
 msgid "Add income"
 msgstr ""
 
-#: moxie/forms.py:163 moxie/forms.py:189
+#: moxie/forms.py:165 moxie/forms.py:191
 msgid "Repeat password"
 msgstr ""
 
-#: moxie/forms.py:172 moxie/forms.py:198
-msgid "Submit"
-msgstr ""
-
-#: moxie/forms.py:177 moxie/forms.py:203
+#: moxie/forms.py:179 moxie/forms.py:205
 msgid "Passwords do not match"
 msgstr ""
 
@@ -226,6 +227,19 @@ msgstr ""
 msgid "Borrar"
 msgstr ""
 
+#: moxie/templates/categories/categories.html:8
+#: moxie/templates/common/data.html:13
+msgid "Category"
+msgstr "Categoria"
+
+#: moxie/templates/categories/categories.html:19
+msgid "Order"
+msgstr ""
+
+#: moxie/templates/categories/categories.html:22
+msgid "Drag categories to reorder it when displaying. Press edit to modify it."
+msgstr ""
+
 #: moxie/templates/categories/favourites.html:9
 msgid "expenses_note"
 msgstr "Nota"
@@ -235,15 +249,11 @@ msgstr "Nota"
 msgid "tags_title"
 msgstr ""
 
-#: moxie/templates/common/data.html:13
-msgid "Category"
-msgstr "Categoria"
-
 #: moxie/templates/common/data.html:14
 msgid "Note"
 msgstr ""
 
-#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:72
+#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:76
 msgid "Date"
 msgstr ""
 
@@ -253,7 +263,7 @@ msgstr ""
 msgid "Amount"
 msgstr "Amount"
 
-#: moxie/templates/common/data.html:75
+#: moxie/templates/common/data.html:79
 msgid "data_export"
 msgstr ""
 
@@ -336,15 +346,15 @@ msgstr ""
 msgid "finance_total"
 msgstr ""
 
-#: moxie/templates/header.html:24
+#: moxie/templates/header.html:50
 msgid "logout"
 msgstr "Sortir"
 
-#: moxie/templates/header.html:26
+#: moxie/templates/header.html:52
 msgid "index"
 msgstr "Inici"
 
-#: moxie/templates/header.html:28
+#: moxie/templates/header.html:54
 msgid "about"
 msgstr "Aprop de"
 
@@ -409,16 +419,20 @@ msgid "registration_ok"
 msgstr ""
 
 #: moxie/templates/stats/index.html:24
-msgid "stats_budget_title"
-msgstr ""
+msgid "Budget"
+msgstr "Pressupost"
+
+#: moxie/templates/stats/index.html:25
+msgid "Yearly"
+msgstr "Anual"
 
 #: moxie/templates/stats/index.html:26
-msgid "stats_trends"
-msgstr ""
+msgid "Trends"
+msgstr "Tendències"
 
 #: moxie/templates/stats/index.html:27
-msgid "stats_title"
-msgstr ""
+msgid "Stats"
+msgstr "Estadístiques"
 
 #: moxie/templates/stats/stats.html:7
 msgid "total"
