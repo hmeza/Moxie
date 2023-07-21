@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-20 08:52+0000\n"
+"POT-Creation-Date: 2023-07-21 13:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgid "Maximum amount"
 msgstr ""
 
 #: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:98 moxie/forms.py:137
-#: moxie/templates/stats/stats.html:6
+#: moxie/templates/stats/stats.html:7
 msgid "category"
 msgstr ""
 
@@ -399,36 +399,40 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/stats/index.html:24
+#: moxie/templates/stats/index.html:25
 msgid "Budget"
 msgstr ""
 
-#: moxie/templates/stats/index.html:25
+#: moxie/templates/stats/index.html:26
 msgid "Yearly"
 msgstr ""
 
-#: moxie/templates/stats/index.html:26
+#: moxie/templates/stats/index.html:27
 msgid "Trends"
 msgstr ""
 
-#: moxie/templates/stats/index.html:27
+#: moxie/templates/stats/index.html:28
 msgid "Stats"
 msgstr ""
 
-#: moxie/templates/stats/stats.html:7
-msgid "total"
+#: moxie/templates/stats/index.html:70
+msgid "stats_budget_total"
 msgstr ""
 
 #: moxie/templates/stats/stats.html:8
-msgid "total_this_year"
+msgid "Total"
 msgstr ""
 
 #: moxie/templates/stats/stats.html:9
-msgid "average_this_year"
+msgid "Total this year"
 msgstr ""
 
 #: moxie/templates/stats/stats.html:10
-msgid "average_unit"
+msgid "Average this year"
+msgstr ""
+
+#: moxie/templates/stats/stats.html:11
+msgid "Average of one buy"
 msgstr ""
 
 #: moxie/templates/tags/tags.html:8
