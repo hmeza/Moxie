@@ -22,33 +22,58 @@ class StatsView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		user = self.request.user
-		# presupuesto
-		context['budget_expenses'] = []
-		context['budget_incomes'] = []
-		# anual
+
+		year = None
+		if 'year' in self.request.path:
+			year = re.findall(r'/year/(\d{4})', self.request.path)[1]
+
+		incomes = Transaction.get_yearly_stats_by_category(user, category_type=Category.INCOMES, year=year)
+		context['incomes'] = self.__prepare_transactions_to_display(incomes)
+		expenses = Transaction.get_yearly_stats_by_category(user, year)
+		context['expenses'] = self.__prepare_transactions_to_display(expenses, include_header=False)
+
 		context['yearly'] = Transaction.get_year_incomes_with_category(user, expenses=True, incomes=True)
+
 		today = datetime.date.today()
 		context['yearly_header'] = [''] + [y for y in range(today.year - 5, today.year)]
 		context['trends'] = self._get_trends(Category.get_categories_tree(user))
-		context['stats'] = self.__get_stats(user)
+		context['stats'] = Transaction.get_category_stats(user)
 		return context
 
-	def __get_stats(self, user):
-		today = datetime.date.today()
-		categories = Category.get_categories_tree(user, type_filter=Category.BOTH)
-		totals = Transaction.totals(user)
-		totals_this_year = Transaction.totals(user, year=today.year)
-		stats = {}
-		for category in categories:
-			pk = category.pk
-			stats[pk] = {
-				'category': str(category),
-				'total': totals.get(pk, {}).get('sum', 0),
-				'total_this_year': totals_this_year.get(pk, {}).get('sum', 0),
-				'avg_this_year': totals_this_year.get(pk, {}).get('avg', 0),
-				'avg': totals.get(pk, {}).get('avg', 0)
-			}
-		return stats
+	def __prepare_transactions_to_display(self, transaction_list, include_header=True):
+		rows = self.__initialize_rows(include_header)
+
+		category = None
+		current_month = 1
+		current_row = None
+		totals = [{}]
+		for row in transaction_list:
+			if row.get('category__id') != category or current_month == 13:
+				if category is not None and current_month < 13:
+					for i in range(current_month, 13):
+						current_row.append({'title': 0, 'link': ''})
+				if category is not None:
+					rows.append(current_row)
+				category = row.get('category__id')
+				current_row = [{'title': row.get('category__name'), 'link': ''}]
+				current_month = 1
+			if row.get('month') != current_month:
+				for i in range(current_month, row.get('month')):
+					current_row.append({'title': 0, 'link': ''})
+			current_row.append({'title': row.get('total'), 'link': ''})
+			current_month = row.get('month') + 1
+		return rows
+
+	def __initialize_rows(self, include_header):
+		if include_header:
+			months = []
+			for i in range(1, 13):
+				month = datetime.datetime.strptime(str(i), "%m").strftime("%b")
+				months.append({'title': month, 'link': ''})
+			rows = [[{'title': '', 'link': ''}] + months]
+		else:
+			rows = []
+		return rows
 
 	def _get_trends(self, expenses_categories):
 		trends = {}

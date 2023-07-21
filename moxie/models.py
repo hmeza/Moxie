@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
-from django.db.models.functions import Cast, Concat, ExtractYear, Abs
+from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, Abs
 from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg
 import datetime
 
@@ -412,6 +412,53 @@ class Transaction(models.Model):
         return Transaction.objects.filter(user=user, amount__lt=0, date__month=month, date__year=year) \
             .values('category__name').order_by('category__name') \
             .annotate(total=Cast(Abs(Sum('amount')), FloatField()))
+
+    @staticmethod
+    def get_yearly_stats_by_category(user, category_type=Category.EXPENSES, year=None):
+        if not year:
+            year = datetime.date.today().year
+        transactions = Transaction.objects\
+            .select_related('category')\
+            .filter(user=user, date__year=year)
+        if category_type == Category.EXPENSES:
+            transactions = transactions.filter(amount__lt=0)
+        elif category_type == Category.INCOMES:
+            transactions = transactions.filter(amount__gte=0)
+        transactions = transactions\
+            .annotate(month=ExtractMonth('date'))\
+            .values('month')\
+            .annotate(category_group=Count('category__id'), category__month=Count('month'))\
+            .annotate(total=Cast(Sum('amount'), FloatField()))\
+            .order_by('category__id', 'month')
+
+        print(transactions.query)
+
+        transactions = transactions\
+            .values('category__id', 'category__name', 'amount', 'month', 'total', 'category_group')
+
+        # print(transactions)
+        # for line in transactions:
+        #     print(line)
+
+        return transactions
+
+    @staticmethod
+    def get_category_stats(user):
+        today = datetime.date.today()
+        categories = Category.get_categories_tree(user, type_filter=Category.BOTH)
+        totals = Transaction.totals(user)
+        totals_this_year = Transaction.totals(user, year=today.year)
+        stats = {}
+        for category in categories:
+            pk = category.pk
+            stats[pk] = {
+                'category': str(category),
+                'total': totals.get(pk, {}).get('sum', 0),
+                'total_this_year': totals_this_year.get(pk, {}).get('sum', 0),
+                'avg_this_year': totals_this_year.get(pk, {}).get('avg', 0),
+                'avg': totals.get(pk, {}).get('avg', 0)
+            }
+        return stats
 
 # <?php
 #
