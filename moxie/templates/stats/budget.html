@@ -5,7 +5,7 @@
     <table class="w-100 text-center mb-2">
         <tr>
             <td>
-                <ul class="pager" style="margin: 0;">
+                <ul class="pager mb-0">
                   <li>
                       <a href="{% url 'stats_year' year|add:-1 %}"> &lt; </a>
                   </li>
@@ -20,31 +20,32 @@
         </tr>
     </table>
 
-    <table class="table table-striped table-bordered table-stats table-condensed table-hover">
-    <th></th>
-
+    <table class="table table-striped table-bordered table-stats table-sm table-hover">
+        <tr>
+            {% for line in budget_header %}
+                <th><a href="{{ line.link }}">{{ line.title }}</a></th>
+            {% endfor %}
+        </tr>
         {% for income_line in incomes %}
             <tr>
-            {% for income in income_line %}
-                <td>{{ income.title }}</td>
-            {% endfor %}
+                {% include 'stats/budget_loop.html' with transactions=income_line %}
             </tr>
         {% endfor %}
+
+        {% if incomes %}
+        <tr><th colspan="13"><hr></th></tr>
+        {% endif %}
 
         {% for expense_line in expenses %}
             <tr>
-            {% for expense in expense_line %}
-                <td>{{ expense.title }}</td>
-            {% endfor %}
+                {% include 'stats/budget_loop.html' with transactions=expense_line %}
             </tr>
         {% endfor %}
 
-    <tr>
-    <td colspan='.$i_colspan.'>&nbsp;</td><tr>
+        <tr><th colspan="13"><hr></th></tr>
 
-    <th class="text-left">{% trans 'stats_budget_total' %}</th>
-    <?php echo $balance_output; ?>
-
-    </tr>
+        <tr>
+            {% include 'stats/budget_loop.html' with transactions=totals use_red_for_negative=True %}
+        </tr>
     </table>
 </div>

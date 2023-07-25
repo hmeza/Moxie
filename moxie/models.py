@@ -414,7 +414,7 @@ class Transaction(models.Model):
             .annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
     @staticmethod
-    def get_yearly_stats_by_category(user, category_type=Category.EXPENSES, year=None):
+    def get_yearly_stats_by_category(user, category_type=Category.EXPENSES, year=None, category=None):
         if not year:
             year = datetime.date.today().year
         transactions = Transaction.objects\
@@ -424,22 +424,14 @@ class Transaction(models.Model):
             transactions = transactions.filter(amount__lt=0)
         elif category_type == Category.INCOMES:
             transactions = transactions.filter(amount__gte=0)
+        if category:
+            transactions = transactions.filter(category=category)
         transactions = transactions\
-            .annotate(month=ExtractMonth('date'))\
-            .values('month')\
+            .annotate(month=ExtractMonth('date'), year=ExtractYear('date'))\
+            .values('month', 'year', 'category__name', 'category__id')\
             .annotate(category_group=Count('category__id'), category__month=Count('month'))\
             .annotate(total=Cast(Sum('amount'), FloatField()))\
             .order_by('category__id', 'month')
-
-        print(transactions.query)
-
-        transactions = transactions\
-            .values('category__id', 'category__name', 'amount', 'month', 'total', 'category_group')
-
-        # print(transactions)
-        # for line in transactions:
-        #     print(line)
-
         return transactions
 
     @staticmethod

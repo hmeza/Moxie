@@ -800,3 +800,22 @@ form {
 .btn-primary {
 	background-color: #337ab7 !important;
 }
+
+/** Stats */
+table.table-stats {
+	font-size: 0.8rem;
+	width: 100%;
+}
+.table-stats td, th {
+	text-align: right;
+}
+
+table.table-stats > tbody > tr > td > a:hover {
+	color: #0b77b7;
+	font-weight: bold !important;
+	text-decoration: none;
+}
+table.table-stats > tbody > tr > td > a:visited {
+	color: #0b77b7;
+	text-decoration: none;
+}

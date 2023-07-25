@@ -3,16 +3,7 @@
 {% load static %}
 {% block content %}
 
-<style>
-table.table-stats {
-	font-size: 11px;
-	width: 100%;
-}
-.table-stats td, th {
-	text-align: right;
-}
-</style>
-
+<div class="mt-3"></div>
 <button data-target="#budget" class="toggable btn btn-info"><i class="fa fa-calculator"></i> {% trans 'Budget' %}</button>
 <button data-target="#stats_table_yearly" class="toggable btn btn-info"><i class="fa fa-calendar"></i> {% trans 'Yearly' %}</button>
 <button data-target="#stats_trends_container" class="toggable btn btn-info"><i class="fa fa-line-chart"></i> {% trans 'Trends' %}</button>
