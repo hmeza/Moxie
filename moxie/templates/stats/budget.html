@@ -2,20 +2,21 @@
 {% load static %}
 
 <div id="budget" class="accordion-body mt-3">
-    <table class="w-100">
-        <!-- Form + expenses list -->
+    <table class="w-100 text-center mb-2">
         <tr>
-        <td>
-                        <div style="display: none">
-            <?php
-            global $st_lang;
-            $last_url = '/stats/index/year/'.($this->year-1);
-            $next_url = '/stats/index/year/'.($this->year+1);
-            $current_month_and_year = $this->year;
-            $this->getHelper('Web')->printHeaderNextLastInterval($last_url, $next_url, $current_month_and_year);
-            ?>
-                        </div>
-        </td>
+            <td>
+                <ul class="pager" style="margin: 0;">
+                  <li>
+                      <a href="{% url 'stats_year' year|add:-1 %}"> &lt; </a>
+                  </li>
+                  <li>
+                      <span class="moxie_header_date">{{ year }}</span>
+                  </li>
+                  <li>
+                      <a href="{% url 'stats_year' year|add:1 %}"> &gt; </a>
+                  </li>
+                </ul>
+            </td>
         </tr>
     </table>
 

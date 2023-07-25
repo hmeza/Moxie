@@ -13,10 +13,10 @@ table.table-stats {
 }
 </style>
 
-<button data-target="#budget" class="toggable btn btn-info">{% trans 'Budget' %}</button>
-<button data-target="#stats_table_yearly" class="toggable btn btn-info">{% trans 'Yearly' %}</button>
-<button data-target="#stats_trends_container" class="toggable btn btn-info">{% trans 'Trends' %}</button>
-<button data-target="#box" class="toggable btn btn-info">{% trans 'Stats' %}</button>
+<button data-target="#budget" class="toggable btn btn-info"><i class="fa fa-calculator"></i> {% trans 'Budget' %}</button>
+<button data-target="#stats_table_yearly" class="toggable btn btn-info"><i class="fa fa-calendar"></i> {% trans 'Yearly' %}</button>
+<button data-target="#stats_trends_container" class="toggable btn btn-info"><i class="fa fa-line-chart"></i> {% trans 'Trends' %}</button>
+<button data-target="#box" class="toggable btn btn-info"><i class="fa fa-area-chart"></i> {% trans 'Stats' %}</button>
 
 {% include 'stats/budget.html' %}
 {% include 'stats/yearly.html' %}

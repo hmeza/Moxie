@@ -4,10 +4,9 @@
 {% block content %}
 <head>
 <script type="text/javascript">
-	var year = {% now 'Y' %}
-	var month = {% now 'm' %}
+	let year = {% now 'Y' %};
+	let month = {% now 'm' %};
 </script>
-<script src="{% static 'dist/bundle.js' %}"></script>
 </head>
 
 <a>
@@ -17,8 +16,9 @@
 </div>
 </a>
 
+<span class="tag label label-info">test3<span data-role="remove"></span></span>
 
-<div class="moxie-container">
+<div class="moxie-container mt-3">
 <div class="moxie-left">
 <a id="data"></a>
 {% include 'expenses/data_header.html' %}

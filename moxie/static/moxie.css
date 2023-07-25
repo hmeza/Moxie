@@ -726,3 +726,34 @@ form {
 	/*background: linear-gradient(40deg, #80f6ff, #0b77b7) !important;*/
 	background-color: #0b77b7;
 }
+
+
+/** Pager */
+.pager::before {
+    display: table;
+    content: " ";
+}
+
+.pager > ul {
+	padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+
+.pager > li {
+	display: inline;
+}
+
+.pager > li > a, .pager > li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+	text-decoration: none;
+}
+
+.pager > li > a {
+	font-weight: bold;
+}
