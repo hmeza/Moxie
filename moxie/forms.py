@@ -90,7 +90,7 @@ class TransactionForm(ModelForm):
 
 
 class ExpensesForm(TransactionForm):
-    favourites = ChoiceField(label=_('favourites'),
+    favourites = ChoiceField(label=_('Favourites'),
                              widget=forms.Select(
                                  attrs={'class': 'select form-control', 'onchange': 'use_favourite_as_expense'}
                              ),

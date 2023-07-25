@@ -1,38 +1,4 @@
 {% load i18n %}
-<!-- web menu -->
-{#<nav class="navbar navbar-light light-blue lighten-4">#}
-{##}
-{#  <!-- Navbar brand -->#}
-{#  <a class="navbar-brand" href="#">Navbar</a>#}
-{##}
-{#  <!-- Collapse button -->#}
-{#  <button class="navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"#}
-{#    aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span class="dark-blue-text"><i#}
-{#        class="fas fa-bars fa-1x"></i></span></button>#}
-{##}
-{#  <!-- Collapsible content -->#}
-{#  <div class="collapse navbar-collapse" id="navbarSupportedContent1">#}
-{##}
-{#    <!-- Links -->#}
-{#    <ul class="navbar-nav mr-auto">#}
-{#      <li class="nav-item active">#}
-{#        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>#}
-{#      </li>#}
-{#      <li class="nav-item">#}
-{#        <a class="nav-link" href="#">Features</a>#}
-{#      </li>#}
-{#      <li class="nav-item">#}
-{#        <a class="nav-link" href="#">Pricing</a>#}
-{#      </li>#}
-{#    </ul>#}
-{#    <!-- Links -->#}
-{##}
-{#  </div>#}
-{#  <!-- Collapsible content -->#}
-{##}
-{#</nav>#}
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="moxietitle text-decoration-none" href="{% url 'index' %}">Moxi€</a>
   <button class="navbar-toggler aqua-gradient" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +9,7 @@
     <ul class="navbar-nav mr-auto">
     {% if user.is_authenticated %}
         {% for url in urls  %}
-            <li class="ml-2" {% if url in request.url %}active{% endif %}>
+            <li class="ml-2 {% if url in request.path %}active{% endif %}">
                 <a href="/{{ url }}" class="nav-link">{% trans url %}</a>
             </li>
         {% endfor %}
@@ -53,28 +19,5 @@
         <!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
         <li><a href="/index/about" class="nav-link">{% trans 'about' %}</a></li>
     {% endif %}
-
-{#      <li class="nav-item">#}
-{#        <a class="nav-link" href="#">Link</a>#}
-{#      </li>#}
-{#      <li class="nav-item dropdown">#}
-{#        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#          Dropdown#}
-{#        </a>#}
-{#        <div class="dropdown-menu" aria-labelledby="navbarDropdown">#}
-{#          <a class="dropdown-item" href="#">Action</a>#}
-{#          <a class="dropdown-item" href="#">Another action</a>#}
-{#          <div class="dropdown-divider"></div>#}
-{#          <a class="dropdown-item" href="#">Something else here</a>#}
-{#        </div>#}
-{#      </li>#}
-{#      <li class="nav-item">#}
-{#        <a class="nav-link disabled" href="#">Disabled</a>#}
-{#      </li>#}
-    </ul>
-{#    <form class="form-inline my-2 my-lg-0">#}
-{#      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
-{#      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
-{#    </form>#}
   </div>
 </nav>

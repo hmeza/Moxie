@@ -47,7 +47,7 @@ urlpatterns = [
     path('budget/<int:pk>/delete/', BudgetDeleteView.as_view(), name='budget_delete'),
     path('budget/', BudgetView.as_view(), name='budget'),
 
-    path('stats/year/<yyyy:year>/', StatsView.as_view(), name='stats'),
+    path('stats/year/<yyyy:year>/', StatsView.as_view(), name='stats_year'),
     path('stats/', StatsView.as_view(), name='stats'),
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
@@ -64,7 +64,7 @@ urlpatterns = [
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
     path('register', RegisterView.as_view(), name='register'),
-    # path('forgot-password', ForgotPasswordView.as_view(), name='forgot-password'),
+    path('forgot-password', RegisterView.as_view(), name='forgot-password'),
     path('captcha/', include('captcha.urls')),
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),

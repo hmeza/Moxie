@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 13:14+0000\n"
+"POT-Creation-Date: 2023-07-25 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,9 +65,9 @@ msgstr "Filtrar"
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:93
-msgid "favourites"
-msgstr ""
+#: moxie/forms.py:93 moxie/templates/users/index.html:25
+msgid "Favourites"
+msgstr "Favoritos"
 
 #: moxie/forms.py:102 moxie/forms.py:140
 msgid "amount"
@@ -79,23 +79,21 @@ msgstr "Mostrar en \"Total\""
 
 #: moxie/forms.py:105
 msgid "Favourite"
-msgstr ""
+msgstr "Favorito"
 
 #: moxie/forms.py:115
-#, fuzzy
 #| msgid "Add expense"
 msgid "Update expense"
-msgstr "Añadir gasto"
+msgstr "Actualizar gasto"
 
 #: moxie/forms.py:115
 msgid "Add expense"
 msgstr "Añadir gasto"
 
 #: moxie/forms.py:153
-#, fuzzy
 #| msgid "incomes"
 msgid "Add income"
-msgstr "Ingresos"
+msgstr "Añadir ingreso"
 
 #: moxie/forms.py:165 moxie/forms.py:191
 msgid "Repeat password"
@@ -106,13 +104,11 @@ msgid "Passwords do not match"
 msgstr ""
 
 #: moxie/models.py:74
-#, fuzzy
 #| msgid "expenses"
 msgid "Expenses"
 msgstr "Gastos"
 
 #: moxie/models.py:75
-#, fuzzy
 #| msgid "incomes"
 msgid "Incomes"
 msgstr "Ingresos"
@@ -130,7 +126,6 @@ msgid "Income"
 msgstr "Ingresos"
 
 #: moxie/models.py:128 moxie/models.py:130
-#, fuzzy
 #| msgid "category"
 msgid "Root category"
 msgstr "Categoría raíz"
@@ -282,11 +277,11 @@ msgstr "Borrar"
 msgid "Delete"
 msgstr ""
 
-#: moxie/templates/expenses/index.html:15
+#: moxie/templates/expenses/index.html:14
 msgid "Go to expenses"
 msgstr "Ir a gastos"
 
-#: moxie/templates/expenses/index.html:16 moxie/templates/incomes/index.html:15
+#: moxie/templates/expenses/index.html:15 moxie/templates/incomes/index.html:15
 msgid "Go to stats"
 msgstr "Ir a estadísticas"
 
@@ -342,15 +337,15 @@ msgstr "Intereses"
 msgid "finance_total"
 msgstr "Total"
 
-#: moxie/templates/header.html:50
+#: moxie/templates/header.html:16
 msgid "logout"
 msgstr "Salir"
 
-#: moxie/templates/header.html:52
+#: moxie/templates/header.html:18
 msgid "index"
 msgstr "Inicio"
 
-#: moxie/templates/header.html:54
+#: moxie/templates/header.html:20
 msgid "about"
 msgstr "Acerca de"
 
@@ -416,27 +411,27 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/stats/index.html:25
-msgid "Budget"
-msgstr "Presupuesto"
-
-#: moxie/templates/stats/index.html:26
-msgid "Yearly"
-msgstr "Anual"
-
-#: moxie/templates/stats/index.html:27
-msgid "Trends"
-msgstr "Tendencias"
-
-#: moxie/templates/stats/index.html:28
-msgid "Stats"
-msgstr "Estadísticas"
-
-#: moxie/templates/stats/index.html:70
+#: moxie/templates/stats/budget.html:45
 #, fuzzy
 #| msgid "stats_budget_title"
 msgid "stats_budget_total"
 msgstr "Tags"
+
+#: moxie/templates/stats/index.html:16
+msgid "Budget"
+msgstr "Presupuesto"
+
+#: moxie/templates/stats/index.html:17
+msgid "Yearly"
+msgstr "Anual"
+
+#: moxie/templates/stats/index.html:18
+msgid "Trends"
+msgstr "Tendencias"
+
+#: moxie/templates/stats/index.html:19
+msgid "Stats"
+msgstr "Estadísticas"
 
 #: moxie/templates/stats/stats.html:8
 msgid "Total"
@@ -483,10 +478,6 @@ msgstr ""
 #| msgid "category"
 msgid "categories"
 msgstr "Categoría"
-
-#: moxie/templates/users/index.html:25
-msgid "favourites_message"
-msgstr ""
 
 #: moxie/templates/users/index.html:26
 msgid "budget"

@@ -2,12 +2,14 @@
 {% load i18n %}
 {% block content %}
 {% if not request.user.is_authenticated %}
-<center>
-    <div align="center" class="form-group text-center" style="width: 250px; margin-bottom: 3rem;">
-        <form name="login" id="login_form" action="/login" method="POST">
+<div class="container w-100 mt-3">
+<div class="row">
+<div class="col-4 offset-4 mb-3">
+    <div class="form-group text-center w-100 mb-4">
+        <h1 class="font-weight-bold h4 moxie-color">{% trans 'Login' %}</h1>
+        <form name="login" id="login_form" action="{% url 'login' %}" method="POST">
             <fieldset>
-                <legend>{% trans 'Login' %}</legend>
-				<input type="text" name="username" id="username" maxlength=12 class="form-control" placeholder="{% trans 'Login' %}">
+                <input type="text" name="username" id="username" maxlength=12 class="form-control" placeholder="{% trans 'Login' %}">
                 <input type="password" name="password" id="password" maxlength=50 class="form-control" placeholder="{% trans 'Password' %}">
                 <input type="submit" value="{% trans 'Login' %}" class="form-control btn btn-info moxie_login_button" style="margin-bottom: 0.8rem">
                 {% csrf_token %}
@@ -18,16 +20,18 @@
                 </div>
                 {% endfor %}
 
-				<div class="text-normal text-left mb-1" style="margin-bottom: 0.8rem"><a href="{% url 'register' %}">{% trans 'New user' %}</a></div>
-                <div class="text-normal text-left mb-1" style="margin-bottom: 0.8rem"><a href="{% url 'forgot-password' %}">{% trans 'Forgot password?' %}</a></div>
+                <div class="text-normal text-left mb-2"><a href="{% url 'register' %}">{% trans 'New user' %}</a></div>
+                <div class="text-normal text-left mb-2"><a href="{% url 'forgot-password' %}">{% trans 'Forgot password?' %}</a></div>
             </fieldset>
         </form>
         <div>{{ error }}</div>
     </div>
-</center>
+</div>
+</div>
+</div>
 {% else %}
     <head>
-        <meta http-equiv="Refresh" content="0; url=http://127.0.0.1:8000/expenses">
+        <meta http-equiv="Refresh" content="0; url={% url 'expenses' %}">
     </head>
 {% endif %}
 {% include 'index/twitter.html' %}

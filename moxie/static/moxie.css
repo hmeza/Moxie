@@ -131,6 +131,10 @@ form.budget {
 	margin: 0em;
 }
 
+.moxie-color {
+	color: #337ab7;
+}
+
 .moxietitle {
 	cursor: hand;
 	cursor: pointer;
@@ -785,4 +789,14 @@ form {
 }
 .tt-highlight {
 	color: #337ab7;
+}
+
+.navbar-nav>.active>a {
+	color: white !important;
+	background-color: #337ab7;
+	border-radius: 25px;
+}
+
+.btn-primary {
+	background-color: #337ab7 !important;
 }

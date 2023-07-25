@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 13:14+0000\n"
+"POT-Creation-Date: 2023-07-25 15:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,8 +65,8 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:93
-msgid "favourites"
+#: moxie/forms.py:93 moxie/templates/users/index.html:25
+msgid "Favourites"
 msgstr ""
 
 #: moxie/forms.py:102 moxie/forms.py:140
@@ -278,11 +278,11 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: moxie/templates/expenses/index.html:15
+#: moxie/templates/expenses/index.html:14
 msgid "Go to expenses"
 msgstr ""
 
-#: moxie/templates/expenses/index.html:16 moxie/templates/incomes/index.html:15
+#: moxie/templates/expenses/index.html:15 moxie/templates/incomes/index.html:15
 msgid "Go to stats"
 msgstr ""
 
@@ -338,15 +338,15 @@ msgstr ""
 msgid "finance_total"
 msgstr ""
 
-#: moxie/templates/header.html:50
+#: moxie/templates/header.html:16
 msgid "logout"
 msgstr "Logout"
 
-#: moxie/templates/header.html:52
+#: moxie/templates/header.html:18
 msgid "index"
 msgstr "Index"
 
-#: moxie/templates/header.html:54
+#: moxie/templates/header.html:20
 msgid "about"
 msgstr "About"
 
@@ -399,24 +399,24 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/stats/index.html:25
+#: moxie/templates/stats/budget.html:45
+msgid "stats_budget_total"
+msgstr ""
+
+#: moxie/templates/stats/index.html:16
 msgid "Budget"
 msgstr ""
 
-#: moxie/templates/stats/index.html:26
+#: moxie/templates/stats/index.html:17
 msgid "Yearly"
 msgstr ""
 
-#: moxie/templates/stats/index.html:27
+#: moxie/templates/stats/index.html:18
 msgid "Trends"
 msgstr ""
 
-#: moxie/templates/stats/index.html:28
+#: moxie/templates/stats/index.html:19
 msgid "Stats"
-msgstr ""
-
-#: moxie/templates/stats/index.html:70
-msgid "stats_budget_total"
 msgstr ""
 
 #: moxie/templates/stats/stats.html:8
@@ -457,10 +457,6 @@ msgstr ""
 
 #: moxie/templates/users/index.html:24
 msgid "categories"
-msgstr ""
-
-#: moxie/templates/users/index.html:25
-msgid "favourites_message"
 msgstr ""
 
 #: moxie/templates/users/index.html:26
