@@ -17,7 +17,7 @@
     ];
     let favourite_data = {% if favourite_data %}{{ favourite_data|safe }}{% else %}{}{% endif %};
 </script>
-<script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v=13"></script>
+<script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v={{ JS_VERSION }}"></script>
 
 <div id="form">
     <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">

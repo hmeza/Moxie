@@ -757,3 +757,32 @@ form {
 .pager > li > a {
 	font-weight: bold;
 }
+
+/** Taggle */
+.bootstrap-tagsinput .tag {
+	margin-right: 2px;
+	color: white;
+}
+.label-info {
+	background-color: #337ab7 !important;
+}
+.label {
+	display: inline;
+	padding: 0.2em 0.6em 0.3em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25em;
+}
+.tt-hint {
+	color: dimgrey;
+	font-size: 1rem;
+	top: -4px !important;
+}
+.tt-highlight {
+	color: #337ab7;
+}
