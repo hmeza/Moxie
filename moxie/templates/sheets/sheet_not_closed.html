@@ -1,0 +1,69 @@
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div id="forms">
+    <div class="moxie_expenses_form_div moxie_expenses_form_left">
+    <button data-toggle="collapse" data-target="#sheets_add_user" class="btn btn-info">{% trans 'Add user' %}</button>
+    <!--<button data-toggle="collapse" data-target="#sheets_add_expense" class="btn btn-info">{% trans 'Add expense' %}</button>-->
+        <div id="sheets_add_user" class="collapse">
+            <form action="/sheets/add_user" method="POST" class="form-group">
+            <p>
+            <?php echo $st_lang['sheets_add_user_message']; ?>
+            </p>
+            <label for="user"><?php echo $st_lang['sheets_name']; ?></label>
+            <input type="text" id="user" name="user" class="form-control"><br>
+            <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+            <input type="submit" value="<?php echo $st_lang['sheets_add']; ?>" class="btn btn-primary">
+            </form>
+        </div>
+
+        {% crispy shared_expenses_form %}
+
+        <div id="sheets_add_expense" class="form-group">
+            <form action="/sheets/add" method="POST" id="add_expense_form" class="form-group">
+                {% trans 'Login' %}
+            <select id="id_sheet_user" name="id_sheet_user" class="form-control">
+            <?php
+            foreach($this->sheet['users'] as $user) {
+                $displayName = (isset($user['login']) ? $user['login'] : $user['email']);
+                echo '<option value="'.$user['id_sheet_user'].'">'.$displayName.'</option>';
+            }
+            ?>
+            </select><br>
+            <label for="amount"><?php echo $st_lang['expenses_amount']; ?></label>
+            <input type="text" id="amount" name="amount" placeholder='0.00' class="form-control">
+            <label for="note"><?php echo $st_lang['expenses_note']; ?></label>
+            <input type="text" id="note" name="note" class="form-control">
+            <label for="date"><?php echo $st_lang['expenses_date']; ?></label>
+            <input type="date" id="date" name="date" value="<?php echo date('Y-m-d'); ?>" class="form-control">
+                <?php if($this->sheet['currency'] != 'eur') { ?>
+                <label for="currency">
+                    <?php
+                    echo $st_lang['sheets_in_currency'];
+                    if($this->sheet['currency'] != 'eur') {
+                        $cur = getCurrencyChar($this->sheet['currency']);
+                        echo " <span>(Divisa ".$cur.", 1 &euro; = ".$this->sheet['change']. " ".$cur.")</span>";
+                    }
+                    ?>
+                    <span></span>
+                </label>
+                <input type="checkbox" id="currency" name="currency" class="form-control">
+                <?php }  else { ?>
+                    <input type="hidden" id="currency" name="currency" value="">
+                <?php } ?>
+
+            <input type="hidden" name="id" value="<?php echo $this->sheet['unique_id']; ?>" class="form-control">
+            <input type="submit" value="<?php echo $st_lang['sheets_add_expense']; ?>" class="form-control btn btn-primary">
+            </form>
+        </div>
+        <?php //echo $this->sheet_form; ?>
+
+    </div>
+
+    <div id="distribution_box" class="moxie_expenses_form_div moxie_expenses_form_right moxie-right">
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript" src="{% static '/js/sheets/stats.js' %}"></script>
+        <div id="expenses_month"></div>
+    </div>
+</div>

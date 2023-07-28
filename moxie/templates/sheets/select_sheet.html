@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="form-group">
+            {% if sheet_list %}
+                {% crispy select_sheet_form %}
+            {% else %}
+                <div class="h4">{% trans 'You do not have shared expenses sheets.' %}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>

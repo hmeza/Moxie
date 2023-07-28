@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 15:07+0000\n"
+"POT-Creation-Date: 2023-07-28 17:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr "Filtrar"
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:93 moxie/templates/users/index.html:25
+#: moxie/forms.py:93 moxie/templates/users/index.html:26
 msgid "Favourites"
 msgstr "Favoritos"
 
@@ -82,7 +82,6 @@ msgid "Favourite"
 msgstr "Favorito"
 
 #: moxie/forms.py:115
-#| msgid "Add expense"
 msgid "Update expense"
 msgstr "Actualizar gasto"
 
@@ -91,7 +90,6 @@ msgid "Add expense"
 msgstr "Añadir gasto"
 
 #: moxie/forms.py:153
-#| msgid "incomes"
 msgid "Add income"
 msgstr "Añadir ingreso"
 
@@ -103,13 +101,15 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
+#: moxie/forms.py:210
+msgid "Select a sheet"
+msgstr ""
+
 #: moxie/models.py:74
-#| msgid "expenses"
 msgid "Expenses"
 msgstr "Gastos"
 
 #: moxie/models.py:75
-#| msgid "incomes"
 msgid "Incomes"
 msgstr "Ingresos"
 
@@ -126,7 +126,6 @@ msgid "Income"
 msgstr "Ingresos"
 
 #: moxie/models.py:128 moxie/models.py:130
-#| msgid "category"
 msgid "Root category"
 msgstr "Categoría raíz"
 
@@ -240,7 +239,7 @@ msgid "expenses_note"
 msgstr "Nota"
 
 #: moxie/templates/categories/favourites.html:10
-#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:27
+#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:28
 msgid "tags_title"
 msgstr "Tags"
 
@@ -388,22 +387,22 @@ msgstr ""
 "target='blank'>Apache</a><br><br>Moxie está hospedado en:<br><a "
 "href='https://www.ovh.com/' target='blank'>OVH</a><br><br>\n"
 
-#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:10
-#: moxie/templates/index/index.html:12
+#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:12
+#: moxie/templates/index/index.html:14
 msgid "Login"
 msgstr ""
 
-#: moxie/templates/index/index.html:11
+#: moxie/templates/index/index.html:13
 msgid "Password"
 msgstr ""
 
-#: moxie/templates/index/index.html:21
+#: moxie/templates/index/index.html:23
 #, fuzzy
 #| msgid "users"
 msgid "New user"
 msgstr "Configuración"
 
-#: moxie/templates/index/index.html:22
+#: moxie/templates/index/index.html:24
 msgid "Forgot password?"
 msgstr ""
 
@@ -411,25 +410,27 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/stats/budget.html:45
-#, fuzzy
-#| msgid "stats_budget_title"
-msgid "stats_budget_total"
-msgstr "Tags"
+#: moxie/templates/sheets/index.html:14
+msgid "Create new sheet"
+msgstr ""
 
-#: moxie/templates/stats/index.html:16
+#: moxie/templates/sheets/select_sheet.html:10
+msgid "You do not have shared expenses sheets."
+msgstr "No tienes hojas de gastos compartidos."
+
+#: moxie/templates/stats/index.html:7
 msgid "Budget"
 msgstr "Presupuesto"
 
-#: moxie/templates/stats/index.html:17
+#: moxie/templates/stats/index.html:8
 msgid "Yearly"
 msgstr "Anual"
 
-#: moxie/templates/stats/index.html:18
+#: moxie/templates/stats/index.html:9
 msgid "Trends"
 msgstr "Tendencias"
 
-#: moxie/templates/stats/index.html:19
+#: moxie/templates/stats/index.html:10
 msgid "Stats"
 msgstr "Estadísticas"
 
@@ -469,17 +470,17 @@ msgstr "Tags"
 msgid "myaccount_password_error"
 msgstr ""
 
-#: moxie/templates/users/index.html:23
+#: moxie/templates/users/index.html:24
 msgid "users_my_account"
 msgstr ""
 
-#: moxie/templates/users/index.html:24
+#: moxie/templates/users/index.html:25
 #, fuzzy
 #| msgid "category"
 msgid "categories"
 msgstr "Categoría"
 
-#: moxie/templates/users/index.html:26
+#: moxie/templates/users/index.html:27
 msgid "budget"
 msgstr ""
 
@@ -510,6 +511,23 @@ msgstr "Autenticación incorrecta"
 #: moxie/views/login.py:35
 msgid "Registered successfully."
 msgstr ""
+
+#: moxie/views/stats.py:61
+msgid "BALANCE (Income - expense)"
+msgstr ""
+
+#: moxie/views/stats.py:117
+msgid "TOTAL EXPENSES"
+msgstr ""
+
+#: moxie/views/stats.py:117
+msgid "TOTAL INCOMES"
+msgstr ""
+
+#, fuzzy
+#~| msgid "stats_budget_title"
+#~ msgid "stats_budget_total"
+#~ msgstr "Tags"
 
 #, fuzzy
 #~| msgid "tags_title"

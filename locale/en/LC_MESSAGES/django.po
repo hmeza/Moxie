@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-25 15:07+0000\n"
+"POT-Creation-Date: 2023-07-28 17:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:93 moxie/templates/users/index.html:25
+#: moxie/forms.py:93 moxie/templates/users/index.html:26
 msgid "Favourites"
 msgstr ""
 
@@ -103,6 +103,10 @@ msgstr ""
 
 #: moxie/forms.py:179 moxie/forms.py:205
 msgid "Passwords do not match"
+msgstr ""
+
+#: moxie/forms.py:210
+msgid "Select a sheet"
 msgstr ""
 
 #: moxie/models.py:74
@@ -241,7 +245,7 @@ msgid "expenses_note"
 msgstr "Monthly expense"
 
 #: moxie/templates/categories/favourites.html:10
-#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:27
+#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:28
 msgid "tags_title"
 msgstr ""
 
@@ -378,20 +382,20 @@ msgid ""
 "<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
 msgstr ""
 
-#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:10
-#: moxie/templates/index/index.html:12
+#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:12
+#: moxie/templates/index/index.html:14
 msgid "Login"
 msgstr ""
 
-#: moxie/templates/index/index.html:11
+#: moxie/templates/index/index.html:13
 msgid "Password"
 msgstr ""
 
-#: moxie/templates/index/index.html:21
+#: moxie/templates/index/index.html:23
 msgid "New user"
 msgstr ""
 
-#: moxie/templates/index/index.html:22
+#: moxie/templates/index/index.html:24
 msgid "Forgot password?"
 msgstr ""
 
@@ -399,23 +403,27 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/stats/budget.html:45
-msgid "stats_budget_total"
+#: moxie/templates/sheets/index.html:14
+msgid "Create new sheet"
 msgstr ""
 
-#: moxie/templates/stats/index.html:16
+#: moxie/templates/sheets/select_sheet.html:10
+msgid "You do not have shared expenses sheets."
+msgstr ""
+
+#: moxie/templates/stats/index.html:7
 msgid "Budget"
 msgstr ""
 
-#: moxie/templates/stats/index.html:17
+#: moxie/templates/stats/index.html:8
 msgid "Yearly"
 msgstr ""
 
-#: moxie/templates/stats/index.html:18
+#: moxie/templates/stats/index.html:9
 msgid "Trends"
 msgstr ""
 
-#: moxie/templates/stats/index.html:19
+#: moxie/templates/stats/index.html:10
 msgid "Stats"
 msgstr ""
 
@@ -451,15 +459,15 @@ msgstr ""
 msgid "myaccount_password_error"
 msgstr ""
 
-#: moxie/templates/users/index.html:23
+#: moxie/templates/users/index.html:24
 msgid "users_my_account"
 msgstr ""
 
-#: moxie/templates/users/index.html:24
+#: moxie/templates/users/index.html:25
 msgid "categories"
 msgstr ""
 
-#: moxie/templates/users/index.html:26
+#: moxie/templates/users/index.html:27
 msgid "budget"
 msgstr ""
 
@@ -491,6 +499,18 @@ msgstr ""
 
 #: moxie/views/login.py:35
 msgid "Registered successfully."
+msgstr ""
+
+#: moxie/views/stats.py:61
+msgid "BALANCE (Income - expense)"
+msgstr ""
+
+#: moxie/views/stats.py:117
+msgid "TOTAL EXPENSES"
+msgstr ""
+
+#: moxie/views/stats.py:117
+msgid "TOTAL INCOMES"
 msgstr ""
 
 #~ msgid "expenses_category"

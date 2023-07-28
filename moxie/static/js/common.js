@@ -1,11 +1,11 @@
-var moxieRedirector = {
+let moxieRedirector = {
 	'redirect': function(url) {
 		window.location = url;
 	}
 };
 
 function confirmDelete(id) {
-    var response;
+    let response;
 
     response = confirm(deleteMessage);
     if (response == true) {
@@ -20,12 +20,12 @@ function confirmDelete(id) {
  * @param filterFunction
  */
 function addDoubleClickListener(chart, data, filterFunction) {
-    var firstClick = 0;
-    var secondClick = 0;
+    let firstClick = 0;
+    let secondClick = 0;
 
     google.visualization.events.addListener(chart, 'click', function () {
-        var date = new Date();
-        var millis = date.getTime();
+        let date = new Date();
+        let millis = date.getTime();
 
         if (millis - secondClick > 1000) {
             // add delayed check if a single click occured
@@ -60,15 +60,15 @@ function enableToggableButtons() {
     $('.toggable ').each(function (e) {
         $(this).click(function (e) {
             $('.toggable').not(this).each(function (e) {
-                var button = $(this);
+                let button = $(this);
                 button.removeClass('btn-primary');
                 button.addClass('btn-info');
-                var collapse = button.attr('data-target');
+                let collapse = button.attr('data-target');
                 $(collapse).hide();
             });
             $(this).removeClass('btn-info');
             $(this).addClass('btn-primary');
-            var collapse = $(this).attr('data-target');
+            let collapse = $(this).attr('data-target');
             $(collapse).show();
         });
     });

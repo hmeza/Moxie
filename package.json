@@ -29,7 +29,6 @@
     "bootstrap": "^4.0.0",
     "bootstrap-social": "^5.1.1",
     "bootstrap-tagsinput": "0.7.1",
-    "clipboard": "^1.7.1",
     "font-awesome": "^4.7.0",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",

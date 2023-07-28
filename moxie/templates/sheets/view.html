@@ -1,0 +1,179 @@
+{% extends 'sheets/base.html'  %}
+{% load currency %}
+{% load i18n %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="moxie-container">
+<div>
+<div id="messages">
+    {% for message in messages %}
+    <div style="color: {% if 'error' in message.tags %}#FF0000{% else %}#00AA00{% endif %}; font-weight: bold; margin-bottom: 1rem;">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+{% include 'sheets/select_sheet.html' %}
+
+{% if object %}
+	<div class="moxie_expenses_form_div">
+        <div class="w-100">
+            <div class="d-inline" style="width: 300px">
+                <div class="h1">
+                <div>
+                    <a href="{{ request.path }}">{{ object.name }}</a>
+                    <span id="clipboard-element" class="fa fa-copy text-moxie i-copy"
+                          alt="{% trans 'Copy permalink of this page to clipboard' %}"
+                          title="{% trans 'Copy permalink of this page to clipboard' %}"
+                          data-clipboard-text="{{ request.build_absolute_uri }}"
+                          onclick="copyToClipboard()"
+                    >
+                    </span>
+                </div>
+                </div>
+            </div>
+            <div class="d-inline" style="float: right;">
+                {% if sheet_not_closed %}
+                <form action="{% url 'sheet_add_user' object.unique_id %}" method="POST" class="form-group">
+                <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
+                <input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
+                </form>
+                {% else %}
+                    <option></option>
+
+                    <div style="padding-bottom: 5px;">
+                        {% trans 'Apply to all' %}
+                        <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
+                        {% for cat in user_categories %}
+                            <option value="{{ cat.pk }}">{{ cat }}</option>
+                        {% endfor %}
+                        </select>
+                        {% if object.currency != 'eur' %}
+                            {% trans 'Use this change rate for sheet currency' %} <input type='text' name='change' value='{{ object.change }}' class='form-control'>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+	</div>
+
+    {% if sheet_not_closed %}
+    {% include 'sheets/sheet_not_closed.html' %}
+    {% endif %}
+
+	<table class="table table-striped table-bordered" id="mytable" width="100%">
+        <form action="{% url 'sheet_copy' object.unique_id %}" method="POST" class="form-group">
+    <thead>
+	<tr>
+        {% if sheet_not_closed %}
+        <th style="width: 5%"></th>
+        {% endif %}
+
+        <th style="width: 20%" class="text-center">{% trans 'Date' %}</th>
+        <th class="text-left">{% trans 'Note' %}</th>
+        {% for user in sheet.0.sheet.users.all %}
+            {% with yesno_args=user.user.username|add:","|add:user.email %}
+            <th class="text-right">{{ user.user.username|yesno:yesno_args }}</th>
+            {% endwith %}
+        {% endfor %}
+        {% if not sheet_not_closed %}
+            <th class='text-right'>{% trans 'Assign to' %}</th>
+        {% endif %}
+	</tr>
+    </thead>
+{#	$total = 0;#}
+	{% for expense in sheet %}
+{#	    if($e['currency'] == 'eur') {#}
+{#            $total += $e['amount'];#}
+{#        }#}
+{#        else {#}
+{#            $total += ($e['amount'] / $this->sheet['change']);#}
+{#        }#}
+{#		// distinct_users_list will mark column for each row#}
+    <tr>
+        {% if not object.closed_at %}
+            <td>
+                <a href='{% url 'sheet_expense_delete' object.unique_id expense.pk %}'>
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        {% endif %}
+		<td class="text-center">{{ expense.date|date:"d-m-Y" }}</td>
+		<td class="text-left">{{ expense.note }}</td>
+        {% for user in expense.sheet.users.all   %}
+            {% if expense.user_id == user.user_id %}
+				<td class="text-right">
+                    {{ expense.amount|floatformat:2 }} {{ expense.currency|currency_symbol|safe }}
+                </td>
+{#				if($e['currency'] == SharedExpenses::DEFAULT_CURRENCY) {#}
+{#                    $this->sheet['users'][$k]['total'] += $e['amount'];#}
+{#                }#}
+{#                else {#}
+{#                    $this->sheet['users'][$k]['total'] += $e['amount'] / $this->sheet['change'];#}
+{#                }#}
+            {% else %}
+				<td class="text-right">0.00 &euro;</td>
+            {% endif %}
+        {% endfor %}
+
+        {% if not sheet_not_closed %}
+            <td class='text-right'><input type='hidden' name='row[{{ expense.pk }}][id]' value='{{ expense.pk }}'>
+            {% if expense.my_expense %}
+                {% if expense.copied %}
+                    <span style='color: #777777'>{% trans 'Already copied' %}</span>
+                {% else %}
+                    <select id='' name='row{{ expense.pk }}[id]' class='form-control sheet_categories_select'>
+                    {% for cat in user_categories %}
+                        <option value="{{ cat.pk }}">{{ cat }}</option>
+                    {% endfor %}
+                    </select>
+                {% endif %}
+            {% endif %}
+            </td>
+        {% endif %}
+    </tr>
+	{% endfor %}
+
+	<tr>
+        {% if sheet_not_closed %}
+	    <th class="sheets-totals"></th>
+        {% endif %}
+        <th class="text-left sheets-totals">{% trans 'TOTAL' %}</th>
+        <th class="sheets-totals">{{ total.sum|floatformat:2 }} &euro;</th>
+        {% for sheet_user in sheet_users.all %}
+        <th class="text-right sheets-totals">{{ sheet_user.sheet_expense|abs|floatformat:2 }} &euro;</th>
+        {% endfor %}
+	</tr>
+
+	<tr>
+        {% if sheet_not_closed %}
+        <th></th>
+        {% endif %}
+        <th></th>
+        <th></th>
+        {% for user in sheet.0.sheet.users.all %}
+            <th class="text-right" style='color: {% if user.difference < 0 %}#ff0000{% else %}#00ff00{% endif %};'>
+                {{ user.difference|floatformat:2 }} &euro;
+            </th>
+        {% endfor %}
+        {% if not sheet_not_closed %}
+        <th>
+            <input type="hidden" name="id_sheet" value="{{ object.unique_id }}">
+            <button onclick="submit()" class="btn btn-primary form-control">{% trans 'Copy to my expenses' %}</button>
+        </th>
+        {% endif %}
+	</tr>
+
+        </form>
+	</table>
+
+{% endif %}
+</div>
+</div>
+
+<script type="text/javascript">
+	let pieData = {{ pie_data|default_if_none:"[]"|safe }};
+	let pieTitle = '{% trans 'Distribution' %}';
+</script>
+{% endblock %}

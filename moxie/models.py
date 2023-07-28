@@ -452,59 +452,43 @@ class Transaction(models.Model):
             }
         return stats
 
-# <?php
-#
-# class SharedExpenses extends Zend_Db_Table_Abstract {
-#     const DEFAULT_CURRENCY = 'eur';
-#
-#     protected $_name = 'shared_expenses';
-#     protected $_primary = 'id';
-#
-#     public function __construct() {
-#         $this->_db = Zend_Registry::get('db');
-#     }
-#
-#     public function getSheetByExpenseIdAndUserId($sharedExpenseId, $userId) {
-#         $select = $this->select()
-#             ->from(array('se' => $this->_name), array())
-#             ->setIntegrityCheck(false)
-#             ->joinInner(array('ses' => 'shared_expenses_sheets'), 'se.id_sheet = ses.id', array('unique_id'))
-#             ->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'sesu.id_sheet = ses.id', array('id'))
-#             ->where('sesu.id_user = ?', $userId)
-#             ->where('se.id = ?', $sharedExpenseId);
-#         error_log($select);
-#         try {
-#             $row = $this->fetchRow($select);
-#             if($row) {
-#                 $row = $row->toArray();
-#             }
-#         }
-#         catch(Exception $e) {
-#             error_log($e->getMessage());
-#             return false;
-#         }
-#         return $row;
-#     }
-# }
 
+class SharedExpensesSheet(models.Model):
+    DEFAULT_CURRENCY = 'eur'
+    POUNDS = 'gbp'
+    US_DOLLAR = 'usd'
+    OTHER = 'nan'
 
-# <?php
-#
-# class SharedExpensesSheet extends Zend_Db_Table_Abstract {
-#     private $database;
-#     protected $_name = 'shared_expenses_sheets';
-#     protected $_primary = 'id';
-#
-#     public function __construct() {
-#         global $db;
-#         $this->database = $db;
-#         $this->_db = Zend_Registry::get('db');
-#     }
-#
-#     public function get_by_user_owner($owner_id) {
-#         return $this->fetchAll("user_owner = ?", $owner_id)->toArray();
-#     }
-#
+    CURRENCIES = (
+        (DEFAULT_CURRENCY, _('Euro')),
+        (POUNDS, _('Pounds')),
+        (US_DOLLAR, _('US Dollar')),
+        (OTHER, _('Other'))
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
+    name = models.CharField(max_length=255, default='')
+    unique_id = models.CharField(max_length=13)  # TODO change to UUIDField
+    closed_at = models.DateTimeField(default=None, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    currency = models.CharField(max_length=3, choices=CURRENCIES, default=DEFAULT_CURRENCY)
+    change = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+
+    @staticmethod
+    def get(user=None, user_id=None):
+        assert user or user_id
+        user_id = user_id if user_id else user.pk
+        return SharedExpensesSheet.objects.get(user_id=user_id)
+
+    @staticmethod
+    def get_by_user_match(user=None, user_id=None):
+        assert user or user_id
+        user_id = user_id if user_id else user.pk
+
+    def __str__(self):
+        return self.name
+
 #     public function get_by_user_match($user_id) {
 #         $select = $this->select()
 #             ->from(array('s' => $this->_name), array('*'))
@@ -567,17 +551,46 @@ class Transaction(models.Model):
 # }
 
 
-# <?php
-#
-# class SharedExpensesSheetUsers extends Zend_Db_Table_Abstract {
-#
-#     protected $_name = 'shared_expenses_sheet_users';
-#     protected $_primary = 'id';
-#
-#     public function __construct() {
-#         $this->_db = Zend_Registry::get('db');
-#     }
-# }
+class SharedExpense(models.Model):
+    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='expenses')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    note = models.CharField(max_length=255)
+    date = models.DateTimeField()
+    copied = models.BooleanField(default=False)
+    currency = models.CharField(max_length=3, default=SharedExpensesSheet.DEFAULT_CURRENCY)
+
+    @staticmethod
+    def get_sheet_by_expense_id_and_user_id(shared_expense_id, user_id):
+        sheet = SharedExpense.objects.select_related('sheet', 'user')\
+            .filter(user__id=user_id, id=shared_expense_id)
+        return sheet
+
+    @property
+    def sheet_user(self):
+        return self.sheet.user
+
+
+class SharedExpensesSheetUsers(models.Model):
+    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='users')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_shared_expenses_sheets')
+    email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def sheet_expense(self):
+        result = SharedExpense.objects.filter(sheet=self.sheet, user=self.user).aggregate(total=Sum('amount'))
+        return result['total']
+
+    @property
+    def difference(self):
+        my_average = self.sheet_expense
+        average_queryset = SharedExpense.objects.filter(sheet=self.sheet).aggregate(total=Sum('amount'))
+        average = average_queryset['total']
+        users = self.sheet.users.count()
+        return my_average - (average / users)
+
 
 
 class Tag(models.Model):

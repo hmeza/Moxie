@@ -1,0 +1,19 @@
+{% extends 'sheets/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<div class="container">
+    {% include 'sheets/select_sheet.html' %}
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="moxie_expenses_form_div" id="sheet_create_button">
+                <input type="submit" onclick="$('#sheet_create').toggle(); $('#sheet_create_button').toggle();"
+                       value="{% trans 'Create new sheet' %}" class="btn btn-info">
+            </div>
+        </div>
+    </div>
+
+    {% include 'sheets/create.html' %}
+</div>
+{% endblock %}

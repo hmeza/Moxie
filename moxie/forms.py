@@ -1,9 +1,8 @@
 import datetime
-
 from django.forms import ModelForm, ModelChoiceField, CharField, DateField, \
     ChoiceField, BooleanField, ValidationError, DecimalField
 from django import forms
-from moxie.models import Category, Transaction, User, Favourite, Tag
+from moxie.models import Category, Transaction, User, Favourite, Tag, SharedExpensesSheet
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
@@ -204,3 +203,49 @@ class UpdateUserData(forms.ModelForm, SetPasswordForm):
         if self.cleaned_data.get('password') != self.cleaned_data.get('repeat_password'):
             raise ValidationError(_("Passwords do not match"))
         return self.cleaned_data.get('repeat_password')
+
+
+class ModelSingleChoiceFieldForPlatform(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return f"{obj.name}"
+
+
+class SheetSelector(forms.Form):
+    sheet_list = ModelSingleChoiceFieldForPlatform(
+        label=_('Select a sheet'),
+        queryset=SharedExpensesSheet.objects.none(),
+        widget=forms.Select(attrs={'onchange': 'redirect()'}),
+        to_field_name='unique_id'
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['sheet_list'].queryset = SharedExpensesSheet.objects.filter(user=user)
+
+
+class SharedExpensesSheetsForm(forms.ModelForm):
+    class Meta:
+        model = SharedExpensesSheet
+        fields = ['name', 'currency', 'change']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Submit')))
+        self.helper.form_action = reverse_lazy('sheet_add')
+
+
+# class SharedExpensesSheetEditForm(forms.ModelForm):
+#     use_distinct_currency = forms.BooleanField(label=_(''))
+#
+#     class Meta:
+#         model = SharedExpense
+#         fields = ['user', 'amount', 'note', 'date', 'use_distinct_currency']
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.helper = FormHelper()
+#         self.helper.add_input(Submit('submit', _('Add')))
+#         self.helper.form_action = reverse_lazy('sheet_add')
+#
+#         self.fields['user'].queryset = SharedExpensesSheetUsers.objects.filter(sheet=self.instance.unique_id)

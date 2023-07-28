@@ -17,6 +17,11 @@ fieldset div {
 	margin:0.3em 0;
 	clear:both;
 }
+
+.text-moxie {
+	color: #0b77b7;
+}
+
 a {
 	color: #0b77b7;
 	text-decoration:none;
@@ -206,6 +211,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	width: 1em;
 }
 
+/** TODO delete */
 .moxie_expenses_form_div {
 	width: auto;
 }
@@ -481,6 +487,7 @@ moxie_expenses_form_right {
 		max-width: none;
 	}
 
+	/** TODO Delete */
 	.moxie_expenses_form_div {
 		width: 100%;
 	}
@@ -818,4 +825,8 @@ table.table-stats > tbody > tr > td > a:hover {
 table.table-stats > tbody > tr > td > a:visited {
 	color: #0b77b7;
 	text-decoration: none;
+}
+
+.sheets-totals {
+	border-top: 1px solid #c5c5c5
 }

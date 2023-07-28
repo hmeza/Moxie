@@ -20,6 +20,7 @@ from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, Expense
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView
+from moxie.views.sheets import SheetsView, SheetView, SheetCloseView
 from moxie.views.tags import TagView
 from moxie.views.categories import CategoryView, categories_bulk_update
 from moxie.views.stats import StatsView
@@ -52,14 +53,21 @@ urlpatterns = [
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('finance', TemplateView.as_view(template_name='finance/index.html'), name='finance'),
+
     # TODO
     path('users', UserConfigurationView.as_view(), name='users'),
     path('tag', TagView.as_view(), name='tags'),
     path('category/order/', categories_bulk_update, name='category_order'),
     path('category/<int:pk>/', CategoryView.as_view(), name='category_edit'),
     path('category/', CategoryView.as_view(), name='category_view'),
-     # TODO
-    path('sheets', UserConfigurationView.as_view(), name='users'),
+
+    path('sheets/add/', SheetView.as_view(), name='sheet_add'),
+    path('sheets/<slug:unique_id>/add_user/', SheetView.as_view(), name='sheet_add_user'),
+    path('sheets/<slug:unique_id>/close/', SheetCloseView.as_view(), name='sheet_close'),
+    path('sheets/<slug:unique_id>/copy/', SheetCloseView.as_view(), name='sheet_copy'),
+    path('sheets/<slug:unique_id>/<int:pk>/delete/', SheetCloseView.as_view(), name='sheet_expense_delete'),
+    path('sheets/<slug:unique_id>/', SheetView.as_view(), name='sheet_view'),
+    path('sheets/', SheetsView.as_view(), name='sheet_list'),
 
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
