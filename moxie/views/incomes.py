@@ -219,6 +219,9 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		# TODO FIX PROBLEM WHEN ADDING DECIMALS
 		print(form.errors)
 		print(form.data['amount'])
+		self.object_list = self.get_queryset()
+		filterset_class = self.get_filterset_class()
+		self.filterset = self.get_filterset(filterset_class)
 		response = super().form_invalid(form)
 		return response
 

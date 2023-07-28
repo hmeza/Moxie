@@ -1,7 +1,7 @@
 import datetime
 
-from django.forms import ModelForm, ModelChoiceField, CharField, FloatField, DateField, DateTimeField, \
-    ChoiceField, BooleanField, ValidationError
+from django.forms import ModelForm, ModelChoiceField, CharField, DateField, \
+    ChoiceField, BooleanField, ValidationError, DecimalField
 from django import forms
 from moxie.models import Category, Transaction, User, Favourite, Tag
 from crispy_forms.helper import FormHelper
@@ -99,7 +99,7 @@ class ExpensesForm(TransactionForm):
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
-    amount = FloatField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
+    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False)
     favourite = BooleanField(label=_('Favourite'), initial=False, required=False)
@@ -137,7 +137,7 @@ class IncomesForm(TransactionForm):
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     note = CharField(label=_('note'))
-    amount = FloatField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
+    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False, widget=forms.HiddenInput())
 
