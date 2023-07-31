@@ -7,8 +7,6 @@
 {#<div class="container">#}
 {#<div class="row m-0">#}
 {#<div class="col-12">#}
-<div class="moxie-container">
-<div>
 <div id="messages">
     {% for message in messages %}
     <div style="color: {% if 'error' in message.tags %}#FF0000{% else %}#00AA00{% endif %}; font-weight: bold; margin-bottom: 1rem;">
@@ -17,14 +15,14 @@
     {% endfor %}
 </div>
 
-{% include 'sheets/select_sheet.html' %}
+{#{% include 'sheets/select_sheet.html' %}#}
 
 {% if object %}
-	<div class="moxie_expenses_form_div">
+	<div class="moxie_expenses_form_div mt-3">
         <div class="w-100">
-            <div class="d-inline" style="width: 300px">
-                <div class="h1">
-                <div>
+            <div class="d-inline-block" style="width: 300px">
+                <div class="d-inline h2">
+                    <a href="{% url 'sheet_list' %}"><span> Back </span></a> >
                     <a href="{{ request.path }}">{{ object.name }}</a>
                     <span id="clipboard-element" class="fa fa-copy text-moxie i-copy"
                           alt="{% trans 'Copy permalink of this page to clipboard' %}"
@@ -34,12 +32,10 @@
                     >
                     </span>
                 </div>
-                </div>
             </div>
-            <div class="d-inline" style="float: right;">
+            <div class="d-inline float-right">
                 {% if sheet_not_closed %}
-                <form action="{% url 'sheet_add_user' object.unique_id %}" method="POST" class="form-group">
-                    <input type="hidden" name="id_sheet" value="{{ object.unique_id }}">
+                <form action="{% url 'sheet_close' object.unique_id %}" method="POST" class="form-group">
                     <input type="submit" value="{% trans 'Close sheet' %}" class="btn btn-primary">
                 </form>
                 {% else %}

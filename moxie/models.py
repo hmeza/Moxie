@@ -578,6 +578,9 @@ class SharedExpensesSheetUsers(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.user.username if self.user else self.email
+
     @property
     def sheet_expense(self):
         result = SharedExpense.objects.filter(sheet=self.sheet, user=self.user).aggregate(total=Sum('amount'))

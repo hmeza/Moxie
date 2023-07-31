@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-28 17:31+0000\n"
+"POT-Creation-Date: 2023-07-31 22:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgid "note"
 msgstr "Note"
 
 #: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:103
-#: moxie/forms.py:141
+#: moxie/forms.py:141 moxie/forms.py:241
 msgid "date"
 msgstr "Date"
 
@@ -89,7 +89,8 @@ msgstr "Favorit"
 msgid "Update expense"
 msgstr "Actualitzar despesa"
 
-#: moxie/forms.py:115
+#: moxie/forms.py:115 moxie/forms.py:250
+#: moxie/templates/sheets/sheet_not_closed.html:7
 msgid "Add expense"
 msgstr "Afegir despesa"
 
@@ -105,8 +106,24 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: moxie/forms.py:210
+#: moxie/forms.py:216
 msgid "Select a sheet"
+msgstr ""
+
+#: moxie/forms.py:235 moxie/forms.py:275
+msgid "Add"
+msgstr ""
+
+#: moxie/forms.py:240
+msgid "In sheet currency?"
+msgstr ""
+
+#: moxie/forms.py:263
+msgid "User or email"
+msgstr ""
+
+#: moxie/forms.py:264
+msgid "Enter address of person with whom you are sharing expenses.&nbsp;"
 msgstr ""
 
 #: moxie/models.py:74
@@ -171,7 +188,7 @@ msgstr ""
 msgid "Wear and dress"
 msgstr ""
 
-#: moxie/models.py:177
+#: moxie/models.py:177 moxie/models.py:466
 msgid "Other"
 msgstr ""
 
@@ -201,6 +218,18 @@ msgstr ""
 
 #: moxie/models.py:213
 msgid "Coffee outside, take away, some pastry maybe"
+msgstr ""
+
+#: moxie/models.py:463
+msgid "Euro"
+msgstr ""
+
+#: moxie/models.py:464
+msgid "Pounds"
+msgstr ""
+
+#: moxie/models.py:465
+msgid "US Dollar"
 msgstr ""
 
 #: moxie/settings.py:156
@@ -249,11 +278,12 @@ msgstr "Nota"
 msgid "tags_title"
 msgstr ""
 
-#: moxie/templates/common/data.html:14
+#: moxie/templates/common/data.html:14 moxie/templates/sheets/view.html:73
 msgid "Note"
 msgstr ""
 
 #: moxie/templates/common/data.html:19 moxie/templates/common/data.html:76
+#: moxie/templates/sheets/view.html:72
 msgid "Date"
 msgstr ""
 
@@ -418,13 +448,57 @@ msgstr ""
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/sheets/index.html:14
+#: moxie/templates/sheets/index.html:12
 msgid "Create new sheet"
 msgstr ""
 
-#: moxie/templates/sheets/select_sheet.html:10
+#: moxie/templates/sheets/select_sheet.html:9
 msgid "You do not have shared expenses sheets."
 msgstr "No tens fulls de despeses compartides."
+
+#: moxie/templates/sheets/sheet_not_closed.html:8
+#, fuzzy
+#| msgid "Add expense"
+msgid "Add user"
+msgstr "Afegir despesa"
+
+#: moxie/templates/sheets/view.html:28 moxie/templates/sheets/view.html:29
+msgid "Copy permalink of this page to clipboard"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:39
+msgid "Close sheet"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:45
+msgid "Apply to all"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:52
+msgid "Use this change rate for sheet currency"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:80
+msgid "Assign to"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:123
+msgid "Already copied"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:141
+msgid "TOTAL"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:162
+#, fuzzy
+#| msgid "Update expense"
+msgid "Copy to my expenses"
+msgstr "Actualitzar despesa"
+
+#: moxie/templates/sheets/view.html:179
+msgid "Distribution"
+msgstr ""
 
 #: moxie/templates/stats/index.html:7
 msgid "Budget"
@@ -516,6 +590,25 @@ msgstr ""
 
 #: moxie/views/login.py:35
 msgid "Registered successfully."
+msgstr ""
+
+#: moxie/views/sheets.py:355
+#, fuzzy
+#| msgid "You do not have shared expenses sheets."
+msgid "New shared expenses sheet"
+msgstr "No tens fulls de despeses compartides."
+
+#: moxie/views/sheets.py:357
+#, fuzzy
+#| msgid "You do not have shared expenses sheets."
+msgid "Someone shared an expenses sheet with you:"
+msgstr "No tens fulls de despeses compartides."
+
+#: moxie/views/sheets.py:362
+msgid ""
+"Best regards\n"
+"\n"
+"Moxie team"
 msgstr ""
 
 #: moxie/views/stats.py:61

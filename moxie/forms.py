@@ -2,7 +2,8 @@ import datetime
 from django.forms import ModelForm, ModelChoiceField, CharField, DateField, \
     ChoiceField, BooleanField, ValidationError, DecimalField
 from django import forms
-from moxie.models import Category, Transaction, User, Favourite, Tag, SharedExpensesSheet
+from moxie.models import Category, Transaction, User, Favourite, Tag, SharedExpensesSheet,\
+    SharedExpensesSheetUsers, SharedExpense
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
@@ -231,21 +232,48 @@ class SharedExpensesSheetsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', _('Submit')))
+        self.helper.add_input(Submit('submit', _('Add')))
         self.helper.form_action = reverse_lazy('sheet_add')
 
 
-# class SharedExpensesSheetEditForm(forms.ModelForm):
-#     use_distinct_currency = forms.BooleanField(label=_(''))
-#
-#     class Meta:
-#         model = SharedExpense
-#         fields = ['user', 'amount', 'note', 'date', 'use_distinct_currency']
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.helper = FormHelper()
-#         self.helper.add_input(Submit('submit', _('Add')))
-#         self.helper.form_action = reverse_lazy('sheet_add')
-#
-#         self.fields['user'].queryset = SharedExpensesSheetUsers.objects.filter(sheet=self.instance.unique_id)
+class SharedExpensesForm(forms.ModelForm):
+    use_distinct_currency = forms.BooleanField(label=_('In sheet currency?'), initial=False)
+    date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
+
+    class Meta:
+        model = SharedExpense
+        fields = ['user', 'amount', 'note', 'date', 'use_distinct_currency']
+
+    def __init__(self, sheet, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Add expense')))
+        self.helper.form_action = reverse_lazy('sheet_view', kwargs={'unique_id': sheet.unique_id})
+
+        self.fields['user'].queryset = sheet.users.all()
+        from moxie.templatetags.currency import currency_symbol
+        symbol = currency_symbol(sheet.currency)
+        self.fields['use_distinct_currency'].help_text = f"(1.00 € = {sheet.change:.2f} {symbol})"
+        if sheet.currency == SharedExpensesSheet.DEFAULT_CURRENCY:
+            self.fields['use_distinct_currency'].widget = forms.HiddenInput()
+
+
+class SharedExpensesSheetAddUser(forms.ModelForm):
+    email = forms.CharField(
+        label=_('User or email'),
+        help_text=_('Enter address of person with whom you are sharing expenses.&nbsp;'),
+        required=True
+    )
+
+    class Meta:
+        model = SharedExpensesSheetUsers
+        fields = ['email']
+
+    def __init__(self, unique_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Add')))
+        self.helper.form_action = reverse_lazy('sheet_add_user', kwargs={'unique_id': unique_id})
+
+    def clean_email(self):
+        return self.cleaned_data.get('email')

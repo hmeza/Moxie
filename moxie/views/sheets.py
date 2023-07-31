@@ -6,11 +6,12 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
-from django.db.models import Sum, Case, When, Value, BooleanField, Count
+from django.db.models import Sum, Case, When, Value, BooleanField, Count, FloatField
+from django.db.models.functions import Cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers
-from moxie.forms import SheetSelector, SharedExpensesSheetsForm#, SharedExpensesSheetEditForm
+from moxie.forms import SheetSelector, SharedExpensesSheetsForm, SharedExpensesSheetAddUser, SharedExpensesForm
 
 
 class SheetsView(LoginRequiredMixin, ListView, FormView):
@@ -27,7 +28,7 @@ class SheetsView(LoginRequiredMixin, ListView, FormView):
 		return context
 
 
-class SheetView(UpdateView):
+class SheetView(CreateView, UpdateView):
 	model = SharedExpensesSheet
 	slug_url_kwarg = 'unique_id'
 	query_pk_and_slug = True
@@ -47,73 +48,29 @@ class SheetView(UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		unique_id = self.kwargs.get('unique_id')
 		context['sheet_list'] = SharedExpensesSheet.objects.exists()
 		context['select_sheet_form'] = SheetSelector(user=self.request.user)
 
-		context['shared_expenses_form'] = SharedExpensesSheetsForm()
+		context['shared_expenses_form'] = SharedExpensesForm(self.object)
 		context['sheet_not_closed'] = not bool(self.object.closed_at)
 
 		conditional = Case(When(user=self.request.user, then=Value(True)), default_value=Value(False), output_field=BooleanField())
 
 		sheet = SharedExpense.objects\
 			.select_related('sheet').prefetch_related('sheet__users')\
-			.annotate(my_expense=conditional).filter(sheet__unique_id=self.kwargs.get('unique_id')).order_by('date')
+			.annotate(my_expense=conditional).filter(sheet__unique_id=unique_id).order_by('date')
 		context['sheet'] = sheet
 		context['total'] = self.get_object().expenses.aggregate(sum=Sum('amount'))
 		# todo calculate average, keep in mind currency change
 		context['user_categories'] = Category.get_categories_by_user(self.request.user, Category.EXPENSES)
-		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=self.kwargs.get('unique_id')).users
+		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=unique_id).users
 		pie_data = []
 		for user in sheet.first().sheet.users.all():  # type: SharedExpensesSheetUsers
-			pie_data.append(user.difference)
+			pie_data.append([user.user.username, float(user.sheet_expense)])
 		context['pie_data'] = pie_data
-		# < ?php
-		# $js = array();
-		# if (is_array($this->sheet['users'])) {
-		# foreach($this->sheet['users'] as $user) {
-		# $name = empty($user['login']) ? $user['email']: $
-		# 	user['login'];
-		# $js[] = '["'.$name.
-		# '", '.$user['total'].
-		# ']';
-		# }
-		# }
-		# $pieData = '['.implode(', ', $js).']';
-		# ? >
-		context['pie_data'] = None
+		context['add_user_form'] = SharedExpensesSheetAddUser(unique_id=unique_id)
 		return context
-
-	def _send_user_added(self, sheet, user_email, registered=False):
-		...
-		subject = "Moxie - " + _('New shared expenses sheet')
-		url = reverse_lazy('sheet_view', kwargs={'unique_id': sheet.unique_id})
-		text_1 = _('Someone shared an expenses sheet with you:')
-		text_2 = """
-		If you have a Moxie account, you will see this sheet in your shared expenses sheets.
-		If you do not have an account, you can register and this sheet will be linked to your account
-		automatically."""
-		footer = _('Best regards\n\nMoxie team')
-		body = f"""
-		{text_1}
-		
-		{sheet.name}
-		
-		{url}
-		
-		{text_2}
-		
-		{footer}
-		"""
-		from_address = 'moxie@dootic.com'
-		# TODO https://docs.djangoproject.com/en/4.2/topics/email/
-		return send_mail(subject, body, from_address, [user_email])
-# 	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
-# 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
-# 		$s_site = Zend_Registry::get('config')->moxie->app->name;
-#
-# 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-# 				'Reply-To: moxie@dootic.com' . "\r\n" .
-# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
 
 
 # <?php
@@ -374,8 +331,58 @@ class SheetCopyView(SheetView):
 # 	}
 #
 
+
 class SheetAddUserview(SheetView):
-	...
+	model = SharedExpensesSheet
+	form_class = SharedExpensesSheetAddUser
+
+	def form_valid(self, form):
+		self.object.users.get_or_create(
+			user=form.cleaned_data.get('user'),
+			email=form.cleaned_data.get('email'),
+		)
+		if form.cleaned_data.get('user'):
+			email = form.cleaned_data.get('user')
+		else:
+			email = form.cleaned_data.get('email')
+		self._send_user_added(self.object, email)
+		return redirect(reverse_lazy('sheet_view'), kwargs={'unique_id': self.object.unique_id})
+
+	def form_invalid(self, form):
+		...
+
+	def _send_user_added(self, sheet, user_email, registered=False):
+		subject = "Moxie - " + _('New shared expenses sheet')
+		url = reverse_lazy('sheet_view', kwargs={'unique_id': sheet.unique_id})
+		text_1 = _('Someone shared an expenses sheet with you:')
+		text_2 = """
+		If you have a Moxie account, you will see this sheet in your shared expenses sheets.
+		If you do not have an account, you can register and this sheet will be linked to your account
+		automatically."""
+		footer = _('Best regards\n\nMoxie team')
+		body = f"""
+		{text_1}
+
+		{sheet.name}
+
+		{url}
+
+		{text_2}
+
+		{footer}
+		"""
+		from_address = 'moxie@dootic.com'
+		# TODO https://docs.djangoproject.com/en/4.2/topics/email/
+		return send_mail(subject, body, from_address, [user_email])
+
+
+# 	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
+# 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
+# 		$s_site = Zend_Registry::get('config')->moxie->app->name;
+#
+# 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+# 				'Reply-To: moxie@dootic.com' . "\r\n" .
+# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
 
 # public function adduserAction() {
 # 		try {
