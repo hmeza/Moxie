@@ -72,48 +72,6 @@ class SheetView(CreateView, UpdateView):
 		context['add_user_form'] = SharedExpensesSheetAddUser(unique_id=unique_id)
 		return context
 
-
-# <?php
-# /** Zend_Controller_Action */
-# class SheetsController extends Zend_Controller_Action
-# {
-#     /**
-#      * @var SharedExpensesSheet
-#      */
-# 	private $sheetModel;
-#
-# 	public function init() {
-# 		$this->sheetModel = new SharedExpensesSheet();
-# 	}
-#
-# 	/**
-# 	 * Show sheets page and all my sheets.
-# 	 */
-# 	public function indexAction() {
-# 		$this->set_sheet_list_to_view();
-# 	}
-#
-# 	/**
-# 	 * List a single sheet.
-# 	 */
-# 	public function viewAction() {
-# 		$categories = new Categories();
-# 		$id = $this->getRequest()->getParam('id', null);
-# 		$sheet = $this->sheetModel->get_by_unique_id($id);
-# 		$this->view->assign('sheet', $sheet);
-# 		if ($this->getRequest()->getParam('errors', null)) {
-# 			$this->view->assign('errors', $this->getRequest()->getParam('errors'));
-# 		}
-# 		try {
-# 			$this->view->assign('categories', $categories->getCategoriesForView(Categories::EXPENSES));
-# 		}
-# 		catch(Exception $e) {
-# 			$this->view->assign('categories', array());
-# 		}
-# 		$this->set_sheet_list_to_view();
-# 		//$this->view->assign('sheet_form', $this->getForm($sheet['users'], $id));
-# 	}
-#
 # 	public function createAction() {
 # 	    $request = $this->getRequest();
 # 		if ($request->isPost()) {
@@ -196,35 +154,20 @@ class SheetView(CreateView, UpdateView):
 # 		$this->redirect('/sheets/view/id/'.$id_sheet);
 # 	}
 #
-# 	public function deleteAction() {
-# 	    global $st_lang;
-# 		// validations: logged user
-# 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
-# 			// return 403
-# 			$this->_request->setPost(array(
-# 					'id' => $this->getRequest()->getParam('id'),
-# 					'errors' => array($st_lang['error_nouser'])
-# 			));
-# 			return $this->_forward("view", "sheets");
-# 		}
-# 		try {
-# 			$seid = $this->getRequest()->getParam('id');
-# 			// validate that current user appears in the sheet of this shared expense
-# 			$seModel = new SharedExpenses();
-# 			$seModel->find($seid);
-# 			$row = $seModel->getSheetByExpenseIdAndUserId($seid, $_SESSION['user_id']);
-# 			if(empty($row)) {
-# 				throw new Exception("Shared expense does not appear in a sheet from current user");
-# 			}
-# 			$id_sheet = $row['unique_id'];
-# 			$seModel->delete('id = '.$seid);
-# 		}
-# 		catch(Exception $e) {
-# 			error_log($e->getMessage());
-# 			$this->redirect('/sheets');
-# 		}
-# 		$this->redirect('/sheets/view/id/'.$id_sheet);
-# 	}
+
+
+class SheetExpenseDeleteView(LoginRequiredMixin, DeleteView):
+	model = SharedExpense
+	# slug_url_kwarg = 'unique_id'
+	# query_pk_and_slug = True
+
+	# TODO Validate that expense belongs to the user or at least user appears in the shared expenses sheet users
+	def get(self, request, *args, **kwargs):
+		return self.delete(request, *args, **kwargs)
+
+	def get_success_url(self):
+		return reverse_lazy('sheet_view', kwargs={'unique_id': self.kwargs.get('unique_id')})
+
 #
 # 	public function closeAction() {
 # 		global $st_lang;
