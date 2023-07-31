@@ -4,18 +4,55 @@
 
 <div id="forms">
     <div class="moxie_expenses_form_div moxie_expenses_form_left">
-    <!--<button data-toggle="collapse" data-target="#sheets_add_expense" class="btn btn-info">{% trans 'Add expense' %}</button>-->
-        <button data-toggle="collapse" data-target="#sheets_add_user" class="btn btn-info mt-3">{% trans 'Add user' %}</button>
-        <div id="sheets_add_user" class="collapse mt-3 mb-4">
-            {% crispy add_user_form %}
+        <div class="d-table w-100">
+            <div class="d-row w-100">
+                <div class="d-table-cell w-50 float-left">
+                    <button data-toggle="collapse" data-target="#sheets_add_user" class="btn btn-info mt-3">{% trans 'Add user' %}</button>
+                </div>
+                <div class="d-table-cell w-50 float-right text-right">
+                    {% if sheet_not_closed %}
+                    <form action="{% url 'sheet_close' object.unique_id %}" method="POST" class="form-group mt-3">
+                        {% csrf_token %}
+                        <input type="hidden" name="closed_at" id="id_closed_at" value="{% now "Y-m-d" %}">
+                        <input type="submit" value="{% trans 'Close sheet' %}" class="btn btn-primary">
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-
+        <div class="d-inline">
+            <div id="sheets_add_user" class="collapse mt-3 mb-4">
+                {% crispy add_user_form %}
+            </div>
+        </div>
+        <div class="d-row">
         <div id="sheets_add_expense" class="form-group mt-4 mb-3">
             {% crispy shared_expenses_form %}
+        </div>
         </div>
     </div>
 
     <div id="distribution_box" class="moxie_expenses_form_div moxie_expenses_form_right moxie-right">
+
+        <div class="d-inline float-right">
+
+            {% if not sheet_not_closed %}
+                <option></option>
+
+                <div class="pb-3">
+                    <label for="id_category">{% trans 'Apply to all' %}</label>
+                    <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
+                    {% for cat in user_categories %}
+                        <option value="{{ cat.pk }}">{{ cat }}</option>
+                    {% endfor %}
+                    </select>
+                    {% if object.currency != 'eur' %}
+                        {% trans 'Use this change rate for sheet currency' %} <input type='text' name='change' value='{{ object.change }}' class='form-control'>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="{% static '/js/sheets/stats.js' %}?v={{ JS_VERSION }}"></script>
         <div id="sheet_distribution"></div>

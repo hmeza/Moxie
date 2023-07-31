@@ -1,7 +1,9 @@
 import datetime
 import re
+import uuid
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, FormView
+from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
@@ -28,7 +30,24 @@ class SheetsView(LoginRequiredMixin, ListView, FormView):
 		return context
 
 
-class SheetView(CreateView, UpdateView):
+class SheetCreateView(LoginRequiredMixin, CreateView):
+	model = SharedExpensesSheet
+	fields = ['name', 'currency', 'change']
+
+	def form_valid(self, form):
+		instance = form.save(commit=False)
+		# TODO once migrated to Django, change id by uuid and generate automatically on create
+		instance.unique_id = uuid.uuid4()
+		instance.user = self.request.user
+		instance.save()
+		SharedExpensesSheetUsers.objects.create(
+			sheet=instance,
+			user=self.request.user
+		)
+		return HttpResponseRedirect(reverse_lazy('sheet_view', kwargs={'unique_id': instance.unique_id}))
+
+
+class SheetView(UpdateView):
 	model = SharedExpensesSheet
 	slug_url_kwarg = 'unique_id'
 	query_pk_and_slug = True
@@ -65,10 +84,7 @@ class SheetView(CreateView, UpdateView):
 		# todo calculate average, keep in mind currency change
 		context['user_categories'] = Category.get_categories_by_user(self.request.user, Category.EXPENSES)
 		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=unique_id).users
-		pie_data = []
-		for user in sheet.first().sheet.users.all():  # type: SharedExpensesSheetUsers
-			pie_data.append([user.user.username, float(user.sheet_expense)])
-		context['pie_data'] = pie_data
+		context['pie_data'] = [[user.user.username, float(user.sheet_expense)] for user in self.object.users.all()]
 		context['add_user_form'] = SharedExpensesSheetAddUser(unique_id=unique_id)
 		return context
 
@@ -168,34 +184,7 @@ class SheetExpenseDeleteView(LoginRequiredMixin, DeleteView):
 	def get_success_url(self):
 		return reverse_lazy('sheet_view', kwargs={'unique_id': self.kwargs.get('unique_id')})
 
-#
-# 	public function closeAction() {
-# 		global $st_lang;
-# 		$id_sheet = $this->getRequest()->getParam('id_sheet', null);
-# 		// validations: logged user
-# 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
-# 			// return 403
-# 			$this->_request->setPost(array(
-# 					'id' => $id_sheet,
-# 					'errors' => array($st_lang['error_nouser'])
-# 			));
-# 			return $this->_forward("view", "sheets");
-# 		}
-# 		try {
-# 			$sheet = $this->getSheet();
-# 			$this->sheetModel->update(array('closed_at' => date('Y-m-d H:i:s')), 'unique_id = "'.$sheet['unique_id'].'"');
-# 			// @todo: set message for view "Sheet closed"
-# 			// @todo: send email to all users in the sheet - sheet closed w/user that closed it.
-# 			$this->view->assign('messages', array('Closed successfully'));
-# 		}
-# 		catch(Exception $e) {
-# 			// return error 404
-# 			// @todo: set error message
-# 			$this->view->assign('errors', array($e->getMessage()));
-# 		}
-# 		$this->redirect('/sheets/view/id/'.$sheet['unique_id']);
-# 	}
-#
+
 class SheetCopyView(SheetView):
 	...
 # 	public function copyAction() {
@@ -389,6 +378,10 @@ class SheetAddUserview(SheetView):
 # 	}
 
 
-class SheetCloseView(SheetView):
+class SheetCloseView(LoginRequiredMixin, SheetView):
+	model = SharedExpensesSheet
+	fields = ['closed_at']
+
+	# TODO Validate that user closing sheet is one of the users in sheet
 	def get_success_url(self):
-		return reverse_lazy('sheet_view', kwargs={'slug': self.object.unique_id})
+		return reverse_lazy('sheet_view', kwargs={'unique_id': self.object.unique_id})

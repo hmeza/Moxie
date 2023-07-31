@@ -468,7 +468,7 @@ class SharedExpensesSheet(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
     name = models.CharField(max_length=255, default='')
-    unique_id = models.CharField(max_length=13)  # TODO change to UUIDField
+    unique_id = models.CharField(max_length=64)  # TODO change to UUIDField
     closed_at = models.DateTimeField(default=None, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -584,16 +584,14 @@ class SharedExpensesSheetUsers(models.Model):
     @property
     def sheet_expense(self):
         result = SharedExpense.objects.filter(sheet=self.sheet, user=self.user).aggregate(total=Sum('amount'))
-        return result['total']
+        return result['total'] if result['total'] else 0
 
     @property
     def difference(self):
-        my_average = self.sheet_expense
         average_queryset = SharedExpense.objects.filter(sheet=self.sheet).aggregate(total=Sum('amount'))
-        average = average_queryset['total']
+        average = average_queryset['total'] if average_queryset['total'] else 0
         users = self.sheet.users.count()
-        return my_average - (average / users)
-
+        return self.sheet_expense - (average / users)
 
 
 class Tag(models.Model):
