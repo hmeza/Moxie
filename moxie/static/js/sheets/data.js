@@ -22,8 +22,4 @@ $(document).ready(function() {
 	$("#add_expense_button").click(function (event) {
 		$("#add_expense_form").slideToggle();
 	});
-	
-	$('#sheet_id_redirector').on('change', function(e, params) {
-		window.location.replace("/sheets/view/id/" + e.target.value);
-	});
 });

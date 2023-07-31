@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.db.models import Sum, Case, When, Value, BooleanField, Count
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from moxie.models import SharedExpense, SharedExpensesSheet, Category
+from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers
 from moxie.forms import SheetSelector, SharedExpensesSheetsForm#, SharedExpensesSheetEditForm
 
 
@@ -63,6 +63,10 @@ class SheetView(UpdateView):
 		# todo calculate average, keep in mind currency change
 		context['user_categories'] = Category.get_categories_by_user(self.request.user, Category.EXPENSES)
 		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=self.kwargs.get('unique_id')).users
+		pie_data = []
+		for user in sheet.first().sheet.users.all():  # type: SharedExpensesSheetUsers
+			pie_data.append(user.difference)
+		context['pie_data'] = pie_data
 		# < ?php
 		# $js = array();
 		# if (is_array($this->sheet['users'])) {

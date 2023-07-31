@@ -4,6 +4,9 @@
 {% load mathfilters %}
 
 {% block content %}
+{#<div class="container">#}
+{#<div class="row m-0">#}
+{#<div class="col-12">#}
 <div class="moxie-container">
 <div>
 <div id="messages">
@@ -36,14 +39,14 @@
             <div class="d-inline" style="float: right;">
                 {% if sheet_not_closed %}
                 <form action="{% url 'sheet_add_user' object.unique_id %}" method="POST" class="form-group">
-                <input type="hidden" name="id_sheet" value="<?php echo $this->sheet['unique_id']; ?>">
-                <input type="submit" value="<?php echo $st_lang['sheets_close']; ?>" class="btn btn-primary">
+                    <input type="hidden" name="id_sheet" value="{{ object.unique_id }}">
+                    <input type="submit" value="{% trans 'Close sheet' %}" class="btn btn-primary">
                 </form>
                 {% else %}
                     <option></option>
 
-                    <div style="padding-bottom: 5px;">
-                        {% trans 'Apply to all' %}
+                    <div class="pb-3">
+                        <label for="id_category">{% trans 'Apply to all' %}</label>
                         <select name="id_category" id="id_category" class="form-control" onchange="changeSelectors();">
                         {% for cat in user_categories %}
                             <option value="{{ cat.pk }}">{{ cat }}</option>
@@ -171,6 +174,9 @@
 {% endif %}
 </div>
 </div>
+    {#</div>#}
+    {#</div>#}
+    {#</div>#}
 
 <script type="text/javascript">
 	let pieData = {{ pie_data|default_if_none:"[]"|safe }};

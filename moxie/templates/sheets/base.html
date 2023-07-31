@@ -3,7 +3,6 @@
 {% load i18n %}
 {% block head %}
 <head>
-    <script src="{% static 'clipboard/dist/clipboard.min.js' %}"></script>
     <script src="{% static 'js/sheets/data.js' %}?v={{ JS_VERSION }}"></script>
     <script type="text/javascript">
         const sheetsUrl = "{% url 'sheet_list' %}";
