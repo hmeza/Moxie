@@ -10,10 +10,6 @@ function changeSelectors() {
     });
 }
 
-function redirect() {
-	window.location.href = sheetsUrl + $('#id_sheet_list').val() + "/";
-}
-
 $(document).ready(function() {
 	$("#add_user_button").click(function (event) {
 		$("#add_user_form").slideToggle();

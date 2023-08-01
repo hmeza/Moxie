@@ -10,7 +10,7 @@
                     <button data-toggle="collapse" data-target="#sheets_add_user" class="btn btn-info mt-3">{% trans 'Add user' %}</button>
                 </div>
                 <div class="d-table-cell w-50 float-right text-right">
-                    {% if sheet_not_closed %}
+                    {% if not sheet_closed %}
                     <form action="{% url 'sheet_close' object.unique_id %}" method="POST" class="form-group mt-3">
                         {% csrf_token %}
                         <input type="hidden" name="closed_at" id="id_closed_at" value="{% now "Y-m-d" %}">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="d-row">
-        <div id="sheets_add_expense" class="form-group mt-4 mb-3">
+        <div id="sheets_add_expense" class="form-group mt-4">
             {% crispy shared_expenses_form %}
         </div>
         </div>
@@ -36,7 +36,7 @@
 
         <div class="d-inline float-right">
 
-            {% if not sheet_not_closed %}
+            {% if sheet_closed %}
                 <option></option>
 
                 <div class="pb-3">

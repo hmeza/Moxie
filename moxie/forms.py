@@ -9,6 +9,7 @@ from crispy_forms.layout import Submit
 from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from captcha.fields import CaptchaField
+from moxie.templatetags.currency import currency_symbol
 
 
 class CategoryForm(ModelForm):
@@ -211,19 +212,6 @@ class ModelSingleChoiceFieldForPlatform(forms.ModelChoiceField):
         return f"{obj.name}"
 
 
-class SheetSelector(forms.Form):
-    sheet_list = ModelSingleChoiceFieldForPlatform(
-        label=_('Select a sheet'),
-        queryset=SharedExpensesSheet.objects.none(),
-        widget=forms.Select(attrs={'onchange': 'redirect()'}),
-        to_field_name='unique_id'
-    )
-
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['sheet_list'].queryset = SharedExpensesSheet.objects.filter(user=user)
-
-
 class SharedExpensesSheetsForm(forms.ModelForm):
     class Meta:
         model = SharedExpensesSheet
@@ -237,7 +225,7 @@ class SharedExpensesSheetsForm(forms.ModelForm):
 
 
 class SharedExpensesForm(forms.ModelForm):
-    use_distinct_currency = forms.BooleanField(label=_('In sheet currency?'), initial=False)
+    use_distinct_currency = forms.BooleanField(label=_('In sheet currency?'), initial=False, required=False)
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
 
     class Meta:
@@ -248,10 +236,9 @@ class SharedExpensesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', _('Add expense')))
-        self.helper.form_action = reverse_lazy('sheet_view', kwargs={'unique_id': sheet.unique_id})
+        self.helper.form_action = reverse_lazy('sheet_expenses', kwargs={'unique_id': sheet.unique_id})
 
         self.fields['user'].queryset = sheet.users.all()
-        from moxie.templatetags.currency import currency_symbol
         symbol = currency_symbol(sheet.currency)
         self.fields['use_distinct_currency'].help_text = f"(1.00 € = {sheet.change:.2f} {symbol})"
         if sheet.currency == SharedExpensesSheet.DEFAULT_CURRENCY:

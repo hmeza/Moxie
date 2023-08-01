@@ -4,7 +4,7 @@
 {% load mathfilters %}
 
 {% block content %}
-{#<div class="container">#}
+{#<div class="container m-0 p-0 border-0 w-100 ml-0">#}
 {#<div class="row m-0">#}
 {#<div class="col-12">#}
 <div id="messages">
@@ -36,122 +36,112 @@
         </div>
 	</div>
 
-    {% if sheet_not_closed %}
+    {% if not sheet_closed %}
     {% include 'sheets/sheet_not_closed.html' %}
     {% endif %}
 
-	<table class="table table-striped table-bordered" id="mytable" width="100%">
-        <form action="{% url 'sheet_copy' object.unique_id %}" method="POST" class="form-group">
-    <thead>
-	<tr>
-        {% if sheet_not_closed %}
-        <th style="width: 5%"></th>
-        {% endif %}
-
-        <th style="width: 20%" class="text-center">{% trans 'Date' %}</th>
-        <th class="text-left">{% trans 'Note' %}</th>
-        {% for user in sheet.0.sheet.users.all %}
-            {% with yesno_args=user.user.username|add:","|add:user.email %}
-            <th class="text-right">{{ user.user.username|yesno:yesno_args }}</th>
-            {% endwith %}
-        {% endfor %}
-        {% if not sheet_not_closed %}
-            <th class='text-right'>{% trans 'Assign to' %}</th>
-        {% endif %}
-	</tr>
-    </thead>
-{#	$total = 0;#}
-	{% for expense in sheet %}
-{#	    if($e['currency'] == 'eur') {#}
-{#            $total += $e['amount'];#}
-{#        }#}
-{#        else {#}
-{#            $total += ($e['amount'] / $this->sheet['change']);#}
-{#        }#}
-{#		// distinct_users_list will mark column for each row#}
-    <tr>
-        {% if not object.closed_at %}
-            <td>
-                <a href='{% url 'sheet_expense_delete' object.unique_id expense.pk %}'>
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-        {% endif %}
-		<td class="text-center">{{ expense.date|date:"d-m-Y" }}</td>
-		<td class="text-left">{{ expense.note }}</td>
-        {% for user in expense.sheet.users.all   %}
-            {% if expense.user_id == user.user_id %}
-				<td class="text-right">
-                    {{ expense.amount|floatformat:2 }} {{ expense.currency|currency_symbol|safe }}
-                </td>
-{#				if($e['currency'] == SharedExpenses::DEFAULT_CURRENCY) {#}
-{#                    $this->sheet['users'][$k]['total'] += $e['amount'];#}
-{#                }#}
-{#                else {#}
-{#                    $this->sheet['users'][$k]['total'] += $e['amount'] / $this->sheet['change'];#}
-{#                }#}
-            {% else %}
-				<td class="text-right">0.00 &euro;</td>
-            {% endif %}
-        {% endfor %}
-
-        {% if not sheet_not_closed %}
-            <td class='text-right'><input type='hidden' name='row[{{ expense.pk }}][id]' value='{{ expense.pk }}'>
-            {% if expense.my_expense %}
-                {% if expense.copied %}
-                    <span style='color: #777777'>{% trans 'Already copied' %}</span>
-                {% else %}
-                    <select id='' name='row{{ expense.pk }}[id]' class='form-control sheet_categories_select'>
-                    {% for cat in user_categories %}
-                        <option value="{{ cat.pk }}">{{ cat }}</option>
-                    {% endfor %}
-                    </select>
+    <div class="mt-3">&nbsp;</div>
+    <form action="{% url 'sheet_copy' object.unique_id %}" method="POST" class="form-group">
+    {% csrf_token %}
+	<table class="table table-striped table-bordered w-100" id="mytable">
+        <thead>
+            <tr>
+                {% if not sheet_closed %}
+                <th style="width: 5%"></th>
                 {% endif %}
-            {% endif %}
-            </td>
-        {% endif %}
-    </tr>
-	{% endfor %}
 
-	<tr>
-        {% if sheet_not_closed %}
-	    <th class="sheets-totals"></th>
-        {% endif %}
-        <th class="text-left sheets-totals">{% trans 'TOTAL' %}</th>
-        <th class="sheets-totals">{{ total.sum|floatformat:2 }} &euro;</th>
-        {% for sheet_user in sheet_users.all %}
-        <th class="text-right sheets-totals">{{ sheet_user.sheet_expense|abs|floatformat:2 }} &euro;</th>
-        {% endfor %}
-	</tr>
+                <th style="width: 20%" class="text-center">{% trans 'Date' %}</th>
+                <th class="text-left">{% trans 'Note' %}</th>
+                {% for user in sheet.0.sheet.users.all %}
+                    {% with yesno_args=user.user.username|add:","|add:user.email %}
+                    <th class="text-right">{{ user.user.username|yesno:yesno_args }}</th>
+                    {% endwith %}
+                {% endfor %}
+                {% if sheet_closed %}
+                    <th class='text-right'>{% trans 'Assign to' %}</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in sheet %}
+            <tr>
+                {% if not object.closed_at %}
+                    <td>
+                        <a href='{% url 'sheet_expense_delete' object.unique_id expense.pk %}'>
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </td>
+                {% endif %}
+                <td class="text-center">{{ expense.date|date:"d-m-Y" }}</td>
+                <td class="text-left">{{ expense.note }}</td>
+                {% for user in expense.sheet.users.all   %}
+                    {% if expense.user == user %}
+                        <td class="text-right">
+                            {{ expense.amount|floatformat:2 }} {{ expense.currency|currency_symbol|safe }}
+                        </td>
+                    {% else %}
+                        <td class="text-right">0.00 &euro;</td>
+                    {% endif %}
+                {% endfor %}
 
-	<tr>
-        {% if sheet_not_closed %}
-        <th></th>
-        {% endif %}
-        <th></th>
-        <th></th>
-        {% for user in sheet.0.sheet.users.all %}
-            <th class="text-right" style='color: {% if user.difference < 0 %}#ff0000{% else %}#00ff00{% endif %};'>
-                {{ user.difference|floatformat:2 }} &euro;
-            </th>
-        {% endfor %}
-        {% if not sheet_not_closed %}
-        <th>
-            <input type="hidden" name="id_sheet" value="{{ object.unique_id }}">
-            <button onclick="submit()" class="btn btn-primary form-control">{% trans 'Copy to my expenses' %}</button>
-        </th>
-        {% endif %}
-	</tr>
+                {% if sheet_closed %}
+                    <td class='text-right'>
+                    {% if expense.my_expense %}
+                        {% if expense.copied %}
+                            <span style='color: #777777'>{% trans 'Already copied' %}</span>
+                        {% else %}
+                            <select id='' name='row-{{ expense.pk }}' class='form-control sheet_categories_select'>
+                            <option value="0">---</option>
+                            {% for cat in user_categories %}
+                                <option value="{{ cat.pk }}">{{ cat }}</option>
+                            {% endfor %}
+                            </select>
+                        {% endif %}
+                    {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
 
-        </form>
+            <tr>
+                {% if not sheet_closed %}
+                <th class="sheets-totals"></th>
+                {% endif %}
+                <th class="text-left sheets-totals">{% trans 'TOTAL' %}</th>
+                <th class="sheets-totals">{{ total.sum|floatformat:2 }} &euro;</th>
+                {% for sheet_user in sheet_users.all %}
+                <th class="text-right sheets-totals">{{ sheet_user.sheet_expense|abs|floatformat:2 }} &euro;</th>
+                {% endfor %}
+            </tr>
+
+            <tr>
+                {% if not sheet_closed %}
+                <th></th>
+                {% endif %}
+                <th></th>
+                <th></th>
+                {% for user in sheet.0.sheet.users.all %}
+                    <th class="text-right" style='color: {% if user.difference < 0 %}#ff0000{% else %}#00ff00{% endif %};'>
+                        {{ user.difference|floatformat:2 }} &euro;
+                    </th>
+                {% endfor %}
+                {% if sheet_closed %}
+                <th>
+                    <input type="hidden" name="id_sheet" value="{{ object.unique_id }}">
+                    <button onclick="submit()" class="btn btn-primary form-control">{% trans 'Copy to my expenses' %}</button>
+                </th>
+                {% endif %}
+            </tr>
+        </tbody>
 	</table>
+    </form>
 
 {% endif %}
 </div>
 </div>
     {#</div>#}
     {#</div>#}
-    {#</div>#}
+{#    </div>#}
 
 <script type="text/javascript">
 	let pieData = {{ pie_data|default_if_none:"[]"|safe }};

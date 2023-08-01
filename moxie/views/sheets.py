@@ -1,33 +1,24 @@
-import datetime
 import re
 import uuid
-from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, FormView
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
-from django.db.models import Sum, Case, When, Value, BooleanField, Count, FloatField
-from django.db.models.functions import Cast
-
+from django.db.models import Sum, Case, When, Value, BooleanField
 from django.contrib.auth.mixins import LoginRequiredMixin
-from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers
-from moxie.forms import SheetSelector, SharedExpensesSheetsForm, SharedExpensesSheetAddUser, SharedExpensesForm
+from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers, Transaction
+from moxie.forms import SharedExpensesSheetsForm, SharedExpensesSheetAddUser, SharedExpensesForm
 
 
 class SheetsView(LoginRequiredMixin, ListView, FormView):
+	paginate_by = 10
 	template_name = 'sheets/index.html'
 	form_class = SharedExpensesSheetsForm
 
 	def get_queryset(self):
-		return SharedExpense.objects.filter(user=self.request.user)
-
-	def get_context_data(self, *args, **kwargs):
-		context = super().get_context_data(*args, **kwargs)
-		context['sheet_list'] = SharedExpensesSheet.objects.exists()
-		context['select_sheet_form'] = SheetSelector(user=self.request.user)
-		return context
+		return SharedExpensesSheet.objects.filter(users__user=self.request.user)
 
 
 class SheetCreateView(LoginRequiredMixin, CreateView):
@@ -47,12 +38,17 @@ class SheetCreateView(LoginRequiredMixin, CreateView):
 		return HttpResponseRedirect(reverse_lazy('sheet_view', kwargs={'unique_id': instance.unique_id}))
 
 
-class SheetView(UpdateView):
+# TODO: make this view accessible for non-users
+class SheetView(LoginRequiredMixin, UpdateView):
 	model = SharedExpensesSheet
 	slug_url_kwarg = 'unique_id'
 	query_pk_and_slug = True
 	template_name = 'sheets/view.html'
 	fields = ['name']
+
+	def form_invalid(self, form):
+		print(form.errors)
+		return super().form_invalid(form)
 
 	def get_slug_field(self):
 		return 'unique_id'
@@ -69,12 +65,11 @@ class SheetView(UpdateView):
 		context = super().get_context_data(**kwargs)
 		unique_id = self.kwargs.get('unique_id')
 		context['sheet_list'] = SharedExpensesSheet.objects.exists()
-		context['select_sheet_form'] = SheetSelector(user=self.request.user)
-
 		context['shared_expenses_form'] = SharedExpensesForm(self.object)
-		context['sheet_not_closed'] = not bool(self.object.closed_at)
+		context['sheet_closed'] = bool(self.object.closed_at)
 
-		conditional = Case(When(user=self.request.user, then=Value(True)), default_value=Value(False), output_field=BooleanField())
+		sheet_user = SharedExpensesSheetUsers.objects.filter(user=self.request.user).first()
+		conditional = Case(When(user=sheet_user, then=Value(True)), default_value=Value(False), output_field=BooleanField())
 
 		sheet = SharedExpense.objects\
 			.select_related('sheet').prefetch_related('sheet__users')\
@@ -88,94 +83,42 @@ class SheetView(UpdateView):
 		context['add_user_form'] = SharedExpensesSheetAddUser(unique_id=unique_id)
 		return context
 
-# 	public function createAction() {
-# 	    $request = $this->getRequest();
-# 		if ($request->isPost()) {
-# 			try {
-# 				if (empty($request->getParam('name', null))) {
-# 					throw new Exception("Please set name for sheet");
-# 				}
-# 				$change = floatval(str_replace(",", ".", $request->getParam('change', 1)));
-# 				if($change === 0.0) {
-# 				    $change = 1;
-#                 }
-# 				$data = array(
-#                     'user_owner' => $_SESSION['user_id'],
-#                     'name' => $request->getParam('name', ''),
-#                     'unique_id' => uniqid(),
-#                     'currency' => $request->getParam('currency', SharedExpenses::DEFAULT_CURRENCY),
-#                     'change' => $change
-# 				);
-# 				$id = $this->sheetModel->insert($data);
-# 				$sheet = $this->sheetModel->find($id)->current();
-# 				// add creator as first user
-# 				$sheetUser = new SharedExpensesSheetUsers();
-# 				$sheetUser->insert(array(
-# 						'id_sheet' => $id,
-# 						'id_user' => $_SESSION['user_id']
-# 				));
-# 				$this->view->assign('sheet', $sheet);
-# 			}
-# 			catch(Exception $e) {
-# 				$errors = array($e->getMessage());
-# 				$this->view->assign('errors', $errors);
-# 			}
-# 			$this->redirect('/sheets/view/id/'.$sheet['unique_id']);
-# 		}
-# 		// else render GET page
-# 	}
-#
-# 	public function addAction() {
-# 		global $st_lang;
-# 		$id_sheet = $this->getRequest()->getParam('id');
-# 		// validations: logged user
-# 		if(!isset($_SESSION) || (isset($_SESSION) && empty($_SESSION['user_id']))) {
-# 			// return 403
-# 			$this->_request->setPost(array(
-# 					'id' => $id_sheet,
-# 					'errors' => array($st_lang['error_nouser'])
-# 			));
-# 			return $this->_forward("view", "sheets");
-# 		}
-# 		try  {
-# 			$sheet = $this->getSheet();
-# 		}
-# 		catch(Exception $e) {
-# 			// return 404
-# 			$this->view->assign('errors', array('Sheet not found'));
-# 			//$this->render('index', 'expenses');
-# 			$this->redirect('/sheets/view/id/'.$id_sheet);
-# 		}
-# 		try {
-# 			$sharedExpenseModel = new SharedExpenses();
-#             $amount = str_replace(",",".",$this->getRequest()->getParam('amount'));
-#             $currency = $this->getRequest()->getParam('currency');
-#             $currencyValue = ($currency === "on") ? $sheet['currency'] : SharedExpenses::DEFAULT_CURRENCY;
-# 			$data = array(
-# 					'id_sheet' => $sheet['id'],
-# 					'id_sheet_user' => $this->getRequest()->getParam('id_sheet_user'),
-# 					'amount' => $amount,
-# 					'note' => $this->getRequest()->getParam('note', ''),
-# 					'date' => $this->getRequest()->getParam('date'),
-#                     'currency' => $currencyValue
-# 			);
-# 			$sharedExpenseModel->insert($data);
-# 		}
-# 		catch(Exception $e) {
-# 			// return 500 / error message
-# 			error_log($e->getMessage());
-# 			$this->view->assign('errors', array('Unable to store shared expense'));
-# 			$this->render('view', 'sheets');
-# 		}
-# 		$this->redirect('/sheets/view/id/'.$id_sheet);
-# 	}
-#
+
+class SharedExpenseView(LoginRequiredMixin, CreateView):
+	model = SharedExpense
+	form_class = SharedExpensesForm
+
+	def get_form_kwargs(self):
+		kwargs = super().get_form_kwargs()
+		kwargs['sheet'] = self._get_shared_expense_sheet()
+		return kwargs
+
+	def get_initial(self):
+		kwargs = super().get_initial()
+		kwargs['sheet'] = self._get_shared_expense_sheet()
+		return kwargs
+
+	def get_success_url(self):
+		return reverse_lazy('sheet_view', kwargs={'unique_id': self.kwargs.get('unique_id')})
+
+	def form_valid(self, form):
+		instance = form.save(commit=False)  # type: SharedExpense
+		instance.sheet = self._get_shared_expense_sheet()
+		instance.currency = instance.sheet.currency if form.cleaned_data.get('use_distinct_currency') else SharedExpensesSheet.DEFAULT_CURRENCY
+		instance.save()
+		return HttpResponseRedirect(self.get_success_url())
+
+	def form_invalid(self, form):
+		# TODO change this
+		print(form.errors)
+		return self.form_invalid(form)
+
+	def _get_shared_expense_sheet(self):
+		return SharedExpensesSheet.objects.get(unique_id=self.kwargs.get('unique_id'))
 
 
 class SheetExpenseDeleteView(LoginRequiredMixin, DeleteView):
 	model = SharedExpense
-	# slug_url_kwarg = 'unique_id'
-	# query_pk_and_slug = True
 
 	# TODO Validate that expense belongs to the user or at least user appears in the shared expenses sheet users
 	def get(self, request, *args, **kwargs):
@@ -186,102 +129,33 @@ class SheetExpenseDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class SheetCopyView(SheetView):
-	...
-# 	public function copyAction() {
-# 		$sheet_id = $this->getRequest()->getParam('id_sheet');
-# 		// @todo validate user
-# 		if(empty($_SESSION['user_id'])) {
-# 			// @todo set error message
-# 			error_log("error in session + category");
-# 			$this->redirect('/sheets/view/id/'.$sheet_id);
-# 		}
-# 		// validate that category belongs to user
-# 		$catModel = new Categories();
-#
-# 		$sheet = $this->getSheet();
-#
-# 		// Default change rate is 1, so if change is not set from the form, 1 will be used
-# 		$changeRate = $this->getParam('change', $sheet['change']);
-#
-# 		// find sheet_user_id for this sheet and for this user
-# 		$id_sheet_user = null;
-# 		foreach($sheet['users'] as $u) {
-# 			if($u['id_user'] == $_SESSION['user_id']) {
-# 				$id_sheet_user = $u['id_sheet_user'];
-# 				break;
-# 			}
-# 		}
-# 		error_log("user is ".$id_sheet_user);
-# 		if(is_null($id_sheet_user)) {
-# 			throw new Exception("Id sheet user not found");
-# 		}
-# 		$sharedExpenses = new SharedExpenses();
-# 		$expenses = new Expenses();
-# 		foreach($_POST['row'] as $row) {
-# 		    if(empty($row['category_id'])) {
-# 		        continue;
-#             }
-# 		    // sanity check
-#             $found = false;
-#             $e = null;
-#             foreach ($sheet['expenses'] as $e) {
-#                 if ($e['id'] == $row['id']) {
-#                     $found = true;
-#                     break;
-#                 }
-#             }
-#             if(!$found) {
-#                 continue;
-#             }
-#             try {
-#                 $cat = $catModel->fetchRow("id = ".$row['category_id'])->toArray();
-#                 if(empty($cat)) {
-#                     throw new Exception("Category does not exists");
-#                 }
-#             }
-#             catch(Exception $e) {
-#                 error_log($e->getMessage());
-#                 throw new Exception("Category does not exists");
-#             }
-#             if ($cat['user_owner'] != $_SESSION['user_id']) {
-#                 error_log("category does not belong to user ".$_SESSION['user_id']);
-#                 throw new Exception("Category does not belong to user");
-#             }
-#             // add expense with category received
-#             $expenses->insert(array(
-#                 'user_owner' => $_SESSION['user_id'],
-#                 'amount' => -$e['amount'] / $changeRate,
-#                 'category' => $row['category_id'],
-#                 'note' => $e['note'],
-#                 'date' => $e['date'],
-#             ));
-#             // update closed
-#             $sharedExpenses->update(array('copied' => 1), 'id = ' . $e['id']);
-#         }
-# 		$this->redirect('/expenses');
-#
-# 	}
-#
+	def get_success_url(self):
+		return reverse_lazy('sheet_view', kwargs={'unique_id': self.kwargs.get('unique_id')})
+
+	def post(self, request, *args, **kwargs):
+		for key, element in dict(request.POST).items():
+			if 'row' in key:
+				index = re.search('row-(\d+)', key)
+				category_id = int(element[0])
+				if not category_id:
+					continue
+				Transaction.copy_from_shared_expense(int(index[1]), category_id)
+		return HttpResponseRedirect(self.get_success_url())
 
 
-class SheetAddUserview(SheetView):
+class SheetAddUserView(SheetView):
 	model = SharedExpensesSheet
 	form_class = SharedExpensesSheetAddUser
 
 	def form_valid(self, form):
+		data = form.cleaned_data
 		self.object.users.get_or_create(
-			user=form.cleaned_data.get('user'),
-			email=form.cleaned_data.get('email'),
+			user=data.get('user'),
+			email=data.get('email'),
 		)
-		if form.cleaned_data.get('user'):
-			email = form.cleaned_data.get('user')
-		else:
-			email = form.cleaned_data.get('email')
+		email = data.get('user') if data.get('user') else data.get('email')
 		self._send_user_added(self.object, email)
 		return redirect(reverse_lazy('sheet_view'), kwargs={'unique_id': self.object.unique_id})
-
-	def form_invalid(self, form):
-		...
 
 	def _send_user_added(self, sheet, user_email, registered=False):
 		subject = "Moxie - " + _('New shared expenses sheet')
@@ -307,14 +181,13 @@ class SheetAddUserview(SheetView):
 		# TODO https://docs.djangoproject.com/en/4.2/topics/email/
 		return send_mail(subject, body, from_address, [user_email])
 
-
-# 	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
-# 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
-# 		$s_site = Zend_Registry::get('config')->moxie->app->name;
-#
-# 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-# 				'Reply-To: moxie@dootic.com' . "\r\n" .
-# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
+		# 	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
+		# 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
+		# 		$s_site = Zend_Registry::get('config')->moxie->app->name;
+		#
+		# 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
+		# 				'Reply-To: moxie@dootic.com' . "\r\n" .
+		# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
 
 # public function adduserAction() {
 # 		try {
@@ -378,7 +251,7 @@ class SheetAddUserview(SheetView):
 # 	}
 
 
-class SheetCloseView(LoginRequiredMixin, SheetView):
+class SheetCloseView(SheetView):
 	model = SharedExpensesSheet
 	fields = ['closed_at']
 

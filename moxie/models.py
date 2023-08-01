@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User, AbstractUser
 from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, Abs
 from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg
@@ -338,6 +338,147 @@ class Budget(models.Model):
         # }
 
 
+class SharedExpensesSheet(models.Model):
+    DEFAULT_CURRENCY = 'eur'
+    POUNDS = 'gbp'
+    US_DOLLAR = 'usd'
+    OTHER = 'nan'
+
+    CURRENCIES = (
+        (DEFAULT_CURRENCY, _('Euro')),
+        (POUNDS, _('Pounds')),
+        (US_DOLLAR, _('US Dollar')),
+        (OTHER, _('Other'))
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
+    name = models.CharField(max_length=255, default='')
+    unique_id = models.CharField(max_length=64)  # TODO change to UUIDField
+    closed_at = models.DateTimeField(default=None, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    currency = models.CharField(max_length=3, choices=CURRENCIES, default=DEFAULT_CURRENCY)
+    change = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+
+    @staticmethod
+    def get(user=None, user_id=None):
+        assert user or user_id
+        user_id = user_id if user_id else user.pk
+        return SharedExpensesSheet.objects.get(user_id=user_id)
+
+    @staticmethod
+    def get_by_user_match(user=None, user_id=None):
+        assert user or user_id
+        user_id = user_id if user_id else user.pk
+
+    def __str__(self):
+        return self.name
+
+#     public function get_by_user_match($user_id) {
+#         $select = $this->select()
+#             ->from(array('s' => $this->_name), array('*'))
+#             ->setIntegrityCheck(false)
+#             ->joinLeft(array('su' => 'shared_expenses_sheet_users'), 'su.id_sheet = s.id', array())
+#             ->where('s.user_owner = ?', $user_id)
+#             ->orWhere('su.id_user = ?', $user_id)
+#             ->order('s.id desc');
+#         return $this->fetchAll($select);
+#     }
+#
+#     public function get_by_unique_id($id) {
+#         if (is_null($id)) {
+#             error_log("null id received when getting sheet");
+#             return null;
+#         }
+#         $row = $this->fetchRow('unique_id = "' . $id . '"')->toArray();
+#         // now fetch expenses, order by date
+#         $sharedExpense = new SharedExpenses();
+#         $list = $sharedExpense->fetchAll('id_sheet = ' . $row['id'], array('date ASC', 'id ASC'));
+#         $row['expenses'] = array();
+#         $distinct_users = 0;
+#         $distinct_users_list = array();
+#         foreach($list as $l) {
+#             if (!in_array($l['id_sheet_user'], $distinct_users_list)) {
+#                 $distinct_users++;
+#                 $distinct_users_list[] = $l['id_sheet_user'];
+#             }
+#             $row['expenses'][] = $l->toArray();
+#         }
+#         $row['distinct_users'] = $distinct_users;
+#         $row['distinct_users_list'] = $distinct_users_list;
+#         $row['users'] = $this->getUsersForSheet($row['unique_id']);
+#         // add users that do not have any expense but exist in the sheet
+#         foreach($row['users'] as $key => $u) {
+#             if(!in_array($u['id_sheet_user'], $row['distinct_users_list'])) {
+#                 $row['distinct_users_list'][] = $u['id_sheet_user'];
+#                 $row['distinct_users']++;
+#             }
+#         }
+#         return $row;
+#     }
+#
+#     private function getUsersForSheet($sheet_id) {
+#         try {
+#             $nameCoalesce = new Zend_Db_Expr('COALESCE(u.login, sesu.email) as login');
+#             $emailCoalesce = new Zend_Db_Expr('COALESCE(u.email, sesu.email) as email');
+#             $select = $this->select()
+#                 ->setIntegrityCheck(false)
+#                 ->from(array('ses' => 'shared_expenses_sheets'), array(new Zend_Db_Expr ('0 as total')))
+#                 ->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
+#                 ->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
+#                 ->where('ses.unique_id = ?', $sheet_id);
+#             return $this->fetchAll($select)->toArray();
+#         }
+#         catch(Exception $e) {
+#             return array();
+#         }
+#     }
+# }
+
+
+class SharedExpensesSheetUsers(models.Model):
+    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='users')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_shared_expenses_sheets')
+    email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.username if self.user else self.email
+
+    @property
+    def sheet_expense(self):
+        result = SharedExpense.objects.filter(user=self).aggregate(total=Sum('amount'))
+        return result['total'] if result['total'] else 0
+
+    @property
+    def difference(self):
+        average_queryset = SharedExpense.objects.filter(sheet=self.sheet).aggregate(total=Sum('amount'))
+        average = average_queryset['total'] if average_queryset['total'] else 0
+        users = self.sheet.users.count()
+        return self.sheet_expense - (average / users)
+
+
+class SharedExpense(models.Model):
+    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='expenses')
+    user = models.ForeignKey(SharedExpensesSheetUsers, on_delete=models.CASCADE, related_name='shared_expenses')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    note = models.CharField(max_length=255)
+    date = models.DateTimeField()
+    copied = models.BooleanField(default=False)
+    currency = models.CharField(max_length=3, default=SharedExpensesSheet.DEFAULT_CURRENCY)
+
+    @staticmethod
+    def get_sheet_by_expense_id_and_user_id(shared_expense_id, user_id):
+        sheet = SharedExpense.objects.select_related('sheet', 'user')\
+            .filter(user__id=user_id, id=shared_expense_id)
+        return sheet
+
+    @property
+    def sheet_user(self):
+        return self.sheet.user
+
+
 class Transaction(models.Model):
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
@@ -452,146 +593,21 @@ class Transaction(models.Model):
             }
         return stats
 
-
-class SharedExpensesSheet(models.Model):
-    DEFAULT_CURRENCY = 'eur'
-    POUNDS = 'gbp'
-    US_DOLLAR = 'usd'
-    OTHER = 'nan'
-
-    CURRENCIES = (
-        (DEFAULT_CURRENCY, _('Euro')),
-        (POUNDS, _('Pounds')),
-        (US_DOLLAR, _('US Dollar')),
-        (OTHER, _('Other'))
-    )
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
-    name = models.CharField(max_length=255, default='')
-    unique_id = models.CharField(max_length=64)  # TODO change to UUIDField
-    closed_at = models.DateTimeField(default=None, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    currency = models.CharField(max_length=3, choices=CURRENCIES, default=DEFAULT_CURRENCY)
-    change = models.DecimalField(max_digits=10, decimal_places=2, default=1)
-
     @staticmethod
-    def get(user=None, user_id=None):
-        assert user or user_id
-        user_id = user_id if user_id else user.pk
-        return SharedExpensesSheet.objects.get(user_id=user_id)
-
-    @staticmethod
-    def get_by_user_match(user=None, user_id=None):
-        assert user or user_id
-        user_id = user_id if user_id else user.pk
-
-    def __str__(self):
-        return self.name
-
-#     public function get_by_user_match($user_id) {
-#         $select = $this->select()
-#             ->from(array('s' => $this->_name), array('*'))
-#             ->setIntegrityCheck(false)
-#             ->joinLeft(array('su' => 'shared_expenses_sheet_users'), 'su.id_sheet = s.id', array())
-#             ->where('s.user_owner = ?', $user_id)
-#             ->orWhere('su.id_user = ?', $user_id)
-#             ->order('s.id desc');
-#         return $this->fetchAll($select);
-#     }
-#
-#     public function get_by_unique_id($id) {
-#         if (is_null($id)) {
-#             error_log("null id received when getting sheet");
-#             return null;
-#         }
-#         $row = $this->fetchRow('unique_id = "' . $id . '"')->toArray();
-#         // now fetch expenses, order by date
-#         $sharedExpense = new SharedExpenses();
-#         $list = $sharedExpense->fetchAll('id_sheet = ' . $row['id'], array('date ASC', 'id ASC'));
-#         $row['expenses'] = array();
-#         $distinct_users = 0;
-#         $distinct_users_list = array();
-#         foreach($list as $l) {
-#             if (!in_array($l['id_sheet_user'], $distinct_users_list)) {
-#                 $distinct_users++;
-#                 $distinct_users_list[] = $l['id_sheet_user'];
-#             }
-#             $row['expenses'][] = $l->toArray();
-#         }
-#         $row['distinct_users'] = $distinct_users;
-#         $row['distinct_users_list'] = $distinct_users_list;
-#         $row['users'] = $this->getUsersForSheet($row['unique_id']);
-#         // add users that do not have any expense but exist in the sheet
-#         foreach($row['users'] as $key => $u) {
-#             if(!in_array($u['id_sheet_user'], $row['distinct_users_list'])) {
-#                 $row['distinct_users_list'][] = $u['id_sheet_user'];
-#                 $row['distinct_users']++;
-#             }
-#         }
-#         return $row;
-#     }
-#
-#     private function getUsersForSheet($sheet_id) {
-#         try {
-#             $nameCoalesce = new Zend_Db_Expr('COALESCE(u.login, sesu.email) as login');
-#             $emailCoalesce = new Zend_Db_Expr('COALESCE(u.email, sesu.email) as email');
-#             $select = $this->select()
-#                 ->setIntegrityCheck(false)
-#                 ->from(array('ses' => 'shared_expenses_sheets'), array(new Zend_Db_Expr ('0 as total')))
-#                 ->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
-#                 ->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
-#                 ->where('ses.unique_id = ?', $sheet_id);
-#             return $this->fetchAll($select)->toArray();
-#         }
-#         catch(Exception $e) {
-#             return array();
-#         }
-#     }
-# }
-
-
-class SharedExpense(models.Model):
-    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='expenses')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    note = models.CharField(max_length=255)
-    date = models.DateTimeField()
-    copied = models.BooleanField(default=False)
-    currency = models.CharField(max_length=3, default=SharedExpensesSheet.DEFAULT_CURRENCY)
-
-    @staticmethod
-    def get_sheet_by_expense_id_and_user_id(shared_expense_id, user_id):
-        sheet = SharedExpense.objects.select_related('sheet', 'user')\
-            .filter(user__id=user_id, id=shared_expense_id)
-        return sheet
-
-    @property
-    def sheet_user(self):
-        return self.sheet.user
-
-
-class SharedExpensesSheetUsers(models.Model):
-    sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='users')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_shared_expenses_sheets')
-    email = models.EmailField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.user.username if self.user else self.email
-
-    @property
-    def sheet_expense(self):
-        result = SharedExpense.objects.filter(sheet=self.sheet, user=self.user).aggregate(total=Sum('amount'))
-        return result['total'] if result['total'] else 0
-
-    @property
-    def difference(self):
-        average_queryset = SharedExpense.objects.filter(sheet=self.sheet).aggregate(total=Sum('amount'))
-        average = average_queryset['total'] if average_queryset['total'] else 0
-        users = self.sheet.users.count()
-        return self.sheet_expense - (average / users)
+    def copy_from_shared_expense(shared_expense_id, category_id):
+        with transaction.atomic():
+            shared_expense = SharedExpense.objects.get(pk=shared_expense_id)
+            # todo apply change to amount if shared_expense in other currency
+            Transaction.objects.create(
+                user=shared_expense.user.user,
+                amount=-shared_expense.amount,
+                note=shared_expense.note,
+                date=shared_expense.date,
+                in_sum=True,
+                category_id=category_id
+            )
+            shared_expense.copied = True
+            shared_expense.save()
 
 
 class Tag(models.Model):

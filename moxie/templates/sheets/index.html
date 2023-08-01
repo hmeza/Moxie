@@ -3,8 +3,6 @@
 {% load i18n %}
 {% block content %}
 <div class="container">
-    {% include 'sheets/select_sheet.html' %}
-
     <div class="row mt-3">
         <div class="col-12">
             <div class="moxie_expenses_form_div" id="sheet_create_button">
@@ -15,5 +13,35 @@
     </div>
 
     {% include 'sheets/create.html' %}
+
+    <div class="row mt-3">
+        {% for sheet in object_list %}
+            <div class="col-12 mt-2"><a class="h5" href="{% url 'sheet_view' sheet.unique_id %}">{{ sheet }}</a></div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-4 text-center">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">{% trans 'First' %}</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">{% trans 'Previous' %}</a>
+                {% endif %}
+            </span>
+        </div>
+        <div class="col-4 text-center">
+            <span class="current">
+                {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}
+            </span>
+        </div>
+        <div class="col-4 text-center">
+            <span class="step-links">
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">{% trans 'Next' %}</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{% trans 'Last' %}</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
 </div>
 {% endblock %}

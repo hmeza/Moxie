@@ -20,7 +20,7 @@ from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, Expense
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView
-from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView
+from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, SharedExpenseView, SheetCopyView
 from moxie.views.tags import TagView
 from moxie.views.categories import CategoryView, categories_bulk_update
 from moxie.views.stats import StatsView
@@ -62,9 +62,10 @@ urlpatterns = [
     path('category/', CategoryView.as_view(), name='category_view'),
 
     path('sheets/add/', SheetCreateView.as_view(), name='sheet_add'),
-    path('sheets/<slug:unique_id>/add_user/', SheetView.as_view(), name='sheet_add_user'),
+    path('sheets/<slug:unique_id>/users/', SheetView.as_view(), name='sheet_add_user'),
+    path('sheets/<slug:unique_id>/expenses/', SharedExpenseView.as_view(), name='sheet_expenses'),
     path('sheets/<slug:unique_id>/close/', SheetCloseView.as_view(), name='sheet_close'),
-    path('sheets/<slug:unique_id>/copy/', SheetCloseView.as_view(), name='sheet_copy'),
+    path('sheets/<slug:unique_id>/copy/', SheetCopyView.as_view(), name='sheet_copy'),
     path('sheets/<slug:unique_id>/<int:pk>/delete/', SheetExpenseDeleteView.as_view(), name='sheet_expense_delete'),
     path('sheets/<slug:unique_id>/', SheetView.as_view(), name='sheet_view'),
     path('sheets/', SheetsView.as_view(), name='sheet_list'),
