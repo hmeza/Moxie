@@ -53,9 +53,6 @@ class SheetView(LoginRequiredMixin, UpdateView):
 	def get_slug_field(self):
 		return 'unique_id'
 
-	def send_user_added(self):
-		...
-
 	def get_queryset(self):
 		queryset = super().get_queryset()
 		queryset = queryset.prefetch_related('users', 'users__user', 'expenses')
@@ -144,6 +141,7 @@ class SheetCopyView(SheetView):
 
 
 class SheetAddUserView(SheetView):
+	# TODO: Control duplicates, show error message properly
 	model = SharedExpensesSheet
 	form_class = SharedExpensesSheetAddUser
 

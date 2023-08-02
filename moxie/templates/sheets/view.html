@@ -15,8 +15,6 @@
     {% endfor %}
 </div>
 
-{#{% include 'sheets/select_sheet.html' %}#}
-
 {% if object %}
 	<div class="moxie_expenses_form_div mt-3">
         <div class="w-100">
@@ -36,9 +34,7 @@
         </div>
 	</div>
 
-    {% if not sheet_closed %}
-    {% include 'sheets/sheet_not_closed.html' %}
-    {% endif %}
+    {% include 'sheets/sheet_header.html' %}
 
     <div class="mt-3">&nbsp;</div>
     <form action="{% url 'sheet_copy' object.unique_id %}" method="POST" class="form-group">
