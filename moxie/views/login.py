@@ -1,12 +1,15 @@
 from django.views.generic import CreateView
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
-from moxie.forms import RegisterForm, SetPasswordForm
+from moxie.forms import RegisterForm, SetPasswordForm, MoxiePasswordResetForm
 from django.contrib import messages
+from django.db.models.query_utils import Q
 
 
 def login_view(request):
@@ -29,11 +32,62 @@ def logout_view(request):
 class RegisterView(CreateView):
 	model = User
 	form_class = RegisterForm
-	template_name = 'login/register.html'
+	template_name = 'index/register.html'
+
+	def form_valid(self, form):
+		instance = form.save(commit=False)
+		instance.set_password(form.cleaned_data.get('password'))
+		instance.save()
+		return HttpResponseRedirect(self.get_success_url())
 
 	def get_success_url(self):
 		messages.info(self.request, _('Registered successfully.'))
 		return reverse_lazy('index')
+
+
+def password_change(request):
+	def get_associated_user(user_email):
+		return User.objects.filter(Q(email=user_email)).first()
+
+	if request.method == 'POST':
+		form = MoxiePasswordResetForm(request.POST)
+		if form.is_valid():
+			associated_user = get_associated_user(form.cleaned_data['email'])
+			if associated_user:
+				subject = "Password Reset request"
+				message = render_to_string("template_reset_password.html", {
+					'user': associated_user,
+					'domain': get_current_site(request).domain,
+					'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+					'token': account_activation_token.make_token(associated_user),
+					"protocol": 'https' if request.is_secure() else 'http'
+				})
+				email = EmailMessage(subject, message, to=[associated_user.email])
+				if email.send() and False:
+					messages.success(request, """
+<h2>Password reset sent</h2><hr>
+<p>
+	We've emailed you instructions for setting your password, if an account exists with the email you entered. 
+	You should receive them shortly.<br>If you don't receive an email, please make sure you've entered the address 
+	you registered with, and check your spam folder.
+</p>
+""")
+				else:
+					messages.error(request, "Problem sending reset password email, <b>SERVER PROBLEM</b>")
+
+			return redirect('homepage')
+
+		for key, error in list(form.errors.items()):
+			if key == 'captcha' and error[0] == 'This field is required.':
+				messages.error(request, "You must pass the reCAPTCHA test")
+				continue
+
+	form = MoxiePasswordResetForm()
+	return render(
+		request=request,
+		template_name="index/password_reset.html",
+		context={"form": form}
+	)
 
 
 # @login_required

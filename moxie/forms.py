@@ -10,6 +10,7 @@ from django.utils.translation import gettext as _
 from django.urls import reverse_lazy
 from captcha.fields import CaptchaField
 from moxie.templatetags.currency import currency_symbol
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
 
 class CategoryForm(ModelForm):
@@ -158,27 +159,19 @@ class IncomesForm(TransactionForm):
         return 1
 
 
-from django.contrib.auth.forms import SetPasswordForm
-
-
-class RegisterForm(forms.ModelForm, SetPasswordForm):
+class RegisterForm(forms.ModelForm):
     captcha = CaptchaField()
-    repeat_password = forms.CharField(label=_("Repeat password"))
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=_("Repeat password"), widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['username', 'password', 'new_password2', 'email']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', _('Submit')))
-        self.helper.form_action = reverse_lazy('register')
-
     def clean_new_password2(self):
-        if self.cleaned_data.get('password') != self.cleaned_data.get('repeat_password'):
+        if self.cleaned_data.get('password') != self.cleaned_data.get('new_password2'):
             raise ValidationError(_("Passwords do not match"))
-        return self.cleaned_data.get('repeat_password')
+        return self.cleaned_data.get('new_password2')
 
 
 class ChangePasswordForm(SetPasswordForm):
@@ -264,3 +257,12 @@ class SharedExpensesSheetAddUser(forms.ModelForm):
 
     def clean_email(self):
         return self.cleaned_data.get('email')
+
+
+class MoxiePasswordResetForm(PasswordResetForm):
+    captcha = CaptchaField()
+    #
+    # def __init__(self, *args, **kwargs):
+    #     super(MoxiePasswordResetForm, self).__init__(*args, **kwargs)
+    #     self.helper = FormHelper()
+    #     self.helper.add_input(Submit('submit', _('Send')))

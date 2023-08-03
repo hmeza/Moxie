@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, register_converter, include
-from moxie.views.login import login_view, logout_view, RegisterView#, ForgotPasswordView
+from moxie.views.login import login_view, logout_view, RegisterView, password_change
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
@@ -73,7 +73,7 @@ urlpatterns = [
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
     path('register', RegisterView.as_view(), name='register'),
-    path('forgot-password', RegisterView.as_view(), name='forgot-password'),
+    path('forgot-password', password_change, name='forgot-password'),
     path('captcha/', include('captcha.urls')),
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),

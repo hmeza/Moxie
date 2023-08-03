@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-4 offset-4 mb-3">
+            <h1 class="font-weight-bold h4 moxie-color text-center">
+                {% trans 'Register' %}
+            </h1>
+        </div>
+        <div class="col-4 offset-4">
+            <div class="form-group">
+                <form id="register_form" method="POST">
+                    {% crispy form %}
+                    <input onclick="document.getElementById('register_form').submit()" type="submit" name="submit"
+                           id="submit" value="{% trans 'Submit' %}" class="form-control btn btn-info mt-3">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
