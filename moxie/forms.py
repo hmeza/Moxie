@@ -261,8 +261,10 @@ class SharedExpensesSheetAddUser(forms.ModelForm):
 
 class MoxiePasswordResetForm(PasswordResetForm):
     captcha = CaptchaField()
-    #
-    # def __init__(self, *args, **kwargs):
-    #     super(MoxiePasswordResetForm, self).__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.add_input(Submit('submit', _('Send')))
+
+    def __init__(self, *args, **kwargs):
+        super(MoxiePasswordResetForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(
+            Submit('submit', _('Submit'), css_class='form-control moxie_login_button mt-2')
+        )

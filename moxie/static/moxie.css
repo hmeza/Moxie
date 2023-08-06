@@ -830,3 +830,7 @@ table.table-stats > tbody > tr > td > a:visited {
 .sheets-totals {
 	border-top: 1px solid #c5c5c5
 }
+
+#hint_id_new_password1 > ul {
+    margin-left: 1rem;
+}
