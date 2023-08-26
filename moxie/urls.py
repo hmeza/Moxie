@@ -22,7 +22,7 @@ from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView
 from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, SharedExpenseView, SheetCopyView
 from moxie.views.tags import TagView
-from moxie.views.categories import CategoryView, categories_bulk_update
+from moxie.views.categories import CategoryView, categories_bulk_update, CategoryBudgetView
 from moxie.views.stats import StatsView
 from django.views.generic import TemplateView
 from . import converters
@@ -58,6 +58,7 @@ urlpatterns = [
     path('users', UserConfigurationView.as_view(), name='users'),
     path('tag', TagView.as_view(), name='tags'),
     path('category/order/', categories_bulk_update, name='category_order'),
+    path('category/<int:pk>/budget/', CategoryBudgetView.as_view(), name='category_budget_edit'),
     path('category/<int:pk>/', CategoryView.as_view(), name='category_edit'),
     path('category/', CategoryView.as_view(), name='category_view'),
 

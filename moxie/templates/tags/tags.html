@@ -1,21 +1,21 @@
 {% load i18n %}
 
-<div id="tags_table" class="accordion-body collapse">
+<div id="tags_table" class="accordion-body collapse mt-3">
     <div class="container">
         <div class="row">
             <div class="col-12">
-            <h2 id="tags_title">
-                {% trans 'tags_title' %} {% trans 'press_here_display' %}
-            </h2>
+            <h3 id="tags_title">
+                {% trans 'tags_title' %}
+            </h3>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
                 <form action="{% url 'tags' %}" method="POST">
-                    {% trans 'tags_notice' %}
+                    {% trans 'When pressing Update, removed tags will be deleted.' %}
                     {% csrf_token %}
                     <input id="tags" name="tags" type="text" data-role="tagsinput">
-                    <input type="submit" value="{% trans 'tags_update' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                    <input type="submit" value="{% trans 'Update' %}" class="btn btn-primary" style="margin-top: 1rem;">
                 </form>
             </div>
         </div>

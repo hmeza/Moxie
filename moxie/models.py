@@ -229,7 +229,7 @@ class Budget(models.Model):
     @staticmethod
     def get_budget(user):
         return Budget.objects.select_related('category')\
-            .filter(user=user, date_ended__isnull=True)
+            .filter(user=user, date_ended__isnull=True).order_by('category__order')
 
     def getBudget(user):
         data = Budget.get_budget(user)

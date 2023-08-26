@@ -203,6 +203,9 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
 
+	def get_object(self, queryset=None):
+		return Transaction.objects.get(pk=self.kwargs.get('pk'))
+
 	def get_form_kwargs(self):
 		kwargs = super().get_form_kwargs()
 		kwargs['user'] = self.request.user
@@ -233,6 +236,7 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		context = super().get_context_data(**kwargs)
 		context['edit_slug'] = '/incomes/'
 		context['filter_url_name'] = 'incomes'
+		context['year'] = self.object.date.year
 		return context
 
 	def __get_transaction_id(self):

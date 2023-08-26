@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 22:07+0000\n"
+"POT-Creation-Date: 2023-08-08 22:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,22 +38,22 @@ msgstr "Importe mínimo"
 msgid "Maximum amount"
 msgstr "Importe máximo"
 
-#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:98 moxie/forms.py:137
-#: moxie/templates/stats/stats.html:7
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:100
+#: moxie/forms.py:139 moxie/templates/stats/stats.html:7
 msgid "category"
 msgstr "Categoría"
 
-#: moxie/filters.py:21 moxie/forms.py:100
+#: moxie/filters.py:21 moxie/forms.py:102
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:101
-#: moxie/forms.py:139
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:103
+#: moxie/forms.py:141
 msgid "note"
 msgstr "Nota"
 
-#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:103
-#: moxie/forms.py:141 moxie/forms.py:241
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:105
+#: moxie/forms.py:143 moxie/forms.py:222
 msgid "date"
 msgstr "Fecha"
 
@@ -61,66 +61,66 @@ msgstr "Fecha"
 msgid "filter_submit"
 msgstr "Filtrar"
 
-#: moxie/forms.py:33 moxie/forms.py:174 moxie/forms.py:200
+#: moxie/forms.py:35 moxie/forms.py:194 moxie/forms.py:269
+#: moxie/templates/index/register.html:17
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
-#: moxie/forms.py:93 moxie/templates/users/index.html:26
+#: moxie/forms.py:95 moxie/templates/users/index.html:24
 msgid "Favourites"
 msgstr "Favoritos"
 
-#: moxie/forms.py:102 moxie/forms.py:140
+#: moxie/forms.py:104 moxie/forms.py:142
 msgid "amount"
 msgstr "Importe"
 
-#: moxie/forms.py:104 moxie/forms.py:142
+#: moxie/forms.py:106 moxie/forms.py:144
 msgid "in_sum"
 msgstr "Mostrar en \"Total\""
 
-#: moxie/forms.py:105
+#: moxie/forms.py:107
 msgid "Favourite"
 msgstr "Favorito"
 
-#: moxie/forms.py:115
+#: moxie/forms.py:117
 msgid "Update expense"
 msgstr "Actualizar gasto"
 
-#: moxie/forms.py:115 moxie/forms.py:250
-#: moxie/templates/sheets/sheet_not_closed.html:7
+#: moxie/forms.py:117 moxie/forms.py:231
 msgid "Add expense"
 msgstr "Añadir gasto"
 
-#: moxie/forms.py:153
+#: moxie/forms.py:155
 msgid "Add income"
 msgstr "Añadir ingreso"
 
-#: moxie/forms.py:165 moxie/forms.py:191
+#: moxie/forms.py:164 moxie/templates/index/index.html:13
+msgid "Password"
+msgstr "Contraseña"
+
+#: moxie/forms.py:165 moxie/forms.py:185
 msgid "Repeat password"
-msgstr ""
+msgstr "Repite la contraseña"
 
-#: moxie/forms.py:179 moxie/forms.py:205
+#: moxie/forms.py:173 moxie/forms.py:199
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Las contraseñas no coinciden"
 
-#: moxie/forms.py:216
-msgid "Select a sheet"
-msgstr ""
-
-#: moxie/forms.py:235 moxie/forms.py:275
+#: moxie/forms.py:216 moxie/forms.py:255
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
-#: moxie/forms.py:240
+#: moxie/forms.py:221
 msgid "In sheet currency?"
-msgstr ""
+msgstr "¿En divisa?"
 
-#: moxie/forms.py:263
+#: moxie/forms.py:243
 msgid "User or email"
-msgstr ""
+msgstr "Usuario o correo electrónico"
 
-#: moxie/forms.py:264
+#: moxie/forms.py:244
 msgid "Enter address of person with whom you are sharing expenses.&nbsp;"
-msgstr ""
+msgstr "Introduce la dirección de la persona con quien compartir gastos.&nbsp;"
 
 #: moxie/models.py:74
 msgid "Expenses"
@@ -156,15 +156,15 @@ msgstr "Diversión"
 
 #: moxie/models.py:147
 msgid "Going out, dinner outside, parties, fun..."
-msgstr ""
+msgstr "Diversión"
 
 #: moxie/models.py:153 moxie/models.py:155
 msgid "Technology"
-msgstr ""
+msgstr "Tecnología"
 
 #: moxie/models.py:161
 msgid "Gifts"
-msgstr ""
+msgstr "Regalos"
 
 #: moxie/models.py:163
 msgid "Christmas, Valentine's day, birthday..."
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Wear and dress"
 msgstr ""
 
-#: moxie/models.py:177 moxie/models.py:466
+#: moxie/models.py:177 moxie/models.py:351
 msgid "Other"
 msgstr ""
 
@@ -192,35 +192,35 @@ msgstr ""
 
 #: moxie/models.py:197
 msgid "Home food, grocery"
-msgstr ""
+msgstr "Comida comprada para casa"
 
 #: moxie/models.py:203
 msgid "Away"
-msgstr ""
+msgstr "Fuera"
 
 #: moxie/models.py:205
 msgid "Lunch and dinner out"
-msgstr ""
+msgstr "Comidas y cenas fuera"
 
 #: moxie/models.py:211
 msgid "Coffee"
-msgstr ""
+msgstr "Café"
 
 #: moxie/models.py:213
 msgid "Coffee outside, take away, some pastry maybe"
-msgstr ""
+msgstr "Cafés, bolleria durante el café, desayuno, merienda..."
 
-#: moxie/models.py:463
+#: moxie/models.py:348
 msgid "Euro"
 msgstr ""
 
-#: moxie/models.py:464
+#: moxie/models.py:349
 msgid "Pounds"
-msgstr ""
+msgstr "Libras"
 
-#: moxie/models.py:465
+#: moxie/models.py:350
 msgid "US Dollar"
-msgstr ""
+msgstr "Dólares"
 
 #: moxie/settings.py:156
 msgid "Español"
@@ -235,17 +235,19 @@ msgid "Català"
 msgstr ""
 
 #: moxie/templates/categories/budget.html:5
-msgid "budgets_save_successful"
-msgstr ""
+#, fuzzy
+#| msgid "Registered successfully."
+msgid "Saved successfully"
+msgstr "Registro efectuado correctamente"
 
 #: moxie/templates/categories/budget.html:45
-#, fuzzy
-#| msgid "tags_title"
-msgid "budgets_title"
-msgstr "Tags"
+msgid "Budgets"
+msgstr "Presupuestos"
 
 #: moxie/templates/categories/budget.html:48
-msgid "Borrar"
+#: moxie/templates/expenses/data_header.html:27
+#: moxie/templates/incomes/data_header.html:18
+msgid "Delete"
 msgstr ""
 
 #: moxie/templates/categories/categories.html:8
@@ -268,16 +270,16 @@ msgid "expenses_note"
 msgstr "Nota"
 
 #: moxie/templates/categories/favourites.html:10
-#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:28
+#: moxie/templates/tags/tags.html:8
 msgid "tags_title"
 msgstr "Tags"
 
-#: moxie/templates/common/data.html:14 moxie/templates/sheets/view.html:73
+#: moxie/templates/common/data.html:14 moxie/templates/sheets/view.html:50
 msgid "Note"
 msgstr "Nota"
 
 #: moxie/templates/common/data.html:19 moxie/templates/common/data.html:76
-#: moxie/templates/sheets/view.html:72
+#: moxie/templates/sheets/view.html:49
 msgid "Date"
 msgstr "Fecha"
 
@@ -301,11 +303,6 @@ msgstr "Volver arriba"
 msgid "expenses_delete_message"
 msgstr "Borrar"
 
-#: moxie/templates/expenses/data_header.html:27
-#: moxie/templates/incomes/data_header.html:18
-msgid "Delete"
-msgstr ""
-
 #: moxie/templates/expenses/index.html:14
 msgid "Go to expenses"
 msgstr "Ir a gastos"
@@ -322,11 +319,11 @@ msgstr "Gastado"
 msgid "expenses_budget"
 msgstr "Presupuesto"
 
-#: moxie/templates/expenses/stats.html:32
+#: moxie/templates/expenses/stats.html:36
 msgid "expenses_monthly"
 msgstr "Gasto mensual"
 
-#: moxie/templates/expenses/stats.html:33
+#: moxie/templates/expenses/stats.html:37
 msgid "expenses_by_months"
 msgstr "Mensual"
 
@@ -422,10 +419,6 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: moxie/templates/index/index.html:13
-msgid "Password"
-msgstr ""
-
 #: moxie/templates/index/index.html:23
 #, fuzzy
 #| msgid "users"
@@ -436,63 +429,108 @@ msgstr "Configuración"
 msgid "Forgot password?"
 msgstr ""
 
-#: moxie/templates/login/registeruser.html:4
+#: moxie/templates/index/password_reset.html:9
+msgid "Reset Password"
+msgstr ""
+
+#: moxie/templates/index/password_reset_confirm.html:9
+msgid "Password Reset Confirm"
+msgstr ""
+
+#: moxie/templates/index/password_reset_confirm.html:11
+msgid "Please enter your new password."
+msgstr ""
+
+#: moxie/templates/index/password_reset_confirm.html:15
+msgid "Reset password"
+msgstr ""
+
+#: moxie/templates/index/register.html:9
+msgid "Register"
+msgstr ""
+
+#: moxie/templates/index/user_registered.html:4
 msgid "registration_ok"
 msgstr ""
 
-#: moxie/templates/sheets/index.html:12
+#: moxie/templates/sheets/index.html:10
 msgid "Create new sheet"
 msgstr ""
 
-#: moxie/templates/sheets/select_sheet.html:9
-msgid "You do not have shared expenses sheets."
-msgstr "No tienes hojas de gastos compartidos."
+#: moxie/templates/sheets/index.html:27
+msgid "First"
+msgstr ""
 
-#: moxie/templates/sheets/sheet_not_closed.html:8
+#: moxie/templates/sheets/index.html:28
+msgid "Previous"
+msgstr ""
+
+#: moxie/templates/sheets/index.html:34
+msgid "Page"
+msgstr ""
+
+#: moxie/templates/sheets/index.html:34
+msgid "of"
+msgstr ""
+
+#: moxie/templates/sheets/index.html:40
+msgid "Next"
+msgstr ""
+
+#: moxie/templates/sheets/index.html:41
+msgid "Last"
+msgstr ""
+
+#: moxie/templates/sheets/sheet_header.html:12
 #, fuzzy
 #| msgid "Add expense"
 msgid "Add user"
 msgstr "Añadir gasto"
 
-#: moxie/templates/sheets/view.html:28 moxie/templates/sheets/view.html:29
-msgid "Copy permalink of this page to clipboard"
-msgstr ""
-
-#: moxie/templates/sheets/view.html:39
+#: moxie/templates/sheets/sheet_header.html:19
 msgid "Close sheet"
 msgstr ""
 
-#: moxie/templates/sheets/view.html:45
+#: moxie/templates/sheets/sheet_header.html:46
 msgid "Apply to all"
 msgstr ""
 
-#: moxie/templates/sheets/view.html:52
+#: moxie/templates/sheets/sheet_header.html:53
 msgid "Use this change rate for sheet currency"
 msgstr ""
 
-#: moxie/templates/sheets/view.html:80
+#: moxie/templates/sheets/view.html:23
+#, fuzzy
+#| msgid "You do not have shared expenses sheets."
+msgid "Shared expenses"
+msgstr "No tienes hojas de gastos compartidos."
+
+#: moxie/templates/sheets/view.html:26 moxie/templates/sheets/view.html:27
+msgid "Copy permalink of this page to clipboard"
+msgstr ""
+
+#: moxie/templates/sheets/view.html:57
 msgid "Assign to"
-msgstr ""
+msgstr "Asignar a"
 
-#: moxie/templates/sheets/view.html:123
+#: moxie/templates/sheets/view.html:87
 msgid "Already copied"
-msgstr ""
+msgstr "Ya copiado"
 
-#: moxie/templates/sheets/view.html:141
+#: moxie/templates/sheets/view.html:106
 msgid "TOTAL"
 msgstr ""
 
-#: moxie/templates/sheets/view.html:162
-#, fuzzy
+#: moxie/templates/sheets/view.html:127
 #| msgid "Go to expenses"
 msgid "Copy to my expenses"
-msgstr "Ir a gastos"
+msgstr "Copiar a mis gastos"
 
-#: moxie/templates/sheets/view.html:179
+#: moxie/templates/sheets/view.html:144
 msgid "Distribution"
-msgstr ""
+msgstr "Distribución"
 
-#: moxie/templates/stats/index.html:7
+#: moxie/templates/stats/index.html:7 moxie/templates/users/index.html:25
 msgid "Budget"
 msgstr "Presupuesto"
 
@@ -524,98 +562,149 @@ msgstr "Media este año"
 msgid "Average of one buy"
 msgstr "Media de una compra"
 
-#: moxie/templates/tags/tags.html:8
-msgid "press_here_display"
-msgstr ""
-
 #: moxie/templates/tags/tags.html:15
-#, fuzzy
-#| msgid "tags_title"
-msgid "tags_notice"
-msgstr "Tags"
+msgid "When pressing Update, removed tags will be deleted."
+msgstr "Al pulsar Actualizar se eliminarán los tags borrados."
 
 #: moxie/templates/tags/tags.html:18
-#, fuzzy
-#| msgid "tags_title"
-msgid "tags_update"
-msgstr "Tags"
+msgid "Update"
+msgstr "Actualizar"
 
-#: moxie/templates/users/index.html:11
-msgid "myaccount_password_error"
-msgstr ""
+#: moxie/templates/users/index.html:9
+msgid "Error: Passwords do not match"
+msgstr "Error: Los passwords no coinciden"
 
-#: moxie/templates/users/index.html:24
-msgid "users_my_account"
-msgstr ""
+#: moxie/templates/users/index.html:22
+msgid "My account"
+msgstr "Mi cuenta"
 
-#: moxie/templates/users/index.html:25
-#, fuzzy
-#| msgid "category"
-msgid "categories"
-msgstr "Categoría"
+#: moxie/templates/users/index.html:23
+#| msgid "categories"
+msgid "Categories"
+msgstr "Categorías"
 
-#: moxie/templates/users/index.html:27
-msgid "budget"
-msgstr ""
+#: moxie/templates/users/index.html:26
+msgid "Tags"
+msgstr "Etiquetas"
 
-#: moxie/views/incomes.py:88 moxie/views/views.py:266
+#: moxie/views/incomes.py:88 moxie/views/views.py:155
 msgid "incomes"
 msgstr "Ingresos"
 
-#: moxie/views/incomes.py:89 moxie/views/views.py:267
+#: moxie/views/incomes.py:89 moxie/views/views.py:156
 msgid "expenses"
 msgstr "Gastos"
 
-#: moxie/views/incomes.py:90 moxie/views/views.py:268
+#: moxie/views/incomes.py:90 moxie/views/views.py:157
 msgid "stats"
 msgstr "Estadísticas"
 
-#: moxie/views/incomes.py:91 moxie/views/views.py:269
+#: moxie/views/incomes.py:91 moxie/views/views.py:158
 msgid "sheets"
 msgstr "Gastos compartidos"
 
-#: moxie/views/incomes.py:92 moxie/views/views.py:270
+#: moxie/views/incomes.py:92 moxie/views/views.py:159
 msgid "users"
 msgstr "Configuración"
 
-#: moxie/views/login.py:20
+#: moxie/views/login.py:30
 msgid "Login incorrect"
 msgstr "Autenticación incorrecta"
 
-#: moxie/views/login.py:35
+#: moxie/views/login.py:51
 msgid "Registered successfully."
+msgstr "Registro efectuado correctamente"
+
+#: moxie/views/login.py:80
+msgid ""
+"\n"
+"\t<h2>Password reset sent</h2><hr>\n"
+"\t<p>\n"
+"\t\tWe've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. \n"
+"\t\tYou should receive them shortly.<br>If you don't receive an email, "
+"please make sure you've entered the address \n"
+"\t\tyou registered with, and check your spam folder.\n"
+"\t</p>\n"
+"\t"
 msgstr ""
+"\n"
+"\t<h2>Correo de cambio de contraseña enviado</h2><hr>\n"
+"\t<p>\n"
+"\t\tTe hemos enviado un correo con instrucciones para cambiar tu contraseña."
+"\t\tDeberías recibirlo en breve.<br>Si no lo recibes, por favor revisa la "
+"carpeta de spam y asegúrate de que el correo introducido era el correcto.\n"
+"\t</p>\n"
+"\t"
 
-#: moxie/views/sheets.py:355
-#, fuzzy
-#| msgid "You do not have shared expenses sheets."
+#: moxie/views/login.py:89
+msgid "Problem sending reset password email"
+msgstr "Hubo un problema enviando el correo de cambio de contraseña"
+
+#: moxie/views/login.py:91
+msgid "Connection error"
+msgstr "Error de conexión"
+
+#: moxie/views/login.py:99
+msgid "You must pass the reCAPTCHA test"
+msgstr "Debes introducir el reCAPTCHA correctamente"
+
+#: moxie/views/login.py:123
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Tu contraseña ha sido cambiada. Ya puedes entrar en la página."
+
+#: moxie/views/login.py:131
+msgid "Link is expired"
+msgstr "El vínculo ha expirado"
+
+#: moxie/views/sheets.py:159
 msgid "New shared expenses sheet"
-msgstr "No tienes hojas de gastos compartidos."
+msgstr "Nueva hoja de gastos compartidos"
 
-#: moxie/views/sheets.py:357
-#, fuzzy
-#| msgid "You do not have shared expenses sheets."
+#: moxie/views/sheets.py:161
 msgid "Someone shared an expenses sheet with you:"
-msgstr "No tienes hojas de gastos compartidos."
+msgstr "Alguien ha compartido una hoja de gastos compartidos contigo:"
 
-#: moxie/views/sheets.py:362
+#: moxie/views/sheets.py:166
 msgid ""
 "Best regards\n"
 "\n"
 "Moxie team"
 msgstr ""
+"Un saludo\n"
+"El equipo de Moxie"
 
 #: moxie/views/stats.py:61
 msgid "BALANCE (Income - expense)"
-msgstr ""
+msgstr "RESULTADO (Ingresos - gastos)"
 
 #: moxie/views/stats.py:117
 msgid "TOTAL EXPENSES"
-msgstr ""
+msgstr "TOTAL GASTOS"
 
 #: moxie/views/stats.py:117
 msgid "TOTAL INCOMES"
-msgstr ""
+msgstr "TOTAL INGRESOS"
+
+#~| msgid "tags_title"
+#~ msgid "budgets_title"
+#~ msgstr "Tags"
+
+#, fuzzy
+#~| msgid "tags_title"
+#~ msgid "tags_update"
+#~ msgstr "Tags"
+
+#, fuzzy
+#~| msgid "tags_title"
+#~ msgid "tags_notice"
+#~ msgstr "Tags"
+
+#~ msgid "budget"
+#~ msgstr "Presupuesto"
+
+#~ msgid "You do not have shared expenses sheets."
+#~ msgstr "No tienes hojas de gastos compartidos."
 
 #, fuzzy
 #~| msgid "stats_budget_title"
