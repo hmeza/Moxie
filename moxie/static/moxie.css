@@ -105,16 +105,11 @@ form {
 
 table.list, td.list, th.list tr.list, tr.list > td {
 	color: #000000;
-	padding: 2px;
 	border-collapse: collapse;
 	border-left: 1px solid #c5c5c5;
 	border-right: 1px solid #c5c5c5;
 	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #c5c5c5;
-}
-
-.list td {
-	padding: 3px;
 }
 
 .list_money {
@@ -164,7 +159,7 @@ form.budget {
 
 div.moxieicon {
 	width: 16px;
-	height: 16px;
+	text-align: center;
 }
 div:hover.moxieicon {
 	cursor: hand;
@@ -218,6 +213,7 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 
 .moxie_edit {
 	width: 5%;
+	text-align: center;
 }
 
 .moxie_category {

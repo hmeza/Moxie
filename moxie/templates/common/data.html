@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load mathfilters %}
 
-<table class="table table-bordered table-condensed table-hover w-100" id="mytable">
+<table class="table table-bordered table-condensed table-hover table-sm w-100" id="mytable">
 <thead>
     <tr>
         <td colspan="5" class="text-center">
@@ -10,8 +10,8 @@
     </tr>
 	<tr>
 		<th class="list moxie_edit">&nbsp;</th>
-		<th class="list moxie_category">{% trans 'Category' %}</th>
-		<th class="list moxie_note">{% trans 'Note' %}</th>
+		<th class="list moxie_category text-left">{% trans 'Category' %}</th>
+		<th class="list moxie_note text-left">{% trans 'Note' %}</th>
         <th class="list moxie_date_inline sorting text-center">
             {% if month or year or o %}
                 <a href="?order=date">

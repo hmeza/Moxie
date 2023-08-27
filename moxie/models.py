@@ -231,10 +231,6 @@ class Budget(models.Model):
         return Budget.objects.select_related('category')\
             .filter(user=user, date_ended__isnull=True).order_by('category__order')
 
-    def getBudget(user):
-        data = Budget.get_budget(user)
-        return [{element['category']: element['amount']} for element in data]
-
     @staticmethod
     def get_budget_for_month(user, year, month):
         queryset = Transaction.objects\

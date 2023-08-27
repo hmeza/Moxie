@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-08 22:41+0000\n"
+"POT-Creation-Date: 2023-08-27 22:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Wear and dress"
 msgstr ""
 
-#: moxie/models.py:177 moxie/models.py:351
+#: moxie/models.py:177 moxie/models.py:347
 msgid "Other"
 msgstr ""
 
@@ -210,15 +210,15 @@ msgstr "Café"
 msgid "Coffee outside, take away, some pastry maybe"
 msgstr "Cafés, bolleria durante el café, desayuno, merienda..."
 
-#: moxie/models.py:348
+#: moxie/models.py:344
 msgid "Euro"
 msgstr ""
 
-#: moxie/models.py:349
+#: moxie/models.py:345
 msgid "Pounds"
 msgstr "Libras"
 
-#: moxie/models.py:350
+#: moxie/models.py:346
 msgid "US Dollar"
 msgstr "Dólares"
 
@@ -240,15 +240,35 @@ msgstr ""
 msgid "Saved successfully"
 msgstr "Registro efectuado correctamente"
 
-#: moxie/templates/categories/budget.html:45
+#: moxie/templates/categories/budget.html:7
+#, fuzzy
+#| msgid "Budget"
+msgid "Budget updated"
+msgstr "Presupuesto"
+
+#: moxie/templates/categories/budget.html:8
+msgid "Error updating budget"
+msgstr ""
+
+#: moxie/templates/categories/budget.html:15
+#, fuzzy
+#| msgid "budget"
+msgid "Current budget"
+msgstr "Presupuesto"
+
+#: moxie/templates/categories/budget.html:36
+msgid "Take snapshot"
+msgstr ""
+
+#: moxie/templates/categories/budget.html:47
 msgid "Budgets"
 msgstr "Presupuestos"
 
-#: moxie/templates/categories/budget.html:48
+#: moxie/templates/categories/budget.html:54
 #: moxie/templates/expenses/data_header.html:27
 #: moxie/templates/incomes/data_header.html:18
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: moxie/templates/categories/categories.html:8
 #: moxie/templates/common/data.html:13
@@ -257,22 +277,24 @@ msgstr "Categoría"
 
 #: moxie/templates/categories/categories.html:19
 msgid "Order"
-msgstr ""
+msgstr "Orden"
 
 #: moxie/templates/categories/categories.html:22
 msgid "Drag categories to reorder it when displaying. Press edit to modify it."
 msgstr ""
+"Arrastra las categorias para reardenarlas. Pulsa editar para modificarlas."
 
 #: moxie/templates/categories/favourites.html:9
 #, fuzzy
 #| msgid "expenses_spent"
-msgid "expenses_note"
+msgid "Expenses note"
 msgstr "Nota"
 
 #: moxie/templates/categories/favourites.html:10
-#: moxie/templates/tags/tags.html:8
-msgid "tags_title"
-msgstr "Tags"
+#, fuzzy
+#| msgid "Tags"
+msgid "Tags used"
+msgstr "Etiquetas usadas"
 
 #: moxie/templates/common/data.html:14 moxie/templates/sheets/view.html:50
 msgid "Note"
@@ -376,10 +398,8 @@ msgid "about"
 msgstr "Acerca de"
 
 #: moxie/templates/incomes/index.html:14
-#, fuzzy
-#| msgid "incomes"
 msgid "Go to incomes"
-msgstr "Ingresos"
+msgstr "Ir a ingresos"
 
 #: moxie/templates/incomes/stats.html:8
 msgid "incomes_bar_title"
@@ -417,7 +437,7 @@ msgstr ""
 #: moxie/templates/index/index.html:9 moxie/templates/index/index.html:12
 #: moxie/templates/index/index.html:14
 msgid "Login"
-msgstr ""
+msgstr "Entrar"
 
 #: moxie/templates/index/index.html:23
 #, fuzzy
@@ -427,11 +447,12 @@ msgstr "Configuración"
 
 #: moxie/templates/index/index.html:24
 msgid "Forgot password?"
-msgstr ""
+msgstr "¿Has olvidado tu contraseña?"
 
 #: moxie/templates/index/password_reset.html:9
+#: moxie/templates/index/password_reset_confirm.html:15
 msgid "Reset Password"
-msgstr ""
+msgstr "Restaurar contraseña"
 
 #: moxie/templates/index/password_reset_confirm.html:9
 msgid "Password Reset Confirm"
@@ -439,11 +460,7 @@ msgstr ""
 
 #: moxie/templates/index/password_reset_confirm.html:11
 msgid "Please enter your new password."
-msgstr ""
-
-#: moxie/templates/index/password_reset_confirm.html:15
-msgid "Reset password"
-msgstr ""
+msgstr "Introduce tu contraseña"
 
 #: moxie/templates/index/register.html:9
 msgid "Register"
@@ -522,7 +539,6 @@ msgid "TOTAL"
 msgstr ""
 
 #: moxie/templates/sheets/view.html:127
-#| msgid "Go to expenses"
 msgid "Copy to my expenses"
 msgstr "Copiar a mis gastos"
 
@@ -562,6 +578,10 @@ msgstr "Media este año"
 msgid "Average of one buy"
 msgstr "Media de una compra"
 
+#: moxie/templates/tags/tags.html:8
+msgid "tags_title"
+msgstr "Tags"
+
 #: moxie/templates/tags/tags.html:15
 msgid "When pressing Update, removed tags will be deleted."
 msgstr "Al pulsar Actualizar se eliminarán los tags borrados."
@@ -579,7 +599,6 @@ msgid "My account"
 msgstr "Mi cuenta"
 
 #: moxie/templates/users/index.html:23
-#| msgid "categories"
 msgid "Categories"
 msgstr "Categorías"
 
@@ -587,23 +606,23 @@ msgstr "Categorías"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: moxie/views/incomes.py:88 moxie/views/views.py:155
+#: moxie/views/incomes.py:88 moxie/views/views.py:159
 msgid "incomes"
 msgstr "Ingresos"
 
-#: moxie/views/incomes.py:89 moxie/views/views.py:156
+#: moxie/views/incomes.py:89 moxie/views/views.py:160
 msgid "expenses"
 msgstr "Gastos"
 
-#: moxie/views/incomes.py:90 moxie/views/views.py:157
+#: moxie/views/incomes.py:90 moxie/views/views.py:161
 msgid "stats"
 msgstr "Estadísticas"
 
-#: moxie/views/incomes.py:91 moxie/views/views.py:158
+#: moxie/views/incomes.py:91 moxie/views/views.py:162
 msgid "sheets"
 msgstr "Gastos compartidos"
 
-#: moxie/views/incomes.py:92 moxie/views/views.py:159
+#: moxie/views/incomes.py:92 moxie/views/views.py:163
 msgid "users"
 msgstr "Configuración"
 
@@ -699,9 +718,6 @@ msgstr "TOTAL INGRESOS"
 #~| msgid "tags_title"
 #~ msgid "tags_notice"
 #~ msgstr "Tags"
-
-#~ msgid "budget"
-#~ msgstr "Presupuesto"
 
 #~ msgid "You do not have shared expenses sheets."
 #~ msgstr "No tienes hojas de gastos compartidos."
