@@ -19,7 +19,7 @@ from moxie.views.login import login_view, logout_view, RegisterView, password_ch
 from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
-from moxie.views.users import UserConfigurationView
+from moxie.views.users import UserConfigurationView, user_password_change
 from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, SharedExpenseView, SheetCopyView
 from moxie.views.tags import TagView
 from moxie.views.categories import CategoryView, categories_bulk_update, CategoryBudgetView
@@ -56,6 +56,7 @@ urlpatterns = [
 
     # TODO
     path('users', UserConfigurationView.as_view(), name='users'),
+    path('users/password-change/', user_password_change, name='password-change'),
     path('tag', TagView.as_view(), name='tags'),
     path('category/order/', categories_bulk_update, name='category_order'),
     path('category/<int:pk>/budget/', CategoryBudgetView.as_view(), name='category_budget_edit'),

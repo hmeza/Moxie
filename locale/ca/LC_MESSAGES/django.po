@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-27 22:10+0000\n"
+"POT-Creation-Date: 2023-08-29 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,22 +42,22 @@ msgstr "Amount"
 msgid "Maximum amount"
 msgstr "Amount"
 
-#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:100
-#: moxie/forms.py:139 moxie/templates/stats/stats.html:7
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:101
+#: moxie/forms.py:140 moxie/templates/stats/stats.html:7
 msgid "category"
 msgstr "Category"
 
-#: moxie/filters.py:21 moxie/forms.py:102
+#: moxie/filters.py:21 moxie/forms.py:103
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:103
-#: moxie/forms.py:141
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:104
+#: moxie/forms.py:142
 msgid "note"
 msgstr "Note"
 
-#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:105
-#: moxie/forms.py:143 moxie/forms.py:222
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:106
+#: moxie/forms.py:144 moxie/forms.py:223
 msgid "date"
 msgstr "Date"
 
@@ -65,64 +65,68 @@ msgstr "Date"
 msgid "filter_submit"
 msgstr ""
 
-#: moxie/forms.py:35 moxie/forms.py:194 moxie/forms.py:269
+#: moxie/forms.py:35 moxie/forms.py:195 moxie/forms.py:270
 #: moxie/templates/index/register.html:17
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:95 moxie/templates/users/index.html:24
+#: moxie/forms.py:75
+msgid "Language"
+msgstr "Idioma"
+
+#: moxie/forms.py:96 moxie/templates/users/index.html:24
 msgid "Favourites"
 msgstr "Favorits"
 
-#: moxie/forms.py:104 moxie/forms.py:142
+#: moxie/forms.py:105 moxie/forms.py:143
 msgid "amount"
 msgstr "Amount"
 
-#: moxie/forms.py:106 moxie/forms.py:144
+#: moxie/forms.py:107 moxie/forms.py:145
 msgid "in_sum"
 msgstr ""
 
-#: moxie/forms.py:107
+#: moxie/forms.py:108
 msgid "Favourite"
 msgstr "Favorit"
 
-#: moxie/forms.py:117
+#: moxie/forms.py:118
 msgid "Update expense"
 msgstr "Actualitzar despesa"
 
-#: moxie/forms.py:117 moxie/forms.py:231
+#: moxie/forms.py:118 moxie/forms.py:232
 msgid "Add expense"
 msgstr "Afegir despesa"
 
-#: moxie/forms.py:155
+#: moxie/forms.py:156
 msgid "Add income"
 msgstr "Afegir ingrés"
 
-#: moxie/forms.py:164 moxie/templates/index/index.html:13
+#: moxie/forms.py:165 moxie/templates/index/index.html:13
 msgid "Password"
 msgstr ""
 
-#: moxie/forms.py:165 moxie/forms.py:185
+#: moxie/forms.py:166 moxie/forms.py:186
 msgid "Repeat password"
 msgstr ""
 
-#: moxie/forms.py:173 moxie/forms.py:199
+#: moxie/forms.py:174 moxie/forms.py:200
 msgid "Passwords do not match"
 msgstr ""
 
-#: moxie/forms.py:216 moxie/forms.py:255
+#: moxie/forms.py:217 moxie/forms.py:256
 msgid "Add"
 msgstr ""
 
-#: moxie/forms.py:221
+#: moxie/forms.py:222
 msgid "In sheet currency?"
 msgstr ""
 
-#: moxie/forms.py:243
+#: moxie/forms.py:244
 msgid "User or email"
 msgstr ""
 
-#: moxie/forms.py:244
+#: moxie/forms.py:245
 msgid "Enter address of person with whom you are sharing expenses.&nbsp;"
 msgstr ""
 
@@ -543,7 +547,7 @@ msgstr ""
 msgid "Already copied"
 msgstr ""
 
-#: moxie/templates/sheets/view.html:106
+#: moxie/templates/sheets/view.html:106 moxie/templates/stats/yearly.html:37
 msgid "TOTAL"
 msgstr ""
 
@@ -589,6 +593,14 @@ msgstr "Mitja aquest any"
 msgid "Average of one buy"
 msgstr "Mitja d'una compra"
 
+#: moxie/templates/stats/yearly.html:25
+msgid "POSITIVE FLOW"
+msgstr ""
+
+#: moxie/templates/stats/yearly.html:31
+msgid "NEGATIVE FLOW"
+msgstr ""
+
 #: moxie/templates/tags/tags.html:8
 msgid "tags_title"
 msgstr ""
@@ -619,6 +631,10 @@ msgstr "Category"
 
 #: moxie/templates/users/index.html:26
 msgid "Tags"
+msgstr ""
+
+#: moxie/templates/users/index.html:32
+msgid "Save"
 msgstr ""
 
 #: moxie/views/incomes.py:88 moxie/views/views.py:159
@@ -708,11 +724,11 @@ msgstr ""
 msgid "BALANCE (Income - expense)"
 msgstr ""
 
-#: moxie/views/stats.py:117
+#: moxie/views/stats.py:118
 msgid "TOTAL EXPENSES"
 msgstr ""
 
-#: moxie/views/stats.py:117
+#: moxie/views/stats.py:118
 msgid "TOTAL INCOMES"
 msgstr ""
 

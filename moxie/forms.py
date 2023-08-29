@@ -64,14 +64,25 @@ class MyAccountForm(ModelForm):
     class Meta:
         db_table = 'users'
         model = User
-        exclude = ['login', 'created_at', 'updated_at', 'last_login']
+        exclude = ['login', 'created_at', 'updated_at', 'last_login', 'is_active', 'is_staff', 'username',
+                   'is_superuser', 'groups', 'user_permissions', 'date_joined', 'password']
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # self.helper.form_id = 'id-userForm'
 
-    password = CharField(max_length=50)
-    email = CharField(max_length=12)
-    language = ChoiceField(choices=CHOICES)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-exampleForm'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
+        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'submit_survey'
+
+        self.helper.add_input(Submit('submit', _('Save')))
+        # self.helper.form_action = reverse_lazy('incomes_edit', kwargs={'pk': self.instance.pk}) if self.instance.pk else reverse_lazy('incomes_add')
+
+    # email = CharField(max_length=255, required=False)
 
 
 class TransactionForm(ModelForm):
