@@ -63,11 +63,12 @@ class StatsView(TemplateView):
 			totals.append({'title': float(income_totals[i]['title']) + float(expense_totals[i]['title']), 'link': ''})
 		context['totals'] = totals
 
-		context['yearly'] = Transaction.get_year_incomes_with_category(user, expenses=True, incomes=True)
+		context['yearly'], context['yearly_positive_flow'], context['yearly_negative_flow'], context['yearly_total'] = Transaction.get_year_incomes_with_category(user, expenses=True, incomes=True)
+
 		context['year'] = int(year)
 
 		today = datetime.date.today()
-		context['yearly_header'] = [''] + [y for y in range(today.year - 5, today.year)]
+		context['yearly_header'] = [''] + [str(y) for y in range(today.year - Transaction.YEARS_FOR_YEARLY_STATS, today.year + 1)]
 		context['trends'] = self._get_trends(Category.get_categories_tree(user))
 		context['stats'] = Transaction.get_category_stats(user)
 		return context

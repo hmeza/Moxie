@@ -1,3 +1,4 @@
+{% load i18n %}
 <div id="stats_table_yearly" class="collapse mt-3">
 <table class="table table-striped table-bordered table-stats">
     <thead>
@@ -15,10 +16,28 @@
             </td>
             {% for item in row %}
                 <td>
-                {{ item.amount }}
+                {{ item.amount|floatformat:2 }} &euro;
                 </td>
             {% endfor %}
         </tr>
         {% endfor %}
+        <tr>
+            <th>{% trans 'POSITIVE FLOW' %}</th>
+            {% for key, row in yearly_positive_flow.items %}
+                <th>{{ row|floatformat:2 }} &euro;</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>{% trans 'NEGATIVE FLOW' %}</th>
+            {% for key, row in yearly_negative_flow.items %}
+            <th>{{ row|floatformat:2}} &euro;</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th>{% trans 'TOTAL' %}</th>
+            {% for key, row in yearly_total.items %}
+            <th>{{ row|floatformat:2 }} &euro;</th>
+            {% endfor %}
+        </tr>
     </tbody>
 </table></div>

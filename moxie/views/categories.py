@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -46,7 +46,6 @@ class CategoryBudgetView(UpdateView):
 
 def categories_bulk_update(request):
     if request.POST:
-        print(request.POST)
         update_list = []
         for key in request.POST:
             obj = Category.objects.get(pk=request.POST.get(key))

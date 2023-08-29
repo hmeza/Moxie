@@ -476,6 +476,8 @@ class SharedExpense(models.Model):
 
 
 class Transaction(models.Model):
+    YEARS_FOR_YEARLY_STATS = 4
+
     user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
@@ -506,7 +508,8 @@ class Transaction(models.Model):
             queryset = queryset.filter(amount__gte=0)
         elif expenses and not incomes:
             queryset = queryset.filter(amount__lt=0)
-        first_year = int(datetime.date.today().year) - 5
+        current_year = datetime.date.today().year
+        first_year = int(current_year) - Transaction.YEARS_FOR_YEARLY_STATS
         queryset = queryset\
             .values(year=ExtractYear('date'))\
             .filter(year__gt=first_year)\
@@ -515,19 +518,50 @@ class Transaction(models.Model):
             .order_by('category', 'year')\
             .values_list('year', 'category', 'category__name', 'sum_amount')
 
+        positive_flow = {y: 0 for y in range(first_year, current_year + 1)}
+        negative_flow = {y: 0 for y in range(first_year, current_year + 1)}
+        grand_total = {y: 0 for y in range(first_year, current_year + 1)}
+
         incomes_by_year_and_category = {}
         current_category = None
+        loop_year = first_year
         for value in queryset:
             if value[1] != current_category:
+                if loop_year < current_year and current_category is not None:
+                    Transaction.__fill_empty_category_years(
+                        current_category, incomes_by_year_and_category, loop_year, value, current_year
+                    )
                 current_category = value[1]
                 incomes_by_year_and_category[current_category] = []
+                loop_year = first_year
+            if value[0] > loop_year:
+                Transaction.__fill_empty_category_years(
+                    current_category, incomes_by_year_and_category, loop_year, value, value[0]
+                )
+                loop_year = value[0]
             incomes_by_year_and_category[current_category].append({
                 'year': value[0],
                 'category': value[1],
                 'name': value[2],
                 'amount': value[3]
             })
-        return incomes_by_year_and_category
+            if value[3] >= 0:
+                positive_flow[value[0]] += value[3]
+            else:
+                negative_flow[value[0]] -= value[3]
+            grand_total[value[0]] += value[3]
+            loop_year += 1
+        return incomes_by_year_and_category, positive_flow, negative_flow, grand_total
+
+    @staticmethod
+    def __fill_empty_category_years(current_category, incomes_by_year_and_category, loop_year, value, target_year):
+        for i in range(loop_year, target_year):
+            incomes_by_year_and_category[current_category].append({
+                'year': loop_year,
+                'category': value[1],
+                'name': value[2],
+                'amount': 0
+            })
 
     @staticmethod
     def totals(user, year=None):
