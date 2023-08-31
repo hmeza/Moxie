@@ -44,31 +44,6 @@
 {% csrf_token %}
 
 <script>
-    let cat_list;
-
-    function stopCallback(event, ui) {
-        // get all inputs inside categories_list and send
-        const cat_list = $('#categories_list');
-        let cats = {};
-        cat_list.find('input').each(function(index) {
-            cats[index] = $(this).attr('name');
-        });
-
-        $.ajax({
-            url: "{% url 'category_order' %}",
-            type: "POST",
-            dataType: 'json',
-            headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
-            data: cats
-        });
-    }
-
-    $(document).ready(function() {
-        cat_list = $('#categories_list');
-        cat_list.sortable({
-            delay: 100,
-            stop:  stopCallback
-        });
-        cat_list.disableSelection();
-    });
+    const categoryOrderUrl = "{% url 'category_order' %}";
 </script>
+<script type="text/javascript" src="{% static 'js/categories/data.js' %}?v={{ JS_VERSION }}"></script>
