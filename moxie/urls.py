@@ -81,5 +81,6 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
+    path('finance', TemplateView.as_view(template_name='finance/index.html'), name='finance'),
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),
 ]
