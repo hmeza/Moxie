@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-29 14:31+0000\n"
+"POT-Creation-Date: 2023-08-31 16:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,22 +42,22 @@ msgstr "Amount"
 msgid "Maximum amount"
 msgstr "Amount"
 
-#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:101
-#: moxie/forms.py:140 moxie/templates/stats/stats.html:7
+#: moxie/filters.py:18 moxie/filters.py:53 moxie/forms.py:110
+#: moxie/forms.py:149 moxie/templates/stats/stats.html:7
 msgid "category"
 msgstr "Category"
 
-#: moxie/filters.py:21 moxie/forms.py:103
+#: moxie/filters.py:21 moxie/forms.py:112
 msgid "tag"
 msgstr "Tag"
 
-#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:104
-#: moxie/forms.py:142
+#: moxie/filters.py:22 moxie/filters.py:57 moxie/forms.py:113
+#: moxie/forms.py:151
 msgid "note"
 msgstr "Note"
 
-#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:106
-#: moxie/forms.py:144 moxie/forms.py:223
+#: moxie/filters.py:24 moxie/filters.py:59 moxie/forms.py:115
+#: moxie/forms.py:153 moxie/forms.py:232
 msgid "date"
 msgstr "Date"
 
@@ -65,174 +65,178 @@ msgstr "Date"
 msgid "filter_submit"
 msgstr ""
 
-#: moxie/forms.py:35 moxie/forms.py:195 moxie/forms.py:270
+#: moxie/forms.py:35 moxie/forms.py:204 moxie/forms.py:279
 #: moxie/templates/index/register.html:17
 msgid "Submit"
 msgstr ""
 
-#: moxie/forms.py:75
+#: moxie/forms.py:64
 msgid "Language"
 msgstr "Idioma"
 
-#: moxie/forms.py:96 moxie/templates/users/index.html:24
+#: moxie/forms.py:84 moxie/templates/users/index.html:45
+msgid "Save"
+msgstr ""
+
+#: moxie/forms.py:105 moxie/templates/users/index.html:25
 msgid "Favourites"
 msgstr "Favorits"
 
-#: moxie/forms.py:105 moxie/forms.py:143
+#: moxie/forms.py:114 moxie/forms.py:152
 msgid "amount"
 msgstr "Amount"
 
-#: moxie/forms.py:107 moxie/forms.py:145
+#: moxie/forms.py:116 moxie/forms.py:154
 msgid "in_sum"
 msgstr ""
 
-#: moxie/forms.py:108
+#: moxie/forms.py:117
 msgid "Favourite"
 msgstr "Favorit"
 
-#: moxie/forms.py:118
+#: moxie/forms.py:127
 msgid "Update expense"
 msgstr "Actualitzar despesa"
 
-#: moxie/forms.py:118 moxie/forms.py:232
+#: moxie/forms.py:127 moxie/forms.py:241
 msgid "Add expense"
 msgstr "Afegir despesa"
 
-#: moxie/forms.py:156
+#: moxie/forms.py:165
 msgid "Add income"
 msgstr "Afegir ingrés"
 
-#: moxie/forms.py:165 moxie/templates/index/index.html:13
+#: moxie/forms.py:174 moxie/templates/index/index.html:13
 msgid "Password"
 msgstr ""
 
-#: moxie/forms.py:166 moxie/forms.py:186
+#: moxie/forms.py:175 moxie/forms.py:195
 msgid "Repeat password"
 msgstr ""
 
-#: moxie/forms.py:174 moxie/forms.py:200
+#: moxie/forms.py:183 moxie/forms.py:209
 msgid "Passwords do not match"
 msgstr ""
 
-#: moxie/forms.py:217 moxie/forms.py:256
+#: moxie/forms.py:226 moxie/forms.py:265
 msgid "Add"
 msgstr ""
 
-#: moxie/forms.py:222
+#: moxie/forms.py:231
 msgid "In sheet currency?"
 msgstr ""
 
-#: moxie/forms.py:244
+#: moxie/forms.py:253
 msgid "User or email"
 msgstr ""
 
-#: moxie/forms.py:245
+#: moxie/forms.py:254
 msgid "Enter address of person with whom you are sharing expenses.&nbsp;"
 msgstr ""
 
-#: moxie/models.py:74
+#: moxie/models.py:72
 #, fuzzy
 #| msgid "expenses_note"
 msgid "Expenses"
 msgstr "Despeses"
 
-#: moxie/models.py:75
+#: moxie/models.py:73
 msgid "Incomes"
 msgstr ""
 
-#: moxie/models.py:76 moxie/models.py:109
+#: moxie/models.py:74 moxie/models.py:107
 msgid "Both"
 msgstr ""
 
-#: moxie/models.py:105
+#: moxie/models.py:103
 #, fuzzy
 #| msgid "expenses_note"
 msgid "Expense"
 msgstr "Despeses"
 
-#: moxie/models.py:107
+#: moxie/models.py:105
 msgid "Income"
 msgstr ""
 
-#: moxie/models.py:128 moxie/models.py:130
+#: moxie/models.py:126 moxie/models.py:128
 #, fuzzy
 #| msgid "category"
 msgid "Root category"
 msgstr "Category"
 
-#: moxie/models.py:137 moxie/models.py:139 moxie/models.py:195
+#: moxie/models.py:135 moxie/models.py:137 moxie/models.py:193
 msgid "Home"
 msgstr ""
 
-#: moxie/models.py:145
+#: moxie/models.py:143
 msgid "Fun"
 msgstr ""
 
-#: moxie/models.py:147
+#: moxie/models.py:145
 msgid "Going out, dinner outside, parties, fun..."
 msgstr ""
 
-#: moxie/models.py:153 moxie/models.py:155
+#: moxie/models.py:151 moxie/models.py:153
 msgid "Technology"
 msgstr ""
 
-#: moxie/models.py:161
+#: moxie/models.py:159
 msgid "Gifts"
 msgstr ""
 
-#: moxie/models.py:163
+#: moxie/models.py:161
 msgid "Christmas, Valentine's day, birthday..."
 msgstr ""
 
-#: moxie/models.py:169
+#: moxie/models.py:167
 msgid "Clothing"
 msgstr ""
 
-#: moxie/models.py:171
+#: moxie/models.py:169
 msgid "Wear and dress"
 msgstr ""
 
-#: moxie/models.py:177 moxie/models.py:347
+#: moxie/models.py:175 moxie/models.py:345
 msgid "Other"
 msgstr ""
 
-#: moxie/models.py:179
+#: moxie/models.py:177
 msgid "Non-classifiable transactions"
 msgstr ""
 
-#: moxie/models.py:187 moxie/models.py:188
+#: moxie/models.py:185 moxie/models.py:186
 msgid "Food"
 msgstr ""
 
-#: moxie/models.py:197
+#: moxie/models.py:195
 msgid "Home food, grocery"
 msgstr ""
 
-#: moxie/models.py:203
+#: moxie/models.py:201
 msgid "Away"
 msgstr ""
 
-#: moxie/models.py:205
+#: moxie/models.py:203
 msgid "Lunch and dinner out"
 msgstr ""
 
-#: moxie/models.py:211
+#: moxie/models.py:209
 msgid "Coffee"
 msgstr ""
 
-#: moxie/models.py:213
+#: moxie/models.py:211
 msgid "Coffee outside, take away, some pastry maybe"
 msgstr ""
 
-#: moxie/models.py:344
+#: moxie/models.py:342
 msgid "Euro"
 msgstr ""
 
-#: moxie/models.py:345
+#: moxie/models.py:343
 msgid "Pounds"
 msgstr ""
 
-#: moxie/models.py:346
+#: moxie/models.py:344
 msgid "US Dollar"
 msgstr ""
 
@@ -561,7 +565,7 @@ msgstr "Actualitzar despesa"
 msgid "Distribution"
 msgstr "Distribució"
 
-#: moxie/templates/stats/index.html:7 moxie/templates/users/index.html:25
+#: moxie/templates/stats/index.html:7 moxie/templates/users/index.html:26
 msgid "Budget"
 msgstr "Pressupost"
 
@@ -595,15 +599,15 @@ msgstr "Mitja d'una compra"
 
 #: moxie/templates/stats/yearly.html:25
 msgid "POSITIVE FLOW"
-msgstr ""
+msgstr "FLUX POSITIU"
 
 #: moxie/templates/stats/yearly.html:31
 msgid "NEGATIVE FLOW"
-msgstr ""
+msgstr "FLUX NEGATIU"
 
-#: moxie/templates/tags/tags.html:8
-msgid "tags_title"
-msgstr ""
+#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:27
+msgid "Tags"
+msgstr "Etiquetes"
 
 #: moxie/templates/tags/tags.html:15
 msgid "When pressing Update, removed tags will be deleted."
@@ -617,25 +621,25 @@ msgstr "Actualitzar"
 msgid "Error: Passwords do not match"
 msgstr "Error: Els passwords no coincideixen"
 
-#: moxie/templates/users/index.html:22
+#: moxie/templates/users/index.html:23
 #, fuzzy
 #| msgid "amount"
 msgid "My account"
 msgstr "Amount"
 
-#: moxie/templates/users/index.html:23
+#: moxie/templates/users/index.html:24
 #, fuzzy
 #| msgid "category"
 msgid "Categories"
 msgstr "Category"
 
-#: moxie/templates/users/index.html:26
-msgid "Tags"
-msgstr ""
-
 #: moxie/templates/users/index.html:32
-msgid "Save"
-msgstr ""
+msgid "Update your profile"
+msgstr "Actualitza les teves dades"
+
+#: moxie/templates/users/index.html:38
+msgid "Change your password"
+msgstr "Canvia la teva contrasenya"
 
 #: moxie/views/incomes.py:88 moxie/views/views.py:159
 msgid "incomes"

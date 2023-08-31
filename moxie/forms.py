@@ -2,7 +2,7 @@ import datetime
 from django.forms import ModelForm, ModelChoiceField, CharField, DateField, \
     ChoiceField, BooleanField, ValidationError, DecimalField
 from django import forms
-from moxie.models import Category, Transaction, User, Favourite, Tag, SharedExpensesSheet,\
+from moxie.models import Category, Transaction, MoxieUser, Favourite, Tag, SharedExpensesSheet,\
     SharedExpensesSheetUsers, SharedExpense
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -61,28 +61,27 @@ class MyAccountForm(ModelForm):
         ('en', 'English')
     )
 
+    language = forms.ChoiceField(label=_("Language"), choices=CHOICES)
+
     class Meta:
-        db_table = 'users'
-        model = User
+        model = MoxieUser
         exclude = ['login', 'created_at', 'updated_at', 'last_login', 'is_active', 'is_staff', 'username',
-                   'is_superuser', 'groups', 'user_permissions', 'date_joined', 'password']
+                   'is_superuser', 'groups', 'user_permissions', 'date_joined', 'password', 'user']
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.helper.form_id = 'id-userForm'
-
+        self.instance = user
         self.helper = FormHelper()
-        self.helper.form_id = 'id-exampleForm'
+        self.helper.form_id = 'users_update_profile'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'submit_survey'
+        self.helper.form_action = reverse_lazy('users_update')
+        if user.moxieuser_resource_file.language:
+            self.fields['language'].initial = user.moxieuser_resource_file.language
 
         self.helper.add_input(Submit('submit', _('Save')))
-        # self.helper.form_action = reverse_lazy('incomes_edit', kwargs={'pk': self.instance.pk}) if self.instance.pk else reverse_lazy('incomes_add')
-
-    # email = CharField(max_length=255, required=False)
 
 
 class TransactionForm(ModelForm):
@@ -176,7 +175,7 @@ class RegisterForm(forms.ModelForm):
     new_password2 = forms.CharField(label=_("Repeat password"), widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = MoxieUser
         fields = ['username', 'password', 'new_password2', 'email']
 
     def clean_new_password2(self):
@@ -187,7 +186,7 @@ class RegisterForm(forms.ModelForm):
 
 class ChangePasswordForm(SetPasswordForm):
     class Meta:
-        model = User
+        model = MoxieUser
         fields = ['new_password1', 'new_password2']
 
 
@@ -196,7 +195,7 @@ class UpdateUserData(forms.ModelForm, SetPasswordForm):
     repeat_password = forms.CharField(label=_("Repeat password"))
 
     class Meta:
-        model = User
+        model = MoxieUser
         fields = ['username', 'password', 'new_password2', 'email']
 
     def __init__(self, *args, **kwargs):

@@ -15,18 +15,19 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+	$('#users_update_profile').find('input[type="submit"]').parent().addClass('text-right');
 });
 </script>
 
 <div class="mt-3 container">
-    <button data-target="#my_account" class="toggable btn btn-primary"><i class="fa fa-user-circle-o"></i> {% trans 'My account' %}</button>
-    <button data-target="#categories_table" class="toggable btn btn-info"><i class="fa fa-clipboard"></i> {% trans 'Categories' %}</button>
+    <button data-target="#my_account" class="toggable btn btn-info"><i class="fa fa-user-circle-o"></i> {% trans 'My account' %}</button>
+    <button data-target="#categories_table" class="toggable btn btn-primary"><i class="fa fa-clipboard"></i> {% trans 'Categories' %}</button>
     <button data-target="#favourites_table" class="toggable btn btn-info"><i class="fa fa-star"></i> {% trans 'Favourites' %}</button>
     <button data-target="#budget_table" class="toggable btn btn-info"><i class="fa fa-calculator"></i> {% trans 'Budget' %}</button>
     <button data-target="#tags_table" class="toggable btn btn-info"><i class="fa fa-tag"></i> {% trans 'Tags' %}</button>
 </div>
 
-<div id="my_account" class="accordion-body form-group mt-3">
+<div id="my_account" class="accordion-body form-group mt-3 collapse">
     <div class="container">
         <div class="h2">{% trans 'Update your profile' %}</div>
     </div>

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.http.response import HttpResponseRedirect
 from moxie.forms import CategoryForm, MyAccountForm, TagsForm
-from moxie.models import Category, Tag, Favourite, Budget, User
+from moxie.models import Category, Tag, Favourite, Budget, MoxieUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 
@@ -12,8 +12,8 @@ from django.db.models import Sum
 class ConfigUserContextData:
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        user = self.request.user
-        context['my_account_form'] = MyAccountForm(user)
+        user = self.request.user  # type: MoxieUser
+        context['my_account_form'] = MyAccountForm(user, instance=user)
         context['change_password_form'] = PasswordChangeForm(user)
         if 'category' in self.request.path:
             instance = Category.objects.get(pk=self.kwargs.get('pk'))
@@ -51,8 +51,28 @@ class UserConfigurationView(LoginRequiredMixin, ConfigUserContextData, ListView)
 
 
 class UserUpdateView(UpdateView):
-    model = User
+    model = MoxieUser
     success_url = reverse_lazy('users')
+
+    def get_form_class(self):
+        return MyAccountForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if not self.request.user.moxieuser_resource_file:
+            moxie_user = MoxieUser(user=self.request.user)
+            moxie_user.save()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        instance = form.save()
+        instance.moxieuser_resource_file.language = form.cleaned_data.get('language')
+        instance.moxieuser_resource_file.save()
+        return super().form_valid(form)
 
 
 def user_password_change(request):

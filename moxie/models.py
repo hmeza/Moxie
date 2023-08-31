@@ -1,10 +1,8 @@
 from django.db import models, transaction
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User as DjangoUser
 from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, Abs
 from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg
 import datetime
-
-
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
@@ -42,15 +40,17 @@ from django.utils import timezone
 #         return self.create_user(email, password, **extra_fields)
 
 
-# class User(AbstractUser):
-#     id = models.IntegerField(primary_key=True, auto_created=True)
+class MoxieUser(DjangoUser):
+    user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, null=True, related_name='%(class)s_resource_file')
+    language = models.CharField(max_length=2, null=False, blank=False, default='es')
+
+    #
+    # class Meta:
+    #     db_table = 'auth_user'
+
 #     username = models.CharField(max_length=12, null=False, blank=False, default='', unique=True)
-#     password = models.CharField(max_length=50, null=False, blank=False, default='')
-#     email = models.CharField(max_length=255, null=False, blank=False, default='')
-#     language = models.CharField(max_length=2, null=False, blank=False, default='es')
 #     created_at = models.DateTimeField(auto_now_add=True)
 #     updated_at = models.DateTimeField(auto_now=True)
-#     last_login = models.DateTimeField(auto_now_add=True)
 #     is_superuser = models.BooleanField(default=False)
 #
 #     def __str__(self):
@@ -61,8 +61,6 @@ from django.utils import timezone
 #
 #     objects = CustomUserManager()
 #
-#     class Meta:
-#         db_table = 'auth_user'
 
 
 class Category(models.Model):
@@ -76,7 +74,7 @@ class Category(models.Model):
         (BOTH, _('Both'))
     )
 
-    user = models.ForeignKey(User, blank=False, null=True, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(DjangoUser, blank=False, null=True, on_delete=models.CASCADE, default=None)
     parent = models.ForeignKey(
         "self", db_column='parent', blank=True, null=True, related_name='subcategories', on_delete=models.PROTECT,
         default=None
@@ -219,7 +217,7 @@ class Category(models.Model):
 
 
 class Budget(models.Model):
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='budgets')
+    user = models.ForeignKey(DjangoUser, blank=False, null=False, on_delete=models.PROTECT, related_name='budgets')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     amount = models.FloatField(default=0)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -347,7 +345,7 @@ class SharedExpensesSheet(models.Model):
         (OTHER, _('Other'))
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
+    user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, related_name='shared_expenses_sheets')
     name = models.CharField(max_length=255, default='')
     unique_id = models.CharField(max_length=64)  # TODO change to UUIDField
     closed_at = models.DateTimeField(default=None, null=True, blank=True)
@@ -434,7 +432,7 @@ class SharedExpensesSheet(models.Model):
 
 class SharedExpensesSheetUsers(models.Model):
     sheet = models.ForeignKey(SharedExpensesSheet, on_delete=models.CASCADE, related_name='users')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='related_shared_expenses_sheets')
+    user = models.ForeignKey(DjangoUser, on_delete=models.CASCADE, related_name='related_shared_expenses_sheets')
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -478,7 +476,7 @@ class SharedExpense(models.Model):
 class Transaction(models.Model):
     YEARS_FOR_YEARLY_STATS = 4
 
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.PROTECT, related_name='transactions')
+    user = models.ForeignKey(DjangoUser, blank=False, null=False, on_delete=models.PROTECT, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, blank=False, null=False, db_column='category')
     note = models.CharField(max_length=255)
@@ -645,7 +643,7 @@ class Tag(models.Model):
     transaction_tags = None
     existing_tags = None
 
-    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(DjangoUser, blank=False, null=False, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
