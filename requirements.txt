@@ -7,3 +7,5 @@ python-dateutil
 #PyMySQL
 django-simple-captcha
 Pillow<=9.5.0
+python-dotenv
+# tagulous
