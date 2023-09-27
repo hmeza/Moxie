@@ -9,7 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=Europe/Madrid
-COPY requirements.txt requirements.txt
+COPY . .
 
 RUN python -m pip install -r requirements.txt
 
