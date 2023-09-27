@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-31 16:22+0000\n"
+"POT-Creation-Date: 2023-09-27 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr "Enviar"
 msgid "Language"
 msgstr "Idioma"
 
-#: moxie/forms.py:84 moxie/templates/users/index.html:45
+#: moxie/forms.py:84 moxie/templates/users/profile.html:18
 msgid "Save"
 msgstr ""
 
@@ -114,7 +114,8 @@ msgstr "Repite la contraseña"
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: moxie/forms.py:226 moxie/forms.py:265
+#: moxie/forms.py:226 moxie/forms.py:265 moxie/templates/finance/index.html:11
+#: moxie/templates/finance/index.html:114
 msgid "Add"
 msgstr "Añadir"
 
@@ -230,15 +231,15 @@ msgstr "Libras"
 msgid "US Dollar"
 msgstr "Dólares"
 
-#: moxie/settings.py:156
+#: moxie/settings.py:159
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:157
+#: moxie/settings.py:160
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:158
+#: moxie/settings.py:161
 msgid "Català"
 msgstr ""
 
@@ -357,41 +358,40 @@ msgstr "Gasto mensual"
 msgid "expenses_by_months"
 msgstr "Mensual"
 
-#: moxie/templates/finance/index.html:12 moxie/templates/finance/index.html:111
-msgid "finance_add_row"
-msgstr "Añadir"
+#: moxie/templates/finance/index.html:74
+msgid "Deposit calculator"
+msgstr ""
 
-#: moxie/templates/finance/index.html:71
-msgid "finance_title"
-msgstr "Calculadora de depósitos"
+#: moxie/templates/finance/index.html:79
+msgid "Compare"
+msgstr ""
 
-#: moxie/templates/finance/index.html:76
-msgid "finance_compare"
-msgstr "Comparar"
+#: moxie/templates/finance/index.html:86
+msgid "Name (optional)"
+msgstr ""
 
-#: moxie/templates/finance/index.html:83
-msgid "finance_name"
-msgstr "Nombre (opcional)"
+#: moxie/templates/finance/index.html:90
+#, fuzzy
+#| msgid "Minimum amount"
+msgid "Saving amount"
+msgstr "Importe mínimo"
 
-#: moxie/templates/finance/index.html:87
-msgid "finance_amount"
-msgstr "Dinero a depositar"
+#: moxie/templates/finance/index.html:94
+#, python-format
+msgid "Interest (%%)"
+msgstr ""
 
-#: moxie/templates/finance/index.html:91
-msgid "finance_interest"
-msgstr "Inter&eacute;s (%)"
+#: moxie/templates/finance/index.html:98
+msgid "Period (months)"
+msgstr ""
 
-#: moxie/templates/finance/index.html:95
-msgid "finance_period"
-msgstr "Meses"
+#: moxie/templates/finance/index.html:102
+msgid "Revenue"
+msgstr ""
 
-#: moxie/templates/finance/index.html:99
-msgid "finance_revenue"
-msgstr "Intereses"
-
-#: moxie/templates/finance/index.html:103
-msgid "finance_total"
-msgstr "Total"
+#: moxie/templates/finance/index.html:106 moxie/templates/stats/stats.html:8
+msgid "Total"
+msgstr "Total final"
 
 #: moxie/templates/header.html:16
 msgid "logout"
@@ -442,16 +442,17 @@ msgstr ""
 "target='blank'>Apache</a><br><br>Moxie está hospedado en:<br><a "
 "href='https://www.ovh.com/' target='blank'>OVH</a><br><br>\n"
 
-#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:12
-#: moxie/templates/index/index.html:14
-msgid "Login"
-msgstr "Entrar"
+#: moxie/templates/index/index.html:9
+msgid "Log in"
+msgstr "Acceder"
 
-#: moxie/templates/index/index.html:23
-#, fuzzy
-#| msgid "users"
-msgid "New user"
-msgstr "Configuración"
+#: moxie/templates/index/index.html:12 moxie/templates/index/index.html:14
+msgid "Login"
+msgstr "Usuario"
+
+#: moxie/templates/index/index.html:23 moxie/templates/index/register.html:9
+msgid "Register"
+msgstr "Registrarse"
 
 #: moxie/templates/index/index.html:24
 msgid "Forgot password?"
@@ -469,10 +470,6 @@ msgstr ""
 #: moxie/templates/index/password_reset_confirm.html:11
 msgid "Please enter your new password."
 msgstr "Introduce tu contraseña"
-
-#: moxie/templates/index/register.html:9
-msgid "Register"
-msgstr ""
 
 #: moxie/templates/index/user_registered.html:4
 msgid "registration_ok"
@@ -570,10 +567,6 @@ msgstr "Tendencias"
 msgid "Stats"
 msgstr "Estadísticas"
 
-#: moxie/templates/stats/stats.html:8
-msgid "Total"
-msgstr "Total final"
-
 #: moxie/templates/stats/stats.html:9
 msgid "Total this year"
 msgstr "Total este año"
@@ -618,11 +611,11 @@ msgstr "Mi cuenta"
 msgid "Categories"
 msgstr "Categorías"
 
-#: moxie/templates/users/index.html:32
+#: moxie/templates/users/profile.html:5
 msgid "Update your profile"
 msgstr "Actualiza tus datos"
 
-#: moxie/templates/users/index.html:38
+#: moxie/templates/users/profile.html:11
 msgid "Change your password"
 msgstr "Cambia tu contraseña"
 
@@ -724,6 +717,37 @@ msgstr "TOTAL GASTOS"
 #: moxie/views/stats.py:118
 msgid "TOTAL INCOMES"
 msgstr "TOTAL INGRESOS"
+
+#~ msgid "finance_add_row"
+#~ msgstr "Añadir"
+
+#~ msgid "finance_title"
+#~ msgstr "Calculadora de depósitos"
+
+#~ msgid "finance_compare"
+#~ msgstr "Comparar"
+
+#~ msgid "finance_name"
+#~ msgstr "Nombre (opcional)"
+
+#~ msgid "finance_amount"
+#~ msgstr "Dinero a depositar"
+
+#~ msgid "finance_interest"
+#~ msgstr "Inter&eacute;s (%)"
+
+#~ msgid "finance_period"
+#~ msgstr "Meses"
+
+#~ msgid "finance_revenue"
+#~ msgstr "Intereses"
+
+#~ msgid "finance_total"
+#~ msgstr "Total"
+
+#~| msgid "users"
+#~ msgid "New user"
+#~ msgstr "Nuevo usuario"
 
 #~ msgid "tags_title"
 #~ msgstr "Tags"

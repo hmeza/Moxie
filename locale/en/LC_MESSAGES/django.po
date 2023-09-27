@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-31 16:22+0000\n"
+"POT-Creation-Date: 2023-09-27 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: moxie/forms.py:84 moxie/templates/users/index.html:45
+#: moxie/forms.py:84 moxie/templates/users/profile.html:18
 msgid "Save"
 msgstr ""
 
@@ -118,7 +118,8 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: moxie/forms.py:226 moxie/forms.py:265
+#: moxie/forms.py:226 moxie/forms.py:265 moxie/templates/finance/index.html:11
+#: moxie/templates/finance/index.html:114
 msgid "Add"
 msgstr ""
 
@@ -238,15 +239,15 @@ msgstr ""
 msgid "US Dollar"
 msgstr ""
 
-#: moxie/settings.py:156
+#: moxie/settings.py:159
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:157
+#: moxie/settings.py:160
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:158
+#: moxie/settings.py:161
 msgid "Català"
 msgstr ""
 
@@ -356,40 +357,37 @@ msgstr "Monthly expense"
 msgid "expenses_by_months"
 msgstr "Monthly"
 
-#: moxie/templates/finance/index.html:12 moxie/templates/finance/index.html:111
-msgid "finance_add_row"
+#: moxie/templates/finance/index.html:74
+msgid "Deposit calculator"
 msgstr ""
 
-#: moxie/templates/finance/index.html:71
-msgid "finance_title"
+#: moxie/templates/finance/index.html:79
+msgid "Compare"
 msgstr ""
 
-#: moxie/templates/finance/index.html:76
-msgid "finance_compare"
+#: moxie/templates/finance/index.html:86
+msgid "Name (optional)"
 msgstr ""
 
-#: moxie/templates/finance/index.html:83
-msgid "finance_name"
+#: moxie/templates/finance/index.html:90
+msgid "Saving amount"
 msgstr ""
 
-#: moxie/templates/finance/index.html:87
-msgid "finance_amount"
+#: moxie/templates/finance/index.html:94
+#, python-format
+msgid "Interest (%%)"
 msgstr ""
 
-#: moxie/templates/finance/index.html:91
-msgid "finance_interest"
+#: moxie/templates/finance/index.html:98
+msgid "Period (months)"
 msgstr ""
 
-#: moxie/templates/finance/index.html:95
-msgid "finance_period"
+#: moxie/templates/finance/index.html:102
+msgid "Revenue"
 msgstr ""
 
-#: moxie/templates/finance/index.html:99
-msgid "finance_revenue"
-msgstr ""
-
-#: moxie/templates/finance/index.html:103
-msgid "finance_total"
+#: moxie/templates/finance/index.html:106 moxie/templates/stats/stats.html:8
+msgid "Total"
 msgstr ""
 
 #: moxie/templates/header.html:16
@@ -432,13 +430,16 @@ msgid ""
 "<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
 msgstr ""
 
-#: moxie/templates/index/index.html:9 moxie/templates/index/index.html:12
-#: moxie/templates/index/index.html:14
+#: moxie/templates/index/index.html:9
+msgid "Log in"
+msgstr ""
+
+#: moxie/templates/index/index.html:12 moxie/templates/index/index.html:14
 msgid "Login"
 msgstr ""
 
-#: moxie/templates/index/index.html:23
-msgid "New user"
+#: moxie/templates/index/index.html:23 moxie/templates/index/register.html:9
+msgid "Register"
 msgstr ""
 
 #: moxie/templates/index/index.html:24
@@ -456,10 +457,6 @@ msgstr ""
 
 #: moxie/templates/index/password_reset_confirm.html:11
 msgid "Please enter your new password."
-msgstr ""
-
-#: moxie/templates/index/register.html:9
-msgid "Register"
 msgstr ""
 
 #: moxie/templates/index/user_registered.html:4
@@ -560,10 +557,6 @@ msgstr ""
 msgid "Stats"
 msgstr ""
 
-#: moxie/templates/stats/stats.html:8
-msgid "Total"
-msgstr ""
-
 #: moxie/templates/stats/stats.html:9
 msgid "Total this year"
 msgstr ""
@@ -610,11 +603,11 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: moxie/templates/users/index.html:32
+#: moxie/templates/users/profile.html:5
 msgid "Update your profile"
 msgstr ""
 
-#: moxie/templates/users/index.html:38
+#: moxie/templates/users/profile.html:11
 msgid "Change your password"
 msgstr ""
 
