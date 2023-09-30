@@ -1,14 +1,14 @@
 import datetime
 import calendar
 import re
+import csv
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
-from django.utils.translation import gettext_lazy as _
-from django.http.response import HttpResponseForbidden, HttpResponseRedirect
+from django.http.response import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from moxie.forms import CategoryForm, CategoryUpdateForm, ExpensesForm
+from moxie.forms import CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
@@ -28,34 +28,11 @@ class UserOwnerMixin(object):
         return super(UserOwnerMixin, self).dispatch(request, *args, **kwargs)
 
 
-class CreateCategory(LoginRequiredMixin, CreateView):
-    form_class = CategoryForm
-
-
 class UpdateCategory(LoginRequiredMixin, UpdateView, UserOwnerMixin):
     form_class = CategoryUpdateForm
-    success_url = reverse_lazy('')
+    success_url = reverse_lazy('users')
 
 
-class DeleteCategory(LoginRequiredMixin, DeleteView, UserOwnerMixin):
-    ...
-
-
-#     public function deleteAction() {
-#         // TODO: check if category has expenses or incomes
-#         // if so, assign it before deleting
-#         // delete category
-#         $i_id = $this->getRequest()->getParam('id');
-#         try {
-#             // delete children categories
-#             $this->categories->delete('parent = '.$i_id);
-#             $this->categories->delete('id = '.$i_id);
-#         }
-#         catch (Exception $e) {
-#             error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
-#         }
-#         $this->_helper->redirector('index','categories');
-#     }
 #
 #     public function orderAction() {
 #         try {
@@ -148,6 +125,12 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
     model = Transaction
     template_name = 'expenses/index.html'
 
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        if request.DATA.get('to_excel'):
+            return self.download_csv(request)
+        return response
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -156,11 +139,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
         context['edit_slug'] = '/expenses/'
         context['date_get'] = ''
-        _('incomes')
-        _('expenses')
-        _('stats')
-        _('sheets')
-        _('users')
         context['tags'] = Tag.get_tags(user)
         context['used_tag_list'] = Tag.get_used_tags(user)
         context['form'] = ExpensesForm(user)
@@ -207,6 +185,31 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
             .values('date__month', 'total_in_month', 'total_out_month')\
             .order_by('date__month')
         return queryset
+
+    def download_csv(self, request, queryset):
+        model = queryset.model
+        model_fields = model._meta.fields + model._meta.many_to_many
+        field_names = [field.name for field in model_fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="export.csv"'
+
+        writer = csv.writer(response, delimiter=";")
+        writer.writerow(field_names)
+        for row in queryset:
+            values = []
+            for field in field_names:
+                value = getattr(row, field)
+                if callable(value):
+                    try:
+                        value = value() or ''
+                    except:
+                        value = 'Error retrieving value'
+                if value is None:
+                    value = ''
+                values.append(value)
+            writer.writerow(values)
+        return response
 
     # todo export to excel
     # todo check if order and order by works properly

@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from captcha.fields import CaptchaField
 from moxie.templatetags.currency import currency_symbol
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from crispy_forms.layout import Button
 
 
 class CategoryForm(ModelForm):
@@ -30,9 +31,14 @@ class CategoryForm(ModelForm):
         self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
         self.helper.form_method = 'post'
-        url = reverse_lazy('category_edit', kwargs={'pk': self.instance.pk}) if self.instance and self.instance.pk else reverse_lazy('category_view')
+        url = reverse_lazy('category_edit', kwargs={'pk': self.instance.pk}) if self.instance and self.instance.pk else reverse_lazy('category_add')
         self.helper.form_action = url
         self.helper.add_input(Submit('submit', _('Submit')))
+        if self.instance and self.instance.pk:
+            del_url = reverse_lazy('category_delete', kwargs={'pk': self.instance.pk})
+            self.helper.add_input(
+                Button('delete', 'Delete', onclick='window.location.href="{}"'.format(del_url), css_class='btn btn-danger float-right')
+            )
 
         self.fields['type'].widget.attrs.update({'class': 'form-control'})
 

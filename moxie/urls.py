@@ -20,9 +20,11 @@ from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, Expense
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView, user_password_change, UserUpdateView
-from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, SharedExpenseView, SheetCopyView
+from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, \
+    SharedExpenseView, SheetCopyView
 from moxie.views.tags import TagView
-from moxie.views.categories import CategoryView, categories_bulk_update, CategoryBudgetView
+from moxie.views.categories import CategoryView, categories_bulk_update, CategoryBudgetView, CategoryAddView, \
+    CategoryDeleteView
 from moxie.views.stats import StatsView
 from django.views.generic import TemplateView
 from . import converters
@@ -61,7 +63,9 @@ urlpatterns = [
     path('tag', TagView.as_view(), name='tags'),
     path('category/order/', categories_bulk_update, name='category_order'),
     path('category/<int:pk>/budget/', CategoryBudgetView.as_view(), name='category_budget_edit'),
+    path('category/<int:pk>/delete/', CategoryDeleteView.as_view(), name='category_delete'),
     path('category/<int:pk>/', CategoryView.as_view(), name='category_edit'),
+    path('category/add/', CategoryAddView.as_view(), name='category_add'),
     path('category/', CategoryView.as_view(), name='category_view'),
 
     path('sheets/add/', SheetCreateView.as_view(), name='sheet_add'),
