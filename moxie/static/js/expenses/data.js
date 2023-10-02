@@ -6,8 +6,13 @@ let filter = function () {
 };
 
 const export_to_excel = function () {
-    $('#search_form').find('[name=to_excel]').val(true);
-    $('#search_submit').click();
+    let searchForm = $('#search_form');
+    searchForm
+        .find('form')
+        .first()
+        .append("<input type='hidden' name='to_excel' id='to_excel' value='true'>")
+    $('#submit-id-filter').click();
+    searchForm.find('#to_excel').remove();
 };
 
 function set_tags(row) {

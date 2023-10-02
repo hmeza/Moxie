@@ -3,17 +3,19 @@ from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from moxie.models import Transaction, Category
-from django.forms import Select
+from django.forms import Select, BooleanField
+from django.forms.widgets import HiddenInput
 
 
 class ExpensesFilter(django_filters.FilterSet):
     class SubmitLightBlue(Submit):
         def __init__(self, *args, **kwargs):
+            kwargs['css_id'] = 'submit-id-filter'
             super().__init__(*args, **kwargs)
             self.field_classes = 'btn btn-info'
 
-    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'))
-    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'))
+    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'), lookup_expr="lte")
+    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'), lookup_expr="gte")
     category = django_filters.ModelChoiceFilter(
         field_name='category', label=_('category'), queryset=Category.objects.none(),
         widget=Select(attrs={'class': 'select form-control'})
@@ -24,6 +26,7 @@ class ExpensesFilter(django_filters.FilterSet):
         field_name='date', label=_('date'),
         widget=django_filters.widgets.RangeWidget(attrs={'type': 'date'})
     )
+    to_excel = BooleanField(widget=HiddenInput())
 
     class Meta:
         model = Transaction

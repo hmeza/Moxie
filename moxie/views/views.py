@@ -7,14 +7,14 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
 from django.http.response import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.utils.translation import gettext_lazy as _
 from moxie.forms import CategoryUpdateForm, ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite
+from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite, Category
 
 
 class UserOwnerMixin(object):
@@ -58,13 +58,9 @@ class TransactionListView(FilterView, ListView):
     filterset_class = ExpensesFilter
 
     def get_queryset(self):
-        start_date, end_date = self.__get_start_and_end_date()
         order_field = self.__get_order_field()
-
         queryset = super().get_queryset()
-        queryset = queryset.filter(user=self.request.user)\
-            .filter(amount__lt=0, date__lt=end_date, date__gte=start_date)\
-            .order_by(order_field)
+        queryset = queryset.filter(user=self.request.user, amount__lt=0).order_by(order_field)
 
         return queryset
 
@@ -77,16 +73,22 @@ class TransactionListView(FilterView, ListView):
         end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
         return start_date, end_date
 
-    def __get_start_and_end_date(self):
+    def _get_start_and_end_date(self, q):
+        start_date, end_date = q.get('date_min'), q.get('date_max')
+
+        if hasattr(self, "instance"):
+            instance = self.instance if self.instance else self.get_object()
+            return self.__get_start_and_end_date_using_date_object(instance.date)
+        elif start_date and end_date:
+            return start_date, end_date
+
         (year, month) = self._get_active_year_and_month()
         if year and month:
             start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
             end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
-        elif self.object:
-            start_date, end_date = self.__get_start_and_end_date_using_date_object(self.object.date)
+            return start_date, end_date
         else:
-            start_date, end_date = self.__get_start_and_end_date_using_date_object(datetime.date.today())
-        return start_date, end_date
+            return self.__get_start_and_end_date_using_date_object(datetime.date.today())
 
     def _get_active_year_and_month(self):
         url = self.request.path
@@ -127,14 +129,30 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
-        if request.DATA.get('to_excel'):
+        if request.GET.get('to_excel'):
             return self.download_csv(request)
         return response
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        from django.http import QueryDict
+        q = QueryDict('', mutable=True)
+        if kwargs['data']:
+            q.update(kwargs['data'])
+        date_min, date_max = self._get_start_and_end_date(q)
+        q['date_min'] = date_min
+        q['date_max'] = date_max
+        if kwargs['data'] and kwargs['data'].get('amount__gte'):
+            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+        if kwargs['data'] and kwargs['data'].get('amount__lte'):
+            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
+        kwargs['data'] = q
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        queryset = self.get_queryset()
+        queryset = self.object_list
         context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
         context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
         context['edit_slug'] = '/expenses/'
@@ -186,7 +204,8 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
             .order_by('date__month')
         return queryset
 
-    def download_csv(self, request, queryset):
+    def download_csv(self, request):
+        queryset = self.filterset.queryset
         model = queryset.model
         model_fields = model._meta.fields + model._meta.many_to_many
         field_names = [field.name for field in model_fields]
@@ -194,24 +213,30 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
 
+        print(queryset.query)
+
         writer = csv.writer(response, delimiter=";")
-        writer.writerow(field_names)
-        for row in queryset:
+        writer.writerow([_(field.name) for field in model_fields])
+        for row in self.object_list:
             values = []
             for field in field_names:
-                value = getattr(row, field)
-                if callable(value):
-                    try:
-                        value = value() or ''
-                    except:
-                        value = 'Error retrieving value'
-                if value is None:
-                    value = ''
-                values.append(value)
+                try:
+                    value = getattr(row, str(field))
+                    if callable(value):
+                        try:
+                            value = value() or ''
+                        except:
+                            value = 'Error retrieving value'
+                    if value is None:
+                        value = ''
+                    values.append(value)
+                except (Transaction.DoesNotExist, Category.DoesNotExist) as e:
+                    # todo use logger
+                    # print(e)
+                    ...
             writer.writerow(values)
         return response
 
-    # todo export to excel
     # todo check if order and order by works properly
     # todo check if results are correct
     # todo check this st_expense needed in the frontend
@@ -280,11 +305,26 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
     template_name = 'expenses/index.html'
 
     def get_object(self, queryset=None):
-        return Transaction.objects.get(pk=self.kwargs.get('pk'))
+        if hasattr(self, 'instance'):
+            return self.instance
+        self.instance = Transaction.objects.get(pk=self.kwargs.get('pk'))
+        return self.instance
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        from django.http import QueryDict
+        q = QueryDict('', mutable=True)
+        if kwargs['data']:
+            q.update(kwargs['data'])
+        date_min, date_max = self._get_start_and_end_date(q)
+        q['date_min'] = date_min
+        q['date_max'] = date_max
+        kwargs['data'] = q
         return kwargs
 
     def form_valid(self, form):
