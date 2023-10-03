@@ -9,8 +9,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=Europe/Madrid
+
+RUN apt-get update -y && apt-get install -y python3-pymysql
+
 COPY requirements.txt requirements.txt
 
 RUN python -m pip install -r requirements.txt
+
+RUN python -m pip install PyMySQL
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
