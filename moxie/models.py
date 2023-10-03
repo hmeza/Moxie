@@ -575,9 +575,10 @@ class Transaction(models.Model):
         return {c['category']: {'sum': c['category_sum'], 'avg': c['category_avg']} for c in queryset}
 
     @staticmethod
-    def get_category_amounts(user, filter_date, get_params):
-        month = get_params.get('month', filter_date.month)
-        year = get_params.get('year', filter_date.year)
+    def get_category_amounts(user, filter_date, get_params, year=None, month=None):
+        if not year or not month:
+            month = get_params.get('month', filter_date.month)
+            year = get_params.get('year', filter_date.year)
         return Transaction.objects.filter(user=user, amount__lt=0, date__month=month, date__year=year) \
             .values('category__name').order_by('category__name') \
             .annotate(total=Cast(Abs(Sum('amount')), FloatField()))

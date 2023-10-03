@@ -159,7 +159,8 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['tags'] = Tag.get_tags(user)
         context['used_tag_list'] = Tag.get_used_tags(user)
         context['form'] = ExpensesForm(user)
-        category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET)
+        year, month = self._get_active_year_and_month()
+        category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
         context['category_amounts'] = category_amounts
         context['pie_data'] = [list(a.values()) for a in category_amounts]
         month_expenses = [list(a.values()) for a in self.__get_monthly_amounts(queryset)]
@@ -168,7 +169,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
             month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
             month_expenses_list.append([month_name, expense[1], expense[2]])
         context['month_expenses'] = month_expenses_list
-        year, month = self._get_active_year_and_month()
         budget = Budget.get_budget_for_month(user, year, month)
         context['budget'] = budget
         context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
