@@ -15,7 +15,7 @@ from crispy_forms.layout import Button
 
 
 class CategoryForm(ModelForm):
-    parent = forms.ModelChoiceField(queryset=Category.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
+    parent = forms.ModelChoiceField(label=_('Parent'), queryset=Category.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Category
