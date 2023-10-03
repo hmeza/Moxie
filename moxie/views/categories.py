@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.http.response import JsonResponse, HttpResponseRedirect
 from moxie.models import Category, Budget
 from moxie.views.users import ConfigUserContextData
-from moxie.views.views import UserOwnerMixin
+from moxie.views.expenses import UserOwnerMixin
 
 
 class CategoryView(LoginRequiredMixin, ConfigUserContextData, UpdateView, ListView):

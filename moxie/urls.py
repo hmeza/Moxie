@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, register_converter, include
 from moxie.views.login import login_view, logout_view, RegisterView, password_change, password_reset_confirm
-from moxie.views.views import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
+from moxie.views.expenses import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
 from moxie.views.budgets import BudgetView, BudgetDeleteView
 from moxie.views.users import UserConfigurationView, user_password_change, UserUpdateView

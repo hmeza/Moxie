@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, DeleteView
 from django.urls import reverse_lazy
-from moxie.views.views import UserOwnerMixin
+from moxie.views.expenses import UserOwnerMixin
 from moxie.models import Budget
 
 
