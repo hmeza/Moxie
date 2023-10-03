@@ -77,8 +77,7 @@ class TransactionListView(FilterView, ListView):
         start_date, end_date = q.get('date_min'), q.get('date_max')
 
         if hasattr(self, "instance"):
-            instance = self.instance if self.instance else self.get_object()
-            return self.__get_start_and_end_date_using_date_object(instance.date)
+            return self.__get_start_and_end_date_using_date_object(self.instance.date)
         elif start_date and end_date:
             return start_date, end_date
 
