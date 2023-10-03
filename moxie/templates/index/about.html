@@ -1,8 +1,26 @@
+{% extends 'base.html' %}
 {% load i18n %}
-<?php
-echo $this->message;
-?>
 
+{% block content %}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-12">
+{% blocktrans %}
+Moxie is helped, through licenses, from:<br>
+<a href="https://www.jetbrains.com/phpstorm/">JetBrains</a><br><br>
+Moxie uses:<br>
+<a href="http://www.php.net" target="blank">PHP</a><br>
+<a href="http://www.zend.com/" target="blank">Zend framework</a><br>
+<a href="https://developers.google.com/chart/" target="blank">Google charts</a><br>
+<a href="https://www.mysql.com/">MySQL</a><br>
+<a href="https://httpd.apache.org/">Apache</a><br><br>
+Moxie is hosted at:<br>
+<a href="https://www.ovh.com/" target="blank">OVH</a><br><br>
+{% endblocktrans %}
+        </div>
+    </div>
+</div>
 <!-- Follow me on Twitter -->
 <!-- Last tweet -->
 <div align="center">
@@ -10,4 +28,4 @@ echo $this->message;
 <a class="twitter-timeline" href="https://twitter.com/___moxie___" data-widget-id="353844563590393856">Tweets por @___moxie___</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </div>
-<br><br><br>
+{% endblock %}

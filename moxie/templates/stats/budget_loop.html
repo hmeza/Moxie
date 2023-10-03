@@ -1,0 +1,28 @@
+{% load mathfilters %}
+{% for transaction in transactions %}
+    {% if transaction.link %}
+        {% if forloop.counter == 1 %}
+        <td class="text-left">
+            <a href="{{ transaction.link }}">{{ transaction.title }}</a>
+        </td>
+        {% else %}
+        <td>
+            <a href="{{ transaction.link }}">{{ transaction.title|abs|floatformat:2 }} €</a>
+        </td>
+        {% endif %}
+    {% else %}
+        {% if forloop.counter == 1 %}
+        <th class="text-left">
+            {{ transaction.title }}
+        </th>
+        {% else %}
+        <th>
+            {% if transaction.title < 0 and use_red_for_negative %}
+                <span class="text-danger">{{ transaction.title|floatformat:2 }} €</span>
+            {% else %}
+                <span>{{ transaction.title|abs|floatformat:2 }} €</span>
+            {% endif %}
+        </th>
+        {% endif %}
+    {% endif %}
+{% endfor %}

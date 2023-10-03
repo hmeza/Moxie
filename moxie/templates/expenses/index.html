@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 {% block content %}
 <head>
-<script type="text/javascript" language="text/javascript">
-	var year = {% now 'Y' %}
-	var month = {% now 'm' %}
+<script type="text/javascript">
+	let year = {% now 'Y' %};
+	let month = {% now 'm' %};
 </script>
 </head>
 
-<a name="top">
+<a>
 <div class="moxie-submenu">
 <div><a href="#data">{% trans 'Go to expenses' %}</a></div>
 <div><a href="#stats">{% trans 'Go to stats' %}</a></div>
 </div>
 </a>
 
-
-<div class="moxie-container">
+<div class="moxie-container mt-3">
 <div class="moxie-left">
 <a id="data"></a>
 {% include 'expenses/data_header.html' %}

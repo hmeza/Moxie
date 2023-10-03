@@ -7,16 +7,28 @@ $(document).ready(function() {
     });
 });
 
-function store(trigger_id) {
-    category = $("#category" + trigger_id).val();
-    amount = $("#amount" + trigger_id);
+function store(triggerId) {
+    let category = $("#category" + triggerId).val();
+    let amount = $("#amount" + triggerId).val();
+    let url = categoryBudgetUrl.replace("1", category);
     $.ajax({
-        url: moxie_url+"/budgets/add/category/" + category + "/amount/" + amount.val()
-    });
+        method: 'POST',
+        headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
+        url: url,
+        data: {
+            'amount': amount
+        },
+        success: function() {
+            $('#budget_message').html(successUpdatingBudget);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $('#budget_message').html(errorUpdatingBudget);
+        }
+    })
 }
 
 function getSum(trigger_id) {
-    var sum = 0;
+    let sum = 0;
     $('[id^=amount]').each(function() {
         sum += parseFloat(this.value);
     });
@@ -30,7 +42,6 @@ function snapshot() {
         type: 'GET',
         data: '',
         success: function(data) {
-            // show OK message
             $('#message').html(message);
         }}
     );

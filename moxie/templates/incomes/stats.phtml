@@ -1,9 +1,0 @@
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-	var barChartData = <?php echo $this->graphData; ?>;
-	var barTitle = "<?php echo $this->graphDataLabel; ?>";
-	var barYearLabel = "<?php echo $this->graphDataLabelYear; ?>";
-</script>
-<script type="text/javascript" src="/js/incomes/stats.js?v=7.4"></script>
-<div id="incomes_all"></div>
-<?php $this->getHelper('Web')->printToTop(); ?>

@@ -11,8 +11,9 @@
             <i class="glyphicon glyphicon-chevron-down center-block" style="height: 1.6rem; padding: 0px"></i>
         </div>
         <span id="search_form" class="search_button_mobile accordion-body {% if is_search %}d-block{% endif %}">
-            {{ filter.form|crispy }}
-            <input type="submit">
+        <form method="GET" action="{% url filter_url_name %}">
+            {% crispy filter.form %}
+        </form>
         </span>
     </div>
 </div>

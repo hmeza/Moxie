@@ -1,36 +1,23 @@
 {% load i18n %}
-<!-- web menu -->
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-	<div class="container">
-        <div class="navbar-header">
-            <span class="moxietitle">Moxi€</span>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="moxietitle text-decoration-none" href="{% url 'index' %}">Moxi€</a>
+  <button class="navbar-toggler aqua-gradient" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav navbar-left">
-
-{% if user.is_authenticated %}
-    {% for url in urls  %}
-		<li role="presentation {% if url in request.url %}active{% endif %}"><a href="/{{ url }}">{% trans url %}</a></li>
-    {% endfor %}
-	<li role="presentation"><a href="'.$settingsUrl.'/login/logout">{% trans 'logout' %}</a></li>
-{% else %}
-
-	<li role="presentation"><a href="/">{% trans 'index' %}</a></li>
-	<!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
-	<li role="presentation"><a href="/index/about">{% trans 'about' %}</a></li>
-{% endif %}
-			</ul>
-            <!--<ul class="nav navbar-nav nav-pills navbar-right">
-                <li><a class="btn btn-social-icon btn-facebook" href="https://www.facebook.com/Moxie-111446182371815/?ref=bookmarks"><i class="fa fa-facebook"></i></a></li>
-                <li><a class="btn btn-block btn-social-icon btn-twitter" href=""><span class="fa fa-twitter"></span></a></li>
-            </ul>-->
-		</div>
-	</div>
+  <div class="collapse navbar-collapse ml-4" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    {% if user.is_authenticated %}
+        {% for url in urls  %}
+            <li class="ml-2 {% if url in request.path %}active{% endif %}">
+                <a href="/{{ url }}" class="nav-link">{% trans url %}</a>
+            </li>
+        {% endfor %}
+        <li><a href="{% url 'logout' %}" class="nav-link">{% trans 'logout' %}</a></li>
+    {% else %}
+        <li><a href="/" class="nav-link">{% trans 'index' %}</a></li>
+        <!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
+        <li><a href="{% url 'about' %}" class="nav-link">{% trans 'about' %}</a></li>
+    {% endif %}
+  </div>
 </nav>

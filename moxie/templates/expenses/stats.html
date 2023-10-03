@@ -1,53 +1,43 @@
 {% load static %}
 {% load i18n %}
+{% load mathfilters %}
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript" src="{% static '/js/expenses/stats.js' %}?v=10.6"></script>
 <div id="expenses_month"></div>
 
-<table class="table table-striped" id="mytable" width="100%">
+<table class="table table-striped w-100" id="budget-table">
 <tr>
     <td></td>
-    <td align="right">{% trans 'expenses_expended' %}</td>
-
-{% if budget %}
+    <td class="text-right">{% trans 'expenses_spent' %}</td>
+    {% if budget %}
+    <td class="text-right">{% trans 'expenses_budget' %}</td>
+    {% endif %}
+</tr>
+    {% for budget_line in budget %}
     <tr>
-    <td align="right">{% trans 'expenses_budget' %}</td>
+        <td><a href="/expenses/?csrfmiddlewaretoken={{ csrf_token }}&category={{ budget_line.category__id }}">{{ budget_line.category__name }}</a></td>
+        <td class="text-right">{{ budget_line.transaction_total|abs|floatformat:2 }} &euro;</td>
+        {% if budget %}
+        <td class="text-right" style="color: {% if budget_line.transaction_total < budget_line.user__budgets__amount %}#00FF00{% else %}#FF0000{% endif %}">{{ budget_line.user__budgets__amount|abs|floatformat:2 }} &euro;</td>
+        {% endif %}
     </tr>
-
-<!--$total = 0;-->
-<!--$budget_total = 0;-->
-<!--foreach ($this->expenses as $key => $data) {-->
-<!--    $amount = $data['sum(e.amount)'];-->
-<!--    $current = $data['id'];-->
-<!--    $category_name = $data['name'];-->
-<!--    $total += $amount;-->
-<!--    $budget_amount = (isset($this->budget[$current])) ? $this->budget[$current] : 0;-->
-<!--    $budget_color = ($budget_amount <= $amount) ? '#FF0000' : '#00FF00';-->
-<!--    $s_out .= '<tr>'-->
-<!--        .'<td><a href="/expenses/index/category/'.$data['id'].'/month/'.$this->month.'/year/'.$this->year.'">'.$category_name.'</a></td>'-->
-<!--        .'<td align="right">'.number_format($amount,2).' &euro;</td>';-->
-<!--    if(!empty($this->budget)) {-->
-<!--        $s_out .= '<td align="right" style="color: '.$budget_color.';">'.$budget_amount.' &euro;</td>';-->
-<!--        $budget_total = $budget_total + $budget_amount;-->
-<!--    }-->
-<!--    $s_out .= '</tr>';-->
-<!--}-->
-<!--$s_out .= '<tr><td><B>TOTAL</B></td><td align="right"><B>'.number_format($total,2).' &euro;</B></td>';-->
-<!--if (!empty($this->budget)) {-->
-<!--    $budget_color = ($budget_total <= $total) ? '#FF0000' : '#00FF00';-->
-<!--    $s_out .= '<td align="right" style="color: '.$budget_color.';">'.number_format($budget_total,2).' &euro;</td>';-->
-<!--}-->
-{% endif %}
-</tr></table>
+    {% endfor %}
+    <tr>
+        <td style="font-weight: bold">TOTAL</td>
+        <td class="text-right">{{ budget_total_spent|abs|floatformat:2 }} &euro;</td>
+        {% if budget %}
+        <td class="text-right" style="color: {% if budget_total_spent > budget_total %}#FF0000{% else %}#00FF00{% endif %}">{{ budget_total|abs|floatformat:2 }} &euro;</td>
+        {% endif %}
+    </tr>
+</table>
 
 <script type="text/javascript">
-    var pieData = {{ pie_data|safe }}
-    // var barChartData = <?php echo $this->month_expenses; ?>;
-    var barChartData = [["Month","En la suma total","Fuera del total"],["Jan",1629.41,0],["Feb",1209.11,0],["Mar",1721.59,0],["Apr",1799.17,0],["May",2148.78,0],["Jun",1248.46,0],["Jul",1316.78,0],["Aug",1797.03,0],["Sep",2690.11,2119],["Oct",1910.97,0],["Nov",1357.63,0],["Dec",1970.57,0],["Jan",1504.36,0]];
-    var pieTitle = "{% trans 'expenses_monthly' %}";
-    var barTitle = "{% trans 'expenses_by_months' %}";
+    let pieData = {% if pie_data %}{{ pie_data|safe }}{% else %}[]{% endif %};
+    let barChartData = {% if month_expenses %}{{ month_expenses|safe }}{% else %}[["Month", "En la suma total", "Fuera del total"],["Jan",0,0]]{% endif %};
+    let pieTitle = "{% trans 'expenses_monthly' %}";
+    let barTitle = "{% trans 'expenses_by_months' %}";
 </script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="{% static '/js/expenses/stats.js' %}?v=10.6"></script>
 
 <div id="expenses_all"></div>
 

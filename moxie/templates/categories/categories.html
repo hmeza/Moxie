@@ -1,0 +1,49 @@
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+<div id="categories_table" class="form-group accordion-body">
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h3>{% trans 'Category' %}</h3>
+            </div>
+            <div class="col-12">
+                {% crispy categories_form %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h3>{% trans 'Order' %}</h3>
+            </div>
+            <div class="col-12">
+                <small>{% trans 'Drag categories to reorder it when displaying. Press edit to modify it.' %}</small>
+            </div>
+            <div class="col-12">
+                <ul id="categories_list" class="categories_list mt-3">
+                {% for category in categories_list %}
+                    <li class="ui-state-default">
+                    <span>
+                        <a href="{% url 'category_edit' category.pk %}" class="text-decoration-none">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </span>
+                    <span class="categories_list">
+                        <input type="hidden" name="{{ category.pk }}"/> {{ category }} ({% trans category.type_name %})
+                    </span>
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% csrf_token %}
+
+<script>
+    const categoryOrderUrl = "{% url 'category_order' %}";
+</script>
+<script type="text/javascript" src="{% static 'js/categories/data.js' %}?v={{ JS_VERSION }}"></script>

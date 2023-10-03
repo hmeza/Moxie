@@ -1,0 +1,24 @@
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+<script type="text/javascript" src="{% static '/js/incomes/data.js' %}?v={{ JS_VERSION }}"></script>
+<style type="text/css">
+    div.moxie_expenses_form_left table {
+        width: 100%;
+    }
+    div.moxie_expenses_form_right table {
+        width: 100%;
+    }
+</style>
+<div id="form">
+	<div class="moxie_expenses_form_div moxie_expenses_form_left">
+        {% crispy form %}
+        {% if object.pk %}
+            <a id="income_delete" class="btn btn-danger" href="{% url 'incomes_delete' object.pk %}">{% trans 'Delete' %}</a>
+        {% endif %}
+	</div>
+	<div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
+        {% include 'common/filter.html' %}
+	</div>
+</div>

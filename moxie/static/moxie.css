@@ -17,6 +17,11 @@ fieldset div {
 	margin:0.3em 0;
 	clear:both;
 }
+
+.text-moxie {
+	color: #0b77b7;
+}
+
 a {
 	color: #0b77b7;
 	text-decoration:none;
@@ -59,6 +64,12 @@ fieldset {
 	/*padding:0 0.5em 0.5em;*/
 }
 
+form {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
 .radio {
 	position:relative;
 }
@@ -94,16 +105,11 @@ fieldset {
 
 table.list, td.list, th.list tr.list, tr.list > td {
 	color: #000000;
-	padding: 2px;
 	border-collapse: collapse;
 	border-left: 1px solid #c5c5c5;
 	border-right: 1px solid #c5c5c5;
 	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #c5c5c5;
-}
-
-.list td {
-	padding: 3px;
 }
 
 .list_money {
@@ -123,6 +129,10 @@ form.budget {
 	padding: 0em;
 	border: none;
 	margin: 0em;
+}
+
+.moxie-color {
+	color: #337ab7;
 }
 
 .moxietitle {
@@ -149,7 +159,7 @@ form.budget {
 
 div.moxieicon {
 	width: 16px;
-	height: 16px;
+	text-align: center;
 }
 div:hover.moxieicon {
 	cursor: hand;
@@ -179,12 +189,6 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	font-family: Monospace;
 }
 
-#box {
-	border:2px solid #D0E8F4;
-	background-color:#ECF8FD;
-    padding:5px;
-}
-
 #bottom {
 	background: #ffffff;
 	position: fixed;
@@ -202,12 +206,14 @@ table.moxie, td.moxie, tr.moxie, th.moxie {
 	width: 1em;
 }
 
+/** TODO delete */
 .moxie_expenses_form_div {
 	width: auto;
 }
 
 .moxie_edit {
 	width: 5%;
+	text-align: center;
 }
 
 .moxie_category {
@@ -477,6 +483,7 @@ moxie_expenses_form_right {
 		max-width: none;
 	}
 
+	/** TODO Delete */
 	.moxie_expenses_form_div {
 		width: 100%;
 	}
@@ -663,10 +670,6 @@ moxie_expenses_form_right {
 	margin: 0;
 }
 
-.moxie-stats-trends-container {
-	padding-bottom: 40px;
-}
-
 .bootstrap-tagsinput {
 	width: 100%;
 }
@@ -715,4 +718,115 @@ div.moxie_expenses_form_right table {
 #expenses_all {
 	margin-top: 2rem;
     margin-bottom: 3rem;
+}
+
+.form-group {
+	margin-bottom: 1px;
+}
+
+form {
+	line-height: 1;
+}
+
+/* nav button gradient */
+.aqua-gradient {
+	/*background: linear-gradient(40deg, #80f6ff, #0b77b7) !important;*/
+	background-color: #0b77b7;
+}
+
+
+/** Pager */
+.pager::before {
+    display: table;
+    content: " ";
+}
+
+.pager > ul {
+	padding-left: 0;
+    margin: 20px 0;
+    text-align: center;
+    list-style: none;
+}
+
+.pager > li {
+	display: inline;
+}
+
+.pager > li > a, .pager > li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+	text-decoration: none;
+}
+
+.pager > li > a {
+	font-weight: bold;
+}
+
+/** Taggle */
+.bootstrap-tagsinput .tag {
+	margin-right: 2px;
+	color: white;
+}
+.label-info {
+	background-color: #337ab7 !important;
+}
+.label {
+	display: inline;
+	padding: 0.2em 0.6em 0.3em;
+	font-size: 75%;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25em;
+}
+.tt-hint {
+	color: dimgrey;
+	font-size: 1rem;
+	top: -4px !important;
+}
+.tt-highlight {
+	color: #337ab7;
+}
+
+.navbar-nav>.active>a {
+	color: white !important;
+	background-color: #337ab7;
+	border-radius: 25px;
+}
+
+.btn-primary {
+	background-color: #337ab7 !important;
+}
+
+/** Stats */
+table.table-stats {
+	font-size: 0.8rem;
+	width: 100%;
+}
+.table-stats td, th {
+	text-align: right;
+}
+
+table.table-stats > tbody > tr > td > a:hover {
+	color: #0b77b7;
+	font-weight: bold !important;
+	text-decoration: none;
+}
+table.table-stats > tbody > tr > td > a:visited {
+	color: #0b77b7;
+	text-decoration: none;
+}
+
+.sheets-totals {
+	border-top: 1px solid #c5c5c5
+}
+
+#hint_id_new_password1 > ul {
+    margin-left: 1rem;
 }

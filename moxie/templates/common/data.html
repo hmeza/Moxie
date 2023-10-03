@@ -1,91 +1,65 @@
 {% load i18n %}
 {% load mathfilters %}
 
-<table class="table table-bordered table-condensed table-hover" id="mytable" width="100%">
+<table class="table table-bordered table-condensed table-hover table-sm w-100" id="mytable">
 <thead>
     <tr>
-        <td colspan="5">
+        <td colspan="5" class="text-center">
 			{% include 'common/next_last_interval.html' with last_url=last_url next_url=next_url current_month_and_year=current_month_and_year %}
         </td>
     </tr>
 	<tr>
 		<th class="list moxie_edit">&nbsp;</th>
-		<th class="list moxie_category">{% trans 'expenses_category' %}</th>
-		<th class="list moxie_note">{% trans 'expenses_note' %}</th>
+		<th class="list moxie_category text-left">{% trans 'Category' %}</th>
+		<th class="list moxie_note text-left">{% trans 'Note' %}</th>
         <th class="list moxie_date_inline sorting text-center">
             {% if month or year or o %}
-                <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
+                <a href="?order=date">
             {% endif %}
-            {% trans 'expenses_date' %}
-            {% if month or year or o%}
+            {% trans 'Date' %}
+            {% if month or year or o %}
                 </a>
             {% endif %}
         </th>
         <th class="list moxie_amount sorting text-right">
             {% if month or year or o %}
-                <a href="/month/1/year/1/<?php echo $target . $date_filter; ?>">
+                <a href="?order=amount">
             {% endif %}
-            {% trans 'expenses_amount' %}
+            {% trans 'Amount' %}
             {% if month or year or o%}
                 </a>
             {% endif %}
         </th>
-{#	if ($this->view) {#}
-{#		$target = '/'.$this->view.'/index';#}
-{#		if ($this->month) {#}
-{#			$target .= '/month/'.$this->month;#}
-{#		}#}
-{#		if ($this->year) {#}
-{#			$target .= '/year/'.$this->year;#}
-{#		}#}
-{#		$date_filter = (strpos($this->o, 'date') !== false) ? "/o/".$this->o : "/o/date";#}
-{#		$amount_filter = (strpos($this->o, 'amount') !== false) ? "/o/".$this->o : "/o/amount";#}
-{#		<th class="list moxie_date_inline sorting text-center"><a href="<?php echo $target . $date_filter; ?>"><?php echo $st_lang['expenses_date']; ?></a></th>#}
-{#		<th class="list moxie_amount sorting text-right"><a href="<?php echo $target . $amount_filter; ?>"><?php echo $st_lang['expenses_amount']; ?></a></th>#}
 	</tr>
-	</thead>
-{#<?php#}
-{#$s_currentExpenseDate = '';#}
+</thead>
 <tbody>
 {% for object in object_list %}
     <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
-    <td class="moxie_edit"><a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}"><div class="moxieicon moxieedit"></div></a></td>
-    <td class="moxie_category"><div alt="{{ object.description}}" title="{{ object.description }}">{{ object.category.name }}</div></td>
-    <td class="moxie_note">{{ object.note }}</td>
-    <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
-    <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount }} &euro;</div></td>
+        <td class="moxie_edit text-center">
+            <a class="moxieedit" href="{{ edit_slug }}{{ object.id }}{{ date_get }}">
+                <i class="fa fa-pencil"></i>
+            </a>
+        </td>
+        <td class="moxie_category"><div alt="{{ object.category.description }}" title="{{ object.category.description }}">{{ object.category.name }}</div></td>
+        <td class="moxie_note">{{ object.note }}</td>
+        <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
+        <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
     </tr>
 {% endfor %}
-
-
-{#foreach ($this->list as $key=>$value) {#}
-{#	$checked = ($value['in_sum'] == '1') ? "checked":"";#}
-{#	$checked_style = ($value['in_sum'] == '0') ? "total_amount" : "";#}
-{#	$s_dateGet = (isset($this->month) && isset($this->year)) ? '/year/'.$this->year.'/month/'.$this->month : '';#}
-{#	$expense_date = date('d-m-Y', strtotime($value['date']));#}
-{#	if($expense_date != $s_currentExpenseDate) {#}
-{#		echo '<tr><th colspan="5" class="list_moxie_top" style="text-align: center; padding-top: 8px;">'.$expense_date.'</th></tr>';#}
-{#		$s_currentExpenseDate = $expense_date;#}
-{#	}#}
-{##}
-{#	$f_totalAmount = $f_totalAmount + $value['amount'];#}
-{#	$f_currentAmount += ($value['in_sum'] == 1) ? $value['amount'] : 0;#}
-{#	$b_showTotalAmount = ($value['in_sum'] != 1) || $b_showTotalAmount;#}
-{#}#}
-
     <tr>
-        <th colspan="5" class="list_moxie_top text-center pt-2">'.$expense_date.'</th>
+        <th colspan="5" class="list_moxie_top text-center pt-2">{% trans 'Date' %}</th>
     </tr>
 <tr>
-<td colspan=2><button class="btn btn-default btn-xs" id="export_to_excel_button" value="Exportar" onclick="export_to_excel()">Exportar</button></td>
+<td colspan=2>
+    <button class="btn btn-info btn-xs" id="export_to_excel_button" value="{% trans 'data_export' %}" onclick="export_to_excel()">{% trans 'data_export' %}</button>
+</td>
 <td colspan=3 class="list list_money text-right">
     <span id="total">
-        <span class="total_amount">{{ current_amount }} &euro;
-        {% if current_amount|sub:current_amount != 0 %}
-            <br><span class="total_amount">{{ total_amount }} &euro;</span>
+        <span class="total_amount">{{ current_amount|default_if_none:"0.00"|abs }} &euro;
+        {% if total_amount|sub:current_amount != 0 %}
+            <br><span class="" style="color:#777777">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
         {% endif %}
-    </span>
-</td>
+    </span></td>
 </tr>
 </tbody>
 </table>

@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load static %}
+
+<div id="budget" class="accordion-body mt-3">
+    <table class="w-100 text-center mb-2">
+        <tr>
+            <td>
+                <ul class="pager mb-0">
+                  <li>
+                      <a href="{% url 'stats_year' year|add:-1 %}"> &lt; </a>
+                  </li>
+                  <li>
+                      <span class="moxie_header_date">{{ year }}</span>
+                  </li>
+                  <li>
+                      <a href="{% url 'stats_year' year|add:1 %}"> &gt; </a>
+                  </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-striped table-bordered table-stats table-sm table-hover">
+        <tr>
+            {% for line in budget_header %}
+                <th><a href="{{ line.link }}">{{ line.title }}</a></th>
+            {% endfor %}
+        </tr>
+        {% for income_line in incomes %}
+            <tr>
+                {% include 'stats/budget_loop.html' with transactions=income_line %}
+            </tr>
+        {% endfor %}
+
+        {% if incomes %}
+        <tr><th colspan="13"><hr></th></tr>
+        {% endif %}
+
+        {% for expense_line in expenses %}
+            <tr>
+                {% include 'stats/budget_loop.html' with transactions=expense_line %}
+            </tr>
+        {% endfor %}
+
+        <tr><th colspan="13"><hr></th></tr>
+
+        <tr>
+            {% include 'stats/budget_loop.html' with transactions=totals use_red_for_negative=True %}
+        </tr>
+    </table>
+</div>

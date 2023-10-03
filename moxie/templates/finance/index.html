@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<script type="text/javascript" src="{% static '/js/finance/utils.js' %}"></script>
+<script type="text/javascript">
+let currentId = 1;
+let currentComparison = 1;
+let formTemplate = "";
+let financeAddTxt = "{% trans 'Add' %}";
+
+let check = function() {
+    try {
+        let finance = new Finance();
+        finance.finalCapital($('#amount').val(), $('#rate').val(), $('#months').val());
+        $('#interest').val(finance.interest);
+        $('#total').val(finance.getTotal());
+    }
+    catch(e) {
+        $('#interest').val(0);
+        $('#total').val(0);
+    }
+}
+
+function disableCurrentForm() {
+    $('#moxie_form_'+currentId+" *").filter(":input").each(function(e) {
+        $(this).attr('disabled', 'disabled');
+        $(this).attr('id', $(this).attr('id')+currentId);
+    });
+    currentId++;
+}
+
+function getDepositForm() {
+    return "<div id='moxie_form_"+currentId+"' class='float-left'>"+formTemplate+"</div>";
+}
+
+let addForm = function() {
+    disableCurrentForm();
+    $(getDepositForm()).insertBefore('#add_form');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+}
+
+let compare = function() {
+    disableCurrentForm();
+    $('#add_form').remove();
+    $("<div id='pepe"+currentComparison+"' class='mt-4 d-flex'>"+getDepositForm()
+        +"<div id='add_form' class='mt-4 ml-3 float-left'>"
+        +"<button class='btn btn-info'>"
+        +"<i class='fa fa-plus-circle'></i> "+financeAddTxt
+        +"</button>"+"</div></div>").insertAfter('#compare');
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+    $('#add_form').click(addForm);
+    currentComparison++;
+}
+
+$(document).ready(function() {
+    $('#amount').change(check);
+    $('#rate').change(check);
+    $('#months').change(check);
+
+    $('#add_form').click(addForm);
+    $('#compare').click(compare);
+
+    formTemplate = $('.moxie_form').wrap('<p/>').parent().html();
+});
+</script>
+
+<div class="container">
+    <h1>{% trans 'Deposit calculator' %}</h1>
+    <div id="container">
+        <div id="compare" class="mb-4">
+            <button class="btn btn-info">
+                <i class="fa fa-plus-circle"></i>
+                {% trans 'Compare' %}
+            </button>
+        </div>
+        <div id="pepe" class="d-flex mt-4">
+            <div id="moxie_form_1" class="float-left">
+                <form class="moxie_form form-group">
+                    <div>
+                        <label for="name">{% trans 'Name (optional)' %}</label>
+                        <input id="name" type="text" placeholder="Ex: Rabobank" class="form-control">
+                    </div>
+                    <div>
+                        <label for="amount">{% trans 'Saving amount' %}</label>
+                        <input id="amount" type="number" placeholder="0,00" class="form-control">
+                    </div>
+                    <div>
+                        <label for="rate">{% trans 'Interest (%)' %}</label>
+                        <input id="rate" type="number" placeholder="0" class="form-control">
+                    </div>
+                    <div>
+                        <label for="months">{% trans 'Period (months)' %}</label>
+                        <input id="months" type="number" placeholder="12" class="form-control">
+                    </div>
+                    <div>
+                        <label for="interest">{% trans 'Revenue' %}</label>
+                        <input id="interest" class="form-control">
+                    </div>
+                    <div>
+                        <label for="total">{% trans 'Total' %}</label>
+                        <input id="total" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div id="add_form" class="mt-4 ml-3 float-left">
+                <button class="btn btn-info">
+                    <i class="fa fa-plus-circle"></i>
+                    {% trans 'Add' %}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">&nbsp;</div>
+</div>
+{% endblock %}

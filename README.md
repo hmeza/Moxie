@@ -33,3 +33,13 @@ execute the migrations and update the database to the latest version.
 #### Installed using git submodules
 
 [Simple PHP captcha](https://github.com/claviska/simple-php-captcha)
+
+## Migration to Django
+
+### Insert into...
+
+> insert into moxie_user(id, first_name, last_name, is_staff, is_active, date_joined, login, password, email, language, created_at, updated_at, last_login, is_superuser) select id, '', '', 0, 1, created_at, login, password, email, language, created_at, updated_at, last_login, 0 from users;
+> SET foreign_key_checks = 0;
+> insert into moxie_category(name, description, type, parent, user_owner, `order`) select name, description, type, parent, user_owner, `order` from categories order by id asc;
+> insert into moxie_transaction(user_owner, amount, note, date, in_sum, income_update, category) select user_owner, amount, note, date, in_sum, income_update, category from transactions;
+> SET foreign_key_checks = 1;

@@ -3,25 +3,29 @@
 {% load crispy_forms_tags %}
 
 <script type="text/javascript">
-	let deleteUrl = "/expenses/delete/id/";
+	let deleteUrl = {% if object.pk %}"{% url 'expenses_delete' object.pk %}"{% else %}""{% endif %};
     let deleteMessage = "{% trans 'expenses_delete_message' %}";
-	let tagList = [{% for tag in tags %}
-        '{{ tag.name.replace }}',
-    {% endfor %}];
-    let usedTagList = [
-        {% for tag in used_tag_list %}
-            '{{ tag.name }}',
+	let tagList = [
+        {% for key, tag in tags.items %}
+            '{{ tag }}',
         {% endfor %}
     ];
-    //let favourite_data = <?php echo $this->favourites_json; ?>;
+    let usedTagList = [
+        {% for key, tag in used_tag_list.items %}
+            '{{ tag }}',
+        {% endfor %}
+    ];
+    let favourite_data = {% if favourite_data %}{{ favourite_data|safe }}{% else %}{}{% endif %};
 </script>
-<script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v=13"></script>
+<script type="text/javascript" src="{% static '/js/expenses/data.js' %}?v={{ JS_VERSION }}"></script>
 
 <div id="form">
     <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
-        <form method="POST" action="/expenses/add/">
-            {% csrf_token %}
+        <form method="POST" action="{{ edit_url }}">
             {% crispy form %}
+            {% if object.pk %}
+                <a id="expense_delete" class="btn btn-danger" href="{% url 'expenses_delete' object.pk %}">{% trans 'Delete' %}</a>
+            {% endif %}
         </form>
     </div>
     <div id="search_box" class="moxie_expenses_form_div moxie_expenses_form_right">
