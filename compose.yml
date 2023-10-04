@@ -7,7 +7,7 @@ networks:
 services:
   moxie:
     container_name: moxie
-    image: moxie:dev
+    image: hmeza/moxie:dev
     build: .
 #    command: python manage.py runserver 0.0.0.0:8000
     volumes:
