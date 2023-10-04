@@ -4,7 +4,7 @@ mysqlclient
 django-mathfilters
 django-crispy-forms
 python-dateutil
-#PyMySQL
+PyMySQL
 django-simple-captcha
 Pillow<=9.5.0
 python-dotenv
