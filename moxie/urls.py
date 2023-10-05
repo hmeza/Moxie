@@ -28,7 +28,9 @@ from moxie.views.categories import CategoryView, categories_bulk_update, Categor
 from moxie.views.stats import StatsView
 from django.views.generic import TemplateView
 from . import converters
-
+from django.urls import re_path
+from django.views.static import serve
+from django.conf import settings
 
 register_converter(converters.FourDigitYearConverter, 'yyyy')
 
@@ -86,5 +88,8 @@ urlpatterns = [
 
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('finance', TemplateView.as_view(template_name='finance/index.html'), name='finance'),
+
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+
     path('', TemplateView.as_view(template_name='index/index.html'), name='index'),
 ]
