@@ -20,11 +20,7 @@
                 </td>
                 <td class="list moxie_note">{{ fav.transaction.note }}</td>
                 <td>
-                    {% for tag in fav.transaction.tags.all %}
-                        {% if tag.tag %}
-                            {{ tag.tag.name }}
-                        {% endif %}
-                    {% endfor %}
+                    {{ fav.transaction.tags.all|text_list:", " }}
                 </td>
             </tr>
         {% endfor %}

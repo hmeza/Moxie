@@ -17,3 +17,16 @@ def urls(context):
     _('sheets')
     _('users')
     return {'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users']}
+
+
+from django.utils.text import get_text_list
+from django.template.defaulttags import register
+
+
+@register.filter
+def text_list(tags, conjunction):
+    tag_list = []
+    for tag in tags:
+        if tag.tag:
+            tag_list.append(tag.tag.name)
+    return get_text_list(tag_list, conjunction)
