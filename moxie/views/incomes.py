@@ -64,7 +64,18 @@ class IncomesListView(FilterView):
 		return kwargs
 
 
-class IncomesView(LoginRequiredMixin, IncomesListView, ListView):
+class CommonIncomesView:
+	def _get_category_amounts(self, expenses):
+		# todo filter by current parameters month
+		today = datetime.date.today()
+		month = self.request.GET.get('month', today.month)
+		year = self.request.GET.get('year', today.year)
+		return Transaction.objects.filter(amount__lt=0, date__month=month, date__year=year)\
+			.values('category__name').order_by('category__name')\
+			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
+
+
+class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView):
 	model = Transaction
 	template_name = 'incomes/index.html'
 
@@ -85,15 +96,10 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView):
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['edit_slug'] = '/incomes/'
 		context['date_get'] = ''
-		_('incomes')
-		_('expenses')
-		_('stats')
-		_('sheets')
-		_('users')
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['form'] = IncomesForm(self.request.user)
-		context['category_amounts'] = self.__get_category_amounts(queryset)
+		context['category_amounts'] = self._get_category_amounts(queryset)
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in Transaction.get_year_incomes(self.request.user, expenses=False, incomes=True)]
 
 		context['year_incomes'] = year_incomes
@@ -107,15 +113,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView):
 		context['edit_url'] = reverse_lazy('incomes_add')
 		context['filter_url_name'] = 'incomes'
 		return context
-
-	def __get_category_amounts(self, expenses):
-		# todo filter by current parameters month
-		today = datetime.date.today()
-		month = self.request.GET.get('month', today.month)
-		year = self.request.GET.get('year', today.year)
-		return Transaction.objects.filter(amount__lt=0, date__month=month, date__year=year)\
-			.values('category__name').order_by('category__name')\
-			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 	def __get_monthly_amounts(self, expenses):
 		a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
@@ -198,7 +195,7 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, UserOwnerMixin):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, UserOwnerMixin, CommonIncomesView):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
@@ -236,7 +233,28 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		context = super().get_context_data(**kwargs)
 		context['edit_slug'] = '/incomes/'
 		context['filter_url_name'] = 'incomes'
-		context['year'] = self.object.date.year
+		year = self.object.date.year
+		context['year'] = year
+
+		# new
+		queryset = self.get_queryset()
+		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['date_get'] = ''
+		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
+		context['tags'] = Tag.get_tags(self.request.user)
+		context['form'] = IncomesForm(self.request.user)
+		context['category_amounts'] = self._get_category_amounts(queryset)
+		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in Transaction.get_year_incomes(self.request.user, expenses=False, incomes=True)]
+
+		context['year_incomes'] = year_incomes
+		context['current_month_and_year'] = f"{year}"
+		last_year = year - 1
+		next_year = year + 1
+		context['last_url'] = f"/incomes/year/{last_year}"
+		context['next_url'] = f"/incomes/year/{next_year}"
+		context['edit_url'] = reverse_lazy('incomes_add')
+		context['filter_url_name'] = 'incomes'
 		return context
 
 	def __get_transaction_id(self):
