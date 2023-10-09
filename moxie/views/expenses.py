@@ -122,7 +122,27 @@ class NextAndLastYearAndMonthCalculatorView:
         return date.year, date.month
 
 
-class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView):
+class CommonExpensesView:
+    def _get_monthly_amounts(self, expenses):
+        a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
+        queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
+            .values_list('date__month')\
+            .annotate(
+                total_in_month=Cast(Abs(Sum(Case(
+                    When(in_sum=True, then='amount'),
+                    default=0
+                ))), FloatField()),
+                total_out_month=Cast(Abs(Sum(Case(
+                    When(in_sum=False, then='amount'),
+                    default=0
+                ))), FloatField())
+            )\
+            .values('date__month', 'total_in_month', 'total_out_month')\
+            .order_by('date__month')
+        return queryset
+
+
+class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView, CommonExpensesView):
     model = Transaction
     template_name = 'expenses/index.html'
 
@@ -163,7 +183,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
         context['category_amounts'] = category_amounts
         context['pie_data'] = [list(a.values()) for a in category_amounts]
-        month_expenses = [list(a.values()) for a in self.__get_monthly_amounts(queryset)]
+        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
         month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
         for expense in month_expenses:
             month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
@@ -184,24 +204,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['filter_url_name'] = 'expenses'
         context['favourite_data'] = Favourite.get_favourites(user)
         return context
-
-    def __get_monthly_amounts(self, expenses):
-        a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
-        queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
-            .values_list('date__month')\
-            .annotate(
-                total_in_month=Cast(Abs(Sum(Case(
-                    When(in_sum=True, then='amount'),
-                    default=0
-                ))), FloatField()),
-                total_out_month=Cast(Abs(Sum(Case(
-                    When(in_sum=False, then='amount'),
-                    default=0
-                ))), FloatField())
-            )\
-            .values('date__month', 'total_in_month', 'total_out_month')\
-            .order_by('date__month')
-        return queryset
 
     def download_csv(self, request):
         queryset = self.filterset.queryset
@@ -298,7 +300,7 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
 
 
 class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionListView, UserOwnerMixin,
-                  NextAndLastYearAndMonthCalculatorView):
+                  NextAndLastYearAndMonthCalculatorView, CommonExpensesView):
     model = Transaction
     form_class = ExpensesForm
     template_name = 'expenses/index.html'
@@ -367,32 +369,29 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         else:
             self.object_list = self.filterset.queryset.none()
         context['object_list'] = self.filterset.qs
+
+        # new
+        user = self.request.user
+        queryset = self.object_list
+        context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['tags'] = Tag.get_tags(user)
+        context['used_tag_list'] = Tag.get_used_tags(user)
+
+        category_amounts = Transaction.get_category_amounts(
+            user, datetime.date.today(), self.request.GET, year, month
+        )
+        context['category_amounts'] = category_amounts
+        context['pie_data'] = [list(a.values()) for a in category_amounts]
+        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
+        month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
+        for expense in month_expenses:
+            month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
+            month_expenses_list.append([month_name, expense[1], expense[2]])
+        context['month_expenses'] = month_expenses_list
+        budget = Budget.get_budget_for_month(user, year, month)
+        context['budget'] = budget
+        context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
+        context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
+        context['filter_url_name'] = 'expenses'
         return context
-#
-#     /**
-#      * Exports to excel the data currently shown in the view.
-#      * @param array|array[] $st_data containing rows with columns date, amount, name and note.
-#      */
-#     private function exportToExcel($st_data) {
-#         $this->getResponse()
-#                 ->setHttpResponseCode(200)
-#                 ->setHeader('Content-Type', 'text/csv; charset=utf-8')
-#                 ->setHeader('Content-Disposition', 'attachment; filename='.date('Y-m-d').'.csv')
-#                 ->setHeader('Pragma', 'no-cache')
-#                 ->sendHeaders();
-#
-#         $output = fopen('php://output', 'w');
-#
-#         fputcsv($output, array('Fecha', 'Euros', 'Categoria', 'Nota'));
-#
-#         foreach($st_data as $row) {
-#             $outputRow = array(
-#                     'Fecha' => $row['date'],
-#                     'Euros' => $row['amount'],
-#                     'Categoria' => $row['name'],
-#                     'Nota' => $row['note']
-#             );
-#             fputcsv($output, $outputRow);
-#         }
-#         exit(0);
-#     }
