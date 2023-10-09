@@ -18,6 +18,6 @@ RUN python -m pip install gunicorn
 
 # RUN yarn install
 
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn"  , "--preload", "-b", "0.0.0.0:8001", "--workers", "4", "--timeout", "60", "--bind", "unix:/tmp/app.sock", "--worker-tmp-dir", "/tmp", "moxie.wsgi:application"]
+CMD ["gunicorn"  , "--preload", "-b", "0.0.0.0:8000", "--workers", "4", "--timeout", "60", "--bind", "unix:/tmp/app.sock", "--worker-tmp-dir", "/tmp", "moxie.wsgi:application"]
