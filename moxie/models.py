@@ -510,7 +510,7 @@ class Transaction(models.Model):
         first_year = int(current_year) - Transaction.YEARS_FOR_YEARLY_STATS
         queryset = queryset\
             .values(year=ExtractYear('date'))\
-            .filter(year__gt=first_year)\
+            .filter(year__gte=first_year)\
             .annotate(year_group=Count(F('year')), category_group=Count(F('category')))\
             .annotate(sum_amount=Cast(Sum('amount'), FloatField()))\
             .order_by('category', 'year')\

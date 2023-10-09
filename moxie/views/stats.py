@@ -1,19 +1,11 @@
 import datetime
-import calendar
 import re
-from dateutil.relativedelta import relativedelta
 from django.views.generic import TemplateView
-
-from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
-
-from moxie.forms import IncomesForm
 from django.urls import reverse_lazy
-from django_filters.views import FilterView
-from django.db.models import Sum, FloatField, Case, When
+from django.db.models import Sum, FloatField
 from django.db.models.functions import Abs, Cast, ExtractMonth, ExtractYear
-from moxie.filters import IncomesFilter
-from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite, Category
+from moxie.models import Transaction, Category
 
 
 class StatsView(TemplateView):
