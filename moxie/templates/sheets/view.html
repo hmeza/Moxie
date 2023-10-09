@@ -104,7 +104,7 @@
                 <th class="sheets-totals"></th>
                 {% endif %}
                 <th class="text-left sheets-totals">{% trans 'TOTAL' %}</th>
-                <th class="sheets-totals">{{ total.sum|floatformat:2 }} &euro;</th>
+                <th class="sheets-totals text-left">{{ total|floatformat:2 }} &euro;</th>
                 {% for sheet_user in sheet_users.all %}
                 <th class="text-right sheets-totals">{{ sheet_user.sheet_expense|abs|floatformat:2 }} &euro;</th>
                 {% endfor %}

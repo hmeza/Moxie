@@ -72,7 +72,7 @@ class SheetView(LoginRequiredMixin, UpdateView):
 			.select_related('sheet').prefetch_related('sheet__users')\
 			.annotate(my_expense=conditional).filter(sheet__unique_id=unique_id).order_by('date')
 		context['sheet'] = sheet
-		context['total'] = self.get_object().expenses.aggregate(sum=Sum('amount'))
+		context['total'] = self.get_object().total
 		# todo calculate average, keep in mind currency change
 		context['user_categories'] = Category.get_categories_by_user(self.request.user, Category.EXPENSES)
 		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=unique_id).users

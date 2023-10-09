@@ -1,66 +1,14 @@
 from django.db import models, transaction
 from django.contrib.auth.models import User as DjangoUser
 from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, Abs
-from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg
+from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg, Case, When
 import datetime
-from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
-
-
-# class CustomUserManager(BaseUserManager):
-#     """
-#     Custom user model manager where email is the unique identifiers
-#     for authentication instead of usernames.
-#     """
-#     def create_user(self, email, password, **extra_fields):
-#         """
-#         Create and save a user with the given email and password.
-#         """
-#         if not email:
-#             raise ValueError(_("The Email must be set"))
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, **extra_fields)
-#         user.set_password(password)
-#         user.save()
-#         return user
-#
-#     def create_superuser(self, email, password, **extra_fields):
-#         """
-#         Create and save a SuperUser with the given email and password.
-#         """
-#         extra_fields.setdefault("is_staff", True)
-#         extra_fields.setdefault("is_superuser", True)
-#         extra_fields.setdefault("is_active", True)
-#
-#         if extra_fields.get("is_staff") is not True:
-#             raise ValueError(_("Superuser must have is_staff=True."))
-#         if extra_fields.get("is_superuser") is not True:
-#             raise ValueError(_("Superuser must have is_superuser=True."))
-#         return self.create_user(email, password, **extra_fields)
 
 
 class MoxieUser(DjangoUser):
     user = models.OneToOneField(DjangoUser, on_delete=models.CASCADE, null=True, related_name='%(class)s_resource_file')
     language = models.CharField(max_length=2, null=False, blank=False, default='es')
-
-    #
-    # class Meta:
-    #     db_table = 'auth_user'
-
-#     username = models.CharField(max_length=12, null=False, blank=False, default='', unique=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     is_superuser = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return self.username
-#
-#     USERNAME_FIELD = "username"
-#     REQUIRED_FIELDS = []
-#
-#     objects = CustomUserManager()
-#
 
 
 class Category(models.Model):
@@ -360,74 +308,16 @@ class SharedExpensesSheet(models.Model):
         user_id = user_id if user_id else user.pk
         return SharedExpensesSheet.objects.get(user_id=user_id)
 
-    @staticmethod
-    def get_by_user_match(user=None, user_id=None):
-        assert user or user_id
-        user_id = user_id if user_id else user.pk
-
     def __str__(self):
         return self.name
 
-#     public function get_by_user_match($user_id) {
-#         $select = $this->select()
-#             ->from(array('s' => $this->_name), array('*'))
-#             ->setIntegrityCheck(false)
-#             ->joinLeft(array('su' => 'shared_expenses_sheet_users'), 'su.id_sheet = s.id', array())
-#             ->where('s.user_owner = ?', $user_id)
-#             ->orWhere('su.id_user = ?', $user_id)
-#             ->order('s.id desc');
-#         return $this->fetchAll($select);
-#     }
-#
-#     public function get_by_unique_id($id) {
-#         if (is_null($id)) {
-#             error_log("null id received when getting sheet");
-#             return null;
-#         }
-#         $row = $this->fetchRow('unique_id = "' . $id . '"')->toArray();
-#         // now fetch expenses, order by date
-#         $sharedExpense = new SharedExpenses();
-#         $list = $sharedExpense->fetchAll('id_sheet = ' . $row['id'], array('date ASC', 'id ASC'));
-#         $row['expenses'] = array();
-#         $distinct_users = 0;
-#         $distinct_users_list = array();
-#         foreach($list as $l) {
-#             if (!in_array($l['id_sheet_user'], $distinct_users_list)) {
-#                 $distinct_users++;
-#                 $distinct_users_list[] = $l['id_sheet_user'];
-#             }
-#             $row['expenses'][] = $l->toArray();
-#         }
-#         $row['distinct_users'] = $distinct_users;
-#         $row['distinct_users_list'] = $distinct_users_list;
-#         $row['users'] = $this->getUsersForSheet($row['unique_id']);
-#         // add users that do not have any expense but exist in the sheet
-#         foreach($row['users'] as $key => $u) {
-#             if(!in_array($u['id_sheet_user'], $row['distinct_users_list'])) {
-#                 $row['distinct_users_list'][] = $u['id_sheet_user'];
-#                 $row['distinct_users']++;
-#             }
-#         }
-#         return $row;
-#     }
-#
-#     private function getUsersForSheet($sheet_id) {
-#         try {
-#             $nameCoalesce = new Zend_Db_Expr('COALESCE(u.login, sesu.email) as login');
-#             $emailCoalesce = new Zend_Db_Expr('COALESCE(u.email, sesu.email) as email');
-#             $select = $this->select()
-#                 ->setIntegrityCheck(false)
-#                 ->from(array('ses' => 'shared_expenses_sheets'), array(new Zend_Db_Expr ('0 as total')))
-#                 ->joinInner(array('sesu' => 'shared_expenses_sheet_users'), 'ses.id = sesu.id_sheet', array('id as id_sheet_user'))
-#                 ->joinLeft(array('u' => 'users'), 'u.id = sesu.id_user', array("u.id as id_user", $nameCoalesce, $emailCoalesce))
-#                 ->where('ses.unique_id = ?', $sheet_id);
-#             return $this->fetchAll($select)->toArray();
-#         }
-#         catch(Exception $e) {
-#             return array();
-#         }
-#     }
-# }
+    @property
+    def total(self):
+        when_change_currency = When(currency=F('sheet__currency'), then=F('amount')/F('sheet__change'))
+
+        return self.expenses\
+            .annotate(amount_converted=Case(when_change_currency, default=F('amount')))\
+            .aggregate(sum=Sum('amount_converted'))['sum']
 
 
 class SharedExpensesSheetUsers(models.Model):
@@ -442,15 +332,19 @@ class SharedExpensesSheetUsers(models.Model):
 
     @property
     def sheet_expense(self):
-        result = SharedExpense.objects.filter(user=self).aggregate(total=Sum('amount'))
+        when_change_currency = When(currency=F('sheet__currency'), then=F('amount') / F('sheet__change'))
+
+        result = SharedExpense.objects\
+            .filter(user=self)\
+            .annotate(amount_converted=Case(when_change_currency, default=F('amount')))\
+            .aggregate(total=Sum('amount_converted'))
+
         return result['total'] if result['total'] else 0
 
     @property
     def difference(self):
-        average_queryset = SharedExpense.objects.filter(sheet=self.sheet).aggregate(total=Sum('amount'))
-        average = average_queryset['total'] if average_queryset['total'] else 0
         users = self.sheet.users.count()
-        return self.sheet_expense - (average / users)
+        return self.sheet_expense - (self.sheet.total / users)
 
 
 class SharedExpense(models.Model):

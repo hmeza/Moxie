@@ -11,4 +11,6 @@ def currency_symbol(string):
         return '&pound;'
     elif string == 'usd':
         return '&dollar;'
-    return ''
+    elif string == 'nan':
+        return '?'
+    return '💱'
