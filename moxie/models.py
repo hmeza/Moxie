@@ -175,7 +175,8 @@ class Budget(models.Model):
     @staticmethod
     def get_budget(user):
         return Budget.objects.select_related('category')\
-            .filter(user=user, date_ended__isnull=True).order_by('category__order')
+            .filter(user=user, date_ended__isnull=True, category__type__in=[Category.EXPENSES, Category.BOTH])\
+            .order_by('category__type', 'category__order')
 
     @staticmethod
     def get_budget_for_month(user, year, month):

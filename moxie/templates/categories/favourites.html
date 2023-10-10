@@ -19,8 +19,14 @@
                     </a>
                 </td>
                 <td class="list moxie_note">{{ fav.transaction.note }}</td>
-                <td>
-                    {{ fav.transaction.tags.all|text_list:", " }}
+                <td class="right text-right">
+                        <div>
+                        {% for favourite in fav.transaction.tags.all %}
+                            {% if favourite.tag %}
+                                <span class="tag label label-info">{{ favourite.tag.name }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </td>
             </tr>
         {% endfor %}
