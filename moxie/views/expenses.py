@@ -5,6 +5,7 @@ import csv
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
+from django.http import QueryDict
 from django.http.response import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
@@ -214,8 +215,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
 
-        print(queryset.query)
-
         writer = csv.writer(response, delimiter=";")
         writer.writerow([_(field.name) for field in model_fields])
         for row in self.object_list:
@@ -318,7 +317,6 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
 
     def get_filterset_kwargs(self, filterset_class):
         kwargs = super().get_filterset_kwargs(filterset_class)
-        from django.http import QueryDict
         q = QueryDict('', mutable=True)
         if kwargs['data']:
             q.update(kwargs['data'])
@@ -344,7 +342,6 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         return HttpResponseRedirect(reverse_lazy('expenses_edit', kwargs={'pk': self.object.pk}))
 
     def get_success_url(self):
-        # todo get month and year for expense, get order, redirect
         return reverse_lazy('expenses')
 
     def get_context_data(self, **kwargs):

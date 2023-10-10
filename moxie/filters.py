@@ -7,13 +7,14 @@ from django.forms import Select, BooleanField
 from django.forms.widgets import HiddenInput
 
 
-class ExpensesFilter(django_filters.FilterSet):
-    class SubmitLightBlue(Submit):
-        def __init__(self, *args, **kwargs):
-            kwargs['css_id'] = 'submit-id-filter'
-            super().__init__(*args, **kwargs)
-            self.field_classes = 'btn btn-info'
+class SubmitLightBlue(Submit):
+    def __init__(self, *args, **kwargs):
+        kwargs['css_id'] = 'submit-id-filter'
+        super().__init__(*args, **kwargs)
+        self.field_classes = 'btn btn-info'
 
+
+class ExpensesFilter(django_filters.FilterSet):
     amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'), lookup_expr="lte")
     amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'), lookup_expr="gte")
     category = django_filters.ModelChoiceFilter(
@@ -41,15 +42,10 @@ class ExpensesFilter(django_filters.FilterSet):
         self.form.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.form.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
 
-        self.form.helper.add_input(ExpensesFilter.SubmitLightBlue('submit', _('filter_submit')))
+        self.form.helper.add_input(SubmitLightBlue('submit', _('filter_submit')))
 
 
 class IncomesFilter(django_filters.FilterSet):
-    class SubmitLightBlue(Submit):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.field_classes = 'btn btn-info'
-
     amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'))
     amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'))
     category = django_filters.ModelChoiceFilter(
@@ -76,4 +72,4 @@ class IncomesFilter(django_filters.FilterSet):
         self.form.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.form.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
 
-        self.form.helper.add_input(ExpensesFilter.SubmitLightBlue('submit', _('filter_submit')))
+        self.form.helper.add_input(SubmitLightBlue('submit', _('filter_submit')))
