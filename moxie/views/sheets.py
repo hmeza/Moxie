@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
-from django.db.models import Sum, Case, When, Value, BooleanField
+from django.db.models import Case, When, Value, BooleanField
 from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers, Transaction
 from moxie.forms import SharedExpensesSheetsForm, SharedExpensesSheetAddUser, SharedExpensesForm
