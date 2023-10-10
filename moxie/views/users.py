@@ -7,6 +7,7 @@ from moxie.forms import CategoryForm, MyAccountForm, TagsForm
 from moxie.models import Category, Tag, Favourite, Budget, MoxieUser
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
+from django.conf import settings
 
 
 class ConfigUserContextData:
@@ -38,16 +39,8 @@ class UserConfigurationView(LoginRequiredMixin, ConfigUserContextData, ListView)
     template_name = 'users/index.html'
     form_class = MyAccountForm
 
-    # def get_form_kwargs(self):
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['user'] = self.request.user
-    #     return kwargs
-
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
-
-    def get_object(self, queryset=None):
-        return Category.objects.none()
 
 
 class UserUpdateView(UpdateView):
@@ -72,7 +65,9 @@ class UserUpdateView(UpdateView):
         instance = form.save()
         instance.moxieuser_resource_file.language = form.cleaned_data.get('language')
         instance.moxieuser_resource_file.save()
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, instance.moxieuser_resource_file.language)
+        return response
 
 
 def user_password_change(request):

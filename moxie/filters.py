@@ -42,7 +42,7 @@ class ExpensesFilter(django_filters.FilterSet):
         self.form.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.form.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
 
-        self.form.helper.add_input(SubmitLightBlue('submit', _('filter_submit')))
+        self.form.helper.add_input(SubmitLightBlue('submit', _('Filter')))
 
 
 class IncomesFilter(django_filters.FilterSet):
@@ -72,4 +72,4 @@ class IncomesFilter(django_filters.FilterSet):
         self.form.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
         self.form.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
 
-        self.form.helper.add_input(SubmitLightBlue('submit', _('filter_submit')))
+        self.form.helper.add_input(SubmitLightBlue('submit', _('Filter')))

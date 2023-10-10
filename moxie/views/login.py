@@ -25,7 +25,9 @@ def login_view(request):
 	user = authenticate(request, username=username, password=password)
 	if user is not None and password is not None:
 		login(request, user)
-		return redirect(reverse_lazy('expenses'))
+		response = redirect(reverse_lazy('expenses'))
+		response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user.moxieuser_resource_file.language)
+		return response
 	else:
 		messages.error(request, _('Login incorrect'))
 		return redirect(reverse_lazy('index'))
