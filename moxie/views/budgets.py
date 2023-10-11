@@ -1,5 +1,8 @@
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView, View
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
+from django.http.response import HttpResponse, HttpResponseRedirect
 from moxie.views.expenses import UserOwnerMixin
 from moxie.models import Budget
 
@@ -17,27 +20,13 @@ class BudgetDeleteView(UserOwnerMixin, DeleteView):
     success_url = reverse_lazy('users')
 
     def get(self, request, *args, **kwargs):
-        return self.delete(request, *args, **kwargs)
+        self.object = Budget.objects.get(pk=self.kwargs.get('pk'))
+        Budget.delete_budget_set(self.kwargs.get('pk'), self.request.user)
+        return HttpResponseRedirect(self.get_success_url())
 
 
-class BudgetSnapshotView(CreateView):
-    pass
-#     /**
-#      * Makes a snapshot of current budget and generates a new one.
-#      * @todo    Handle exception with proper message
-#      * @author    hmeza
-#      * @since    2011-11-12
-#      */
-#     public function snapshotAction() {
-#         $result = true;
-#         header("Cache-Control: no-cache");
-#         try {
-#             $this->budgets->snapshot($_SESSION['user_id']);
-#         }
-#         catch (Exception $e) {
-#             error_log(__METHOD__.": ".$e->getMessage());
-#             $result = false;
-#         }
-#         $this->render('index','categories');
-#         return $result;
-#     }
+@method_decorator(require_http_methods(["POST"]), name='dispatch')
+class BudgetSnapshotView(View):
+    def post(self, request, *args, **kwargs):
+        Budget.snapshot(self.request.user.pk)
+        return HttpResponse(reverse_lazy('users'), status=201)

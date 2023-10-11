@@ -30,7 +30,7 @@ class ConfigUserContextData:
         current_budget = Budget.get_budget(user)
         context['current_budget'] = current_budget
         context['current_budget_amount'] = current_budget.aggregate(total=Sum('amount'))['total']
-        context['budgets_list'] = Budget.objects.filter(user=user).order_by('-date_created').all()
+        context['budgets_list'] = Budget.closed_budgets(user)
         return context
 
 

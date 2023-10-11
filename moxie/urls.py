@@ -18,7 +18,7 @@ from django.urls import path, register_converter, include
 from moxie.views.login import login_view, logout_view, RegisterView, password_change, password_reset_confirm
 from moxie.views.expenses import ExpensesView, ExpenseView, ExpenseAddView, ExpenseDeleteView
 from moxie.views.incomes import IncomesView, IncomeView, IncomeAddView, IncomeDeleteView
-from moxie.views.budgets import BudgetView, BudgetDeleteView
+from moxie.views.budgets import BudgetView, BudgetDeleteView, BudgetSnapshotView
 from moxie.views.users import UserConfigurationView, user_password_change, UserUpdateView
 from moxie.views.sheets import SheetsView, SheetView, SheetCloseView, SheetExpenseDeleteView, SheetCreateView, \
     SharedExpenseView, SheetCopyView
@@ -58,7 +58,6 @@ urlpatterns = [
     path('about', TemplateView.as_view(template_name='index/about.html'), name='about'),
     path('finance', TemplateView.as_view(template_name='finance/index.html'), name='finance'),
 
-    # TODO
     path('users', UserConfigurationView.as_view(), name='users'),
     path('users/update/', UserUpdateView.as_view(), name='users_update'),
     path('users/password-change/', user_password_change, name='password-change'),
@@ -69,6 +68,7 @@ urlpatterns = [
     path('category/<int:pk>/', CategoryView.as_view(), name='category_edit'),
     path('category/add/', CategoryAddView.as_view(), name='category_add'),
     path('category/', CategoryView.as_view(), name='category_view'),
+    path('budgets/snapshot', BudgetSnapshotView.as_view(), name='budget_snapshot'),
 
     path('sheets/add/', SheetCreateView.as_view(), name='sheet_add'),
     path('sheets/<slug:unique_id>/users/', SheetView.as_view(), name='sheet_add_user'),
@@ -78,7 +78,6 @@ urlpatterns = [
     path('sheets/<slug:unique_id>/<int:pk>/delete/', SheetExpenseDeleteView.as_view(), name='sheet_expense_delete'),
     path('sheets/<slug:unique_id>/', SheetView.as_view(), name='sheet_view'),
     path('sheets/', SheetsView.as_view(), name='sheet_list'),
-
     path('login', login_view, name='login'),
     path('logout', logout_view, name='logout'),
     path('register', RegisterView.as_view(), name='register'),

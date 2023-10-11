@@ -175,7 +175,7 @@ class Budget(models.Model):
     @staticmethod
     def get_budget(user):
         return Budget.objects.select_related('category')\
-            .filter(user=user, date_ended__isnull=True, category__type__in=[Category.EXPENSES, Category.BOTH])\
+            .filter(user=user, date_ended__isnull=True)\
             .order_by('category__type', 'category__order')
 
     @staticmethod
@@ -197,88 +197,30 @@ class Budget(models.Model):
 
     @staticmethod
     def snapshot(user_id):
-        current_budget = Budget.get_budget(user_id)
-        current_budget.date_ended = datetime.datetime.now()
-    #
-    #
-    #     // mark current budget with end date
-    #     $st_data = array('date_ended'    => date('Y-m-d h:i:s'));
-    #     $this->_db->beginTransaction();
-    #     try {
-    #         $this->_db->update($this->_name, $st_data,
-    #             'user_owner = '.$user_id.' AND date_ended IS NULL');
-    #         // duplicate latest budget
-    #         foreach ($st_currentBudget as $key => $value) {
-    #             $st_data = array(
-    #                 'user_owner'    =>    $user_id,
-    #                 'category'        =>    $key,
-    #                 'amount'        =>    $value,
-    #                 'date_created'    =>    date('Y-m-d h:i:s')
-    #             );
-    #             $this->_db->insert($this->_name, $st_data);
-    #         }
-    #         $this->_db->commit();
-    #     }
-    #     catch (Exception $e) {
-    #         $this->_db->rollBack();
-    #         throw $e;
-    #     }
-    #     // finally get the current budget for this user
-    #     return $this->getBudget($user_id);
-    # }
+        close_date = datetime.datetime.now()
+        with transaction.atomic():
+            current_budget_data = Budget.get_budget(user_id)
+            create_objects = []
+            for budget in current_budget_data:  # type: Budget
+                create_objects.append(Budget(
+                    user_id=budget.user_id, category_id=budget.category_id, amount=budget.amount, date_created=close_date
+                ))
+                budget.date_ended = close_date
+            Budget.objects.bulk_update(current_budget_data, ['date_ended'])
+            Budget.objects.bulk_create(create_objects)
 
-    def getYearBudgets(user_id, i_year=None):
-        if not i_year:
-            i_year = datetime.date.today().year
-        year_budget = []
-        for r in range(1, 13):
-            pass
-    #         $s_nextMonthDate = ($i == 12)
-    #                 ? strtotime('-1 day', mktime(23, 59, 59, 1, 1, $i_year+1))
-    #                 : strtotime('-1 day', mktime(23, 59, 59, $i+1, 1, $i_year));
-    #         $st_data = $this->_db->fetchAll(
-    #             $this->_db->select()
-    #                     ->from('budgets')
-    #                     ->where('user_owner = '.$user_id)
-    #                     ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
-    #                     ->where('unix_timestamp(date_created) <= '.$s_nextMonthDate)
-    #                     ->where('unix_timestamp(date_ended) >= '.$s_nextMonthDate.' OR date_ended IS NULL')
-    #                     ->order('date_created ASC')
-    #             );
-    #         if (empty($st_data)) {
-    #             $st_data = $this->_db->fetchAll(
-    #                 $this->_db->select()
-    #                         ->from('budgets')
-    #                         ->where('user_owner = '.$user_id)
-    #                         ->where('YEAR(date_ended) = '.$i_year.' OR date_ended IS NULL')
-    #                         ->where('date_ended IS NULL')
-    #                         ->order('date_created ASC')
-    #                 );
-    #         }
-    #         $st_budget = array();
-    #         $s_currentDate = null;
-    #         foreach($st_data as $key => $value) {
-    #             $st_budget[$value['category']] = $value['amount'];
-    #         }
-    #         $st_yearBudget[$i] = $st_budget;
-    #     }
-    #     return $st_yearBudget;
-    # }
+    @staticmethod
+    def delete_budget_set(pk, user):
+        budget = Budget.objects.get(pk=pk)
+        start_date = budget.date_ended - datetime.timedelta(seconds=1)
+        end_date = budget.date_ended + datetime.timedelta(seconds=1)
+        return Budget.objects\
+            .filter(user=user, date_ended__gte=start_date, date_ended__lte=end_date)\
+            .delete()
 
-    def getBudgetsDatesList(self):
-        return Budget.objects.all().filter()
-        #     $st_budgetsList = array();
-        #     $st_budgetsListObjects = $this->fetchAll(
-        #             $this->select()
-        #                     ->from("budgets", array('DISTINCT(date_created) as date_created'))
-        #                     ->where('user_owner = ?', $_SESSION['user_id'])
-        #                     ->where('date_ended IS NOT NULL')
-        #     );
-        #     foreach($st_budgetsListObjects as $target => $budget) {
-        #         $st_budgetsList[] = $budget->toArray();
-        #     }
-        #     return $st_budgetsList;
-        # }
+    @staticmethod
+    def closed_budgets(user):
+        return Budget.objects.filter(user=user, date_ended__isnull=False).order_by('-date_created').all()
 
 
 class SharedExpensesSheet(models.Model):
@@ -600,30 +542,6 @@ class TransactionTag(models.Model):
     tag = models.ForeignKey(Tag, related_name='transactions', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    # public function getTagsForTransaction($transactionId) {
-    #     $select = $this->select()
-    #             ->setIntegrityCheck(false)
-    #             ->from(array('tt' => $this->_name), array())
-    #             ->joinInner(array('t' => 'tags'), 't.id = tt.id_tag', array('name'))
-    #             ->joinInner(array('tr' => 'transactions'), 'tr.id = tt.id_transaction', array())
-    #             ->where('tr.id = ?', $transactionId);
-    #     $rows = $this->fetchAll($select)->toArray();
-    #     $tags = array();
-    #     foreach($rows as $row) {
-    #         $tags[] = str_replace("'", "\'", $row['name']);
-    #     }
-    #     return $tags;
-    # }
-    #
-    # /**
-    #  * Removes tags from transactions.
-    #  * @var int $transactionId
-    #  * @var int|array $tags
-    #  */
-    # public function removeTagsFromTransaction($transactionId) {
-    #     $this->delete("id_transaction = ".$transactionId);
-    # }
 
 
 class Favourite(models.Model):

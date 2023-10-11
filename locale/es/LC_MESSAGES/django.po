@@ -268,10 +268,9 @@ msgid "Català"
 msgstr ""
 
 #: moxie/templates/categories/budget.html:5
-#, fuzzy
 #| msgid "Registered successfully."
 msgid "Saved successfully"
-msgstr "Registro efectuado correctamente"
+msgstr "Guardado correctamente"
 
 #: moxie/templates/categories/budget.html:7
 msgid "Budget updated"
@@ -287,7 +286,7 @@ msgstr "Presupuesto actual"
 
 #: moxie/templates/categories/budget.html:36
 msgid "Take snapshot"
-msgstr ""
+msgstr "Crear instantánea"
 
 #: moxie/templates/categories/budget.html:47
 msgid "Budgets"

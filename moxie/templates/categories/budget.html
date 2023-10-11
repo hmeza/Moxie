@@ -2,10 +2,11 @@
 {% load static %}
 
 <script type="text/javascript">
-	let message = "{% trans 'Saved successfully' %}";
+	const message = "{% trans 'Saved successfully' %}";
 	const categoryBudgetUrl = "{% url 'category_budget_edit' 1 %}";
 	const successUpdatingBudget = "{% trans 'Budget updated' %}";
 	const errorUpdatingBudget = "{% trans 'Error updating budget' %}";
+    const budgetSnapshotUrl = "{% url 'budget_snapshot' %}"
 </script>
 <script type="text/javascript" src="{% static '/js/budgets/data.js' %}?v={{ JS_VERSION }}"></script>
 
@@ -37,8 +38,8 @@
             </td>
             </tr>
             <tr>
-            <td align="center" colspan="2">
-                <span id="budget_message"></span>
+            <td colspan="2" class="text-center">
+                <span id="budget_message" class="font-weight-bold" style="color: green"></span>
             </td>
             </tr>
             </table>

@@ -38,11 +38,16 @@ function getSum(trigger_id) {
 }
 
 function snapshot() {
-    $.ajax({url: '/budgets/snapshot',
-        type: 'GET',
-        data: '',
-        success: function(data) {
-            $('#message').html(message);
-        }}
-    );
+    $.ajax({
+        url: budgetSnapshotUrl,
+        dataType: 'json',
+        headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
+        type: 'POST',
+        data: ''
+    }).error(function(e) {
+        if(e.status === 201) {
+            // not an error
+            $('#budget_message').html(message);
+        }
+    })
 }
