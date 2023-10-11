@@ -279,7 +279,6 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
-		context['form'] = IncomesForm(self.request.user)
 		context['category_amounts'] = self._get_category_amounts(queryset)
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in Transaction.get_year_incomes(self.request.user, expenses=False, incomes=True)]
 
