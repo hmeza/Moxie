@@ -108,7 +108,7 @@ class StatsView(TemplateView):
 		rows.append(current_row)
 
 		totals_translation = _('TOTAL EXPENSES') if is_expense else _('TOTAL INCOMES')
-		rows.append([{'title': totals_translation, 'link': ''}] + [{'title': i, 'link': ''} for k, i in totals.items()])
+		rows.append([{'title': totals_translation, 'link': ''}] + [{'title': i, 'link': self.get_link(is_expense, year, k)} for k, i in totals.items()])
 
 		return rows
 
