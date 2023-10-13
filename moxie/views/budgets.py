@@ -1,21 +1,12 @@
-from django.views.generic import CreateView, DeleteView, View
+from django.views.generic import DeleteView, View
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.http.response import HttpResponse, HttpResponseRedirect
-from moxie.views.expenses import UserOwnerMixin
 from moxie.models import Budget
 
 
-class SnapshotView(CreateView):
-    pass
-
-
-class BudgetView(CreateView):
-    pass
-
-
-class BudgetDeleteView(UserOwnerMixin, DeleteView):
+class BudgetDeleteView(DeleteView):
     model = Budget
     success_url = reverse_lazy('users')
 

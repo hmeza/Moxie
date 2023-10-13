@@ -1,10 +1,10 @@
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.http.response import JsonResponse, HttpResponseRedirect
 from moxie.models import Category, Budget
 from moxie.views.users import ConfigUserContextData
-from moxie.views.expenses import UserOwnerMixin
 
 
 class CategoryView(LoginRequiredMixin, ConfigUserContextData, UpdateView, ListView):
@@ -12,6 +12,12 @@ class CategoryView(LoginRequiredMixin, ConfigUserContextData, UpdateView, ListVi
     fields = ['parent', 'name', 'description', 'type', 'order']
     success_url = reverse_lazy('users')
     template_name = 'users/index.html'
+
+    def get_object(self, queryset=None):
+        instance = super().get_object(queryset)
+        if instance.user != self.request.user:
+            logout(self.request)
+        return instance
 
 
 class CategoryAddView(LoginRequiredMixin, CreateView):
@@ -53,33 +59,25 @@ def categories_bulk_update(request):
     if request.POST:
         update_list = []
         for key in request.POST:
-            obj = Category.objects.get(pk=request.POST.get(key))
+            obj = Category.objects.filter(pk=request.POST.get(key), user=request.user).first()
             obj.order = key
             update_list.append(obj)
-        Category.objects.bulk_update(update_list, ['order'], batch_size=1000)
+        Category.objects.bulk_update(update_list, ['order'], batch_size=100)
     return JsonResponse({"status": "success"}, status=202)
 
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy('users')
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.user != self.request.user:
+            logout(self.request)
+            return None
+        return obj
+
     def get(self, request, *args, **kwargs):
+        # todo check if category has children, make them hang by root
+        # todo validate transactions are not deleted
         return self.delete(request, *args, **kwargs)
-
-
-#     public function deleteAction() {
-#         // TODO: check if category has expenses or incomes
-#         // if so, assign it before deleting
-#         // delete category
-#         $i_id = $this->getRequest()->getParam('id');
-#         try {
-#             // delete children categories
-#             $this->categories->delete('parent = '.$i_id);
-#             $this->categories->delete('id = '.$i_id);
-#         }
-#         catch (Exception $e) {
-#             error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
-#         }
-#         $this->_helper->redirector('index','categories');
-#     }

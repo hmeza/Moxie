@@ -6,10 +6,11 @@ from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
 from django.http import QueryDict
-from django.http.response import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect, HttpResponse
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
-from moxie.forms import CategoryUpdateForm, ExpensesForm
+from moxie.forms import ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
@@ -18,42 +19,7 @@ from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite, Category
 
 
-class UserOwnerMixin(object):
-    def get(self, request, *args, **kwargs):
-        # TODO FINISH THIS
-        try:
-            if self.get_object().user != self.request.user:
-                return HttpResponseForbidden()
-        except Exception as e:
-            print(f"EXCEPTION {e}")
-        return super(UserOwnerMixin, self).dispatch(request, *args, **kwargs)
-
-
-class UpdateCategory(LoginRequiredMixin, UpdateView, UserOwnerMixin):
-    form_class = CategoryUpdateForm
-    success_url = reverse_lazy('users')
-
-
-#
-#     public function orderAction() {
-#         try {
-#             $data = $this->_request->getParams();
-#             $order = 0;
-#             foreach($data as $key => $category_id) {
-#                 if(!is_int($key)) {
-#                     continue;
-#                 }
-#                 $st_update = array('order'    =>    ++$order);
-#                 $this->categories->update($st_update,'id = '.$category_id.' AND user_owner = '.$_SESSION['user_id']);
-#             }
-#         } catch (Exception $e) {
-#             error_log('Exception caught on '.__CLASS__.', '.__FUNCTION__.'('.$e->getLine().'), message: '.$e->getMessage());
-#         }
-#         $this->_helper->redirector('index','categories');
-#     }
-# }
-
-
+# TODO: order
 class TransactionListView(FilterView, ListView):
     model = Transaction
     filterset_class = ExpensesFilter
@@ -123,91 +89,11 @@ class NextAndLastYearAndMonthCalculatorView:
         return date.year, date.month
 
 
-class CommonExpensesView:
-    def _get_monthly_amounts(self, expenses):
-        a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
-        queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
-            .values_list('date__month')\
-            .annotate(
-                total_in_month=Cast(Abs(Sum(Case(
-                    When(in_sum=True, then='amount'),
-                    default=0
-                ))), FloatField()),
-                total_out_month=Cast(Abs(Sum(Case(
-                    When(in_sum=False, then='amount'),
-                    default=0
-                ))), FloatField())
-            )\
-            .values('date__month', 'total_in_month', 'total_out_month')\
-            .order_by('date__month')
-        return queryset
-
-
-class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView, CommonExpensesView):
-    model = Transaction
-    template_name = 'expenses/index.html'
-
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        if request.GET.get('to_excel'):
-            return self.download_csv(request)
-        return response
-
-    def get_filterset_kwargs(self, filterset_class):
-        kwargs = super().get_filterset_kwargs(filterset_class)
-        from django.http import QueryDict
-        q = QueryDict('', mutable=True)
-        if kwargs['data']:
-            q.update(kwargs['data'])
-        date_min, date_max = self._get_start_and_end_date(q)
-        q['date_min'] = date_min
-        q['date_max'] = date_max
-        if kwargs['data'] and kwargs['data'].get('amount__gte'):
-            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
-        if kwargs['data'] and kwargs['data'].get('amount__lte'):
-            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
-        kwargs['data'] = q
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        queryset = self.object_list
-        context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-        context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-        context['edit_slug'] = '/expenses/'
-        context['date_get'] = ''
-        context['tags'] = Tag.get_tags(user)
-        context['used_tag_list'] = Tag.get_used_tags(user)
-        context['form'] = ExpensesForm(user)
-        year, month = self._get_active_year_and_month()
-        category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
-        context['category_amounts'] = category_amounts
-        context['pie_data'] = [list(a.values()) for a in category_amounts]
-        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
-        month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
-        for expense in month_expenses:
-            month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
-            month_expenses_list.append([month_name, expense[1], expense[2]])
-        context['month_expenses'] = month_expenses_list
-        budget = Budget.get_budget_for_month(user, year, month)
-        context['budget'] = budget
-        context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
-        context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
-        context['year'] = year
-        context['month'] = month
-        context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
-        last_year, last_month = self._get_last_year_and_month(year, month)
-        next_year, next_month = self._get_next_year_and_month(year, month)
-        context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
-        context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
-        context['edit_url'] = reverse_lazy('expenses_add')
-        context['filter_url_name'] = 'expenses'
-        context['favourite_data'] = Favourite.get_favourites(user)
-        return context
-
-    def download_csv(self, request):
+class ExportView:
+    def download_csv(self):
         queryset = self.filterset.queryset
+        if not self.object_list:
+            self.object_list = queryset
         model = queryset.model
         model_fields = model._meta.fields + model._meta.many_to_many
         field_names = [field.name for field in model_fields]
@@ -236,6 +122,89 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
                     ...
             writer.writerow(values)
         return response
+
+
+class CommonExpensesView:
+    def _get_monthly_amounts(self, expenses):
+        a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
+        queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
+            .values_list('date__month')\
+            .annotate(
+                total_in_month=Cast(Abs(Sum(Case(
+                    When(in_sum=True, then='amount'),
+                    default=0
+                ))), FloatField()),
+                total_out_month=Cast(Abs(Sum(Case(
+                    When(in_sum=False, then='amount'),
+                    default=0
+                ))), FloatField())
+            )\
+            .values('date__month', 'total_in_month', 'total_out_month')\
+            .order_by('date__month')
+        return queryset
+
+
+class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView):
+    model = Transaction
+    template_name = 'expenses/index.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        # todo this belongs to ExportView, refactor
+        if request.GET.get('to_excel'):
+            return self.download_csv()
+        return response
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        from django.http import QueryDict
+        q = QueryDict('', mutable=True)
+        if kwargs['data']:
+            q.update(kwargs['data'])
+        date_min, date_max = self._get_start_and_end_date(q)
+        q['date_min'] = date_min
+        q['date_max'] = date_max
+        if kwargs['data'] and kwargs['data'].get('amount__gte'):
+            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+        if kwargs['data'] and kwargs['data'].get('amount__lte'):
+            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
+        kwargs['data'] = q
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        queryset = self.object_list
+        context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['tags'] = Tag.get_tags(user)
+        context['used_tag_list'] = Tag.get_used_tags(user)
+        context['form'] = ExpensesForm(user)
+        year, month = self._get_active_year_and_month()
+        category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
+        context['category_amounts'] = category_amounts
+        context['pie_data'] = [list(a.values()) for a in category_amounts]
+        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
+        month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
+        for expense in month_expenses:
+            month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
+            month_expenses_list.append([month_name, expense[1], expense[2]])
+        context['month_expenses'] = month_expenses_list
+        budget = Budget.get_budget_for_month(user, year, month)
+        context['budget'] = budget
+        context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
+        context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
+        context['year'] = year
+        context['month'] = month
+        context['current_month_and_year'] = "{} {}".format(calendar.month_name[int(month)][:3], year)
+        last_year, last_month = self._get_last_year_and_month(year, month)
+        next_year, next_month = self._get_next_year_and_month(year, month)
+        context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
+        context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
+        context['edit_url'] = reverse_lazy('expenses_add')
+        context['filter_url_name'] = 'expenses'
+        context['favourite_data'] = Favourite.get_favourites(user)
+        return context
 
     # todo check if order and order by works properly
     # todo check if results are correct
@@ -290,24 +259,41 @@ class ExpenseAddView(LoginRequiredMixin, CreateView, UpdateTagsView, Transaction
         return redirect(reverse_lazy('expenses'))
 
 
-class ExpenseDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
+class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
     model = Transaction
     success_url = reverse_lazy('expenses')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.user != self.request.user:
+            logout(self.request)
+            return None
+        return obj
 
     def get(self, request, *args, **kwargs):
         return self.delete(request, *args, **kwargs)
 
 
-class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionListView, UserOwnerMixin,
-                  NextAndLastYearAndMonthCalculatorView, CommonExpensesView):
+class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionListView,
+                  NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView):
     model = Transaction
     form_class = ExpensesForm
     template_name = 'expenses/index.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        # todo this belongs to ExportView, refactor
+        if request.GET.get('to_excel'):
+            self.set_object_list({})
+            return self.download_csv()
+        return response
 
     def get_object(self, queryset=None):
         if hasattr(self, 'instance'):
             return self.instance
         self.instance = Transaction.objects.get(pk=self.kwargs.get('pk'))
+        if self.instance.user != self.request.user:
+            logout(self.request)
         return self.instance
 
     def get_form_kwargs(self):
@@ -358,14 +344,7 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         context['last_url'] = f"/expenses/year/{last_year}/month/{last_month}"
         context['next_url'] = f"/expenses/year/{next_year}/month/{next_month}"
 
-        filterset_class = self.get_filterset_class()
-        self.filterset = self.get_filterset(filterset_class)
-
-        if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
-            self.object_list = self.filterset.qs
-        else:
-            self.object_list = self.filterset.queryset.none()
-        context['object_list'] = self.filterset.qs
+        self.set_object_list(context)
 
         # new
         user = self.request.user
@@ -392,3 +371,28 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
         context['filter_url_name'] = 'expenses'
         return context
+
+    def set_object_list(self, context):
+        filterset_class = self.get_filterset_class()
+        self.filterset = self.get_filterset(filterset_class)
+        if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
+            self.object_list = self.filterset.qs
+        else:
+            self.object_list = self.filterset.queryset.none()
+        context['object_list'] = self.filterset.qs
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        from django.http import QueryDict
+        q = QueryDict('', mutable=True)
+        if kwargs['data']:
+            q.update(kwargs['data'])
+        date_min, date_max = self._get_start_and_end_date(q)
+        q['date_min'] = date_min
+        q['date_max'] = date_max
+        if kwargs['data'] and kwargs['data'].get('amount__gte'):
+            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+        if kwargs['data'] and kwargs['data'].get('amount__lte'):
+            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
+        kwargs['data'] = q
+        return kwargs

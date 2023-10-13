@@ -2,19 +2,17 @@ import datetime
 import re
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
-
 from django.shortcuts import redirect
-
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from moxie.forms import IncomesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
-from moxie.models import Transaction, Tag, TransactionTag, Favourite
-from moxie.views.expenses import UserOwnerMixin
+from moxie.models import Transaction, Tag, Favourite
+from moxie.views.expenses import UpdateTagsView
 
 
 class IncomesListView(FilterView, ListView):
@@ -22,7 +20,6 @@ class IncomesListView(FilterView, ListView):
 	filterset_class = IncomesFilter
 
 	def get_queryset(self):
-		start_date, end_date = self.__get_start_and_end_date()
 		order_field = self.__get_order_field()
 		queryset = super().get_queryset()
 		queryset = queryset.filter(user=self.request.user)\
@@ -194,13 +191,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 	# }
 
 
-class UpdateTagsView:
-	def update_tags(self, tags, expense, user):
-		for tag_name in tags:
-			(tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
-			TransactionTag.objects.get_or_create(transaction=expense, tag=tag)
-
-
 class IncomeAddView(LoginRequiredMixin, CreateView, UpdateTagsView, IncomesListView):
 	model = Transaction
 	form_class = IncomesForm
@@ -221,15 +211,22 @@ class IncomeAddView(LoginRequiredMixin, CreateView, UpdateTagsView, IncomesListV
 		return redirect(reverse_lazy('incomes'))
 
 
-class IncomeDeleteView(LoginRequiredMixin, DeleteView, UserOwnerMixin):
+class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 	model = Transaction
 	success_url = reverse_lazy('incomes')
+
+	def get_object(self, queryset=None):
+		obj = super().get_object(queryset)
+		if obj.user != self.request.user:
+			logout(self.request)
+			return None
+		return obj
 
 	def get(self, request, *args, **kwargs):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, UserOwnerMixin, CommonIncomesView):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
@@ -238,6 +235,8 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		if hasattr(self, 'instance'):
 			return self.instance
 		self.instance = Transaction.objects.get(pk=self.kwargs.get('pk'))
+		if self.instance.user != self.request.user:
+			logout(self.request)
 		return self.instance
 
 	def get_form_kwargs(self):

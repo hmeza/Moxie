@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
 from django.db.models import Case, When, Value, BooleanField
+from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.models import SharedExpense, SharedExpensesSheet, Category, SharedExpensesSheetUsers, Transaction
 from moxie.forms import SharedExpensesSheetsForm, SharedExpensesSheetAddUser, SharedExpensesForm
@@ -73,7 +74,6 @@ class SheetView(LoginRequiredMixin, UpdateView):
 			.annotate(my_expense=conditional).filter(sheet__unique_id=unique_id).order_by('date')
 		context['sheet'] = sheet
 		context['total'] = self.get_object().total
-		# todo calculate average, keep in mind currency change
 		context['user_categories'] = Category.get_categories_by_user(self.request.user, Category.EXPENSES)
 		context['sheet_users'] = SharedExpensesSheet.objects.get(unique_id=unique_id).users
 		context['pie_data'] = [[user.user.username, float(user.sheet_expense)] for user in self.object.users.all()]
@@ -117,7 +117,14 @@ class SharedExpenseView(LoginRequiredMixin, CreateView):
 class SheetExpenseDeleteView(LoginRequiredMixin, DeleteView):
 	model = SharedExpense
 
-	# TODO Validate that expense belongs to the user or at least user appears in the shared expenses sheet users
+	def get_object(self, queryset=None):
+		instance = super().get_object(queryset)  # type: SharedExpense
+		users_in_sheet = [a[0] for a in list(instance.sheet.users.all().values_list('sheet__users__user_id'))]
+		if self.request.user.pk not in users_in_sheet:
+			logout(self.request)
+			return None
+		return instance
+
 	def get(self, request, *args, **kwargs):
 		return self.delete(request, *args, **kwargs)
 
@@ -141,7 +148,6 @@ class SheetCopyView(SheetView):
 
 
 class SheetAddUserView(SheetView):
-	# TODO: Control duplicates, show error message properly
 	model = SharedExpensesSheet
 	form_class = SharedExpensesSheetAddUser
 
@@ -187,72 +193,18 @@ class SheetAddUserView(SheetView):
 		# 				'Reply-To: moxie@dootic.com' . "\r\n" .
 		# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
 
-# public function adduserAction() {
-# 		try {
-# 			$id_sheet= $this->getRequest()->getParam('id_sheet');
-# 			$sheetUser = new SharedExpensesSheetUsers();
-# 			$userModel = new Users();
-# 			$sheet = $this->sheetModel->get_by_unique_id($id_sheet);
-# 			if(empty($sheet)) {
-# 				throw new Exception("Sheet with id ".$id_sheet." not found");
-# 			}
-# 			$user = $this->getRequest()->getParam('user');
-# 			$user_id = null;
-# 			$email = null;
-# 			$registered = true;
-# 			try {
-# 				$u = $userModel->findUserByLogin($user);
-# 				error_log(print_r($u,true));
-# 				if(empty($u)) {
-# 					error_log("user not found by login");
-# 					$u = $userModel->findUserByEmail($user);
-# 					error_log(print_r($u,true));
-# 					if(empty($u)) {
-# 						error_log("user not found by email");
-# 						$validator = new Zend_Validate_EmailAddress();
-# 						if (!$validator->isValid($email)) {
-# 							throw new Exception("Invalid email address");
-# 						}
-# 						error_log("settings user as email ".$user);
-# 						$email = $user;
-# 						$registered = false;
-# 					}
-# 				}
-# 				if (!empty($u)) {
-# 					error_log("\$u is set, ".print_r($u,true));
-# 					$user_id = $u['id'];
-# 					$email = $u['email'];
-# 				}
-# 				$data = array(
-# 					'id_sheet' => $sheet['id'],
-# 					'id_user' => $user_id,
-# 					'email' => $email
-# 				);
-# 				// @todo control duplicates
-# 				$sheetUser->insert($data);
-# 				$this->sendUserAdded($id_sheet, $email, $sheet['name'], $registered);
-# 			}
-# 			catch(Exception $e) {
-# 				error_log("exception caught when adding user to sheet: ".$e->getMessage());
-# 				$this->_request->setPost(array(
-# 						'id' => $id_sheet,
-# 						'errors' => array($e->getMessage())
-# 				));
-# 				return $this->_forward("view", "sheets");
-# 			}
-# 		}
-# 		catch(Exception $e) {
-# 			error_log($e->getMessage());
-# 			$this->view->assign("errors", array($e->getMessage()));
-# 		}
-# 		$this->redirect('/sheets/view/id/'.$id_sheet);
-# 	}
-
 
 class SheetCloseView(SheetView):
 	model = SharedExpensesSheet
 	fields = ['closed_at']
 
-	# TODO Validate that user closing sheet is one of the users in sheet
+	def get_object(self, queryset=None):
+		instance = super().get_object(queryset)  # type: SharedExpense
+		users_in_sheet = [a[0] for a in list(instance.sheet.users.all().values_list('sheet__users__user_id'))]
+		if self.request.user.pk not in users_in_sheet:
+			logout(self.request)
+			return None
+		return instance
+
 	def get_success_url(self):
 		return reverse_lazy('sheet_view', kwargs={'unique_id': self.object.unique_id})
