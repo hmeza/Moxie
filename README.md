@@ -8,6 +8,19 @@ Moxie is built with Python3+Django stack, plus jQuery for the front-end.
 
 See it online and register at [https://moxie.dootic.com](https://moxie.dootic.com)
 
+## Deployment
+
+If deploying to production, remember to do a
+
+> yarn install
+
+> python3 manage.py collectstatic
+
+before start using it.
+If you find that no styles are loaded, these two steps are required.
+
+Set ALLOWED_HOSTS in settings also.
+
 ## Requirements and dependencies
 
 Please check requirements.txt for Python + Django.
@@ -27,13 +40,3 @@ or use compose.yml to run it in the same way.
 
 There are also Dockerfile and composer.yml files for production environment in the infrastructure folder.
 
-## Deployment
-
-If deploying to production, remember to do a
-
-> yarn install
-
-> python3 manage.py collectstatic
-
-before start using it.
-If you find that no styles are loaded, these two steps are required. 
