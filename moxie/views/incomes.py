@@ -122,11 +122,10 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		queryset = self.get_queryset()
+		queryset = self.object_list
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['edit_slug'] = '/incomes/'
-		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['form'] = IncomesForm(self.request.user)
@@ -162,33 +161,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 			.values('date__month', 'total_in_month', 'total_out_month')\
 			.order_by('date__month')
 		return queryset
-
-	# todo export to excel
-	# todo check if order and order by works properly
-	# todo check if results are correct
-	# todo check this st_expense needed in the frontend
-	# /**
-	#  * Shows the expenses view.
-	#  * Receives call from export to excel too.
-	#  */
-	# public function indexAction() {
-	# 	$st_params = $this->getParameters();
-	#
-	# 	$st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
-	#
-	# 	// order + switch order by
-	# 	if (isset($st_params['o'])) {
-	# 		$st_params['o'] = ($st_params['o'][0] == '-')
-	# 				? substr($st_params['o'], 1)
-	# 				: "-".$st_params['o'];
-	# 	}
-	#
-	# 	if($this->getRequest()->getParam('to_excel') == true) {
-	# 		$this->exportToExcel($st_list);
-	# 	}
-	#
-	# 	$this->assignViewData($st_list, $st_params);
-	# }
 
 
 class IncomeAddView(LoginRequiredMixin, CreateView, UpdateTagsView, IncomesListView):
@@ -275,7 +247,6 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		queryset = self.get_queryset()
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['date_get'] = ''
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['category_amounts'] = self._get_category_amounts(queryset)

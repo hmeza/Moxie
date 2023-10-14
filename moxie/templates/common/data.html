@@ -36,7 +36,7 @@
 {% for object in object_list %}
     <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
         <td class="moxie_edit text-center">
-            <a class="moxieedit" href="{% url 'expenses_edit' object.id %}">
+            <a class="moxieedit" href="{% if 'expenses' in request.get_full_path %}{% url 'expenses_edit' object.id %}{% else %}{% url 'incomes_edit' object.id %}{% endif %}">
                 <i class="fa fa-pencil"></i>
             </a>
         </td>

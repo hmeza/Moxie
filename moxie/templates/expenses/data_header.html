@@ -24,7 +24,9 @@
         <form method="POST" action="{{ edit_url }}">
             {% crispy form %}
             {% if object.pk %}
-                <a id="expense_delete" class="btn btn-danger" href="{% url 'expenses_delete' object.pk %}">{% trans 'Delete' %}</a>
+                <a id="expense_delete" class="btn btn-danger" href="{% url 'expenses_delete' object.pk %}">
+                    {% trans 'Delete' %}
+                </a>
             {% endif %}
         </form>
     </div>
