@@ -206,29 +206,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['favourite_data'] = Favourite.get_favourites(user)
         return context
 
-    # todo check if order and order by works properly
-    # todo check if results are correct
-    # todo check this st_expense needed in the frontend
-    # /**
-    #  * Shows the expenses view.
-    #  * Receives call from export to excel too.
-    #  */
-    # public function indexAction() {
-    #     $st_params = $this->getParameters();
-    #
-    #     $st_list = $this->expenses->get($_SESSION['user_id'],Categories::EXPENSES, $st_params);
-    #
-    #     // order + switch order by
-    #     if (isset($st_params['o'])) {
-    #         $st_params['o'] = ($st_params['o'][0] == '-')
-    #                 ? substr($st_params['o'], 1)
-    #                 : "-".$st_params['o'];
-    #     }
-    #
-    #     if($this->getRequest()->getParam('to_excel') == true) {
-    #         $this->exportToExcel($st_list);
-    #     }
-
 
 class UpdateTagsView:
     def update_tags(self, form, transaction, user):

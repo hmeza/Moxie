@@ -14,7 +14,7 @@
 		<th class="list moxie_note text-left">{% trans 'Note' %}</th>
         <th class="list moxie_date_inline sorting text-center">
             {% if month or year or o %}
-                <a href="?order=date">
+                <a href="?order={% if 'order=date' in request.get_full_path %}-{% endif %}date">
             {% endif %}
             {% trans 'Date' %}
             {% if month or year or o %}
@@ -23,7 +23,7 @@
         </th>
         <th class="list moxie_amount sorting text-right">
             {% if month or year or o %}
-                <a href="?order=amount">
+                <a href="?order={% if 'order=amount' in request.get_full_path %}-{% endif %}amount">
             {% endif %}
             {% trans 'Amount' %}
             {% if month or year or o%}
