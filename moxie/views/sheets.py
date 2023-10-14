@@ -3,6 +3,7 @@ import uuid
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, FormView
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.conf import settings
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import send_mail
@@ -181,17 +182,9 @@ class SheetAddUserView(SheetView):
 
 		{footer}
 		"""
-		from_address = 'moxie@dootic.com'
+		from_address = settings['FROM_EMAIL']
 		# TODO https://docs.djangoproject.com/en/4.2/topics/email/
 		return send_mail(subject, body, from_address, [user_email])
-
-		# 	private function sendUserAdded($sheetId, $userEmail, $sheetName, $registered=false) {
-		# 		$s_server = Zend_Registry::get('config')->moxie->settings->url;
-		# 		$s_site = Zend_Registry::get('config')->moxie->app->name;
-		#
-		# 		$headers = 'From: Moxie <moxie@dootic.com>' . "\r\n" .
-		# 				'Reply-To: moxie@dootic.com' . "\r\n" .
-		# 				'X-Mailer: PHP/' . phpversion() . "\r\n";
 
 
 class SheetCloseView(SheetView):
