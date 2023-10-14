@@ -57,7 +57,7 @@
     <span id="total">
         <span class="total_amount">{{ current_amount|default_if_none:"0.00"|abs }} &euro;
         {% if total_amount|sub:current_amount != 0 %}
-            <br><span class="" style="color:#777777">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
+            <br><span class="text-grey">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
         {% endif %}
     </span></td>
 </tr>

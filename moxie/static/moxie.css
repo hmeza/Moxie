@@ -830,3 +830,7 @@ table.table-stats > tbody > tr > td > a:visited {
 #hint_id_new_password1 > ul {
     margin-left: 1rem;
 }
+
+.text-grey {
+	color: #777777;
+}
