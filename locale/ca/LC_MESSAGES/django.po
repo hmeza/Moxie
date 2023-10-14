@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 11:20+0000\n"
+"POT-Creation-Date: 2023-10-14 09:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,107 +166,107 @@ msgstr "Despeses"
 msgid "Incomes"
 msgstr "Ingresos"
 
-#: moxie/models.py:22 moxie/models.py:55
+#: moxie/models.py:22 moxie/models.py:65
 msgid "Both"
 msgstr "Ambdues"
 
-#: moxie/models.py:51
+#: moxie/models.py:61
 msgid "Expense"
 msgstr "Despesa"
 
-#: moxie/models.py:53
+#: moxie/models.py:63
 msgid "Income"
 msgstr "Ingrés"
 
-#: moxie/models.py:74 moxie/models.py:76
+#: moxie/models.py:84 moxie/models.py:86
 msgid "Root category"
 msgstr "Categoria arrel"
 
-#: moxie/models.py:83 moxie/models.py:85 moxie/models.py:141
+#: moxie/models.py:93 moxie/models.py:95 moxie/models.py:151
 msgid "Home"
 msgstr "Inici"
 
-#: moxie/models.py:91
+#: moxie/models.py:101
 msgid "Fun"
 msgstr "Diversió"
 
-#: moxie/models.py:93
+#: moxie/models.py:103
 msgid "Going out, dinner outside, parties, fun..."
 msgstr "Sortir, sopar fora, festes, alegria..."
 
-#: moxie/models.py:99 moxie/models.py:101
+#: moxie/models.py:109 moxie/models.py:111
 msgid "Technology"
 msgstr "Tecnologia"
 
-#: moxie/models.py:107
+#: moxie/models.py:117
 msgid "Gifts"
 msgstr "Regals"
 
-#: moxie/models.py:109
+#: moxie/models.py:119
 msgid "Christmas, Valentine's day, birthday..."
 msgstr "Nadal, aniversaris..."
 
-#: moxie/models.py:115
+#: moxie/models.py:125
 msgid "Clothing"
 msgstr "Roba"
 
-#: moxie/models.py:117
+#: moxie/models.py:127
 msgid "Wear and dress"
 msgstr "Roba, sabates, etc."
 
-#: moxie/models.py:123 moxie/models.py:294
+#: moxie/models.py:133 moxie/models.py:246
 msgid "Other"
 msgstr "Altres"
 
-#: moxie/models.py:125
+#: moxie/models.py:135
 msgid "Non-classifiable transactions"
 msgstr "El que no entra en altres categories"
 
-#: moxie/models.py:133 moxie/models.py:134
+#: moxie/models.py:143 moxie/models.py:144
 msgid "Food"
 msgstr "Menjar"
 
-#: moxie/models.py:143
+#: moxie/models.py:153
 msgid "Home food, grocery"
 msgstr "Menjar per a casa, compres a supermercats"
 
-#: moxie/models.py:149
+#: moxie/models.py:159
 msgid "Away"
 msgstr "Fora"
 
-#: moxie/models.py:151
+#: moxie/models.py:161
 msgid "Lunch and dinner out"
 msgstr "Menjar i sopar fora de casa"
 
-#: moxie/models.py:157
+#: moxie/models.py:167
 msgid "Coffee"
 msgstr "Cafè"
 
-#: moxie/models.py:159
+#: moxie/models.py:169
 msgid "Coffee outside, take away, some pastry maybe"
 msgstr "Cafè fora de casa, per emportar, potser alguna pasteta"
 
-#: moxie/models.py:291
+#: moxie/models.py:243
 msgid "Euro"
 msgstr ""
 
-#: moxie/models.py:292
+#: moxie/models.py:244
 msgid "Pounds"
 msgstr "Lliures"
 
-#: moxie/models.py:293
+#: moxie/models.py:245
 msgid "US Dollar"
 msgstr "Dòlars"
 
-#: moxie/settings.py:151
+#: moxie/settings.py:154
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:152
+#: moxie/settings.py:155
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:153
+#: moxie/settings.py:156
 msgid "Català"
 msgstr ""
 
@@ -282,20 +282,20 @@ msgstr "Pressupost actualitzat"
 msgid "Error updating budget"
 msgstr "Error actualitzant pressupost"
 
-#: moxie/templates/categories/budget.html:15
+#: moxie/templates/categories/budget.html:16
 msgid "Current budget"
 msgstr "Pressupost actual"
 
-#: moxie/templates/categories/budget.html:36
+#: moxie/templates/categories/budget.html:37
 msgid "Take snapshot"
 msgstr "Fer una instantània"
 
-#: moxie/templates/categories/budget.html:47
+#: moxie/templates/categories/budget.html:48
 msgid "Budgets"
 msgstr "Pressupostos"
 
-#: moxie/templates/categories/budget.html:54
-#: moxie/templates/expenses/data_header.html:27
+#: moxie/templates/categories/budget.html:55
+#: moxie/templates/expenses/data_header.html:28
 #: moxie/templates/incomes/data_header.html:18
 msgid "Delete"
 msgstr "Esborrar"
@@ -439,27 +439,16 @@ msgstr "Per any"
 #: moxie/templates/index/about.html:9
 msgid ""
 "\n"
-"Moxie is helped, through licenses, from:<br>\n"
-"<a href=\"https://www.jetbrains.com/phpstorm/\">JetBrains</a><br><br>\n"
-"Moxie uses:<br>\n"
-"<a href=\"http://www.php.net\" target=\"blank\">PHP</a><br>\n"
-"<a href=\"http://www.zend.com/\" target=\"blank\">Zend framework</a><br>\n"
-"<a href=\"https://developers.google.com/chart/\" target=\"blank\">Google "
-"charts</a><br>\n"
-"<a href=\"https://www.mysql.com/\">MySQL</a><br>\n"
-"<a href=\"https://httpd.apache.org/\">Apache</a><br><br>\n"
-"Moxie is hosted at:<br>\n"
-"<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
+"    Moxie is a website to manage your daily incomes and expenses.<br><br>\n"
+"    If you do not manage your personal finance or your spreadsheet is taking "
+"you\n"
+"    a lot of time to maintain, register and check what Moxie can do for "
+"you.\n"
 msgstr ""
 "\n"
-"Moxie rep recolzament, mitjançant llicencies, de:<br><a href='https://www."
-"jetbrains.com/phpstorm/'>JetBrains</a><br><br>Moxie utilitza:<br><a "
-"href='http://www.php.net' target='blank'>PHP</a><br><a href='http://www.zend."
-"com/' target='blank'>Zend framework</a><br><a href='https://developers."
-"google.com/chart/' target='blank'>Google charts</a><br><a href='https://www."
-"mysql.com/'>MySQL</a><br><a href='https://httpd.apache.org/'>Apache</"
-"a><br><br>Moxie està hospedat a:<br><a href='https://www.ovh.com/' "
-"target='blank'>OVH</a><br><br>\n"
+"Moxie es un lloc web per portar el control de les despeses i els ingresos diaris.<br><br>\n"
+"Si no tens un control de les teves finances personals, o notes que el full de càlcul que estàs emprant s'ha quedat petit\n"
+"regístra't i comprova el que Moxie pot fer per tu.\n"
 
 #: moxie/templates/index/index.html:9
 msgid "Log in"
@@ -543,7 +532,6 @@ msgid "TOTAL"
 msgstr "TOTAL"
 
 #: moxie/templates/sheets/view.html:127
-#| msgid "Update expense"
 msgid "Copy to my expenses"
 msgstr "Copiar a les meves despeses"
 
@@ -615,15 +603,15 @@ msgstr "Actualitza les teves dades"
 msgid "Change your password"
 msgstr "Canvia la teva contrasenya"
 
-#: moxie/views/login.py:30
+#: moxie/views/login.py:32
 msgid "Login incorrect"
 msgstr "Autenticació incorrecta"
 
-#: moxie/views/login.py:51
+#: moxie/views/login.py:53
 msgid "Registered successfully."
 msgstr "Registre fet amb èxit"
 
-#: moxie/views/login.py:80
+#: moxie/views/login.py:82
 msgid ""
 "\n"
 "\t<h2>Password reset sent</h2><hr>\n"
@@ -637,36 +625,36 @@ msgid ""
 "\t"
 msgstr ""
 
-#: moxie/views/login.py:89
+#: moxie/views/login.py:91
 msgid "Problem sending reset password email"
 msgstr ""
 "Hi ha hagut un problema enviant el correu de restauració de contrasenya"
 
-#: moxie/views/login.py:91
+#: moxie/views/login.py:93
 msgid "Connection error"
 msgstr "Error de connexió"
 
-#: moxie/views/login.py:99
+#: moxie/views/login.py:101
 msgid "You must pass the reCAPTCHA test"
 msgstr "Has d'introduir el reCAPTCHA correctament"
 
-#: moxie/views/login.py:123
+#: moxie/views/login.py:125
 msgid "Your password has been set. You may go ahead and log in now."
 msgstr "La teva contrasenya s'ha modificat correctament. Ja pots accedir."
 
-#: moxie/views/login.py:131
+#: moxie/views/login.py:133
 msgid "Link is expired"
 msgstr "El vincle ha expirat"
 
-#: moxie/views/sheets.py:159
+#: moxie/views/sheets.py:166
 msgid "New shared expenses sheet"
 msgstr "Nou full de despeses compartides"
 
-#: moxie/views/sheets.py:161
+#: moxie/views/sheets.py:168
 msgid "Someone shared an expenses sheet with you:"
 msgstr "Algú ha compartit un full de despeses amb tu:"
 
-#: moxie/views/sheets.py:166
+#: moxie/views/sheets.py:173
 msgid ""
 "Best regards\n"
 "\n"
@@ -687,6 +675,30 @@ msgstr "TOTAL DESPESES"
 #: moxie/views/stats.py:110
 msgid "TOTAL INCOMES"
 msgstr "INGRESOS TOTALS"
+
+#~ msgid ""
+#~ "\n"
+#~ "Moxie is helped, through licenses, from:<br>\n"
+#~ "<a href=\"https://www.jetbrains.com/phpstorm/\">JetBrains</a><br><br>\n"
+#~ "Moxie uses:<br>\n"
+#~ "<a href=\"http://www.php.net\" target=\"blank\">PHP</a><br>\n"
+#~ "<a href=\"http://www.zend.com/\" target=\"blank\">Zend framework</a><br>\n"
+#~ "<a href=\"https://developers.google.com/chart/\" target=\"blank\">Google "
+#~ "charts</a><br>\n"
+#~ "<a href=\"https://www.mysql.com/\">MySQL</a><br>\n"
+#~ "<a href=\"https://httpd.apache.org/\">Apache</a><br><br>\n"
+#~ "Moxie is hosted at:<br>\n"
+#~ "<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Moxie rep recolzament, mitjançant llicencies, de:<br><a href='https://www."
+#~ "jetbrains.com/phpstorm/'>JetBrains</a><br><br>Moxie utilitza:<br><a "
+#~ "href='http://www.php.net' target='blank'>PHP</a><br><a href='http://www."
+#~ "zend.com/' target='blank'>Zend framework</a><br><a href='https://"
+#~ "developers.google.com/chart/' target='blank'>Google charts</a><br><a "
+#~ "href='https://www.mysql.com/'>MySQL</a><br><a href='https://httpd.apache."
+#~ "org/'>Apache</a><br><br>Moxie està hospedat a:<br><a href='https://www."
+#~ "ovh.com/' target='blank'>OVH</a><br><br>\n"
 
 #~ msgid "filter_submit"
 #~ msgstr "Filtrar"

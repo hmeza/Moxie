@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-10 11:20+0000\n"
+"POT-Creation-Date: 2023-10-14 09:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,109 +171,109 @@ msgstr "Monthly expense"
 msgid "Incomes"
 msgstr ""
 
-#: moxie/models.py:22 moxie/models.py:55
+#: moxie/models.py:22 moxie/models.py:65
 msgid "Both"
 msgstr ""
 
-#: moxie/models.py:51
+#: moxie/models.py:61
 #, fuzzy
 #| msgid "expenses_monthly"
 msgid "Expense"
 msgstr "Monthly expense"
 
-#: moxie/models.py:53
+#: moxie/models.py:63
 msgid "Income"
 msgstr ""
 
-#: moxie/models.py:74 moxie/models.py:76
+#: moxie/models.py:84 moxie/models.py:86
 msgid "Root category"
 msgstr ""
 
-#: moxie/models.py:83 moxie/models.py:85 moxie/models.py:141
+#: moxie/models.py:93 moxie/models.py:95 moxie/models.py:151
 msgid "Home"
 msgstr ""
 
-#: moxie/models.py:91
+#: moxie/models.py:101
 msgid "Fun"
 msgstr ""
 
-#: moxie/models.py:93
+#: moxie/models.py:103
 msgid "Going out, dinner outside, parties, fun..."
 msgstr ""
 
-#: moxie/models.py:99 moxie/models.py:101
+#: moxie/models.py:109 moxie/models.py:111
 msgid "Technology"
 msgstr ""
 
-#: moxie/models.py:107
+#: moxie/models.py:117
 msgid "Gifts"
 msgstr ""
 
-#: moxie/models.py:109
+#: moxie/models.py:119
 msgid "Christmas, Valentine's day, birthday..."
 msgstr ""
 
-#: moxie/models.py:115
+#: moxie/models.py:125
 msgid "Clothing"
 msgstr ""
 
-#: moxie/models.py:117
+#: moxie/models.py:127
 msgid "Wear and dress"
 msgstr ""
 
-#: moxie/models.py:123 moxie/models.py:294
+#: moxie/models.py:133 moxie/models.py:246
 msgid "Other"
 msgstr ""
 
-#: moxie/models.py:125
+#: moxie/models.py:135
 msgid "Non-classifiable transactions"
 msgstr ""
 
-#: moxie/models.py:133 moxie/models.py:134
+#: moxie/models.py:143 moxie/models.py:144
 msgid "Food"
 msgstr ""
 
-#: moxie/models.py:143
+#: moxie/models.py:153
 msgid "Home food, grocery"
 msgstr ""
 
-#: moxie/models.py:149
+#: moxie/models.py:159
 msgid "Away"
 msgstr ""
 
-#: moxie/models.py:151
+#: moxie/models.py:161
 msgid "Lunch and dinner out"
 msgstr ""
 
-#: moxie/models.py:157
+#: moxie/models.py:167
 msgid "Coffee"
 msgstr ""
 
-#: moxie/models.py:159
+#: moxie/models.py:169
 msgid "Coffee outside, take away, some pastry maybe"
 msgstr ""
 
-#: moxie/models.py:291
+#: moxie/models.py:243
 msgid "Euro"
 msgstr ""
 
-#: moxie/models.py:292
+#: moxie/models.py:244
 msgid "Pounds"
 msgstr ""
 
-#: moxie/models.py:293
+#: moxie/models.py:245
 msgid "US Dollar"
 msgstr ""
 
-#: moxie/settings.py:151
+#: moxie/settings.py:154
 msgid "Español"
 msgstr ""
 
-#: moxie/settings.py:152
+#: moxie/settings.py:155
 msgid "English"
 msgstr ""
 
-#: moxie/settings.py:153
+#: moxie/settings.py:156
 msgid "Català"
 msgstr ""
 
@@ -289,20 +289,20 @@ msgstr ""
 msgid "Error updating budget"
 msgstr ""
 
-#: moxie/templates/categories/budget.html:15
+#: moxie/templates/categories/budget.html:16
 msgid "Current budget"
 msgstr ""
 
-#: moxie/templates/categories/budget.html:36
+#: moxie/templates/categories/budget.html:37
 msgid "Take snapshot"
 msgstr ""
 
-#: moxie/templates/categories/budget.html:47
+#: moxie/templates/categories/budget.html:48
 msgid "Budgets"
 msgstr ""
 
-#: moxie/templates/categories/budget.html:54
-#: moxie/templates/expenses/data_header.html:27
+#: moxie/templates/categories/budget.html:55
+#: moxie/templates/expenses/data_header.html:28
 #: moxie/templates/incomes/data_header.html:18
 msgid "Delete"
 msgstr ""
@@ -444,17 +444,11 @@ msgstr ""
 #: moxie/templates/index/about.html:9
 msgid ""
 "\n"
-"Moxie is helped, through licenses, from:<br>\n"
-"<a href=\"https://www.jetbrains.com/phpstorm/\">JetBrains</a><br><br>\n"
-"Moxie uses:<br>\n"
-"<a href=\"http://www.php.net\" target=\"blank\">PHP</a><br>\n"
-"<a href=\"http://www.zend.com/\" target=\"blank\">Zend framework</a><br>\n"
-"<a href=\"https://developers.google.com/chart/\" target=\"blank\">Google "
-"charts</a><br>\n"
-"<a href=\"https://www.mysql.com/\">MySQL</a><br>\n"
-"<a href=\"https://httpd.apache.org/\">Apache</a><br><br>\n"
-"Moxie is hosted at:<br>\n"
-"<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
+"    Moxie is a website to manage your daily incomes and expenses.<br><br>\n"
+"    If you do not manage your personal finance or your spreadsheet is taking "
+"you\n"
+"    a lot of time to maintain, register and check what Moxie can do for "
+"you.\n"
 msgstr ""
 
 #: moxie/templates/index/index.html:9
@@ -618,15 +612,15 @@ msgstr ""
 msgid "Change your password"
 msgstr ""
 
-#: moxie/views/login.py:30
+#: moxie/views/login.py:32
 msgid "Login incorrect"
 msgstr ""
 
-#: moxie/views/login.py:51
+#: moxie/views/login.py:53
 msgid "Registered successfully."
 msgstr ""
 
-#: moxie/views/login.py:80
+#: moxie/views/login.py:82
 msgid ""
 "\n"
 "\t<h2>Password reset sent</h2><hr>\n"
@@ -640,35 +634,35 @@ msgid ""
 "\t"
 msgstr ""
 
-#: moxie/views/login.py:89
+#: moxie/views/login.py:91
 msgid "Problem sending reset password email"
 msgstr ""
 
-#: moxie/views/login.py:91
+#: moxie/views/login.py:93
 msgid "Connection error"
 msgstr ""
 
-#: moxie/views/login.py:99
+#: moxie/views/login.py:101
 msgid "You must pass the reCAPTCHA test"
 msgstr ""
 
-#: moxie/views/login.py:123
+#: moxie/views/login.py:125
 msgid "Your password has been set. You may go ahead and log in now."
 msgstr ""
 
-#: moxie/views/login.py:131
+#: moxie/views/login.py:133
 msgid "Link is expired"
 msgstr ""
 
-#: moxie/views/sheets.py:159
+#: moxie/views/sheets.py:166
 msgid "New shared expenses sheet"
 msgstr ""
 
-#: moxie/views/sheets.py:161
+#: moxie/views/sheets.py:168
 msgid "Someone shared an expenses sheet with you:"
 msgstr ""
 
-#: moxie/views/sheets.py:166
+#: moxie/views/sheets.py:173
 msgid ""
 "Best regards\n"
 "\n"
