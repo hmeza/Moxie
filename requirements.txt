@@ -1,0 +1,11 @@
+Django==3.1.0
+django-filter
+mysqlclient
+django-mathfilters
+django-crispy-forms
+python-dateutil
+PyMySQL
+django-simple-captcha
+Pillow<=9.5.0
+python-dotenv
+# tagulous

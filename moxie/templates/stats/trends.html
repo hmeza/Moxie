@@ -1,0 +1,24 @@
+{% load static %}
+<!-- Graphic -->
+<link rel="stylesheet" type="text/css" href="{% static 'trends.css' %}?version={{ JS_VERSION }}"/>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+	let trends_array = [];
+    {% for key, value in trends.items %}
+    trends_array[{{ key }}] = {{ value.data|safe }};
+    {% endfor %}
+	{#let default_category = <?php echo $default; ?>#}
+</script>
+<script type="text/javascript" src="{% static '/js/stats/trends.js' %}"></script>
+
+<div id="stats_trends_container" class="accordion-body collapse mt-3 mb-5 pb-5">
+	<div id="stats_trends"></div>
+	<label for="trends_category"></label>
+    <form class="form-group">
+	<select id="trends_category" name="trends_category" onchange="drawChart();" class="form-control">
+        {% for key, value in trends.items %}
+            <option value="{{ key }}">{{ value.name }}</option>
+        {% endfor %}
+	</select>
+    </form>
+</div>

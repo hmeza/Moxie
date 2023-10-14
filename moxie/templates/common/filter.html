@@ -1,0 +1,20 @@
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+<div style="margin-bottom: 25px">
+    <div class="center-block" style="padding-left: 5px; padding-right: 5px;">
+        <div id="search_title" class="btn btn-default center search_button" data-toggle="collapse" data-target="#search_form">
+            <span id="search-toggle" class="glyphicon glyphicon-search p-0">
+                {% trans 'Search' %}
+            </span>
+            <i class="glyphicon glyphicon-chevron-down center-block" style="height: 1.6rem; padding: 0px"></i>
+        </div>
+        <span id="search_form" class="search_button_mobile accordion-body {% if is_search %}d-block{% endif %}">
+        <form method="GET" action="{% url filter_url_name %}">
+            {% crispy filter.form %}
+        </form>
+        </span>
+    </div>
+</div>
+<script type="text/javascript" src="{% static '/js/common/search.js' %}?v=1"></script>

@@ -1,0 +1,14 @@
+{% load static %}
+{% load i18n %}
+{% load mathfilters %}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    let barChartData = {% if year_incomes %}{{ year_incomes|safe }}{% else %}[["Year", "Amount"], [new Date().getFullYear(), 0]]{% endif %};
+    let barTitle = "{% trans 'Yearly income' %}";
+    let barYearLabel = "{% trans 'Per year' %}";
+</script>
+<script type="text/javascript" src="{% static '/js/incomes/stats.js' %}?v={{ JS_VERSION }}"></script>
+<div id="incomes_all"></div>
+
+{% include 'common/to_top.html' %}

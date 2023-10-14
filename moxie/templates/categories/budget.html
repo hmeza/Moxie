@@ -1,0 +1,61 @@
+{% load i18n %}
+{% load static %}
+
+<script type="text/javascript">
+	const message = "{% trans 'Saved successfully' %}";
+	const categoryBudgetUrl = "{% url 'category_budget_edit' 1 %}";
+	const successUpdatingBudget = "{% trans 'Budget updated' %}";
+	const errorUpdatingBudget = "{% trans 'Error updating budget' %}";
+    const budgetSnapshotUrl = "{% url 'budget_snapshot' %}"
+</script>
+<script type="text/javascript" src="{% static '/js/budgets/data.js' %}?v={{ JS_VERSION }}"></script>
+
+<div id="budget_table" class="accordion-body collapse form-group container mt-3 w-100">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6">
+            <div class="h3">{% trans 'Current budget' %}</div>
+            <table class="table table-striped">
+            {% if current_budget %}
+                <th colspan="3" class="text-left">{{ current_budget.0.date_created|date:'d/m/Y' }}</th>
+                {% for bl in current_budget %}
+                    <tr>
+                    <td>{{ bl.category }}</td>
+                    <td align="right">
+                        <input type="hidden" name="category{{ bl.category.pk }}" id="category{{ bl.category.pk }}" value="{{ bl.category.pk }}">
+                        <input type="text" id="amount{{ bl.category.pk }}" name="amount{{ bl.category.pk }}" onChange="getSum({{ bl.category.pk }})" value="{{ bl.amount}}" class="form-control text-right">
+                    </td>
+                    <td width=15></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            <tr>
+            <td></td><td align="right"><span id="sum"><b>{{ current_budget_amount }} &euro;</b></span></td>
+            <td><span id="spinner" style="display:none"><img src="{% static '/img/spinner.gif' %}"></span></td>
+            </tr>
+            <tr>
+            <td colspan="2" class="text-center">
+                <input type="button" value="{% trans 'Take snapshot' %}" onclick="snapshot();" class="btn btn-primary"></form>
+            </td>
+            </tr>
+            <tr>
+            <td colspan="2" class="text-center">
+                <span id="budget_message" class="font-weight-bold" style="color: green"></span>
+            </td>
+            </tr>
+            </table>
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <div class="h3">{% trans 'Budgets' %}</div>
+            {% for budget in budgets_list %}
+            <div class="d-inline-block mb-3 w-100">
+                <div class="float-left">
+                    {{ budget.date_created }}
+                </div>
+                <div class="float-right">
+                    <a class="btn btn-danger" href="{% url 'budget_delete' budget.pk %}">{% trans 'Delete' %}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

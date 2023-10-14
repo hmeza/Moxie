@@ -1,0 +1,66 @@
+{% load i18n %}
+{% load mathfilters %}
+
+<table class="table table-bordered table-condensed table-hover table-sm w-100" id="mytable">
+<thead>
+    <tr>
+        <td colspan="5" class="text-center">
+			{% include 'common/next_last_interval.html' with last_url=last_url next_url=next_url current_month_and_year=current_month_and_year %}
+        </td>
+    </tr>
+	<tr>
+		<th class="list moxie_edit">&nbsp;</th>
+		<th class="list moxie_category text-left">{% trans 'Category' %}</th>
+		<th class="list moxie_note text-left">{% trans 'Note' %}</th>
+        <th class="list moxie_date_inline sorting text-center">
+            {% if month or year or o %}
+                <a href="?order={% if 'order=date' in request.get_full_path %}-{% endif %}date">
+            {% endif %}
+            {% trans 'Date' %}
+            {% if month or year or o %}
+                </a>
+            {% endif %}
+        </th>
+        <th class="list moxie_amount sorting text-right">
+            {% if month or year or o %}
+                <a href="?order={% if 'order=amount' in request.get_full_path %}-{% endif %}amount">
+            {% endif %}
+            {% trans 'Amount' %}
+            {% if month or year or o%}
+                </a>
+            {% endif %}
+        </th>
+	</tr>
+</thead>
+<tbody>
+{% for object in object_list %}
+    <tr id="tr{{ object.id }}" class="list{% if not object.in_sum %} total_amount{% endif %}">
+        <td class="moxie_edit text-center">
+            <a class="moxieedit" href="{% if 'expenses' in request.get_full_path %}{% url 'expenses_edit' object.id %}{% else %}{% url 'incomes_edit' object.id %}{% endif %}">
+                <i class="fa fa-pencil"></i>
+            </a>
+        </td>
+        <td class="moxie_category"><div alt="{{ object.category.description }}" title="{{ object.category.description }}">{{ object.category.name }}</div></td>
+        <td class="moxie_note">{{ object.note }}</td>
+        <td class="moxie_date_inline">{{ object.date|date:'d-m-Y' }}</td>
+        <td class="moxie_amount"><div id="val{{ object.id }}" class="text-right">{{ object.amount|abs }} &euro;</div></td>
+    </tr>
+{% endfor %}
+    <tr>
+        <th colspan="5" class="list_moxie_top text-center pt-2">{% trans 'Date' %}</th>
+    </tr>
+<tr>
+<td colspan=2>
+    <button class="btn btn-info btn-xs" id="export_to_excel_button" value="{% trans 'Export' %}" onclick="export_to_excel()">{% trans 'Export' %}</button>
+</td>
+<td colspan=3 class="list list_money text-right">
+    <span id="total">
+        <span class="total_amount">{{ current_amount|default_if_none:"0.00"|abs }} &euro;
+        {% if total_amount|sub:current_amount != 0 %}
+            <br><span class="text-grey">{{ total_amount|default_if_none:"0.00"|abs }} &euro;
+        {% endif %}
+    </span></td>
+</tr>
+</tbody>
+</table>
+{% include 'common/to_top.html' %}

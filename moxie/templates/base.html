@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Moxie</title>
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{% static '/img/favicon/apple-touch-icon-57x57.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static '/img/favicon/apple-touch-icon-114x114.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static '/img/favicon/apple-touch-icon-72x72.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static '/img/favicon/apple-touch-icon-144x144.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="{% static '/img/favicon/apple-touch-icon-60x60.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{% static '/img/favicon/apple-touch-icon-120x120.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{% static '/img/favicon/apple-touch-icon-76x76.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{% static '/img/favicon/apple-touch-icon-152x152.png' %}" />
+    <link rel="apple-touch-icon-precomposed" sizes="196x196" href="{% static '/img/favicon/apple-touch-icon-196x196.png' %}" />
+    <link rel="icon" sizes="196x196" href="{% static '/img/favicon/apple-touch-icon-196x196.png' %}">
+    <link rel="icon" type="image/png" href="{% static '/img/favicon/favicon-196x196.png' %}" sizes="196x196" />
+    <link rel="icon" type="image/png" href="{% static '/img/favicon/favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/png" href="{% static '/img/favicon/favicon-32x32.png' %}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{% static '/img/favicon/favicon-16x16.png' %}" sizes="16x16" />
+    <link rel="icon" type="image/png" href="{% static '/img/favicon/favicon-128.png' %}" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="{% static '/img/favicon/mstile-144x144.png' %}" />
+    <meta name="msapplication-square70x70logo" content="{% static '/img/favicon/mstile-70x70.png' %}" />
+    <meta name="msapplication-square150x150logo" content="{% static '/img/favicon/mstile-150x150.png' %}" />
+    <meta name="msapplication-wide310x150logo" content="{% static '/img/favicon/mstile-310x150.png' %}" />
+    <meta name="msapplication-square310x310logo" content="{% static '/img/favicon/mstile-310x310.png' %}" />
+    <meta property="og:image" content="{% static '/img/favicon/apple-touch-icon-152x152.png' %}" />
+    <link href="{% static '/img/favicon/apple-touch-icon-152x152.png' %}" rel="apple-touch-icon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="{% static '/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static '/jquery-ui/dist/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static '/js/common.js' %}?v=2"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bootstrap-social/bootstrap-social.css' %}">
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-tagsinput/src/bootstrap-tagsinput.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-tagsinput/src/bootstrap-tagsinput.css' %}">
+    <script src="{% static 'typeahead.js/dist/typeahead.bundle.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/moxie.css' %}?v={{ JS_VERSION }}"/>
+    <script type="text/javascript" src="{% static '/js/jquery.ui.touch-punch.min.js' %}"></script>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-10754954-7']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body style="border: 0; margin: 0; padding: 0">
+{% include 'header.html' %}
+{% block content %}
+{% endblock %}
+{% include 'footer.html' %}
+</body>
+</html>

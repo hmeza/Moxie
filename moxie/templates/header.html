@@ -1,0 +1,23 @@
+{% load i18n %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="moxietitle text-decoration-none" href="{% url 'index' %}">Moxi€</a>
+  <button class="navbar-toggler aqua-gradient" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse ml-4" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+    {% if user.is_authenticated %}
+        {% for url in urls  %}
+            <li class="ml-2 {% if url in request.path %}active{% endif %}">
+                <a href="/{{ url }}" class="nav-link">{% trans url %}</a>
+            </li>
+        {% endfor %}
+        <li><a href="{% url 'logout' %}" class="nav-link">{% trans 'logout' %}</a></li>
+    {% else %}
+        <li><a href="/" class="nav-link">{% trans 'index' %}</a></li>
+        <!--<li role="presentation"><a href="/finance/index">'.$st_lang['finance'].'</a></li>-->
+        <li><a href="{% url 'about' %}" class="nav-link">{% trans 'about' %}</a></li>
+    {% endif %}
+  </div>
+</nav>

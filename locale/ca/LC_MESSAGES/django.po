@@ -1,0 +1,735 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-14 09:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: moxie/auth/hashers.py:32
+msgid "algorithm"
+msgstr "algoritme"
+
+#: moxie/auth/hashers.py:33
+msgid "salt"
+msgstr "sal"
+
+#: moxie/auth/hashers.py:34
+msgid "hash"
+msgstr "haixix"
+
+#: moxie/context_processors.py:14
+msgid "incomes"
+msgstr "ingressos"
+
+#: moxie/context_processors.py:15
+msgid "expenses"
+msgstr "Despeses"
+
+#: moxie/context_processors.py:16
+msgid "stats"
+msgstr "Estadístiques"
+
+#: moxie/context_processors.py:17
+msgid "sheets"
+msgstr "Despeses compartides"
+
+#: moxie/context_processors.py:18
+msgid "users"
+msgstr "Usuaris"
+
+#: moxie/filters.py:18 moxie/filters.py:49
+msgid "Minimum amount"
+msgstr "Quantitat mínima"
+
+#: moxie/filters.py:19 moxie/filters.py:50
+#, fuzzy
+#| msgid "amount"
+msgid "Maximum amount"
+msgstr "Quantitat màxima"
+
+#: moxie/filters.py:21 moxie/filters.py:52 moxie/forms.py:116
+#: moxie/forms.py:155 moxie/templates/stats/stats.html:7
+msgid "category"
+msgstr "Categoria"
+
+#: moxie/filters.py:24 moxie/forms.py:118
+msgid "tag"
+msgstr "Tag"
+
+#: moxie/filters.py:25 moxie/filters.py:56 moxie/forms.py:119
+#: moxie/forms.py:157
+msgid "note"
+msgstr "Nota"
+
+#: moxie/filters.py:27 moxie/filters.py:58 moxie/forms.py:121
+#: moxie/forms.py:159 moxie/forms.py:238
+msgid "date"
+msgstr "Data"
+
+#: moxie/filters.py:45 moxie/filters.py:75
+msgid "Filter"
+msgstr "Filtrar"
+
+#: moxie/forms.py:18
+msgid "Parent"
+msgstr "Arrel"
+
+#: moxie/forms.py:36 moxie/forms.py:210 moxie/forms.py:285
+#: moxie/templates/index/register.html:17
+msgid "Submit"
+msgstr "Enviar"
+
+#: moxie/forms.py:70
+msgid "Language"
+msgstr "Idioma"
+
+#: moxie/forms.py:90 moxie/templates/users/profile.html:18
+msgid "Save"
+msgstr "Desar"
+
+#: moxie/forms.py:111 moxie/templates/users/index.html:25
+msgid "Favourites"
+msgstr "Favorits"
+
+#: moxie/forms.py:120 moxie/forms.py:158
+msgid "amount"
+msgstr "Amount"
+
+#: moxie/forms.py:122 moxie/forms.py:160
+msgid "in_sum"
+msgstr "A la suma"
+
+#: moxie/forms.py:123
+msgid "Favourite"
+msgstr "Favorit"
+
+#: moxie/forms.py:133
+msgid "Update expense"
+msgstr "Actualitzar despesa"
+
+#: moxie/forms.py:133 moxie/forms.py:247
+msgid "Add expense"
+msgstr "Afegir despesa"
+
+#: moxie/forms.py:171
+msgid "Add income"
+msgstr "Afegir ingrés"
+
+#: moxie/forms.py:180 moxie/templates/index/index.html:13
+msgid "Password"
+msgstr "Contrasenya"
+
+#: moxie/forms.py:181 moxie/forms.py:201
+msgid "Repeat password"
+msgstr "Repeteix la contrasenya"
+
+#: moxie/forms.py:189 moxie/forms.py:215
+msgid "Passwords do not match"
+msgstr "Les contrasenyes no coincideixen"
+
+#: moxie/forms.py:232 moxie/forms.py:271 moxie/templates/finance/index.html:11
+#: moxie/templates/finance/index.html:114
+msgid "Add"
+msgstr "Afegir"
+
+#: moxie/forms.py:237
+msgid "In sheet currency?"
+msgstr "Emprar la moneda del full?"
+
+#: moxie/forms.py:259
+msgid "User or email"
+msgstr "Usuari o adreça electrònica"
+
+#: moxie/forms.py:260
+msgid "Enter address of person with whom you are sharing expenses.&nbsp;"
+msgstr ""
+"Introdueix l'adreça de la persona amb qui compartiras les despeses.&nbsp;"
+
+#: moxie/models.py:20
+msgid "Expenses"
+msgstr "Despeses"
+
+#: moxie/models.py:21
+msgid "Incomes"
+msgstr "Ingresos"
+
+#: moxie/models.py:22 moxie/models.py:65
+msgid "Both"
+msgstr "Ambdues"
+
+#: moxie/models.py:61
+msgid "Expense"
+msgstr "Despesa"
+
+#: moxie/models.py:63
+msgid "Income"
+msgstr "Ingrés"
+
+#: moxie/models.py:84 moxie/models.py:86
+msgid "Root category"
+msgstr "Categoria arrel"
+
+#: moxie/models.py:93 moxie/models.py:95 moxie/models.py:151
+msgid "Home"
+msgstr "Inici"
+
+#: moxie/models.py:101
+msgid "Fun"
+msgstr "Diversió"
+
+#: moxie/models.py:103
+msgid "Going out, dinner outside, parties, fun..."
+msgstr "Sortir, sopar fora, festes, alegria..."
+
+#: moxie/models.py:109 moxie/models.py:111
+msgid "Technology"
+msgstr "Tecnologia"
+
+#: moxie/models.py:117
+msgid "Gifts"
+msgstr "Regals"
+
+#: moxie/models.py:119
+msgid "Christmas, Valentine's day, birthday..."
+msgstr "Nadal, aniversaris..."
+
+#: moxie/models.py:125
+msgid "Clothing"
+msgstr "Roba"
+
+#: moxie/models.py:127
+msgid "Wear and dress"
+msgstr "Roba, sabates, etc."
+
+#: moxie/models.py:133 moxie/models.py:246
+msgid "Other"
+msgstr "Altres"
+
+#: moxie/models.py:135
+msgid "Non-classifiable transactions"
+msgstr "El que no entra en altres categories"
+
+#: moxie/models.py:143 moxie/models.py:144
+msgid "Food"
+msgstr "Menjar"
+
+#: moxie/models.py:153
+msgid "Home food, grocery"
+msgstr "Menjar per a casa, compres a supermercats"
+
+#: moxie/models.py:159
+msgid "Away"
+msgstr "Fora"
+
+#: moxie/models.py:161
+msgid "Lunch and dinner out"
+msgstr "Menjar i sopar fora de casa"
+
+#: moxie/models.py:167
+msgid "Coffee"
+msgstr "Cafè"
+
+#: moxie/models.py:169
+msgid "Coffee outside, take away, some pastry maybe"
+msgstr "Cafè fora de casa, per emportar, potser alguna pasteta"
+
+#: moxie/models.py:243
+msgid "Euro"
+msgstr ""
+
+#: moxie/models.py:244
+msgid "Pounds"
+msgstr "Lliures"
+
+#: moxie/models.py:245
+msgid "US Dollar"
+msgstr "Dòlars"
+
+#: moxie/settings.py:154
+msgid "Español"
+msgstr ""
+
+#: moxie/settings.py:155
+msgid "English"
+msgstr ""
+
+#: moxie/settings.py:156
+msgid "Català"
+msgstr ""
+
+#: moxie/templates/categories/budget.html:5
+msgid "Saved successfully"
+msgstr "Desat amb èxit"
+
+#: moxie/templates/categories/budget.html:7
+msgid "Budget updated"
+msgstr "Pressupost actualitzat"
+
+#: moxie/templates/categories/budget.html:8
+msgid "Error updating budget"
+msgstr "Error actualitzant pressupost"
+
+#: moxie/templates/categories/budget.html:16
+msgid "Current budget"
+msgstr "Pressupost actual"
+
+#: moxie/templates/categories/budget.html:37
+msgid "Take snapshot"
+msgstr "Fer una instantània"
+
+#: moxie/templates/categories/budget.html:48
+msgid "Budgets"
+msgstr "Pressupostos"
+
+#: moxie/templates/categories/budget.html:55
+#: moxie/templates/expenses/data_header.html:28
+#: moxie/templates/incomes/data_header.html:18
+msgid "Delete"
+msgstr "Esborrar"
+
+#: moxie/templates/categories/categories.html:8
+#: moxie/templates/common/data.html:13
+msgid "Category"
+msgstr "Categoria"
+
+#: moxie/templates/categories/categories.html:19
+msgid "Order"
+msgstr "Ordre"
+
+#: moxie/templates/categories/categories.html:22
+msgid "Drag categories to reorder it when displaying. Press edit to modify it."
+msgstr ""
+"Arrossega les categories per a reaordenar quan es mostrin. Prem editar per "
+"modificar."
+
+#: moxie/templates/categories/favourites.html:9
+msgid "Expenses note"
+msgstr "Nota"
+
+#: moxie/templates/categories/favourites.html:10
+msgid "Tags used"
+msgstr "Tags emprats"
+
+#: moxie/templates/common/data.html:14 moxie/templates/sheets/view.html:50
+msgid "Note"
+msgstr "Nota"
+
+#: moxie/templates/common/data.html:19 moxie/templates/common/data.html:50
+#: moxie/templates/sheets/view.html:49
+msgid "Date"
+msgstr "Data"
+
+#: moxie/templates/common/data.html:28
+msgid "Amount"
+msgstr "Import"
+
+#: moxie/templates/common/data.html:54
+msgid "Export"
+msgstr "Exportar"
+
+#: moxie/templates/common/filter.html:9
+msgid "Search"
+msgstr "Cercar"
+
+#: moxie/templates/common/to_top.html:4
+msgid "Back to top"
+msgstr "Tornar a dalt"
+
+#: moxie/templates/expenses/data_header.html:7
+msgid "expenses_delete_message"
+msgstr ""
+
+#: moxie/templates/expenses/index.html:14
+msgid "Go to expenses"
+msgstr "Anar a despeses"
+
+#: moxie/templates/expenses/index.html:15 moxie/templates/incomes/index.html:15
+msgid "Go to stats"
+msgstr "Anar a estadístiques"
+
+#: moxie/templates/expenses/stats.html:10
+msgid "Spent"
+msgstr "Gastat"
+
+#: moxie/templates/expenses/stats.html:12 moxie/templates/stats/index.html:7
+#: moxie/templates/users/index.html:26
+msgid "Budget"
+msgstr "Pressupost"
+
+#: moxie/templates/expenses/stats.html:36
+msgid "expenses_monthly"
+msgstr "Despesa mensual"
+
+#: moxie/templates/expenses/stats.html:37
+msgid "expenses_by_months"
+msgstr "Per mes"
+
+#: moxie/templates/finance/index.html:74
+msgid "Deposit calculator"
+msgstr "Calculadora de depòsits"
+
+#: moxie/templates/finance/index.html:79
+msgid "Compare"
+msgstr "Comparar"
+
+#: moxie/templates/finance/index.html:86
+msgid "Name (optional)"
+msgstr "Nom (opcional)"
+
+#: moxie/templates/finance/index.html:90
+msgid "Saving amount"
+msgstr "Interessos generats"
+
+#: moxie/templates/finance/index.html:94
+#, python-format
+msgid "Interest (%%)"
+msgstr "Interès (%%)"
+
+#: moxie/templates/finance/index.html:98
+msgid "Period (months)"
+msgstr "Periode (mesos)"
+
+#: moxie/templates/finance/index.html:102
+msgid "Revenue"
+msgstr "Benefici"
+
+#: moxie/templates/finance/index.html:106 moxie/templates/stats/stats.html:8
+msgid "Total"
+msgstr "Total final"
+
+#: moxie/templates/header.html:16
+msgid "logout"
+msgstr "Sortir"
+
+#: moxie/templates/header.html:18
+msgid "index"
+msgstr "Inici"
+
+#: moxie/templates/header.html:20
+msgid "about"
+msgstr "Aprop de"
+
+#: moxie/templates/incomes/index.html:14
+msgid "Go to incomes"
+msgstr "Anar a ingressos"
+
+#: moxie/templates/incomes/stats.html:8
+#, fuzzy
+#| msgid "Yearly"
+msgid "Yearly income"
+msgstr "Ingressos anuals"
+
+#: moxie/templates/incomes/stats.html:9
+msgid "Per year"
+msgstr "Per any"
+
+#: moxie/templates/index/about.html:9
+msgid ""
+"\n"
+"    Moxie is a website to manage your daily incomes and expenses.<br><br>\n"
+"    If you do not manage your personal finance or your spreadsheet is taking "
+"you\n"
+"    a lot of time to maintain, register and check what Moxie can do for "
+"you.\n"
+msgstr ""
+"\n"
+"Moxie es un lloc web per portar el control de les despeses i els ingresos diaris.<br><br>\n"
+"Si no tens un control de les teves finances personals, o notes que el full de càlcul que estàs emprant s'ha quedat petit\n"
+"regístra't i comprova el que Moxie pot fer per tu.\n"
+
+#: moxie/templates/index/index.html:9
+msgid "Log in"
+msgstr "Accedir"
+
+#: moxie/templates/index/index.html:12 moxie/templates/index/index.html:14
+msgid "Login"
+msgstr "Usuari"
+
+#: moxie/templates/index/index.html:23 moxie/templates/index/register.html:9
+msgid "Register"
+msgstr "Registrarse"
+
+#: moxie/templates/index/index.html:24
+msgid "Forgot password?"
+msgstr "Has oblidat la teva contrasenya?"
+
+#: moxie/templates/index/password_reset.html:9
+#: moxie/templates/index/password_reset_confirm.html:15
+msgid "Reset Password"
+msgstr "Reiniciar la contrasenya"
+
+#: moxie/templates/index/password_reset_confirm.html:9
+msgid "Password Reset Confirm"
+msgstr "Confirmació de reinici de contrasenya"
+
+#: moxie/templates/index/password_reset_confirm.html:11
+msgid "Please enter your new password."
+msgstr "Si us plau, introdueix la teva contrasenya"
+
+#: moxie/templates/index/user_registered.html:4
+msgid "registration_ok"
+msgstr "Registre efectuat amb èxit"
+
+#: moxie/templates/sheets/index.html:10
+msgid "Create new sheet"
+msgstr "Crear nou full de despeses"
+
+#: moxie/templates/sheets/index.html:34
+msgid "Page"
+msgstr "Pàgina"
+
+#: moxie/templates/sheets/index.html:34
+msgid "of"
+msgstr "de"
+
+#: moxie/templates/sheets/sheet_header.html:12
+msgid "Add user"
+msgstr "Afegir usuari"
+
+#: moxie/templates/sheets/sheet_header.html:19
+msgid "Close sheet"
+msgstr "Tancar full"
+
+#: moxie/templates/sheets/sheet_header.html:46
+msgid "Apply to all"
+msgstr "Aplicar a tots"
+
+#: moxie/templates/sheets/sheet_header.html:53
+msgid "Use this change rate for sheet currency"
+msgstr "Utilitzar aquest tipus de canvi per al tipus del full"
+
+#: moxie/templates/sheets/view.html:23
+msgid "Shared expenses"
+msgstr "Fulles compartides"
+
+#: moxie/templates/sheets/view.html:26 moxie/templates/sheets/view.html:27
+msgid "Copy permalink of this page to clipboard"
+msgstr "Copiar permalink d'aquesta pàgina al portapapers"
+
+#: moxie/templates/sheets/view.html:57
+msgid "Assign to"
+msgstr "Assignar a"
+
+#: moxie/templates/sheets/view.html:87
+msgid "Already copied"
+msgstr "Ja copiat"
+
+#: moxie/templates/sheets/view.html:106 moxie/templates/stats/yearly.html:37
+msgid "TOTAL"
+msgstr "TOTAL"
+
+#: moxie/templates/sheets/view.html:127
+msgid "Copy to my expenses"
+msgstr "Copiar a les meves despeses"
+
+#: moxie/templates/sheets/view.html:144
+msgid "Distribution"
+msgstr "Distribució"
+
+#: moxie/templates/stats/index.html:8
+msgid "Yearly"
+msgstr "Anual"
+
+#: moxie/templates/stats/index.html:9
+msgid "Trends"
+msgstr "Tendències"
+
+#: moxie/templates/stats/index.html:10
+msgid "Stats"
+msgstr "Estadístiques"
+
+#: moxie/templates/stats/stats.html:9
+msgid "Total this year"
+msgstr "Total aquest any"
+
+#: moxie/templates/stats/stats.html:10
+msgid "Average this year"
+msgstr "Mitja aquest any"
+
+#: moxie/templates/stats/stats.html:11
+msgid "Average of one buy"
+msgstr "Mitja d'una compra"
+
+#: moxie/templates/stats/yearly.html:25
+msgid "POSITIVE FLOW"
+msgstr "FLUX POSITIU"
+
+#: moxie/templates/stats/yearly.html:31
+msgid "NEGATIVE FLOW"
+msgstr "FLUX NEGATIU"
+
+#: moxie/templates/tags/tags.html:8 moxie/templates/users/index.html:27
+msgid "Tags"
+msgstr "Etiquetes"
+
+#: moxie/templates/tags/tags.html:15
+msgid "When pressing Update, removed tags will be deleted."
+msgstr "En premer Actualitzar, s'eliminaran els tags esborrats."
+
+#: moxie/templates/tags/tags.html:18
+msgid "Update"
+msgstr "Actualitzar"
+
+#: moxie/templates/users/index.html:9
+msgid "Error: Passwords do not match"
+msgstr "Error: Els passwords no coincideixen"
+
+#: moxie/templates/users/index.html:23
+msgid "My account"
+msgstr "El meu compte"
+
+#: moxie/templates/users/index.html:24
+msgid "Categories"
+msgstr "Categories"
+
+#: moxie/templates/users/profile.html:5
+msgid "Update your profile"
+msgstr "Actualitza les teves dades"
+
+#: moxie/templates/users/profile.html:11
+msgid "Change your password"
+msgstr "Canvia la teva contrasenya"
+
+#: moxie/views/login.py:32
+msgid "Login incorrect"
+msgstr "Autenticació incorrecta"
+
+#: moxie/views/login.py:53
+msgid "Registered successfully."
+msgstr "Registre fet amb èxit"
+
+#: moxie/views/login.py:82
+msgid ""
+"\n"
+"\t<h2>Password reset sent</h2><hr>\n"
+"\t<p>\n"
+"\t\tWe've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. \n"
+"\t\tYou should receive them shortly.<br>If you don't receive an email, "
+"please make sure you've entered the address \n"
+"\t\tyou registered with, and check your spam folder.\n"
+"\t</p>\n"
+"\t"
+msgstr ""
+
+#: moxie/views/login.py:91
+msgid "Problem sending reset password email"
+msgstr ""
+"Hi ha hagut un problema enviant el correu de restauració de contrasenya"
+
+#: moxie/views/login.py:93
+msgid "Connection error"
+msgstr "Error de connexió"
+
+#: moxie/views/login.py:101
+msgid "You must pass the reCAPTCHA test"
+msgstr "Has d'introduir el reCAPTCHA correctament"
+
+#: moxie/views/login.py:125
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "La teva contrasenya s'ha modificat correctament. Ja pots accedir."
+
+#: moxie/views/login.py:133
+msgid "Link is expired"
+msgstr "El vincle ha expirat"
+
+#: moxie/views/sheets.py:166
+msgid "New shared expenses sheet"
+msgstr "Nou full de despeses compartides"
+
+#: moxie/views/sheets.py:168
+msgid "Someone shared an expenses sheet with you:"
+msgstr "Algú ha compartit un full de despeses amb tu:"
+
+#: moxie/views/sheets.py:173
+msgid ""
+"Best regards\n"
+"\n"
+"Moxie team"
+msgstr ""
+"Cordialment\n"
+"\n"
+"L'equip de Moxie"
+
+#: moxie/views/stats.py:53
+msgid "BALANCE (Income - expense)"
+msgstr "SALDO (ingressos - despeses)"
+
+#: moxie/views/stats.py:110
+msgid "TOTAL EXPENSES"
+msgstr "TOTAL DESPESES"
+
+#: moxie/views/stats.py:110
+msgid "TOTAL INCOMES"
+msgstr "INGRESOS TOTALS"
+
+#~ msgid ""
+#~ "\n"
+#~ "Moxie is helped, through licenses, from:<br>\n"
+#~ "<a href=\"https://www.jetbrains.com/phpstorm/\">JetBrains</a><br><br>\n"
+#~ "Moxie uses:<br>\n"
+#~ "<a href=\"http://www.php.net\" target=\"blank\">PHP</a><br>\n"
+#~ "<a href=\"http://www.zend.com/\" target=\"blank\">Zend framework</a><br>\n"
+#~ "<a href=\"https://developers.google.com/chart/\" target=\"blank\">Google "
+#~ "charts</a><br>\n"
+#~ "<a href=\"https://www.mysql.com/\">MySQL</a><br>\n"
+#~ "<a href=\"https://httpd.apache.org/\">Apache</a><br><br>\n"
+#~ "Moxie is hosted at:<br>\n"
+#~ "<a href=\"https://www.ovh.com/\" target=\"blank\">OVH</a><br><br>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Moxie rep recolzament, mitjançant llicencies, de:<br><a href='https://www."
+#~ "jetbrains.com/phpstorm/'>JetBrains</a><br><br>Moxie utilitza:<br><a "
+#~ "href='http://www.php.net' target='blank'>PHP</a><br><a href='http://www."
+#~ "zend.com/' target='blank'>Zend framework</a><br><a href='https://"
+#~ "developers.google.com/chart/' target='blank'>Google charts</a><br><a "
+#~ "href='https://www.mysql.com/'>MySQL</a><br><a href='https://httpd.apache."
+#~ "org/'>Apache</a><br><br>Moxie està hospedat a:<br><a href='https://www."
+#~ "ovh.com/' target='blank'>OVH</a><br><br>\n"
+
+#~ msgid "filter_submit"
+#~ msgstr "Filtrar"
+
+#~ msgid "First"
+#~ msgstr "Primer"
+
+#~ msgid "Previous"
+#~ msgstr "Previa"
+
+#~ msgid "Next"
+#~ msgstr "Següent"
+
+#~ msgid "Last"
+#~ msgstr "Última"
+
+#, fuzzy
+#~| msgid "expenses_amount"
+#~ msgid "finance_amount"
+#~ msgstr "Import"
+
+#, fuzzy
+#~| msgid "users"
+#~ msgid "New user"
+#~ msgstr "Usuaris"
+
+#~ msgid "You do not have shared expenses sheets."
+#~ msgstr "No tens fulls de despeses compartides."
+
+#~ msgid "expenses_category"
+#~ msgstr "Categoria"
+
+#~ msgid "expenses_date"
+#~ msgstr "Data"

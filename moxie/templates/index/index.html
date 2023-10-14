@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+{% if not request.user.is_authenticated %}
+<div class="container w-100 mt-3">
+<div class="row">
+<div class="col-4 offset-4 mb-3">
+    <div class="form-group text-center w-100 mb-4">
+        <h1 class="font-weight-bold h4 moxie-color">{% trans 'Log in' %}</h1>
+        <form name="login" id="login_form" action="{% url 'login' %}" method="POST">
+            <fieldset>
+                <input type="text" name="username" id="username" maxlength=12 class="form-control" placeholder="{% trans 'Login' %}">
+                <input type="password" name="password" id="password" maxlength=50 class="form-control" placeholder="{% trans 'Password' %}">
+                <input type="submit" value="{% trans 'Login' %}" class="form-control btn btn-info moxie_login_button" style="margin-bottom: 0.8rem">
+                {% csrf_token %}
+
+                {% for message in messages %}
+                <div style="color: {% if 'error' in message.tags %}#FF0000{% else %}#00AA00{% endif %}; font-weight: bold; margin-bottom: 1rem;">
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+                <div class="text-normal text-left mb-2"><a href="{% url 'register' %}">{% trans 'Register' %}</a></div>
+                <div class="text-normal text-left mb-2"><a href="{% url 'forgot-password' %}">{% trans 'Forgot password?' %}</a></div>
+            </fieldset>
+        </form>
+        <div>{{ error }}</div>
+    </div>
+</div>
+</div>
+</div>
+{% else %}
+    <head>
+        <meta http-equiv="Refresh" content="0; url={% url 'expenses' %}">
+    </head>
+{% endif %}
+{% include 'index/twitter.html' %}
+{% endblock %}

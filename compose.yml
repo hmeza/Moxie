@@ -1,0 +1,25 @@
+version: '3.11'
+
+networks:
+  shared_db:
+    external: true
+
+services:
+  moxie:
+    container_name: moxie
+    image: hmeza/moxie:dev
+    build: .
+#    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./static/:/tmp/files/
+      - .:/usr/src/moxie
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    external_links:
+      - db:db
+    environment:
+      db: db
+    networks:
+      - shared_db

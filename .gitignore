@@ -11,3 +11,5 @@ bower_components/
 phpunit/
 backups/
 log/*
+settings.py
+.env

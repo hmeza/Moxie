@@ -1,0 +1,47 @@
+{% extends 'sheets/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="moxie_expenses_form_div" id="sheet_create_button">
+                <input type="submit" onclick="$('#sheet_create').toggle(); $('#sheet_create_button').toggle();"
+                       value="{% trans 'Create new sheet' %}" class="btn btn-info">
+            </div>
+        </div>
+    </div>
+
+    {% include 'sheets/create.html' %}
+
+    <div class="row mt-3">
+        {% for sheet in object_list %}
+            <div class="col-12 mt-2"><a class="h5" href="{% url 'sheet_view' sheet.unique_id %}">{{ sheet }}</a></div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-4 text-center">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="btn btn-info"><i class="fa fa-fast-backward"></i></a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-info"><i class="fa fa-step-backward"></i></a>
+                {% endif %}
+            </span>
+        </div>
+        <div class="col-4 text-center">
+            <span class="current">
+                {% trans 'Page' %} {{ page_obj.number }} {% trans 'of' %} {{ page_obj.paginator.num_pages }}
+            </span>
+        </div>
+        <div class="col-4 text-center">
+            <span class="step-links">
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-info"><i class="fa fa-step-forward"></i></a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-info"><i class="fa fa-fast-forward"></i></a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

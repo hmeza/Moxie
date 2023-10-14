@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div id="tags_table" class="accordion-body collapse mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            <h3 id="tags_title">
+                {% trans 'Tags' %}
+            </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form action="{% url 'tags' %}" method="POST">
+                    {% trans 'When pressing Update, removed tags will be deleted.' %}
+                    {% csrf_token %}
+                    <input id="tags" name="tags" type="text" data-role="tagsinput">
+                    <input type="submit" value="{% trans 'Update' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<script type="text/javascript">
+    let tagList = [
+        {% for key, tag in tag_list.items %}
+            "{{ tag }}",
+        {% endfor %}
+    ];
+    $('#tags').val(tagList);
+</script>
