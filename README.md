@@ -1,45 +1,39 @@
-See it online at [https://moxie.dootic.com](https://moxie.dootic.com)
-
-[![Build Status](http://integration.dootic.com:8080/job/moxie.dootic.com/badge/icon?style=plastic)](http://integration.dootic.com:8080/job/moxie.dootic.com/)
-
-### Moxie
+# Moxie
 
 Moxie is an application that will allow you to control home expenses, incomes and to elaborate a home budget. You will also be able to adapt the categories and subcategories to your own needs.
 
-If you need more than a spreadsheet or you have never controlled your home economy, this application can help you to have a better control of it.
+If you need more than a spreadsheet, or you have never controlled your home economy, this application can help you to have a better control of it.
 
-### Requirements:
+Moxie is built with Python3+Django stack, plus jQuery for the front-end.
 
-[Composer](https://getcomposer.org/)
+See it online and register at [https://moxie.dootic.com](https://moxie.dootic.com)
 
-Once installed, execute composer install from Moxie folder.
+## Requirements and dependencies
 
-After installation, copy application/configs/application.ini.example to application/configs/application.ini. Edit
-and set your database username and password that Moxie will use.
+Please check requirements.txt for Python + Django.
 
-### Dependencies
+### .env
+Note that there is a .env t``emplate. Copy this file to a .env file and edit the contents to match your environment.
 
-#### installed with composer
+### Docker
 
-[Zend Framework](http://framework.zend.com/)
+In the root folder there are a Dockerfile and a composer.yml files to build a container to help development in local and run tests.
 
-[Phinx](https://phinx.org/)
+You can either run it once built with
 
-After that, install phinx. Once installed, edit phinx.yml to match your database and then execute vendor/bin/phinx to
-execute the migrations and update the database to the latest version.
+> docker run --env-file .env -p 8000:8000 --network bridge hmeza/moxie:dev
 
-[PHPUnit](https://phpunit.de/)
+or use compose.yml to run it in the same way.
 
-#### Installed using git submodules
+There are also Dockerfile and composer.yml files for production environment in the infrastructure folder.
 
-[Simple PHP captcha](https://github.com/claviska/simple-php-captcha)
+## Deployment
 
-## Migration to Django
+If deploying to production, remember to do a
 
-### Insert into...
+> yarn install
 
-> insert into moxie_user(id, first_name, last_name, is_staff, is_active, date_joined, login, password, email, language, created_at, updated_at, last_login, is_superuser) select id, '', '', 0, 1, created_at, login, password, email, language, created_at, updated_at, last_login, 0 from users;
-> SET foreign_key_checks = 0;
-> insert into moxie_category(name, description, type, parent, user_owner, `order`) select name, description, type, parent, user_owner, `order` from categories order by id asc;
-> insert into moxie_transaction(user_owner, amount, note, date, in_sum, income_update, category) select user_owner, amount, note, date, in_sum, income_update, category from transactions;
-> SET foreign_key_checks = 1;
+> python3 manage.py collectstatic
+
+before start using it.
+If you find that no styles are loaded, these two steps are required. 
