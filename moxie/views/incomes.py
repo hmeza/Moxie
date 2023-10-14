@@ -12,7 +12,7 @@ from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Favourite
-from moxie.views.expenses import UpdateTagsView
+from moxie.views.common_classes import UpdateTagsView, ExportView
 
 
 class IncomesListView(FilterView, ListView):
@@ -71,9 +71,16 @@ class CommonIncomesView:
 			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 
-class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView):
+class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView, ExportView):
 	model = Transaction
 	template_name = 'incomes/index.html'
+
+	def get(self, request, *args, **kwargs):
+		response = super().get(request, *args, **kwargs)
+		# todo this belongs to ExportView, refactor
+		if request.GET.get('to_excel'):
+			return self.download_csv()
+		return response
 
 	def __get_last_year_and_month(self, year, month):
 		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
@@ -198,10 +205,17 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView, ExportView):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
+
+	def get(self, request, *args, **kwargs):
+		response = super().get(request, *args, **kwargs)
+		# todo this belongs to ExportView, refactor
+		if request.GET.get('to_excel'):
+			return self.download_csv()
+		return response
 
 	def get_object(self, queryset=None):
 		if hasattr(self, 'instance'):

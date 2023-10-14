@@ -1,22 +1,21 @@
 import datetime
 import calendar
 import re
-import csv
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
 from django.http import QueryDict
-from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http.response import HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.translation import gettext_lazy as _
 from moxie.forms import ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
-from moxie.models import Transaction, Tag, Budget, TransactionTag, Favourite, Category
+from moxie.models import Transaction, Tag, Budget, Favourite
+from moxie.views.common_classes import ExportView, UpdateTagsView
 
 
 # TODO: order
@@ -87,41 +86,6 @@ class NextAndLastYearAndMonthCalculatorView:
         date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
         date = date + relativedelta(months=1)
         return date.year, date.month
-
-
-class ExportView:
-    def download_csv(self):
-        queryset = self.filterset.queryset
-        if not self.object_list:
-            self.object_list = queryset
-        model = queryset.model
-        model_fields = model._meta.fields + model._meta.many_to_many
-        field_names = [field.name for field in model_fields]
-
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="export.csv"'
-
-        writer = csv.writer(response, delimiter=";")
-        writer.writerow([_(field.name) for field in model_fields])
-        for row in self.object_list:
-            values = []
-            for field in field_names:
-                try:
-                    value = getattr(row, str(field))
-                    if callable(value):
-                        try:
-                            value = value() or ''
-                        except:
-                            value = 'Error retrieving value'
-                    if value is None:
-                        value = ''
-                    values.append(value)
-                except (Transaction.DoesNotExist, Category.DoesNotExist) as e:
-                    # todo use logger
-                    # print(e)
-                    ...
-            writer.writerow(values)
-        return response
 
 
 class CommonExpensesView:
@@ -205,14 +169,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['filter_url_name'] = 'expenses'
         context['favourite_data'] = Favourite.get_favourites(user)
         return context
-
-
-class UpdateTagsView:
-    def update_tags(self, form, transaction, user):
-        tags = form.data.get('tag').split(",")
-        for tag_name in tags:
-            (tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
-            TransactionTag.objects.get_or_create(transaction=transaction, tag=tag)
 
 
 class ExpenseAddView(LoginRequiredMixin, CreateView, UpdateTagsView, TransactionListView):

@@ -1,3 +1,13 @@
+const export_to_excel = function () {
+    let searchForm = $('#search_form');
+    searchForm
+        .find('form')
+        .first()
+        .append("<input type='hidden' name='to_excel' id='to_excel' value='true'>")
+    $('#submit-id-filter').click();
+    searchForm.find('#to_excel').remove();
+};
+
 $(document).ready(function() {
     let amount = $('#amount');
     amount.attr('inputmode', 'decimal');
@@ -13,4 +23,5 @@ $(document).ready(function() {
         submitParent.siblings().first().append(incomesFormSelector);
     }
     $('#search_form :input[type="submit"]').parent().addClass('text-right')
+    $('#to').click(export_to_excel);
 });
