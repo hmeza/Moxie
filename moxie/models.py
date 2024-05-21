@@ -4,6 +4,10 @@ from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, 
 from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg, Case, When
 import datetime
 from django.utils.translation import gettext_lazy as _
+import logging
+
+
+logger = logging.getLogger('django')
 
 
 class MoxieUser(DjangoUser):
@@ -557,8 +561,11 @@ class Tag(models.Model):
     @staticmethod
     def __get_tags_from_query(queryset):
         tags = {}
-        for tag in queryset.all():
-            tags[tag.id] = tag.name.replace("'", "\\'")
+        try:
+            for tag in queryset.all():
+                tags[tag.id] = tag.name.replace("'", "\\'")
+        except Exception as e:
+            logger.error(e)
         return tags
 
     def get_tag(self, user_id=None, tag=None):
