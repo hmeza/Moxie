@@ -36,16 +36,6 @@ class Category(models.Model):
     type = models.SmallIntegerField(choices=CHOICE_TYPE)
     order = models.SmallIntegerField(default=1)
 
-    def __init__(self, *args, **kwargs):
-        from django.db.models.signals import pre_save
-
-        super(Category, self).__init__(*args, **kwargs)
-        pre_save.connect(self.before_save, sender=Transaction)
-
-    def before_save(self, sender, instance, *args, **kwargs):
-        self.name = self.name.encode('utf-8').decode('iso-8859-1')
-        self.description = self.description.encode('utf-8').decode('iso-8859-1')
-
     def __str__(self):
         if self.parent is None or self.parent.parent is None:
             return self.name
@@ -259,15 +249,6 @@ class SharedExpensesSheet(models.Model):
     currency = models.CharField(max_length=3, choices=CURRENCIES, default=DEFAULT_CURRENCY)
     change = models.DecimalField(max_digits=10, decimal_places=2, default=1)
 
-    def __init__(self, *args, **kwargs):
-        from django.db.models.signals import pre_save
-
-        super(SharedExpensesSheet, self).__init__(*args, **kwargs)
-        pre_save.connect(self.before_save, sender=Transaction)
-
-    def before_save(self, sender, instance, *args, **kwargs):
-        self.name = self.name.encode('utf-8').decode('iso-8859-1')
-
     @staticmethod
     def get(user=None, user_id=None):
         assert user or user_id
@@ -322,15 +303,6 @@ class SharedExpense(models.Model):
     copied = models.BooleanField(default=False)
     currency = models.CharField(max_length=3, default=SharedExpensesSheet.DEFAULT_CURRENCY)
 
-    def __init__(self, *args, **kwargs):
-        from django.db.models.signals import pre_save
-
-        super(SharedExpense, self).__init__(*args, **kwargs)
-        pre_save.connect(self.before_save, sender=Transaction)
-
-    def before_save(self, sender, instance, *args, **kwargs):
-        self.note = self.note.encode('utf-8').decode('iso-8859-1')
-
     @staticmethod
     def get_sheet_by_expense_id_and_user_id(shared_expense_id, user_id):
         sheet = SharedExpense.objects.select_related('sheet', 'user')\
@@ -352,15 +324,6 @@ class Transaction(models.Model):
     date = models.DateTimeField(default=None)
     in_sum = models.BooleanField(blank=False, null=False)
     income_update = models.DateTimeField(auto_now=True)
-
-    def __init__(self, *args, **kwargs):
-        from django.db.models.signals import pre_save
-
-        super(Transaction, self).__init__(*args, **kwargs)
-        pre_save.connect(self.before_save, sender=Transaction)
-
-    def before_save(self, sender, instance, *args, **kwargs):
-        self.note = self.note.encode('utf-8').decode('iso-8859-1')
 
     @staticmethod
     def get_year_incomes(user, expenses=True, incomes=False):
@@ -526,15 +489,6 @@ class Tag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __init__(self, *args, **kwargs):
-        from django.db.models.signals import pre_save
-
-        super(Tag, self).__init__(*args, **kwargs)
-        pre_save.connect(self.before_save, sender=Transaction)
-
-    def before_save(self, sender, instance, *args, **kwargs):
-        self.name = self.name.encode('utf-8').decode('iso-8859-1')
-
     def __str__(self):
         return self.name
 
@@ -561,11 +515,8 @@ class Tag(models.Model):
     @staticmethod
     def __get_tags_from_query(queryset):
         tags = {}
-        try:
-            for tag in queryset.all():
-                tags[tag.id] = tag.name.replace("'", "\\'")
-        except Exception as e:
-            logger.error(e)
+        for tag in queryset.all():
+            tags[tag.id] = tag.name.replace("'", "\\'")
         return tags
 
     def get_tag(self, user_id=None, tag=None):
