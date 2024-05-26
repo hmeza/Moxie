@@ -247,10 +247,18 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
 
     def form_valid(self, form):
         instance = form.save()
-        if form.data.get('favourite'):
-            Favourite.objects.get_or_create(transaction=form.instance)
+        self._handle_favourite(form, instance)
         self.update_tags(form, instance, self.request.user)
         return redirect(reverse_lazy('expenses'))
+
+    def _handle_favourite(self, form, instance):
+        if instance.pk:
+            qs = Favourite.objects.filter(transaction=instance)
+            is_fav = qs.exists()
+            if form.data.get('favourite') and not is_fav:
+                Favourite.objects.get_or_create(transaction=form.instance)
+            elif is_fav and not form.data.get('favourite'):
+                qs.delete()
 
     def form_invalid(self, form):
         # TODO FIX PROBLEM WHEN FORM IS INVALID

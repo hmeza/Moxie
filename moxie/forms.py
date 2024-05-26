@@ -124,7 +124,7 @@ class ExpensesForm(TransactionForm):
 
     class Meta:
         model = Transaction
-        fields = ['favourites', 'amount', 'note', 'date', 'category', 'tag', 'in_sum']
+        fields = ['favourites', 'amount', 'note', 'date', 'category', 'tag', 'in_sum', 'favourite']
         exclude = ['user', 'income_update']
 
     def __init__(self, user, *args, **kwargs):
@@ -135,6 +135,10 @@ class ExpensesForm(TransactionForm):
         if self.initial.get('amount'):
             self.initial['amount'] = -self.initial.get('amount')
         self.fields['favourites'].choices = self.__mount_favourites(user)
+        if self.instance:
+            exists = Favourite.objects.filter(transaction=self.instance).exists()
+            self.fields['favourite'].value = exists
+            self.fields['favourite'].initial = exists
 
     def __mount_favourites(self, user):
         values_list = Favourite.objects.filter(transaction__user=user)\
