@@ -170,7 +170,7 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		return queryset
 
 
-class IncomeAddView(LoginRequiredMixin, CreateView, UpdateTagsView, IncomesListView):
+class IncomeAddView(IncomesListView, LoginRequiredMixin, CreateView, UpdateTagsView):
 	model = Transaction
 	form_class = IncomesForm
 	success_url = reverse_lazy('incomes')
