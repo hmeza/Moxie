@@ -171,7 +171,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         return context
 
 
-class ExpenseAddView(LoginRequiredMixin, CreateView, UpdateTagsView, TransactionListView):
+class ExpenseAddView(TransactionListView, LoginRequiredMixin, CreateView, UpdateTagsView):
     model = Transaction
     form_class = ExpensesForm
     success_url = reverse_lazy('expenses')

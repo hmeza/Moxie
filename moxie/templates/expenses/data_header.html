@@ -21,7 +21,7 @@
 
 <div id="form">
     <div class="form-group moxie_expenses_form_div moxie_expenses_form_left">
-        <form method="POST" action="{{ edit_url }}">
+        <form method="POST" action="{{ edit_url }}" id="expenses_form">
             {% crispy form %}
             {% if object.pk %}
                 <a id="expense_delete" class="btn btn-danger" href="{% url 'expenses_delete' object.pk %}">
