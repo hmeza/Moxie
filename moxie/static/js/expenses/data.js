@@ -114,15 +114,15 @@ $(document).ready(function () {
         }],
         freeInput: true
     });
-    let amount = $('#amount');
-    amount.attr('inputmode', 'decimal');
+    let amount = $('#id_amount');
+    /*amount.attr('inputmode', 'decimal');
     amount.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
     let amount_min = $('#amount_min');
     amount_min.attr('inputmode', 'decimal');
     amount_min.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
     let amount_max = $('#amount_max');
     amount_max.attr('inputmode', 'decimal');
-    amount_max.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
+    amount_max.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');*/
 
     // TODO do this modifying form classes
     let expenseDeleteSelector = $('#expense_delete');
@@ -132,4 +132,9 @@ $(document).ready(function () {
         submitParent.siblings().first().append(expenseDeleteSelector);
     }
     $('#search_form :input[type="submit"]').parent().addClass('text-right')
+
+    $('#expenses_form').submit(function(e) {
+        amount.val(amount.val().replace(",", "."));
+    });
 });
+var elem;

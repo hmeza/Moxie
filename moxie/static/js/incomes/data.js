@@ -9,19 +9,23 @@ const export_to_excel = function () {
 };
 
 $(document).ready(function() {
-    let amount = $('#amount');
-    amount.attr('inputmode', 'decimal');
-    amount.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
+    let amount = $('#id_amount');
+    /*amount.attr('inputmode', 'decimal');
+    amount.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');*/
     $('#date_min').attr('type', 'date');
     $('#date_max').attr('type', 'date');
 
     // TODO do this modifying form classes
     let submitParent = $('#id-incomesForm :input[type="submit"]').parent();
     submitParent.addClass('text-right');
-    let incomesFormSelector = $('#income_delete');
-    if(incomesFormSelector !== undefined) {
-        submitParent.siblings().first().append(incomesFormSelector);
+    let incomeDeleteSelector = $('#income_delete');
+    if(incomeDeleteSelector !== undefined) {
+        submitParent.siblings().first().append(incomeDeleteSelector);
     }
     $('#search_form :input[type="submit"]').parent().addClass('text-right')
     $('#to').click(export_to_excel);
+
+    $('#id-incomesForm').submit(function(e) {
+        amount.val(amount.val().replace(",", "."));
+    });
 });
