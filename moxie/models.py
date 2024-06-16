@@ -479,6 +479,24 @@ class Transaction(models.Model):
             shared_expense.copied = True
             shared_expense.save()
 
+    @staticmethod
+    def get_month_expenses_data(user, year, category):
+        queryset = Transaction.objects \
+            .filter(amount__lt=0, in_sum=True, user=user, date__year__gte=year, category=category) \
+            .annotate(month=ExtractMonth('date'), year=ExtractYear('date')) \
+            .values('month', 'year') \
+            .annotate(amount=Cast(Abs(Sum('amount')), FloatField())).order_by('year', 'month')
+
+        if not queryset:
+            today = datetime.date.today()
+            queryset = [{
+                'month': today.month,
+                'year': today.year,
+                'amount': 0
+            }]
+
+        return queryset
+
 
 class Tag(models.Model):
     transaction_tags = None
