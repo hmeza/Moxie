@@ -21,12 +21,18 @@ If you find that no styles are loaded, these two steps are required.
 
 Set ALLOWED_HOSTS in settings also.
 
+### To prod
+> docker pull hmeza/moxie:latest
+> cd /var/www/moxie
+> docker run --env-file .env -p 8002:8000 --network bridge -d --name moxie hmeza/moxie:latest
+> docker exec -t moxie ./manage.py collectstatic --noinput 
+
 ## Requirements and dependencies
 
 Please check requirements.txt for Python + Django.
 
 ### .env
-Note that there is a .env t``emplate. Copy this file to a .env file and edit the contents to match your environment.
+Note that there is a .env template. Copy this file to a .env file and edit the contents to match your environment.
 
 ### Docker
 
@@ -39,4 +45,3 @@ You can either run it once built with
 or use compose.yml to run it in the same way.
 
 There are also Dockerfile and composer.yml files for production environment in the infrastructure folder.
-

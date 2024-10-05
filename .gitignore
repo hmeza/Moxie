@@ -13,3 +13,4 @@ backups/
 log/*
 settings.py
 .env
+*__pycache__*

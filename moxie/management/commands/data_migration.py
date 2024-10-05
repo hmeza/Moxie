@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from moxie.models import *
 from django.db import transaction, connection
 import logging
+import ftfy
 
 
 logger = logging.getLogger('django')
@@ -11,15 +12,44 @@ class Command(BaseCommand):
     help = 'Import data'
 
     def handle(self, *args, **options):
-        # with connection.cursor() as cursor:
-        #     cursor.execute("select * from tags where id = 6")
-        #     row = cursor.fetchone()
-        #     tag = Tag.objects.filter(user_id=row[1], name=row[2].encode('latin1').decode('utf-8')).first()
-        #     print(f"tag {tag}")
-        # return
+        with connection.cursor() as cursor:
+            # cursor.execute("select * from tags where id = 6")
+            # row = cursor.fetchone()
+            # tag = Tag.objects.filter(user_id=row[1], name=row[2].encode('latin1').decode('utf-8')).first()
+            # print(f"tag {tag}")
+
+            cursor.execute("SET NAMES 'utf8'")
+            cursor.execute("select * from transactions")
+            for row in cursor.fetchall():
+                counter = row[0]
+                self.stdout.write(str(counter))
+                note = row[4]
+                self.stdout.write(note)
+
+                fixed_col = self._fix_note(note, row)
+
+                self.stdout.write(fixed_col)
 
         # self.insertion()
-        self.taggetization()
+        # self.taggetization()
+
+    def _fix_note(self, note, row):
+        if isinstance(note, bytes):
+            try:
+                fixed_col = note.decode('utf-8')
+            except UnicodeDecodeError:
+                fixed_col = ftfy.fix_encoding(note.decode('latin1', errors='replace'))
+            row[4] = fixed_col
+        else:
+            try:
+                fixed_col = note.encode('latin-1').decode('utf-8')
+            except (UnicodeDecodeError, UnicodeEncodeError) as e:
+                self.stdout.write(self.style.ERROR(e))
+                fixed_col = ftfy.fix_encoding(note)
+                # fixed_col = note.encode('utf-8').decode('utf-8')
+            # except Exception as e:
+            #     fixed_col = note.encode('latin-1').decode('latin1').encode('utf-8').decode('utf-8')
+        return fixed_col
 
     def taggetization(self):
         # todo change to latin1 at this step
