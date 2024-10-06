@@ -440,9 +440,20 @@ moxie_expenses_form_right {
 	}
 }
 
+#search_title {
+	display: none;
+}
+
+#search_form_desktop {
+}
+
 /* Mobile */
 @media screen and (max-width: 480px) {
-	.search_button_mobile {
+	#search_title {
+		display: block;
+	}
+
+	#search_form_desktop {
 		display: none;
 	}
 }
@@ -602,10 +613,6 @@ moxie_expenses_form_right {
 	.moxie_expenses_form_left {}
 
 	.moxie_expenses_form_right {}
-
-	.search_button_mobile {
-		display: none;
-	}
 }
 
 .moxie-submenu {

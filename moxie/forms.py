@@ -28,8 +28,8 @@ class CategoryForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_id = 'id-categoriesForm'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
-        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
+        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3'
+        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9'
         self.helper.form_method = 'post'
         url = reverse_lazy('category_edit', kwargs={'pk': self.instance.pk}) if self.instance and self.instance.pk else reverse_lazy('category_add')
         self.helper.form_action = url
@@ -96,8 +96,8 @@ class TransactionForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_id = 'id-exampleForm'
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-xs-5'
-        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-xs-7'
+        self.helper.label_class = 'col-lg-3 col-md-3 col-sm-3 col-5'
+        self.helper.field_class = 'col-lg-9 col-md-9 col-sm-9 col-7'
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
 
@@ -130,7 +130,7 @@ class ExpensesForm(TransactionForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(user, *args, **kwargs)
         self.fields['category'].queryset = Category.get_categories_tree(user)
-        translation = _('Update expense') if self.instance else _('Add expense')
+        translation = _('Update expense') if self.instance.pk else _('Add expense')
         self.helper.add_input(Submit('submit', translation))
         if self.initial.get('amount'):
             self.initial['amount'] = -self.initial.get('amount')

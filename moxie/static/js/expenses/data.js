@@ -129,7 +129,9 @@ $(document).ready(function () {
     if(expenseDeleteSelector !== undefined) {
         let submitParent = $('#submit-id-submit').parent();
         submitParent.addClass('text-right');
-        submitParent.siblings().first().append(expenseDeleteSelector);
+        let firstSibling = submitParent.siblings().first();
+        firstSibling.append(expenseDeleteSelector);
+        firstSibling.removeClass('')
     }
     $('#search_form :input[type="submit"]').parent().addClass('text-right')
 
