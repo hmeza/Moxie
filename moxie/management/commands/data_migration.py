@@ -12,26 +12,68 @@ class Command(BaseCommand):
     help = 'Import data'
 
     def handle(self, *args, **options):
-        with connection.cursor() as cursor:
-            # cursor.execute("select * from tags where id = 6")
-            # row = cursor.fetchone()
-            # tag = Tag.objects.filter(user_id=row[1], name=row[2].encode('latin1').decode('utf-8')).first()
-            # print(f"tag {tag}")
-
-            cursor.execute("SET NAMES 'utf8'")
-            cursor.execute("select * from transactions")
-            for row in cursor.fetchall():
-                counter = row[0]
-                self.stdout.write(str(counter))
-                note = row[4]
-                self.stdout.write(note)
-
-                fixed_col = self._fix_note(note, row)
-
-                self.stdout.write(fixed_col)
-
+        self._migrate_transactions()
         # self.insertion()
         # self.taggetization()
+
+    def _migrate_categories(self, cursor):
+        cursor.execute("SET NAMES 'utf8'")
+        cursor.execute("select * from categories")
+        column_names = [col[0] for col in cursor.description]
+        rows = cursor.fetchall()
+        for row in rows:
+            row_dict = dict(zip(column_names, row))
+            self.stdout.write()
+            counter = row[0]
+            self.stdout.write(str(counter))
+            note = row[4]
+            self.stdout.write(note)
+
+            fixed_col = self._fix_note(note, row)
+
+            self.stdout.write(fixed_col)
+
+            obj = Transaction(**row_dict)
+            obj.save(force_insert=True)
+
+    def _migrate_transactions(self):
+        with connection.cursor() as cursor:
+            cursor.execute("SET NAMES 'utf8'")
+            cursor.execute("select * from transactions")
+            column_names = [col[0] for col in cursor.description]
+            rows = cursor.fetchall()
+            for row in rows:
+                row_dict = dict(zip(column_names, row))
+                note = row[4]
+
+                fixed_col = self._fix_note(note, row)
+                fixed_col = fixed_col.encode('utf-8').decode('utf-8')
+
+                self.stdout.write(f"{row[0]} {note} - fixed {fixed_col}")
+
+                row_dict['user_id'] = row_dict['user_owner']
+                row_dict.pop('user_owner')
+
+                if row_dict['income_update'] == '0000-00-00 00:00:00':
+                    row_dict['income_update'] = row_dict['date']
+
+                insert_query = """
+                INSERT IGNORE INTO moxie_transaction (id, amount, note, date, in_sum, income_update, category, user_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                """
+                # Recolectar los valores de la fila en el orden correcto
+                values = (
+                    row_dict['id'],
+                    float(row_dict['amount']),  # Convertir Decimal a float
+                    fixed_col,
+                    row_dict['date'].strftime('%Y-%m-%d %H:%M:%S'),  # Formato de fecha
+                    row_dict['in_sum'],
+                    row_dict['income_update'].strftime('%Y-%m-%d %H:%M:%S'),  # Formato de fecha
+                    row_dict['category'],
+                    row_dict['user_id']
+                )
+                # Ejecutar la consulta
+                cursor.execute(insert_query, values)
 
     def _fix_note(self, note, row):
         if isinstance(note, bytes):
