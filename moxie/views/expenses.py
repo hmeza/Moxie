@@ -50,7 +50,7 @@ class TransactionListView(FilterView, ListView):
         (year, month) = self._get_active_year_and_month()
         if year and month:
             start_date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
-            end_date = (start_date + datetime.timedelta(days=32)).replace(day=1)
+            end_date = (start_date + datetime.timedelta(days=32)).replace(day=1) - datetime.timedelta(days=1)
             return start_date, end_date
         else:
             return self.__get_start_and_end_date_using_date_object(datetime.date.today())
