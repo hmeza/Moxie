@@ -28,7 +28,11 @@
         </tr>
         {% for income_line in incomes %}
             <tr>
-                {% include 'stats/budget_loop.html' with transactions=income_line %}
+                {% if forloop.last %}
+                {% include 'stats/budget_loop.html' with transactions=income_line last=True %}
+                {% else %}
+                {% include 'stats/budget_loop.html' with transactions=income_line last=False %}
+                {% endif %}
             </tr>
         {% endfor %}
 
@@ -38,7 +42,11 @@
 
         {% for expense_line in expenses %}
             <tr>
-                {% include 'stats/budget_loop.html' with transactions=expense_line %}
+                {% if forloop.last %}
+                {% include 'stats/budget_loop.html' with transactions=expense_line last=True %}
+                {% else %}
+                {% include 'stats/budget_loop.html' with transactions=expense_line last=False %}
+                {% endif %}
             </tr>
         {% endfor %}
 

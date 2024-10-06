@@ -6,7 +6,7 @@
             <a href="{{ transaction.link }}">{{ transaction.title }}</a>
         </td>
         {% else %}
-        <td>
+        <td {% if last %}class="font-weight-bold"{% endif %}>
             <a href="{{ transaction.link }}">{{ transaction.title|abs|floatformat:2 }} €</a>
         </td>
         {% endif %}
