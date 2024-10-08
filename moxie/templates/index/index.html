@@ -4,7 +4,7 @@
 {% if not request.user.is_authenticated %}
 <div class="container w-100 mt-3">
 <div class="row">
-<div class="col-4 offset-4 mb-3">
+<div class="col-12 col-md-4 offset-md-4 mb-3">
     <div class="form-group text-center w-100 mb-4">
         <h1 class="font-weight-bold h4 moxie-color">{% trans 'Log in' %}</h1>
         <form name="login" id="login_form" action="{% url 'login' %}" method="POST">
