@@ -12,6 +12,7 @@ from django.db.models import Sum, FloatField, Case, When
 from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Favourite
+from moxie.repositories import IncomeRepository
 from moxie.views.common_classes import UpdateTagsView, ExportView
 
 
@@ -137,7 +138,7 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['form'] = IncomesForm(self.request.user)
 		context['category_amounts'] = self._get_category_amounts(queryset)
-		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in Transaction.get_year_incomes(self.request.user, expenses=False, incomes=True)]
+		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
 
 		context['year_incomes'] = year_incomes
 		year = self._get_active_year()
@@ -257,14 +258,13 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		year = self.object.date.year
 		context['year'] = year
 
-		# new
 		queryset = self.get_queryset()
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['category_amounts'] = self._get_category_amounts(queryset)
-		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in Transaction.get_year_incomes(self.request.user, expenses=False, incomes=True)]
+		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
 
 		filterset_class = self.get_filterset_class()
 		self.filterset = self.get_filterset(filterset_class)

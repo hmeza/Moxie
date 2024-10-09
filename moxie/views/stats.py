@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from moxie.models import Transaction, Category
+from moxie.repositories import ExpenseRepository, IncomeRepository
 
 
 class StatsView(TemplateView):
@@ -38,7 +39,7 @@ class StatsView(TemplateView):
 		for i in range(1, 13):
 			totals.append({'title': float(income_totals[i]['title']) + float(expense_totals[i]['title']), 'link': ''})
 		context['totals'] = totals
-		context['yearly'], context['yearly_positive_flow'], context['yearly_negative_flow'], context['yearly_total'] = Transaction.get_year_incomes_with_category(user, expenses=True, incomes=True)
+		context['yearly'], context['yearly_positive_flow'], context['yearly_negative_flow'], context['yearly_total'] = IncomeRepository.get_year_incomes_with_category(user, expenses=True, incomes=True)
 		context['year'] = int(year)
 		context['yearly_header'] = [''] + [str(y) for y in range(today.year - Transaction.YEARS_FOR_YEARLY_STATS, today.year + 1)]
 		context['trends'] = self._get_trends(Category.get_categories_tree(user))
@@ -49,8 +50,9 @@ class StatsView(TemplateView):
 		income_categories = Category.get_categories_tree(user, Category.INCOMES)
 		incomes = None
 		for category in income_categories:
-			new_incomes = Transaction.get_yearly_stats_by_category(user, category_type=Category.INCOMES, year=year,
-																   category=category)
+			new_incomes = Transaction.get_yearly_stats_by_category(
+				user, category_type=Category.INCOMES, year=year, category=category
+			)
 			if incomes:
 				incomes += list(new_incomes)
 			else:
@@ -128,7 +130,7 @@ class StatsView(TemplateView):
 	def _get_trends(self, expenses_categories):
 		trends = {}
 		for category in expenses_categories:
-			trend = Transaction.get_month_expenses_data(self.request.user, 1980, category)
+			trend = ExpenseRepository.get_month_expenses_data(self.request.user, 1980, category)
 			trend_list = [[str(a.get('month'))+"/"+str(a.get('year')), a.get('amount')] for a in trend]
 			trends[category.pk] = {
 				'id': category.pk,
