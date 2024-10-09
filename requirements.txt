@@ -6,6 +6,6 @@ django-crispy-forms
 python-dateutil
 PyMySQL
 django-simple-captcha
-Pillow<=9.5.0
+Pillow>=10.3.0
 python-dotenv
 # tagulous
