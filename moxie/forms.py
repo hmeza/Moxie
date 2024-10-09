@@ -117,7 +117,7 @@ class ExpensesForm(TransactionForm):
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     tag = CharField(label=_('tag'), required=False)
     note = CharField(label=_('note'))
-    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
+    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float', 'inputmode': 'decimal', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False)
     favourite = BooleanField(label=_('Favourite'), initial=False, required=False)

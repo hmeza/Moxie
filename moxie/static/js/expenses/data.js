@@ -97,6 +97,10 @@ $(document).ready(function () {
         }],
         freeInput: true
     });
+    tagsSelector.val(usedTagList.join(", "));
+    usedTagList.forEach(function(tag) {
+        tagsSelector.tagsinput('add', tag);
+    });
 
     let tagSearchSelector = $('#id_tag_search');
     tagSearchSelector.attr('data-role', 'tagsinput');
@@ -115,8 +119,7 @@ $(document).ready(function () {
         freeInput: true
     });
     let amount = $('#id_amount');
-    /*amount.attr('inputmode', 'decimal');
-    amount.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
+    /*
     let amount_min = $('#amount_min');
     amount_min.attr('inputmode', 'decimal');
     amount_min.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');

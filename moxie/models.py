@@ -497,6 +497,10 @@ class Transaction(models.Model):
 
         return queryset
 
+    def used_tags(self):
+        tags = self.tags.all()
+        return {tag.tag_id: tag.tag.name for tag in tags}
+
 
 class Tag(models.Model):
     transaction_tags = None
@@ -521,14 +525,6 @@ class Tag(models.Model):
         queryset = Tag.objects.prefetch_related('transaction_tags')\
             .filter(transaction_tags__id_transaction=transaction)
         return self.__get_tags_from_query(queryset)
-
-    @staticmethod
-    def get_used_tags(user):
-        queryset = Tag.objects\
-            .prefetch_related('transactions')\
-            .annotate(count=Count('id'))\
-            .filter(user=user).order_by('-name')
-        return Tag.__get_tags_from_query(queryset)
 
     @staticmethod
     def __get_tags_from_query(queryset):

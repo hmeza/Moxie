@@ -142,7 +142,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
         context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
         context['tags'] = Tag.get_tags(user)
-        context['used_tag_list'] = Tag.get_used_tags(user)
+        context['used_tag_list'] = self.instance.get_used_tags() if hasattr(self, 'instance') else {}
         context['form'] = ExpensesForm(user)
         year, month = self._get_active_year_and_month()
         category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
@@ -293,7 +293,7 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
         context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
         context['tags'] = Tag.get_tags(user)
-        context['used_tag_list'] = Tag.get_used_tags(user)
+        context['used_tag_list'] = self.instance.used_tags()
 
         category_amounts = Transaction.get_category_amounts(
             user, datetime.date.today(), self.request.GET, year, month
