@@ -159,7 +159,7 @@ class IncomesForm(TransactionForm):
     category = ModelChoiceField(label=_('category'), queryset=Category.objects.none(),
                                 widget=forms.Select(attrs={'class': 'select form-control'}))
     note = CharField(label=_('note'))
-    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float'}))
+    amount = DecimalField(label=_('amount'), widget=forms.TextInput(attrs={'type': 'float', 'inputmode': 'decimal', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+'}))
     date = DateField(label=_('date'), widget=forms.TextInput(attrs={'type': 'date'}))
     in_sum = BooleanField(label=_('in_sum'), initial=True, required=False, widget=forms.HiddenInput())
 

@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from moxie.models import Transaction, Category
-from django.forms import Select, BooleanField
+from django.forms import Select, BooleanField, NumberInput
 from django.forms.widgets import HiddenInput
 
 
@@ -15,8 +15,12 @@ class SubmitLightBlue(Submit):
 
 
 class ExpensesFilter(django_filters.FilterSet):
-    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'), lookup_expr="lte")
-    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'), lookup_expr="gte")
+    amount__gte = django_filters.NumberFilter(
+        field_name='amount', label=_('Minimum amount'), lookup_expr="lte", widget=NumberInput()
+    )
+    amount__lte = django_filters.NumberFilter(
+        field_name='amount', label=_('Maximum amount'), lookup_expr="gte", widget=NumberInput()
+    )
     category = django_filters.ModelChoiceFilter(
         field_name='category', label=_('category'), queryset=Category.objects.none(),
         widget=Select(attrs={'class': 'select form-control'})
