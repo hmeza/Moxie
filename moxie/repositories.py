@@ -1,11 +1,27 @@
-from django.db.models.functions import Cast, Concat, ExtractMonth, ExtractYear, Abs
-from django.db.models import Sum, FloatField, Count, F, Q, Value, Avg, Case, When
+from django.db.models.functions import Cast, ExtractMonth, ExtractYear, Abs
+from django.db.models import Sum, FloatField, Count, F, Q, Value, Case, When, DecimalField
 from moxie.models import Transaction
 import datetime
 
 
 class TransactionRepository:
-    ...
+    @staticmethod
+    def get_monthly_totals_from_a_period(user, start_date):
+        queryset = Transaction.objects.filter(date__gte=start_date, amount__lt=0)\
+            .values_list('date__month')\
+            .annotate(
+                total_in_month=Cast(Abs(Sum(Case(
+                    When(in_sum=True, then='amount'),
+                    default=(Value(0, output_field=DecimalField()))
+                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField()),
+                total_out_month=Cast(Abs(Sum(Case(
+                    When(in_sum=False, then='amount'),
+                    default=(Value(0, output_field=DecimalField()))
+                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField())
+            )\
+            .values('date__month', 'total_in_month', 'total_out_month')\
+            .order_by('date__month')
+        return queryset
 
 
 class IncomeRepository:

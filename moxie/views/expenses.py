@@ -11,14 +11,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.forms import ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum, FloatField, Case, When, DecimalField, Value
-from django.db.models.functions import Abs, Cast
+from django.db.models import Sum
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, Favourite
+from moxie.repositories import TransactionRepository
 from moxie.views.common_classes import ExportView, UpdateTagsView
 
 
-# TODO: order
 class TransactionListView(FilterView, ListView):
     model = Transaction
     filterset_class = ExpensesFilter
@@ -105,22 +104,9 @@ class NextAndLastYearAndMonthCalculatorView:
 
 
 class CommonExpensesView:
-    def _get_monthly_amounts(self, expenses):
+    def _get_monthly_amounts(self, user):
         a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
-        queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
-            .values_list('date__month')\
-            .annotate(
-                total_in_month=Cast(Abs(Sum(Case(
-                    When(in_sum=True, then='amount'),
-                    default=(Value(0, output_field=DecimalField()))
-                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField()),
-                total_out_month=Cast(Abs(Sum(Case(
-                    When(in_sum=False, then='amount'),
-                    default=(Value(0, output_field=DecimalField()))
-                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField())
-            )\
-            .values('date__month', 'total_in_month', 'total_out_month')\
-            .order_by('date__month')
+        queryset = TransactionRepository.get_monthly_totals_from_a_period(user, a_year_ago)
         return queryset
 
 
@@ -164,7 +150,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         category_amounts = Transaction.get_category_amounts(user, datetime.date.today(), self.request.GET, year, month)
         context['category_amounts'] = category_amounts
         context['pie_data'] = [list(a.values()) for a in category_amounts]
-        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
+        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(user)]
         month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
         for expense in month_expenses:
             month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
@@ -317,7 +303,7 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         )
         context['category_amounts'] = category_amounts
         context['pie_data'] = [list(a.values()) for a in category_amounts]
-        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(queryset)]
+        month_expenses = [list(a.values()) for a in self._get_monthly_amounts(user)]
         month_expenses_list = [["Month", "En la suma total", "Fuera del total"]]
         for expense in month_expenses:
             month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
