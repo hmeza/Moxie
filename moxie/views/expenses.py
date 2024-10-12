@@ -75,6 +75,22 @@ class TransactionListView(FilterView, ListView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def _get_grouped_object_list(self, object_list):
+        object_grouped_list = []
+        current_date = None
+        current_group = {}
+        for obj in object_list:
+            if not current_date or obj.date != current_date:
+                if current_date:
+                    object_grouped_list.append(current_group)
+                current_date = obj.date
+                current_group = {
+                    'date': current_date,
+                    'object_list': []
+                }
+            current_group['object_list'].append(obj)
+        return object_grouped_list
+
 
 class NextAndLastYearAndMonthCalculatorView:
     def _get_last_year_and_month(self, year, month):
@@ -168,6 +184,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context['edit_url'] = reverse_lazy('expenses_add')
         context['filter_url_name'] = 'expenses'
         context['favourite_data'] = Favourite.get_favourites(user)
+        context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
         return context
 
 
