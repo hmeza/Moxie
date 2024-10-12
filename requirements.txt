@@ -1,4 +1,4 @@
-Django==3.1.14
+Django==3.2.25
 django-filter
 mysqlclient
 django-mathfilters
@@ -6,6 +6,6 @@ django-crispy-forms
 python-dateutil
 PyMySQL
 django-simple-captcha
-Pillow<=9.5.0
+Pillow>=10.3.0
 python-dotenv
 # tagulous
