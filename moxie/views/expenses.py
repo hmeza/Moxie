@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.forms import ExpensesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum, FloatField, Case, When
+from django.db.models import Sum, FloatField, Case, When, DecimalField, Value
 from django.db.models.functions import Abs, Cast
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, Favourite
@@ -112,12 +112,12 @@ class CommonExpensesView:
             .annotate(
                 total_in_month=Cast(Abs(Sum(Case(
                     When(in_sum=True, then='amount'),
-                    default=0
-                ))), FloatField()),
+                    default=(Value(0, output_field=DecimalField()))
+                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField()),
                 total_out_month=Cast(Abs(Sum(Case(
                     When(in_sum=False, then='amount'),
-                    default=0
-                ))), FloatField())
+                    default=(Value(0, output_field=DecimalField()))
+                ), output_field=DecimalField()), output_field=FloatField()), output_field=FloatField())
             )\
             .values('date__month', 'total_in_month', 'total_out_month')\
             .order_by('date__month')
