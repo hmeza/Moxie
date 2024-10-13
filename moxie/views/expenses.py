@@ -156,7 +156,7 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
             month_name = datetime.datetime.strptime("2023-{}-01".format(expense[0]), "%Y-%m-%d").strftime("%m")
             month_expenses_list.append([month_name, expense[1], expense[2]])
         context['month_expenses'] = month_expenses_list
-        budget = Budget.get_budget_for_month(user, year, month)
+        budget = Budget.get_budget_for_month(user, year, month, expenses=True)
         context['budget'] = budget
         context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
         context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')

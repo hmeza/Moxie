@@ -183,7 +183,7 @@ class Budget(models.Model):
             .order_by('category__type', 'category__order')
 
     @staticmethod
-    def get_budget_for_month(user, year, month):
+    def get_budget_for_month(user, year, month, expenses=False, incomes=False):
         queryset = Transaction.objects\
             .prefetch_related('user', 'user__budgets', 'category') \
             .filter(date__year=year, date__month=month, user=user)\
@@ -193,6 +193,8 @@ class Budget(models.Model):
             .annotate(transaction_total=Cast(Sum('amount'), FloatField()))\
             .values('transaction_total', 'category__name', 'user__budgets__amount', 'category_group', 'category__id')\
             .order_by('category')
+        if expenses:
+            queryset = queryset.filter(amount__lt=0)
         return queryset
 
     @staticmethod
