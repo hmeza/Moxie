@@ -1,3 +1,5 @@
+import datetime
+from django import db
 from django.core.management.base import BaseCommand
 from moxie.models import *
 from django.db import transaction, connection
@@ -12,9 +14,10 @@ class Command(BaseCommand):
     help = 'Import data'
 
     def handle(self, *args, **options):
-        self._migrate_transactions()
+        # self._migrate_transactions()
         # self.insertion()
         # self.taggetization()
+        self._migrate_tags()
 
     def _migrate_categories(self, cursor):
         cursor.execute("SET NAMES 'utf8'")
@@ -35,6 +38,68 @@ class Command(BaseCommand):
 
             obj = Transaction(**row_dict)
             obj.save(force_insert=True)
+
+    def _migrate_tags(self):
+        with connection.cursor() as cursor:
+            cursor.execute("SET NAMES 'utf8'")
+            cursor.execute("select * from tags")
+            column_names = [col[0] for col in cursor.description]
+            rows = cursor.fetchall()
+            for row in rows:
+                row_dict = dict(zip(column_names, row))
+                note = row[2]
+
+                fixed_col = self._fix_note(note, row)
+                fixed_col = fixed_col.encode('utf-8').decode('utf-8')
+
+                # self.stdout.write(f"{row[0]} {note} - fixed {fixed_col}")
+
+                row_dict['user_id'] = row_dict['user_owner']
+                row_dict.pop('user_owner')
+                tag_id = row_dict.pop('id')
+                row_dict['name'] = fixed_col
+                # print(row_dict)
+
+                insert_query = """
+                INSERT IGNORE INTO moxie_tag (name, created_at, updated_at, user_id)
+                VALUES (%s, %s, %s, %s);
+                """
+                cursor.execute(insert_query, tuple(row_dict.values()))
+
+                cursor.execute("SELECT LAST_INSERT_ID()")
+                last_insert_id = cursor.fetchone()[0]
+
+                # Fetch related rows from transaction_tags
+                transaction_tag_query = """
+                SELECT * FROM transaction_tags WHERE id_tag = %s and created_at <= %s;
+                """
+                cursor.execute(transaction_tag_query, [tag_id, '2024-10-06 00:00:00'])
+                transaction_tag_rows = cursor.fetchall()
+
+                # Insert the relationships into moxie_transactiontag
+                for transaction_row in transaction_tag_rows:
+                    # column_names = [col[0] for col in cursor.description]
+                    # row_dict = dict(zip(column_names, row))
+                    # self.stdout.write(f"{row_dict}")
+                    insert_transactiontag_query = """
+                    INSERT INTO moxie_transactiontag (transaction_id, tag_id, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s);
+                    """
+                    data = (
+                        transaction_row[1],
+                        last_insert_id,
+                        transaction_row[3].strftime('%Y-%m-%d %H:%M:%S'),
+                        datetime.datetime.now()
+                    )
+                    try:
+                        # Assuming transaction_row[0] is the transaction_id and [2] is created_at
+                        cursor.execute(insert_transactiontag_query, data)
+                    except db.utils.IntegrityError as e:
+                        self.stdout.write(self.style.ERROR(f"""Check transaction {transaction_row[0]},
+                        last insert id was {last_insert_id} and original one is {tag_id}"""))
+                    except Exception as e:
+                        self.stdout.write(self.style.ERROR(f"ERROR caused by {data}, {e}"))
+                        raise
 
     def _migrate_transactions(self):
         with connection.cursor() as cursor:
