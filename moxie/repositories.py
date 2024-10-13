@@ -7,7 +7,7 @@ import datetime
 class TransactionRepository:
     @staticmethod
     def get_monthly_totals_from_a_period(user, start_date):
-        queryset = Transaction.objects.filter(date__gte=start_date, amount__lt=0)\
+        queryset = Transaction.objects.filter(date__gte=start_date, amount__lt=0, user=user)\
             .values_list('date__month')\
             .annotate(
                 total_in_month=Cast(Abs(Sum(Case(
