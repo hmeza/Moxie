@@ -16,10 +16,12 @@ class SubmitLightBlue(Submit):
 
 class ExpensesFilter(django_filters.FilterSet):
     amount__gte = django_filters.NumberFilter(
-        field_name='amount', label=_('Minimum amount'), lookup_expr="lte", widget=NumberInput()
+        field_name='amount', label=_('Minimum amount'), lookup_expr="lte",
+        widget=NumberInput(attrs={'inputmode': 'decimal', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+'})
     )
     amount__lte = django_filters.NumberFilter(
-        field_name='amount', label=_('Maximum amount'), lookup_expr="gte", widget=NumberInput()
+        field_name='amount', label=_('Maximum amount'), lookup_expr="gte",
+        widget=NumberInput(attrs={'inputmode': 'decimal', 'pattern': '[-+]?[0-9]*[.,]?[0-9]+'})
     )
     category = django_filters.ModelChoiceFilter(
         field_name='category', label=_('category'), queryset=Category.objects.none(),
