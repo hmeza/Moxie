@@ -13,7 +13,7 @@ from django.db.models.functions import Abs, Cast
 from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Favourite
 from moxie.repositories import IncomeRepository
-from moxie.views.common_classes import UpdateTagsView, ExportView
+from moxie.views.common_classes import UpdateTagsView, ExportView, TransactionView
 
 
 class IncomesListView(FilterView, ListView):
@@ -60,6 +60,25 @@ class IncomesListView(FilterView, ListView):
 		kwargs['user'] = self.request.user
 		return kwargs
 
+	def _get_start_and_end_date(self, q):
+		start_date, end_date = q.get('date_min'), q.get('date_max')
+
+		if hasattr(self, "instance"):
+			return self._get_start_and_end_date_by_date(dateobject=self.instance.date)
+		elif start_date and end_date:
+			return start_date, end_date
+		return self._get_start_and_end_date_by_date(year=self.kwargs.get('year'))
+
+	def _get_start_and_end_date_by_date(self, year=None, dateobject=None):
+		if dateobject:
+			year = dateobject.year
+		if not year and not dateobject:
+			year = datetime.datetime.today().year
+		date_format = "%Y-%M-%d"
+		start_date = datetime.datetime.strptime(f"{year}-01-01", date_format)
+		end_date = datetime.datetime.strptime(f"{year}-12-31", date_format)
+		return start_date.strftime(date_format), end_date.strftime(date_format)
+
 
 class CommonIncomesView:
 	def _get_category_amounts(self, expenses):
@@ -72,7 +91,7 @@ class CommonIncomesView:
 			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
 
 
-class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView, ExportView):
+class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView, ExportView, TransactionView):
 	model = Transaction
 	template_name = 'incomes/index.html'
 
@@ -109,25 +128,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		kwargs['data'] = q
 		return kwargs
 
-	def _get_start_and_end_date(self, q):
-		start_date, end_date = q.get('date_min'), q.get('date_max')
-
-		if hasattr(self, "instance"):
-			return self._get_start_and_end_date_by_date(dateobject=self.instance.date)
-		elif start_date and end_date:
-			return start_date, end_date
-		return self._get_start_and_end_date_by_date(year=self.kwargs.get('year'))
-
-	def _get_start_and_end_date_by_date(self, year=None, dateobject=None):
-		if dateobject:
-			year = dateobject.year
-		if not year and not dateobject:
-			year = datetime.datetime.today().year
-		date_format = "%Y-%M-%d"
-		start_date = datetime.datetime.strptime(f"{year}-01-01", date_format)
-		end_date = datetime.datetime.strptime(f"{year}-12-31", date_format)
-		return start_date.strftime(date_format), end_date.strftime(date_format)
-
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		queryset = self.object_list
@@ -150,6 +150,7 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		context['next_url'] = f"/incomes/year/{next_year}"
 		context['edit_url'] = reverse_lazy('incomes_add')
 		context['filter_url_name'] = 'incomes'
+		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
 		return context
 
 	def __get_monthly_amounts(self, expenses):
@@ -206,7 +207,7 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView, ExportView):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView, ExportView, TransactionView):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
@@ -221,7 +222,7 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 	def get_object(self, queryset=None):
 		if hasattr(self, 'instance'):
 			return self.instance
-		self.instance = Transaction.objects.get(pk=self.kwargs.get('pk'))
+		setattr(self, 'instance', Transaction.objects.get(pk=self.kwargs.get('pk')))
 		if self.instance.user != self.request.user:
 			logout(self.request)
 		return self.instance
@@ -253,18 +254,22 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['edit_slug'] = '/incomes/'
-		context['filter_url_name'] = 'incomes'
 		year = self.object.date.year
-		context['year'] = year
-
-		queryset = self.get_queryset()
-		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
-		context['tags'] = Tag.get_tags(self.request.user)
-		context['category_amounts'] = self._get_category_amounts(queryset)
+		last_year = year - 1
+		next_year = year + 1
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
+		context.update({
+			'edit_slug': '/incomes/',
+			'filter_url_name': 'incomes',
+			'year': year,
+			'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users'],
+			'tags': Tag.get_tags(self.request.user),
+			'year_incomes': year_incomes,
+			'current_month_and_year': f"{year}",
+			'last_url': f"/incomes/year/{last_year}",
+			'next_url': f"/incomes/year/{next_year}",
+			'edit_url': reverse_lazy('incomes_add'),
+		})
 
 		filterset_class = self.get_filterset_class()
 		self.filterset = self.get_filterset(filterset_class)
@@ -274,16 +279,12 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		else:
 			self.object_list = self.filterset.queryset.none()
 
-		context['object_list'] = self.filterset.qs
-
-		context['year_incomes'] = year_incomes
-		context['current_month_and_year'] = f"{year}"
-		last_year = year - 1
-		next_year = year + 1
-		context['last_url'] = f"/incomes/year/{last_year}"
-		context['next_url'] = f"/incomes/year/{next_year}"
-		context['edit_url'] = reverse_lazy('incomes_add')
-		context['filter_url_name'] = 'incomes'
+		queryset = self.filterset.qs
+		context['object_list'] = queryset
+		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['category_amounts'] = self._get_category_amounts(queryset)
+		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
 		return context
 
 	def __get_transaction_id(self):
@@ -306,22 +307,3 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 			q['amount__lte'] = -int(kwargs['data']['amount__lte'])
 		kwargs['data'] = q
 		return kwargs
-
-	def _get_start_and_end_date(self, q):
-		start_date, end_date = q.get('date_min'), q.get('date_max')
-
-		if hasattr(self, "instance"):
-			return self._get_start_and_end_date_by_date(dateobject=self.instance.date)
-		elif start_date and end_date:
-			return start_date, end_date
-		return self._get_start_and_end_date_by_date(year=self.kwargs.get('year'))
-
-	def _get_start_and_end_date_by_date(self, year=None, dateobject=None):
-		if dateobject:
-			year = dateobject.year
-		if not year and not dateobject:
-			year = datetime.datetime.today().year
-		date_format = "%Y-%M-%d"
-		start_date = datetime.datetime.strptime(f"{year}-01-01", date_format)
-		end_date = datetime.datetime.strptime(f"{year}-12-31", date_format)
-		return start_date.strftime(date_format), end_date.strftime(date_format)

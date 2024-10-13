@@ -15,7 +15,7 @@ from django.db.models import Sum
 from moxie.filters import ExpensesFilter
 from moxie.models import Transaction, Tag, Budget, Favourite
 from moxie.repositories import TransactionRepository
-from moxie.views.common_classes import ExportView, UpdateTagsView
+from moxie.views.common_classes import ExportView, UpdateTagsView, TransactionView
 
 
 class TransactionListView(FilterView, ListView):
@@ -74,22 +74,6 @@ class TransactionListView(FilterView, ListView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def _get_grouped_object_list(self, object_list):
-        object_grouped_list = []
-        current_date = None
-        current_group = {}
-        for obj in object_list:
-            if not current_date or obj.date != current_date:
-                if current_date:
-                    object_grouped_list.append(current_group)
-                current_date = obj.date
-                current_group = {
-                    'date': current_date,
-                    'object_list': []
-                }
-            current_group['object_list'].append(obj)
-        return object_grouped_list
-
 
 class NextAndLastYearAndMonthCalculatorView:
     def _get_last_year_and_month(self, year, month):
@@ -110,7 +94,7 @@ class CommonExpensesView:
         return queryset
 
 
-class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView):
+class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView, TransactionView):
     model = Transaction
     template_name = 'expenses/index.html'
 
@@ -211,7 +195,7 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionListView,
-                  NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView):
+                  NextAndLastYearAndMonthCalculatorView, CommonExpensesView, ExportView, TransactionView):
     model = Transaction
     form_class = ExpensesForm
     template_name = 'expenses/index.html'

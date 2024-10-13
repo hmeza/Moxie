@@ -45,3 +45,21 @@ class ExportView:
                     ...
             writer.writerow(values)
         return response
+
+
+class TransactionView:
+    def _get_grouped_object_list(self, object_list):
+        object_grouped_list = []
+        current_date = None
+        current_group = {}
+        for obj in object_list:
+            if not current_date or obj.date != current_date:
+                if current_date:
+                    object_grouped_list.append(current_group)
+                current_date = obj.date
+                current_group = {
+                    'date': current_date,
+                    'object_list': []
+                }
+            current_group['object_list'].append(obj)
+        return object_grouped_list
