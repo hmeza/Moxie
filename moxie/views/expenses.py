@@ -314,6 +314,7 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         context['budget_total'] = budget.aggregate(sum=Sum('user__budgets__amount')).get('sum')
         context['budget_total_spent'] = budget.aggregate(sum=Sum('transaction_total')).get('sum')
         context['filter_url_name'] = 'expenses'
+        context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
         return context
 
     def set_object_list(self, context):
