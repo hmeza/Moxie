@@ -36,7 +36,7 @@ class TransactionListView(FilterView, ListView):
         start_date = date.replace(day=1)
         end_date = date
         end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
-        return start_date, end_date
+        return start_date.date(), end_date.date()
 
     def _get_start_and_end_date(self, q):
         start_date, end_date = q.get('date_min'), q.get('date_max')
