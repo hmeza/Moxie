@@ -107,16 +107,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 			return self.download_csv()
 		return response
 
-	def __get_last_year_and_month(self, year, month):
-		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
-		date = date - relativedelta(months=1)
-		return date.year, date.month
-
-	def __get_next_year_and_month(self, year, month):
-		date = datetime.datetime.strptime(f"{year}-{month}-01", '%Y-%m-%d').date()
-		date = date + relativedelta(months=1)
-		return date.year, date.month
-
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
