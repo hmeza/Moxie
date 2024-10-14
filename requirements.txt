@@ -3,6 +3,7 @@ django-filter
 mysqlclient
 django-mathfilters
 django-crispy-forms
+crispy-bootstrap4
 python-dateutil
 PyMySQL
 django-simple-captcha
