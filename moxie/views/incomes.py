@@ -1,6 +1,5 @@
 import datetime
 import re
-from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
@@ -8,8 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from moxie.forms import IncomesForm
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
-from django.db.models import Sum, FloatField, Case, When
-from django.db.models.functions import Abs, Cast
+from django.db.models import Sum
 from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Favourite
 from moxie.repositories import IncomeRepository
