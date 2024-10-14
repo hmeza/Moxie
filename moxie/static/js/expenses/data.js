@@ -56,7 +56,7 @@ function get_tags_object() {
     let tags = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: $.map(usedTagList, function (tag) {
+        local: $.map(tagList, function (tag) {
             return {
                 name: tag
             };
@@ -119,15 +119,6 @@ $(document).ready(function () {
         freeInput: true
     });
     let amount = $('#id_amount');
-    /*
-    let amount_min = $('#amount_min');
-    amount_min.attr('inputmode', 'decimal');
-    amount_min.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');
-    let amount_max = $('#amount_max');
-    amount_max.attr('inputmode', 'decimal');
-    amount_max.attr('pattern', '[-+]?[0-9]*[.,]?[0-9]+');*/
-
-    // TODO do this modifying form classes
     let expenseDeleteSelector = $('#expense_delete');
     if(expenseDeleteSelector !== undefined) {
         let submitParent = $('#submit-id-submit').parent();
@@ -137,9 +128,5 @@ $(document).ready(function () {
         firstSibling.removeClass('')
     }
     $('#search_form :input[type="submit"]').parent().addClass('text-right')
-
-    $('#expenses_form').submit(function(e) {
-        amount.val(amount.val().replace(",", "."));
-    });
 });
 var elem;
