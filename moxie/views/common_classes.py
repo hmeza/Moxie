@@ -63,6 +63,9 @@ class TransactionView:
         object_grouped_list = []
         current_date = None
         current_group = {}
+        order_by = object_list.query.order_by
+        if 'amount' in order_by:
+            return [{'date': None, 'object_list': object_list}]
         for obj in object_list:
             if not current_date or obj.date != current_date:
                 if current_date:
@@ -73,4 +76,6 @@ class TransactionView:
                     'object_list': []
                 }
             current_group['object_list'].append(obj)
+        if current_group.get('object_list', []):
+            object_grouped_list.append(current_group)
         return object_grouped_list
