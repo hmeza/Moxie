@@ -52,8 +52,8 @@ class ExpensesFilter(django_filters.FilterSet):
 
 
 class IncomesFilter(django_filters.FilterSet):
-    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'))
-    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'))
+    amount__gte = django_filters.NumberFilter(field_name='amount', label=_('Minimum amount'), lookup_expr="gte",)
+    amount__lte = django_filters.NumberFilter(field_name='amount', label=_('Maximum amount'), lookup_expr="lte",)
     category = django_filters.ModelChoiceFilter(
         field_name='category', label=_('category'), queryset=Category.objects.none(),
         widget=Select(attrs={'class': 'select form-control'})
