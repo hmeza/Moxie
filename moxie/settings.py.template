@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import platform
 from dotenv import load_dotenv
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
@@ -168,3 +169,62 @@ JS_VERSION = '1.00.000'
 LOGIN_URL = reverse_lazy('index')
 
 FROM_EMAIL = os.environ.get('FROM_EMAIL')
+
+LOGGING_LEVEL = os.environ.get('LOGGING_LEVEL', 'INFO')
+
+if 'HANDLERS' not in vars() and 'HANDLERS' not in globals():
+    HANDLERS = {
+        'console': {
+            'level': LOGGING_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    }
+
+if not os.path.exists('/dev/log') and platform.system() == 'Darwin':
+    HANDLERS['syslog'] = {
+        'level': LOGGING_LEVEL,
+        'class': 'logging.handlers.SysLogHandler',
+        'address': '/var/run/syslog',
+        'formatter': 'verbose',
+    }
+
+if 'LOG_HANDLERS' not in vars() and 'LOG_HANDLERS' not in globals():
+    LOG_HANDLERS = HANDLERS
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'verbose': {
+            'format': 'python[%(process)d]: [%(levelname)s] [%(name)s] %(message)s'
+        },
+    },
+    'handlers': HANDLERS,
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': LOGGING_LEVEL,
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': LOG_HANDLERS,
+            'level': LOGGING_LEVEL,
+            'propagate': False,
+        },
+        'django': {
+            'handlers': LOG_HANDLERS,
+            'level': LOGGING_LEVEL,
+            'propagate': False,
+        },
+        'logger': {
+            'handlers': ['console'],
+            'level': LOGGING_LEVEL,
+            'propagate': False
+        },
+    }
+}
