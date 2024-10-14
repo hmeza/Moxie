@@ -109,11 +109,7 @@ class IncomesListView(FilterView, ListView):
 		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
 
 
-class CommonIncomesView:
-	...
-
-
-class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView, ExportView, TransactionView):
+class IncomesView(LoginRequiredMixin, IncomesListView, ListView, ExportView, TransactionView):
 	model = Transaction
 	template_name = 'incomes/index.html'
 
@@ -166,7 +162,7 @@ class IncomeDeleteView(LoginRequiredMixin, DeleteView):
 		return self.delete(request, *args, **kwargs)
 
 
-class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, CommonIncomesView, ExportView, TransactionView):
+class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView, ExportView, TransactionView):
 	model = Transaction
 	form_class = IncomesForm
 	template_name = 'incomes/index.html'
