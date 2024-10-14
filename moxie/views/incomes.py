@@ -33,17 +33,6 @@ class IncomesListView(FilterView, ListView):
 	def __get_order_field(self):
 		return self.request.GET.get('order', '-date')
 
-	def __get_start_and_end_date(self):
-		year = self._get_active_year()
-		if year:
-			start_date = datetime.datetime.strptime(f"{year}-01-01", '%Y-%m-%d').date()
-			end_date = datetime.datetime.strptime(f"{year}-12-31", '%Y-%m-%d').date()
-		else:
-			start_date = datetime.date.today().replace(day=1)
-			end_date = datetime.date.today()
-			end_date = end_date.replace(month=end_date.month + 1, day=1) - datetime.timedelta(days=1)
-		return start_date, end_date
-
 	def _get_active_year(self):
 		if hasattr(self, 'object'):
 			return self.object.date.year
