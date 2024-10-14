@@ -2,6 +2,10 @@ import csv
 from django.http.response import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from moxie.models import TransactionTag, Tag, Transaction, Category
+import logging
+
+
+logger = logging.getLogger()
 
 
 class UpdateTagsView:
@@ -40,9 +44,7 @@ class ExportView:
                         value = ''
                     values.append(value)
                 except (Transaction.DoesNotExist, Category.DoesNotExist) as e:
-                    # todo use logger
-                    # print(e)
-                    ...
+                    logger.error(e)
             writer.writerow(values)
         return response
 

@@ -100,7 +100,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
-        # todo this belongs to ExportView, refactor
         if request.GET.get('to_excel'):
             return self.download_csv()
         return response
