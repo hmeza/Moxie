@@ -45,6 +45,8 @@ class IncomesListView(FilterView, ListView):
 		return start_date, end_date
 
 	def _get_active_year(self):
+		if hasattr(self, 'object'):
+			return self.object.date.year
 		url = self.request.path
 		if 'year' in url:
 			groups = re.search(r'year/(\d+)/$', url)
@@ -91,6 +93,35 @@ class IncomesListView(FilterView, ListView):
 		kwargs['data'] = q
 		return kwargs
 
+	def _get_common_context_data(self, context):
+		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
+		year = self._get_active_year()
+		last_year = year - 1
+		next_year = year + 1
+		context.update({
+			'edit_slug': '/incomes/',
+			'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users'],
+			'tags': Tag.get_tags(self.request.user),
+			'year_incomes': year_incomes,
+			'year': year,
+			'current_month_and_year': f"{year}",
+			'last_url': f"/incomes/year/{last_year}",
+			'next_url': f"/incomes/year/{next_year}",
+			'edit_url': reverse_lazy('incomes_add'),
+			'filter_url_name': 'incomes',
+		})
+
+		if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
+			self.object_list = self.filterset.qs
+		else:
+			self.object_list = self.filterset.queryset.none()
+
+		queryset = self.filterset.qs
+		context['object_list'] = queryset
+		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
+
 
 class CommonIncomesView:
 	...
@@ -109,38 +140,8 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
-		year = self._get_active_year()
-		last_year = year - 1
-		next_year = year + 1
-		context.update({
-			'edit_slug': '/incomes/',
-			'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users'],
-			'tags': Tag.get_tags(self.request.user),
-			'form': IncomesForm(self.request.user),
-			'year_incomes': year_incomes,
-			'year': year,
-			'current_month_and_year': f"{year}",
-			'last_url': f"/incomes/year/{last_year}",
-			'next_url': f"/incomes/year/{next_year}",
-			'edit_url': reverse_lazy('incomes_add'),
-			'filter_url_name': 'incomes'
-		})
-
-		filterset_class = self.get_filterset_class()
-		self.filterset = self.get_filterset(filterset_class)
-
-		if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
-			self.object_list = self.filterset.qs
-		else:
-			self.object_list = self.filterset.queryset.none()
-		print(self.filterset.qs.query)
-
-		queryset = self.filterset.qs
-		context['object_list'] = queryset
-		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['grouped_object_list'] = self._get_grouped_object_list(queryset)
+		self._get_common_context_data(context)
+		context['form'] = IncomesForm(self.request.user)
 		return context
 
 
@@ -225,36 +226,7 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		year = self.object.date.year
-		last_year = year - 1
-		next_year = year + 1
-		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
-		context.update({
-			'edit_slug': '/incomes/',
-			'filter_url_name': 'incomes',
-			'year': year,
-			'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users'],
-			'tags': Tag.get_tags(self.request.user),
-			'year_incomes': year_incomes,
-			'current_month_and_year': f"{year}",
-			'last_url': f"/incomes/year/{last_year}",
-			'next_url': f"/incomes/year/{next_year}",
-			'edit_url': reverse_lazy('incomes_add'),
-		})
-
-		filterset_class = self.get_filterset_class()
-		self.filterset = self.get_filterset(filterset_class)
-
-		if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
-			self.object_list = self.filterset.qs
-		else:
-			self.object_list = self.filterset.queryset.none()
-
-		queryset = self.filterset.qs
-		context['object_list'] = queryset
-		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
+		self._get_common_context_data(context)
 		return context
 
 	def __get_transaction_id(self):
