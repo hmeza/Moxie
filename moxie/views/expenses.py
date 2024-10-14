@@ -106,7 +106,6 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
 
     def get_filterset_kwargs(self, filterset_class):
         kwargs = super().get_filterset_kwargs(filterset_class)
-        from django.http import QueryDict
         q = QueryDict('', mutable=True)
         if kwargs['data']:
             q.update(kwargs['data'])
