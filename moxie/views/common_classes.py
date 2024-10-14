@@ -12,8 +12,17 @@ class UpdateTagsView:
     def update_tags(self, form, transaction, user):
         tags = form.data.get('tag').split(",")
         for tag_name in tags:
-            (tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
-            TransactionTag.objects.get_or_create(transaction=transaction, tag=tag)
+            try:
+                (tag, created) = Tag.objects.get_or_create(user=user, name=tag_name)
+                TransactionTag.objects.get_or_create(transaction=transaction, tag=tag)
+            except Tag.MultipleObjectsReturned:
+                last_tag = Tag.objects.filter(user=user, name=tag_name).last()
+                TransactionTag.objects\
+                    .filter(tag__user=user, tag__name=tag_name)\
+                    .exclude(tag=last_tag)\
+                    .update(tag=last_tag)
+                dup_tags = Tag.objects.filter(user=user, name=tag_name).exclude(id=last_tag.id)
+                dup_tags.delete()
 
 
 class ExportView:
