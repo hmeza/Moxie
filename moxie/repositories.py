@@ -23,6 +23,14 @@ class TransactionRepository:
             .order_by('date__month')
         return queryset
 
+    @staticmethod
+    def get_total_amount(queryset):
+        return queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+
+    @staticmethod
+    def get_current_amount(queryset):
+        return queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+
 
 class IncomeRepository:
     @staticmethod

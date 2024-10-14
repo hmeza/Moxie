@@ -125,8 +125,8 @@ class ExpensesView(LoginRequiredMixin, TransactionListView, ListView, NextAndLas
         context = super().get_context_data(**kwargs)
         user = self.request.user
         queryset = self.object_list
-        context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-        context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['total_amount'] = TransactionRepository.get_total_amount(queryset)
+        context['current_amount'] = TransactionRepository.get_current_amount(queryset)
         context['tags'] = Tag.get_tags(user)
         context['used_tag_list'] = self.instance.get_used_tags() if hasattr(self, 'instance') else {}
         context['form'] = ExpensesForm(user)
@@ -281,8 +281,8 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         # new
         user = self.request.user
         queryset = self.object_list
-        context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-        context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+        context['total_amount'] = TransactionRepository.get_total_amount(queryset)
+        context['current_amount'] = TransactionRepository.get_current_amount(queryset)
         context['tags'] = Tag.get_tags(user)
         context['used_tag_list'] = self.instance.used_tags()
 
