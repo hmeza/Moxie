@@ -14,6 +14,7 @@ from moxie.filters import IncomesFilter
 from moxie.models import Transaction, Tag, Favourite
 from moxie.repositories import IncomeRepository
 from moxie.views.common_classes import UpdateTagsView, ExportView, TransactionView
+from django.http import QueryDict
 
 
 class IncomesListView(FilterView, ListView):
@@ -55,11 +56,6 @@ class IncomesListView(FilterView, ListView):
 			year = datetime.date.today().year
 		return int(year)
 
-	def get_filterset_kwargs(self, filterset_class):
-		kwargs = super().get_filterset_kwargs(filterset_class)
-		kwargs['user'] = self.request.user
-		return kwargs
-
 	def _get_start_and_end_date(self, q):
 		start_date, end_date = q.get('date_min'), q.get('date_max')
 
@@ -79,16 +75,25 @@ class IncomesListView(FilterView, ListView):
 		end_date = datetime.datetime.strptime(f"{year}-12-31", date_format)
 		return start_date.strftime(date_format), end_date.strftime(date_format)
 
+	def get_filterset_kwargs(self, filterset_class):
+		kwargs = super().get_filterset_kwargs(filterset_class)
+		kwargs['user'] = self.request.user
+		q = QueryDict('', mutable=True)
+		if kwargs['data']:
+			q.update(kwargs['data'])
+		date_min, date_max = self._get_start_and_end_date(self.request.GET)
+		q['date_min'] = date_min
+		q['date_max'] = date_max
+		if kwargs['data'] and kwargs['data'].get('amount__gte'):
+			q['amount__gte'] = float(kwargs['data']['amount__gte'])
+		if kwargs['data'] and kwargs['data'].get('amount__lte'):
+			q['amount__lte'] = float(kwargs['data']['amount__lte'])
+		kwargs['data'] = q
+		return kwargs
+
 
 class CommonIncomesView:
-	def _get_category_amounts(self, expenses):
-		# todo filter by current parameters month
-		today = datetime.date.today()
-		month = self.request.GET.get('month', today.month)
-		year = self.request.GET.get('year', today.year)
-		return Transaction.objects.filter(amount__lt=0, date__month=month, date__year=year)\
-			.values('category__name').order_by('category__name')\
-			.annotate(total=Cast(Abs(Sum('amount')), FloatField()))
+	...
 
 
 class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesView, ExportView, TransactionView):
@@ -112,22 +117,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		date = date + relativedelta(months=1)
 		return date.year, date.month
 
-	def get_filterset_kwargs(self, filterset_class):
-		kwargs = super().get_filterset_kwargs(filterset_class)
-		from django.http import QueryDict
-		q = QueryDict('', mutable=True)
-		if kwargs['data']:
-			q.update(kwargs['data'])
-		date_min, date_max = self._get_start_and_end_date(self.request.GET)
-		q['date_min'] = date_min
-		q['date_max'] = date_max
-		if kwargs['data'] and kwargs['data'].get('amount__gte'):
-			q['amount__gte'] = -float(kwargs['data']['amount__gte'])
-		if kwargs['data'] and kwargs['data'].get('amount__lte'):
-			q['amount__lte'] = -float(kwargs['data']['amount__lte'])
-		kwargs['data'] = q
-		return kwargs
-
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		queryset = self.object_list
@@ -137,7 +126,6 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
 		context['tags'] = Tag.get_tags(self.request.user)
 		context['form'] = IncomesForm(self.request.user)
-		context['category_amounts'] = self._get_category_amounts(queryset)
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
 
 		context['year_incomes'] = year_incomes
@@ -233,7 +221,6 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		return kwargs
 
 	def form_valid(self, form):
-		# TODO VALIDATE THAT EXPENSE BELONGS TO USER
 		response = super().form_valid(form)
 		if form.data.get('favourite'):
 			Favourite.objects.get_or_create(transaction=form.instance)
@@ -283,7 +270,6 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		context['object_list'] = queryset
 		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
 		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['category_amounts'] = self._get_category_amounts(queryset)
 		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
 		return context
 
@@ -291,19 +277,3 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		url = self.request.path
 		groups = re.search(r'year/(\d+)/month/(\d+)/$', url)
 		return groups.group(1)
-
-	def get_filterset_kwargs(self, filterset_class):
-		kwargs = super().get_filterset_kwargs(filterset_class)
-		from django.http import QueryDict
-		q = QueryDict('', mutable=True)
-		if kwargs['data']:
-			q.update(kwargs['data'])
-		date_min, date_max = self._get_start_and_end_date(self.request.GET)
-		q['date_min'] = date_min
-		q['date_max'] = date_max
-		if kwargs['data'] and kwargs['data'].get('amount__gte'):
-			q['amount__gte'] = -float(kwargs['data']['amount__gte'])
-		if kwargs['data'] and kwargs['data'].get('amount__lte'):
-			q['amount__lte'] = -float(kwargs['data']['amount__lte'])
-		kwargs['data'] = q
-		return kwargs
