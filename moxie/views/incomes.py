@@ -122,9 +122,9 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 		q['date_min'] = date_min
 		q['date_max'] = date_max
 		if kwargs['data'] and kwargs['data'].get('amount__gte'):
-			q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+			q['amount__gte'] = -float(kwargs['data']['amount__gte'])
 		if kwargs['data'] and kwargs['data'].get('amount__lte'):
-			q['amount__lte'] = -int(kwargs['data']['amount__lte'])
+			q['amount__lte'] = -float(kwargs['data']['amount__lte'])
 		kwargs['data'] = q
 		return kwargs
 
@@ -302,8 +302,8 @@ class IncomeView(LoginRequiredMixin, UpdateView, UpdateTagsView, IncomesListView
 		q['date_min'] = date_min
 		q['date_max'] = date_max
 		if kwargs['data'] and kwargs['data'].get('amount__gte'):
-			q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+			q['amount__gte'] = -float(kwargs['data']['amount__gte'])
 		if kwargs['data'] and kwargs['data'].get('amount__lte'):
-			q['amount__lte'] = -int(kwargs['data']['amount__lte'])
+			q['amount__lte'] = -float(kwargs['data']['amount__lte'])
 		kwargs['data'] = q
 		return kwargs
