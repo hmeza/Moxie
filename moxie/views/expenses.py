@@ -229,6 +229,10 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         date_min, date_max = self._get_start_and_end_date(q)
         q['date_min'] = date_min
         q['date_max'] = date_max
+        if kwargs['data'] and kwargs['data'].get('amount__gte'):
+            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
+        if kwargs['data'] and kwargs['data'].get('amount__lte'):
+            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
         kwargs['data'] = q
         return kwargs
 
@@ -309,19 +313,3 @@ class ExpenseView(LoginRequiredMixin, UpdateView, UpdateTagsView, TransactionLis
         else:
             self.object_list = self.filterset.queryset.none()
         context['object_list'] = self.filterset.qs
-
-    def get_filterset_kwargs(self, filterset_class):
-        kwargs = super().get_filterset_kwargs(filterset_class)
-        from django.http import QueryDict
-        q = QueryDict('', mutable=True)
-        if kwargs['data']:
-            q.update(kwargs['data'])
-        date_min, date_max = self._get_start_and_end_date(q)
-        q['date_min'] = date_min
-        q['date_max'] = date_max
-        if kwargs['data'] and kwargs['data'].get('amount__gte'):
-            q['amount__gte'] = -int(kwargs['data']['amount__gte'])
-        if kwargs['data'] and kwargs['data'].get('amount__lte'):
-            q['amount__lte'] = -int(kwargs['data']['amount__lte'])
-        kwargs['data'] = q
-        return kwargs
