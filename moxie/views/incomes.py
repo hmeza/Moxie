@@ -119,45 +119,39 @@ class IncomesView(LoginRequiredMixin, IncomesListView, ListView, CommonIncomesVi
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		queryset = self.object_list
-		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
-		context['edit_slug'] = '/incomes/'
-		context['urls'] = ['incomes', 'expenses', 'stats', 'sheets', 'users']
-		context['tags'] = Tag.get_tags(self.request.user)
-		context['form'] = IncomesForm(self.request.user)
 		year_incomes = [["Fecha", "Importe"]] + [[a[0], a[1]] for a in IncomeRepository.get_year_incomes(self.request.user, expenses=False, incomes=True)]
-
-		context['year_incomes'] = year_incomes
 		year = self._get_active_year()
-		context['year'] = year
-		context['current_month_and_year'] = f"{year}"
 		last_year = year - 1
 		next_year = year + 1
-		context['last_url'] = f"/incomes/year/{last_year}"
-		context['next_url'] = f"/incomes/year/{next_year}"
-		context['edit_url'] = reverse_lazy('incomes_add')
-		context['filter_url_name'] = 'incomes'
-		context['grouped_object_list'] = self._get_grouped_object_list(context['object_list'])
-		return context
+		context.update({
+			'edit_slug': '/incomes/',
+			'urls': ['incomes', 'expenses', 'stats', 'sheets', 'users'],
+			'tags': Tag.get_tags(self.request.user),
+			'form': IncomesForm(self.request.user),
+			'year_incomes': year_incomes,
+			'year': year,
+			'current_month_and_year': f"{year}",
+			'last_url': f"/incomes/year/{last_year}",
+			'next_url': f"/incomes/year/{next_year}",
+			'edit_url': reverse_lazy('incomes_add'),
+			'filter_url_name': 'incomes'
+		})
 
-	def __get_monthly_amounts(self, expenses):
-		a_year_ago = datetime.date.today() - datetime.timedelta(days=365)
-		queryset = Transaction.objects.filter(date__gte=a_year_ago, amount__lt=0)\
-			.values_list('date__month')\
-			.annotate(
-				total_in_month=Cast(Abs(Sum(Case(
-					When(in_sum=True, then='amount'),
-					default=0
-				))), FloatField()),
-				total_out_month=Cast(Abs(Sum(Case(
-					When(in_sum=False, then='amount'),
-					default=0
-				))), FloatField())
-			)\
-			.values('date__month', 'total_in_month', 'total_out_month')\
-			.order_by('date__month')
-		return queryset
+		filterset_class = self.get_filterset_class()
+		self.filterset = self.get_filterset(filterset_class)
+
+		if not self.filterset.is_bound or self.filterset.is_valid() or not self.get_strict():
+			self.object_list = self.filterset.qs
+		else:
+			self.object_list = self.filterset.queryset.none()
+		print(self.filterset.qs.query)
+
+		queryset = self.filterset.qs
+		context['object_list'] = queryset
+		context['total_amount'] = queryset.aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['current_amount'] = queryset.exclude(in_sum=False).aggregate(total_amount=Sum('amount')).get('total_amount')
+		context['grouped_object_list'] = self._get_grouped_object_list(queryset)
+		return context
 
 
 class IncomeAddView(IncomesListView, LoginRequiredMixin, CreateView, UpdateTagsView):
