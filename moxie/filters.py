@@ -27,7 +27,7 @@ class ExpensesFilter(django_filters.FilterSet):
         field_name='category', label=_('category'), queryset=Category.objects.none(),
         widget=Select(attrs={'class': 'select form-control'})
     )
-    tag = django_filters.CharFilter(field_name='tag', label=_('tag'))
+    tags = django_filters.CharFilter(field_name='tags__tag__name', label=_('tag'))
     note = django_filters.CharFilter(field_name='note', label=_('note'), lookup_expr='icontains')
     date = django_filters.DateFromToRangeFilter(
         field_name='date', label=_('date'),
